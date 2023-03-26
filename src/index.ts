@@ -25,10 +25,7 @@ const MONGODB_URI = process.env.MONGODB_URI as string;
 mongoose
   .connect(MONGODB_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    poolSize: parseInt(process.env.POOL_SIZE!),
+    useUnifiedTopology: true
   } as ConnectOptions)
   .then((res) => {
     console.log("Connected to Distribution API Database - Initial Connection");
