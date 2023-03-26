@@ -15,11 +15,11 @@ app.use(helmet());
 app.use(logger);
 
 // database connection
-// monogoose.connect(
-//     "",
-//     { useNewUrlParser: true, useUnifiedTopology: true },
-//     () => console.log("db connected")
-//   );
+mongoose.connect(
+     "mongodb+srv://yumustyung:yumustyung@cluster0.aa6bi.mongodb.net/weatherApp?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => console.log("db connected")
+  );
 
 
 
