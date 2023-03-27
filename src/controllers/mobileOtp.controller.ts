@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import otpGenerator from "otp-generator";
 // import nodemailer from "nodemailer";
 import UserModel from "../models/User.model";
+import request from "request";
 
 // Define the OTP expiration time
 const OTP_EXPIRY_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -37,7 +38,28 @@ export const mobileOtpController = async (req: Request, res: Response) => {
     await existingUser?.save();
 
     // Send the OTP to the mobile number using a third-party SMS API
-    
+
+    var data = {
+      to: "2347053578760",
+      from: "THERASWIFT",
+      sms: "Hi there, testing Termii",
+      type: "plain",
+      api_key: "TLQuyFMJ4VTHRgNj6URWPoaULuwWWJdI90CckJlZgWp9bvG34m49kpt2LIOLEB",
+      channel: "generic",
+    };
+    var options = {
+      method: "POST",
+      url: "https://api.ng.termii.com/api/sms/send",
+      headers: {
+        "Content-Type": ["application/json", "application/json"],
+      },
+      body: JSON.stringify(data),
+    };
+    request(options, function (error, response) {
+      if (error) throw new Error(error);
+      console.log(response.body);
+    });
+
     // For demo purposes, we'll just log the OTP to the console
     console.log(`OTP for mobile number ${mobileNumber}: ${otp}`);
 
@@ -48,10 +70,12 @@ export const mobileOtpController = async (req: Request, res: Response) => {
   }
 };
 
-
 // verifying otp logic
 
-export const mobileOtpVerificationController = async (req: Request, res: Response) => {
+export const mobileOtpVerificationController = async (
+  req: Request,
+  res: Response
+) => {
   const { mobileNumber, otp } = req.body;
 
   try {
@@ -80,11 +104,12 @@ export const mobileOtpVerificationController = async (req: Request, res: Respons
   }
 };
 
-
 // resending otp logic
 
-export const mobileOtpResendController = async (req: Request, res: Response) => {
-
+export const mobileOtpResendController = async (
+  req: Request,
+  res: Response
+) => {
   const { mobileNumber } = req.body;
 
   try {
@@ -110,7 +135,6 @@ export const mobileOtpResendController = async (req: Request, res: Response) => 
     await existingUser.save();
 
     // Send the OTP to the mobile number using a third-party SMS API
-
 
     // For demo purposes, we'll just log the OTP to the console
     console.log(`New OTP for mobile number ${mobileNumber}: ${otp}`);
