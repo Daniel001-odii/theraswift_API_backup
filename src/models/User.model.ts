@@ -52,13 +52,13 @@ const UserSchema = new Schema(
       otp: String,
       createdTime: Date,
       verified: Boolean,
-      default: false,
+     
     },
     emailOtp: {
       otp: String,
       createdTime: Date,
       verified: Boolean,
-      default: false,
+     
     },
   },
   {
