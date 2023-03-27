@@ -17,6 +17,7 @@
     "@types/node": "^18.15.10",
     "@types/otp-generator": "^4.0.0",
     "nodemon": "^2.0.22",
+    "request": "^2.88.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   },
@@ -34,7 +35,6 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
     "nodemailer": "^6.9.1",
-    "otp-generator": "^4.0.1",
-    "request": "^2.88.2"
+    "otp-generator": "^4.0.1"
   }
 }
