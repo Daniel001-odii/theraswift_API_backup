@@ -12,11 +12,11 @@ const OTP_EXPIRY_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
 
 // sending otp logic
 export const mobileOtpController = async (req: Request, res: Response) => {
-  const { mobile } = req.body;
+  const { mobileNumber } = req.body;
 
   try {
     // Check if the mobile number already exists in the database
-    const existingUser = await UserModel.findOne({ mobile });
+    const existingUser = await UserModel.findOne({ mobileNumber });
 
     // Generate a new OTP
     const otp = otpGenerator.generate(6, {
@@ -39,7 +39,7 @@ export const mobileOtpController = async (req: Request, res: Response) => {
     // Send the OTP to the mobile number using a third-party SMS API
     
     // For demo purposes, we'll just log the OTP to the console
-    console.log(`OTP for mobile number ${mobile}: ${otp}`);
+    console.log(`OTP for mobile number ${mobileNumber}: ${otp}`);
 
     return res.json({ message: "OTP sent successfully" });
   } catch (err) {
@@ -52,11 +52,11 @@ export const mobileOtpController = async (req: Request, res: Response) => {
 // verifying otp logic
 
 export const mobileOtpVerificationController = async (req: Request, res: Response) => {
-  const { mobile, otp } = req.body;
+  const { mobileNumber, otp } = req.body;
 
   try {
     // Check if the mobile number exists in the database
-    const user = await UserModel.findOne({ mobile });
+    const user = await UserModel.findOne({ mobileNumber });
     if (!user) {
       return res.status(400).json({ message: "Mobile number not found" });
     }
@@ -85,11 +85,11 @@ export const mobileOtpVerificationController = async (req: Request, res: Respons
 
 export const mobileOtpResendController = async (req: Request, res: Response) => {
 
-  const { mobile } = req.body;
+  const { mobileNumber } = req.body;
 
   try {
     // Check if the mobile number exists in the database
-    const existingUser = await UserModel.findOne({ mobile });
+    const existingUser = await UserModel.findOne({ mobileNumber });
 
     if (!existingUser) {
       return res.status(400).json({ message: "Mobile number not found" });
@@ -113,7 +113,7 @@ export const mobileOtpResendController = async (req: Request, res: Response) => 
 
 
     // For demo purposes, we'll just log the OTP to the console
-    console.log(`New OTP for mobile number ${mobile}: ${otp}`);
+    console.log(`New OTP for mobile number ${mobileNumber}: ${otp}`);
 
     return res.json({ message: "New OTP sent successfully" });
   } catch (err) {
