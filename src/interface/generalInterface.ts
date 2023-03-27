@@ -11,5 +11,15 @@ export interface IUser extends Document {
   role: string;
   createdAt: Date;
   updatedAt: Date;
-  verified: boolean;
+  // verified: boolean;
+  mobileOtp: {
+    otp: string;
+    createdTime: Date;
+    verified: boolean;
+  };
+  emailOtp: {
+    otp: string;
+    createdTime: Date;
+    verified: boolean;
+  };
 }

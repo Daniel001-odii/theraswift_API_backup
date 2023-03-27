@@ -48,10 +48,18 @@ const UserSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    verified:{
-      type: Boolean,
+    mobileOtp: {
+      otp: String,
+      createdTime: Date,
+      verified: Boolean,
       default: false,
-    }
+    },
+    emailOtp: {
+      otp: String,
+      createdTime: Date,
+      verified: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

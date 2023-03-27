@@ -25,13 +25,13 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     // try find user with the same email
-    const userEmail = await UserModel.findOne({ email });
+    const userEmailOrNumber = await UserModel.findOne({ email, mobileNumber });
 
-    console.log(userEmail);
+    console.log(userEmailOrNumber);
 
     // check if user exists
-    if (userEmail) {
-      return res.status(401).json({ message: "Email exists already" });
+    if (userEmailOrNumber) {
+      return res.status(401).json({ message: "Email or Mobile Number exists already" });
     }
 
     // Hash password
@@ -104,7 +104,7 @@ export default signup;
 //     const { mobileNumber } = req.body;
 
 //     // generate a new OTP using the otp-generator package
-//     const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
+//     const otp = otpGenerator.generate(6, { digitlls: true, alphabets: false, upperCase: false, specialChars: false });
 
 //     // send the OTP to the user's mobile number using the Nexmo client
 //     nexmo.message.sendSms(
