@@ -81,3 +81,67 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default signup;
+
+
+
+
+
+// import express, { Request, Response } from "express";
+// import * as otpGenerator from "otp-generator";
+// import * as Nexmo from "nexmo";
+
+// const router = express.Router();
+
+// // create a new instance of the Nexmo client with your API key and secret
+// const nexmo = new Nexmo({
+//   apiKey: process.env.NEXMO_API_KEY!,
+//   apiSecret: process.env.NEXMO_API_SECRET!,
+// });
+
+// // endpoint to send an OTP to the user's mobile number
+// router.post("/send-otp", async (req: Request, res: Response) => {
+//   try {
+//     const { mobileNumber } = req.body;
+
+//     // generate a new OTP using the otp-generator package
+//     const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
+
+//     // send the OTP to the user's mobile number using the Nexmo client
+//     nexmo.message.sendSms(
+//       process.env.NEXMO_PHONE_NUMBER!,
+//       mobileNumber,
+//       `Your OTP is ${otp}.`,
+//       (err: Error, responseData: any) => {
+//         if (err) {
+//           console.log(err);
+//           res.status(500).json({ message: "Failed to send OTP." });
+//         } else {
+//           console.log(responseData);
+//           res.json({ message: "OTP sent successfully." });
+//         }
+//       }
+//     );
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: "Failed to send OTP." });
+//   }
+// });
+
+// // endpoint to verify the OTP sent to the user's mobile number
+// router.post("/verify-otp", async (req: Request, res: Response) => {
+//   try {
+//     const { mobileNumber, otp } = req.body;
+
+//     // verify the OTP entered by the user
+//     if (otp === process.env.TEST_OTP) { // replace with your own OTP verification logic
+//       res.json({ message: "OTP verified successfully." });
+//     } else {
+//       res.status(400).json({ message: "Invalid OTP." });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: "Failed to verify OTP." });
+//   }
+// });
+
+// export default router;

@@ -11,4 +11,5 @@ export interface IUser extends Document {
   role: string;
   createdAt: Date;
   updatedAt: Date;
+  verified: boolean;
 }
