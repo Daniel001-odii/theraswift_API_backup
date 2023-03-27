@@ -16,26 +16,24 @@ app.use(helmet());
 app.use(logger);
 dotenv.config();
 
-
 // database connection
-console.log(process.env.MONGODB_URI);
 const MONGODB_URI = process.env.MONGODB_URI as string;
 // process.env.MONGODB_URI!
 
-mongoose
-  .connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  } as ConnectOptions)
-  .then((res) => {
-    console.log("Connected to Distribution API Database - Initial Connection");
-  })
-  .catch((err) => {
+(async () => {
+  try {
+    mongoose.connect(MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    } as ConnectOptions);
+    console.log("Connected To Database - Initial Connection");
+  } catch (err) {
     console.log(
-      `Initial Distribution API Database connection error occured -`,
+      `Initial Distribution API Database connection error occurred -`,
       err
     );
-  });
+  }
+})();
 
 // Router middleware
 app.use("/", routes);
