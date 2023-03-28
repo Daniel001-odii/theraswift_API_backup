@@ -35,11 +35,11 @@ export const mobileOtpController = async (req: Request, res: Response) => {
     // Send the OTP to the mobile number using termii third-party SMS API
     let sms = `Hello ${
       existingUser!.firstName
-    } your mobile number verification otp is ${otp}`;
+    } your Theraswift mobile number verification OTP is ${otp}`;
 
     let data = { to: mobileNumber, sms };
 
-    await sendSms(data);
+    sendSms(data);
 
     // For demo purposes, we'll just log the OTP to the console
     return res.json({
@@ -97,25 +97,31 @@ export const mobileOtpResendController = async (
     // Check if the mobile number exists in the database
     const existingUser = await UserModel.findOne({ mobileNumber });
 
-    if (!existingUser) {
-      return res.status(400).json({ message: "Mobile number not found" });
+    if(!existingUser){
+      return res.json({
+        message:"mobile number doesn't exist"
+      })
     }
-
     // Generate a new OTP
     let otp = generateOTP();
 
-    // Update the existing OTP in the database
-    existingUser.mobileOtp = {
+    console.log(otp);
+
+    // Save the OTP in the database
+    const createdTime = new Date();
+
+    existingUser!.mobileOtp = {
       otp,
-      createdTime: new Date(),
+      createdTime,
       verified: false,
     };
-    await existingUser.save();
+
+    await existingUser?.save();
 
     // Send the OTP to the mobile number using termii third-party SMS API
     let sms = `Hello ${
       existingUser!.firstName
-    } your mobile number verification otp is ${otp}`;
+    } your Theraswift mobile number verification OTP is ${otp}`;
 
     let data = { to: mobileNumber, sms };
 
