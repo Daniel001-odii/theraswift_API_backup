@@ -1,15 +1,8 @@
 import express, { Request, Response } from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-import otpGenerator from "otp-generator";
-// import nodemailer from "nodemailer";
 import UserModel from "../models/User.model";
-import request from "request";
-
-// Define the OTP expiration time
-const OTP_EXPIRY_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
+import { sendSms } from "../utils/sendSmsUtility";
+import { generateOTP } from "../utils/otpGenerator";
+import { OTP_EXPIRY_TIME } from "../utils/utils";
 
 // sending otp logic
 export const mobileOtpController = async (req: Request, res: Response) => {
@@ -18,12 +11,13 @@ export const mobileOtpController = async (req: Request, res: Response) => {
   try {
     // Check if the mobile number already exists in the database
     const existingUser = await UserModel.findOne({ mobileNumber });
-
+    if(!existingUser){
+      return res.json({
+        message:"mobile number doesn't exist"
+      })
+    }
     // Generate a new OTP
-    const otp = otpGenerator.generate(6, {
-      digits: true,
-      specialChars: false,
-    });
+    let otp = generateOTP();
 
     console.log(otp);
 
@@ -35,35 +29,22 @@ export const mobileOtpController = async (req: Request, res: Response) => {
       createdTime,
       verified: false,
     };
+
     await existingUser?.save();
 
-    // Send the OTP to the mobile number using a third-party SMS API
+    // Send the OTP to the mobile number using termii third-party SMS API
+    let sms = `Hello ${
+      existingUser!.firstName
+    } your mobile number verification otp is ${otp}`;
 
-    var data = {
-      to: "2347053578760",
-      from: "THERASWIFT",
-      sms: "Hi there, testing Termii",
-      type: "plain",
-      api_key: "TLQuyFMJ4VTHRgNj6URWPoaULuwWWJdI90CckJlZgWp9bvG34m49kpt2LIOLEB",
-      channel: "generic",
-    };
-    var options = {
-      method: "POST",
-      url: "https://api.ng.termii.com/api/sms/send",
-      headers: {
-        "Content-Type": ["application/json", "application/json"],
-      },
-      body: JSON.stringify(data),
-    };
-    request(options, function (error, response) {
-      if (error) throw new Error(error);
-      console.log(response.body);
-    });
+    let data = { to: mobileNumber, sms };
+
+    await sendSms(data);
 
     // For demo purposes, we'll just log the OTP to the console
-    console.log(`OTP for mobile number ${mobileNumber}: ${otp}`);
-
-    return res.json({ message: "OTP sent successfully" });
+    return res.json({
+      message: `OTP sent successfully ${mobileNumber}: ${otp}`,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
@@ -121,10 +102,7 @@ export const mobileOtpResendController = async (
     }
 
     // Generate a new OTP
-    const otp = otpGenerator.generate(6, {
-      digits: true,
-      specialChars: false,
-    });
+    let otp = generateOTP();
 
     // Update the existing OTP in the database
     existingUser.mobileOtp = {
@@ -134,12 +112,18 @@ export const mobileOtpResendController = async (
     };
     await existingUser.save();
 
-    // Send the OTP to the mobile number using a third-party SMS API
+    // Send the OTP to the mobile number using termii third-party SMS API
+    let sms = `Hello ${
+      existingUser!.firstName
+    } your mobile number verification otp is ${otp}`;
 
-    // For demo purposes, we'll just log the OTP to the console
-    console.log(`New OTP for mobile number ${mobileNumber}: ${otp}`);
+    let data = { to: mobileNumber, sms };
 
-    return res.json({ message: "New OTP sent successfully" });
+    sendSms(data);
+
+    return res.json({
+      message: `New OTP sent successfully ${mobileNumber}: ${otp}`,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
