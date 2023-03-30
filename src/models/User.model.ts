@@ -60,6 +60,7 @@ const UserSchema = new Schema(
       verified: Boolean,
      
     },
+    theraWallet: Number
   },
   {
     timestamps: true,
