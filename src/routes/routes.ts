@@ -6,12 +6,13 @@ import {
   loginController,
   rootController,
   topUpWalletController,
-} from "../controllers/";
-import {
   mobileOtpController,
   mobileOtpResendController,
   mobileOtpVerificationController,
-} from "../controllers/mobileOtp.controller";
+  resendEmailController,
+  sendEmailController,
+  verifyEmailController,
+} from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { validateSignupParams } from "../middleware/signup.middleware";
 
@@ -23,6 +24,10 @@ router.post("/otp/send_mobile", mobileOtpController);
 router.post("/otp/verify_mobile", mobileOtpVerificationController);
 router.post("/otp/resend_mobile", mobileOtpResendController);
 router.put("/topUpWallet", topUpWalletController);
+router.post("/otp/send_email", sendEmailController);
+router.post("/otp/verify_email", verifyEmailController);
+router.post("/otp/resend_email", resendEmailController);
+
 // router.delete("/deleteTodo", deleteTodo);
 
 export default router;

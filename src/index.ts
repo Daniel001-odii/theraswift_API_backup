@@ -35,6 +35,9 @@ const MONGODB_URI = process.env.MONGODB_URI as string;
   }
 })();
 
+console.log(process.env.MONGODB_URI);
+
+
 // Router middleware
 app.use("/", routes);
 
