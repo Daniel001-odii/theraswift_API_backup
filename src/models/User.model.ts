@@ -3,6 +3,10 @@ import { IUser } from "../interface/generalInterface";
 
 const UserSchema = new Schema(
   {
+    userId:{
+    type: String,
+    required: true,
+  },
     firstName: {
       type: String,
       required: true,
@@ -37,7 +41,7 @@ const UserSchema = new Schema(
     role: {
       type: String,
       enum: ["user", "admin"],
-      default:'user',
+      default: "user",
       required: true,
     },
     createdAt: {
@@ -52,15 +56,16 @@ const UserSchema = new Schema(
       otp: String,
       createdTime: Date,
       verified: Boolean,
-     
     },
     emailOtp: {
       otp: String,
       createdTime: Date,
       verified: Boolean,
-     
     },
-    theraWallet: Number
+    theraWallet: {
+      type: Number,
+      min: 0,
+    },
   },
   {
     timestamps: true,

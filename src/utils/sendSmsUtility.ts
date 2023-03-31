@@ -29,5 +29,6 @@ export const sendSms = ({to,sms}:SendSms)=>{
         })
         .catch((error) => {
           console.error(error);
+          throw error;
         }); 
 }

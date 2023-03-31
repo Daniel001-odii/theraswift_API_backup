@@ -1,7 +1,9 @@
 import signUpController from "./signup.controller";
 import loginController from "./login.controller";
 import rootController from "./root.controller";
-import topUpWalletController from "./topUpWallet.controller";
+import topUpWalletController, {
+  giftWalletTopUpController,
+} from "./topUpWallet.controller";
 import {
   mobileOtpController,
   mobileOtpResendController,
@@ -12,7 +14,9 @@ import {
   sendEmailController,
   verifyEmailController,
 } from "./emailOtp.controller";
-
+import {
+  addMedicationController
+} from "./medication.controller";
 export {
   signUpController,
   loginController,
@@ -24,4 +28,6 @@ export {
   resendEmailController,
   sendEmailController,
   verifyEmailController,
+  giftWalletTopUpController,
+  addMedicationController
 };

@@ -6,6 +6,7 @@ import { logger } from "./middleware/logger";
 import routes from "./routes/routes";
 import mongoose, { ConnectOptions, MongooseOptions } from "mongoose";
 import dotenv from "dotenv";
+import { sendGiftTopUpSenderEmail } from "./utils/sendEmailUtility";
 const app = express();
 
 // Middleware
@@ -40,6 +41,9 @@ console.log(process.env.MONGODB_URI);
 
 // Router middleware
 app.use("/", routes);
+
+
+
 
 // app.get("/", (req, res) => {
 //   res.send("Hello, TypeScript!");
