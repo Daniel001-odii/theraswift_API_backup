@@ -167,4 +167,10 @@ export const receiverEmailTemplate = (
 		<p>We are pleased to inform you that a gift balance top-up of <span class="amount">$${parseInt(amount).toFixed(
       2
     )}</span> has been successfully transferred to the account of the recipient.</p>
-		<p>Thank you for using our services.</p>`;
+		<p>Thank you for using our services.</p>
+		<p>Best regards,</p>
+		<p>The Sender</p>
+	</div>
+</body>
+</html>
+`;
