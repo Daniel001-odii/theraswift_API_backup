@@ -164,7 +164,7 @@ export const receiverEmailTemplate = (
 	<div class="container">
 		<h1>${subject}</h1>
 		<p>Dear ${senderName},</p>
-		<p>We are pleased to inform you that a gift balance top-up of <span class="amount">$${amount.toFixed(
+		<p>We are pleased to inform you that a gift balance top-up of <span class="amount">$${parseInt(amount).toFixed(
       2
     )}</span> has been successfully transferred to the account of the recipient.</p>
 		<p>Thank you for using our services.</p>`;
