@@ -52,6 +52,9 @@ app.listen(port, () => {
 
 
   
-// MONGODB_URI=mongodb+srv://yumustyung:yumustyung@cluster0.aa6bi.mongodb.net/theraswift?retryWrites=true&w=majority
-// JWT_SECRET_KEY=THERASWIFT_SECRETE_JWT_STRING
-// PAYSTACK_API_KEY=sk_test_3c8a5c6ad09a0d29f4d4b26031b9d0bc9034d3d9
+// GMAIL_USERNAME='yumustyology@gmail.com'
+// GMAIL_PASSWORD='gdcduniexzzthcau'
+// TERMI_API_KEY='TLQuyFMJ4VTHRgNj6URWPoaULuwWWJdI90CckJlZgWp9bvG34m49kpt2LIOLEB'
+// MONGODB_URI='mongodb+srv://yumustyung:yumustyung@cluster0.aa6bi.mongodb.net/theraswift?retryWrites=true&w=majority'
+// JWT_SECRET_KEY='THERASWIFT_SECRETE_JWT_STRING'
+// PAYSTACK_API_KEY='sk_test_3c8a5c6ad09a0d29f4d4b26031b9d0bc9034d3d9'
