@@ -18,7 +18,7 @@ export const verifyPaystackPayment = async (reference: string) => {
     });
     const data = await res.json();
     console.log(data);
-    if(data.status == 'false'){
+    if(data.status == false){
       throw Error(data.message)
     }
   } catch (error) {

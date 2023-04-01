@@ -72,7 +72,8 @@ const topUpWalletController = async (
       type: "wallet-topup",
       created_at: new Date(),
     });
-    await newTopupTransactionLog.save();
+    let savedHistory = await newTopupTransactionLog.save();
+    console.log(savedHistory)
     //TODO send email notification to user
     console.log("sending notification email to user on success");
 
