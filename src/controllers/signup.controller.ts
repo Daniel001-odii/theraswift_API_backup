@@ -30,7 +30,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     const userEmailExists = await UserModel.findOne({ email });
     const userNumberExists = await UserModel.findOne({ mobileNumber });
 
-    console.log(userEmailOrNumber);
+    console.log(userEmailExists,userNumberExists);
 
     // check if user exists
     if (userEmailExists || userNumberExists) {
