@@ -4,6 +4,8 @@ import UserModel from "../models/User.model";
 import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { userIdGen } from "../utils/userIdGen";
+import { modifiedPhoneNumber } from "../utils/mobileNumberFormatter";
 
 // signup logic
 const signup = async (req: Request, res: Response, next: NextFunction) => {
@@ -31,30 +33,23 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 
     // check if user exists
     if (userEmailOrNumber) {
-      return res.status(401).json({ message: "Email or Mobile Number exists already" });
+      return res
+        .status(401)
+        .json({ message: "Email or Mobile Number exists already" });
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    
-
-    const modifiedPhoneNumber = ()=>{
-      if (mobileNumber.charAt(0) === "0") {
-        let n = mobileNumber.substring(1);
-        return "234" + n.toString()
-      } else {
-        return mobileNumber.toString()
-      }
-    } 
-
-    let newNum =  modifiedPhoneNumber()
-
+    // format mobile number to international format
+    let newNum = modifiedPhoneNumber(mobileNumber);
     console.log(newNum);
-  
+    // getting userID out of users mobile number
+    let userId = userIdGen(mobileNumber);
 
     // Save user to MongoDB
     const user = new UserModel({
+      userId,
       email: email,
       firstName: firstName,
       dateOfBirth: dateOfBirth,
@@ -68,6 +63,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     // generate access token
     const accessToken = jwt.sign(
       {
+        userId: userSaved.userId,
         email: userSaved.email,
         firstName: userSaved.firstName,
         lastName: userSaved.lastName,
@@ -81,6 +77,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       message: "Signup successful",
       user: {
         _id: userSaved._id,
+        userID: userSaved.userId,
         firstName: userSaved.firstName,
         lastName: userSaved.lastName,
         email: userSaved.email,
@@ -97,8 +94,3 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default signup;
-
-
-
-
-

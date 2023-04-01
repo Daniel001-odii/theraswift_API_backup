@@ -2,7 +2,7 @@ import { Document } from "mongoose";
 import { Request } from "express";
 
 export interface IUser extends Document {
-  userId:string,
+  userId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -29,7 +29,13 @@ export interface IUser extends Document {
 
 export interface ITransaction extends Document {
   userId: string;
-  type: "gift-balance" | "product-order" | "wallet-topup" | "order-refill" | "non-prescription-order" | "prescription-order";
+  type:
+    | "gift-balance"
+    | "product-order"
+    | "wallet-topup"
+    | "order-refill"
+    | "non-prescription-order"
+    | "prescription-order";
   details: {
     sender?: string;
     recipient?: string;
@@ -56,7 +62,6 @@ export interface ITransaction extends Document {
 }
 
 export interface IMedication extends Document {
- 
   name: string;
   description: string;
   dosage: string;
@@ -73,7 +78,6 @@ export interface IMedication extends Document {
   prescription_required: boolean;
 }
 
-
 export interface JwtPayload {
   email: string;
   mobile: string;
@@ -82,7 +86,6 @@ export interface JwtPayload {
 export interface CustomRequest extends Request {
   jwtPayload?: JwtPayload;
 }
-
 
 export interface IOrder extends Document {
   userId: string;
@@ -93,13 +96,12 @@ export interface IOrder extends Document {
   prescription?: string;
   refill_request_id?: string;
   payment: {
-    provider: 'paystack' | 'flutterwave' | 'stripe';
+    provider: "paystack" | "flutterwave" | "stripe";
     transaction_id: string;
     amount: number;
   };
   shipping_address: string;
-  status: 'pending' | 'in-transit' | 'delivered';
+  status: "pending" | "in-transit" | "delivered";
   createdAt?: Date;
   updatedAt?: Date;
 }
-

@@ -1,9 +1,12 @@
 import { ExpressArgs } from "../types/generalTypes";
 import UserModel from "../models/User.model";
 import { Request, Response, NextFunction } from "express";
-import { verifyPaystackPayment } from "../utils/verifyPaystackpPaymentUtility";
+import { verifyPaystackPayment } from "../utils/verifyPaystackPaymentUtility";
 import TransactionsModel from "../models/Transactions.model";
-import { sendGiftTopUpSenderEmail,sendGiftTopUpRecipientEmail } from "../utils/sendEmailUtility";
+import {
+  sendGiftTopUpSenderEmail,
+  sendGiftTopUpRecipientEmail,
+} from "../utils/sendEmailUtility";
 
 // topUpWallet logic
 const topUpWalletController = async (
@@ -11,10 +14,16 @@ const topUpWalletController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userID, email, amount, referenceId } = req.body;
+  const {
+    userId,
+    email,
+    amount,
+    referenceId,
+    payment_method = "paystack",
+  } = req.body;
 
   //   Checking the parameters passed in the body
-  if (userID && email) {
+  if (userId && email) {
     res.status(500).json({
       message: "please pass in either a user_id or an email address",
     });
@@ -25,9 +34,9 @@ const topUpWalletController = async (
     if (email) {
       user = await UserModel.findOne({ email });
     }
-    if (userID) {
-      let formattedUserId = "234" + userID;
-      user = await UserModel.findOne({ mobileNumber: userID });
+    if (userId) {
+      let formattedUserId = "234" + userId;
+      user = await UserModel.findOne({ userId });
     }
 
     if (!user) {
@@ -38,17 +47,32 @@ const topUpWalletController = async (
 
     // verify payment in paystack here
     console.log("verifying with paystack");
-    verifyPaystackPayment(referenceId);
+   await verifyPaystackPayment(referenceId);
     //   wallet topUp logic
     let currentWalletBal = user!.theraWallet;
     // adding to the user's wallet balance
     user!.theraWallet = currentWalletBal + amount;
 
+    console.log("added "+ currentWalletBal + amount)
+    console.log("current bal "+  currentWalletBal)
+
     await user?.save();
 
     //TODO save log in transaction history
     console.log("saving transaction log in history");
-
+    const newTopupTransactionLog = new TransactionsModel({
+      userId: user.userId,
+      amount,
+      details: {
+        payment_method: payment_method,
+        reference_id: referenceId,
+        currency: "NGN",
+        payment_status: "success",
+      },
+      type: "wallet-topup",
+      created_at: new Date(),
+    });
+    await newTopupTransactionLog.save();
     //TODO send email notification to user
     console.log("sending notification email to user on success");
 
@@ -68,7 +92,14 @@ export const giftWalletTopUpController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { receiverId, email, amount, senderId, referenceId } = req.body;
+  const {
+    receiverId,
+    email,
+    amount,
+    senderId,
+    referenceId,
+    payment_method = "paystack",
+  } = req.body;
 
   if (receiverId && email) {
     res.status(500).json({
@@ -100,7 +131,7 @@ export const giftWalletTopUpController = async (
 
     // verify payment in paystack here
     console.log("verifying with paystack");
-    verifyPaystackPayment(referenceId);
+    await verifyPaystackPayment(referenceId);
     //   wallet topUp logic
     let currentWalletBal = recipient!.theraWallet;
     //   deducting from the sender's wallet balance
@@ -119,6 +150,10 @@ export const giftWalletTopUpController = async (
       details: {
         recipientId: `${recipient!.userId}`,
         recipientName: `${recipient!.firstName} ${recipient!.lastName}`,
+        payment_method: payment_method,
+        reference_id: referenceId,
+        currency: "NGN",
+        payment_status: "success",
       },
       type: "gift-balance",
       created_at: new Date(),
@@ -130,6 +165,10 @@ export const giftWalletTopUpController = async (
       details: {
         senderName: `${sender!.firstName} ${sender!.lastName}`,
         senderId: `${sender!.userId}`,
+        payment_method: payment_method,
+        reference_id: referenceId,
+        currency: "NGN",
+        payment_status: "success",
       },
       type: "gift-balance",
       created_at: new Date(),
@@ -158,7 +197,7 @@ export const giftWalletTopUpController = async (
       subject: "Gift Balance Top-up Notification",
     };
 
-    sendGiftTopUpRecipientEmail(recipientEmailNotificationData)
+    sendGiftTopUpRecipientEmail(recipientEmailNotificationData);
 
     res.status(200).json({ success: "gifting was successful" });
   } catch (err) {
