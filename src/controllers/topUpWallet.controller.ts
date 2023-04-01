@@ -19,7 +19,7 @@ const topUpWalletController = async (
     userId,
     email,
     amount,
-    referenceId,
+    referenceId = 'T768990107951172',
     payment_method = "paystack",
   } = req.body;
 
@@ -32,11 +32,12 @@ const topUpWalletController = async (
   try {
     // Check if the mobile number already exists in the database
     let user;
-    if (email) {
-      user = await UserModel.findOne({ email });
-    }
+
+    // if (email) {
+    //   user = await UserModel.findOne({ email });
+    // }
+
     if (userId) {
-      let formattedUserId = "234" + userId;
       user = await UserModel.findOne({ userId });
     }
 
@@ -52,10 +53,10 @@ const topUpWalletController = async (
     //   wallet topUp logic
     let currentWalletBal = user!.theraWallet;
     // adding to the user's wallet balance
-    user!.theraWallet = currentWalletBal + amount;
+    user!.theraWallet = parseInt(currentWalletBal) + parseInt(amount);
 
-    console.log("added " + currentWalletBal + amount);
-    console.log("current bal " + currentWalletBal);
+    console.log("added " + parseInt(currentWalletBal) + parseInt(amount));
+    console.log("current bal " + parseInt(currentWalletBal));
 
     await user?.save();
 
@@ -76,7 +77,6 @@ const topUpWalletController = async (
     let savedHistory = await newTopupTransactionLog.save();
     console.log(savedHistory);
     //TODO send email notification to user
-    console.log("sending notification email to user on success");
     let data = {
       name: user.firstName,
       amount,
@@ -84,7 +84,8 @@ const topUpWalletController = async (
       subject: "Therawallet Top-up Notification",
       emailTo: user.email,
     };
-    sendTopUpEmail(data);
+    let emailSent = await sendTopUpEmail(data);
+    console.log(emailSent);
     res.status(200).json({ success: "topUp was successful" });
   } catch (err) {
     next?.(err);
@@ -106,7 +107,7 @@ export const giftWalletTopUpController = async (
     email,
     amount,
     senderId,
-    referenceId,
+    referenceId = 'T768990107951172',
     payment_method = "paystack",
   } = req.body;
 

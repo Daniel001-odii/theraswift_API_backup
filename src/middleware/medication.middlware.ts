@@ -1,6 +1,6 @@
 import { body, validationResult } from "express-validator";
 
-// Define validation rules using express-validator
+// Define validation rules using for medication
 export const validateMedication = [
   body("name").notEmpty(),
   body("description").notEmpty(),
