@@ -27,12 +27,13 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     // try find user with the same email
-    const userEmailOrNumber = await UserModel.findOne({ email, mobileNumber });
+    const userEmailExists = await UserModel.findOne({ email });
+    const userNumberExists = await UserModel.findOne({ mobileNumber });
 
     console.log(userEmailOrNumber);
 
     // check if user exists
-    if (userEmailOrNumber) {
+    if (userEmailExists || userNumberExists) {
       return res
         .status(401)
         .json({ message: "Email or Mobile Number exists already" });
