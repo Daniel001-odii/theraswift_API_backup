@@ -48,7 +48,26 @@
       "pharmacy_phone": "123-456-7890",
       "pharmacist_name": "John Doe"
     }
-  }
-  
+  },
+
+
+{
+  "referenceId": "T768990107951172",
+  "userId": "7053578760",
+  "amount": 2000
+},
+
+{
+  "email": "yusufmustahan21@gmail.com",
+  "firstName": "Yusuf",
+  "dateOfBirth": "08-08-2008",
+  "lastName": "Mustapha",
+  "password": "123456",
+  "passwordConfirmation": "123456",
+  "mobileNumber": "2347053578760",
+  "gender": "male"
+}
   
 ]
+
+

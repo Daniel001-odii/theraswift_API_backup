@@ -42,14 +42,6 @@ console.log(process.env.MONGODB_URI);
 // Router middleware
 app.use("/", routes);
 
-// MONGODB_URI=mongodb+srv://yumustyung:yumustyung@cluster0.aa6bi.mongodb.net/theraswift?retryWrites=true&w=majority
-// JWT_SECRET_KEY=THERASWIFT_SECRETE_JWT_STRING
-// PAYSTACK_API_KEY=sk_test_3c8a5c6ad09a0d29f4d4b26031b9d0bc9034d3d9
-
-
-// app.get("/", (req, res) => {
-//   res.send("Hello, TypeScript!");
-// });
 
 // app initialized port
 const port = process.env.PORT || 3000;
@@ -57,3 +49,9 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
+
+  
+// MONGODB_URI=mongodb+srv://yumustyung:yumustyung@cluster0.aa6bi.mongodb.net/theraswift?retryWrites=true&w=majority
+// JWT_SECRET_KEY=THERASWIFT_SECRETE_JWT_STRING
+// PAYSTACK_API_KEY=sk_test_3c8a5c6ad09a0d29f4d4b26031b9d0bc9034d3d9
