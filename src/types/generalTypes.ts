@@ -24,3 +24,12 @@ export type sendGiftTopUpEmailType = {
   senderId?: string;
   senderName?: string;
 };
+
+
+export type sendTopUpEmailType = {
+  amount: string;
+  referenceId?: string;
+  emailTo: string;
+  subject: string;
+  name:string
+}

@@ -6,6 +6,7 @@ import TransactionsModel from "../models/Transactions.model";
 import {
   sendGiftTopUpSenderEmail,
   sendGiftTopUpRecipientEmail,
+  sendTopUpEmail,
 } from "../utils/sendEmailUtility";
 
 // topUpWallet logic
@@ -47,14 +48,14 @@ const topUpWalletController = async (
 
     // verify payment in paystack here
     console.log("verifying with paystack");
-   await verifyPaystackPayment(referenceId);
+    await verifyPaystackPayment(referenceId);
     //   wallet topUp logic
     let currentWalletBal = user!.theraWallet;
     // adding to the user's wallet balance
     user!.theraWallet = currentWalletBal + amount;
 
-    console.log("added "+ currentWalletBal + amount)
-    console.log("current bal "+  currentWalletBal)
+    console.log("added " + currentWalletBal + amount);
+    console.log("current bal " + currentWalletBal);
 
     await user?.save();
 
@@ -73,10 +74,17 @@ const topUpWalletController = async (
       created_at: new Date(),
     });
     let savedHistory = await newTopupTransactionLog.save();
-    console.log(savedHistory)
+    console.log(savedHistory);
     //TODO send email notification to user
     console.log("sending notification email to user on success");
-
+    let data = {
+      name: user.firstName,
+      amount,
+      referenceId,
+      subject: "Therawallet Top-up Notification",
+      emailTo: user.email,
+    };
+    sendTopUpEmail(data);
     res.status(200).json({ success: "topUp was successful" });
   } catch (err) {
     next?.(err);
@@ -186,7 +194,7 @@ export const giftWalletTopUpController = async (
       recipientId: `${recipient!.userId}`,
       recipientName: `${recipient!.firstName} ${recipient!.lastName}`,
       emailTo: sender!.email,
-      subject: "Gift Balance Top-up Notification",
+      subject: "Therawallet Gift Balance Top-up Notification",
     };
 
     sendGiftTopUpSenderEmail(senderEmailNotificationData);
@@ -195,7 +203,7 @@ export const giftWalletTopUpController = async (
       senderId: `${sender!.userId}`,
       senderName: `${sender!.firstName} ${sender!.lastName}`,
       emailTo: recipient!.email,
-      subject: "Gift Balance Top-up Notification",
+      subject: "Therawallet Gift Balance Top-up Notification",
     };
 
     sendGiftTopUpRecipientEmail(recipientEmailNotificationData);

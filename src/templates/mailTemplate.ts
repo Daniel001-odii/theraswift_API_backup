@@ -174,3 +174,72 @@ export const receiverEmailTemplate = (
 </body>
 </html>
 `;
+
+
+
+  export const walletTopupEmailTemplate = (
+	recipientName: string,
+	topupAmount: string,
+	transactionReference: string
+  ): string => `
+	<html>
+	  <head>
+		<style>
+		  body {
+			font-family: sans-serif;
+			font-size: 13px;
+			background-color: #f4f4f4;
+		  }
+		  .container {
+			margin: 20px auto;
+			max-width: 600px;
+			background-color: #ffffff;
+			border-radius: 5px;
+			box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+		  }
+		  h2 {
+			color: #333333;
+			text-transform: capitalize;
+		  }
+		  .details {
+			color: #333333;
+			font-size: 13px;
+			display: block;
+			margin-top: 10px;
+		  }
+		  .success {
+			display: inline-block;
+			padding: 10px;
+			border-radius: 5px;
+			background-color: #00cc00;
+			box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+			backdrop-filter: blur(5px);
+			font-size: 18px;
+			font-weight: bold;
+			color: #ffffff;
+			cursor: pointer;
+		  }
+		  p {
+			color: #333333;
+			font-size: 13px;
+			display: block;
+			margin: 10px 0;
+		  }
+		</style>
+	  </head>
+	  <body>
+		<div class="container" style="background-color: #f2f2f2; padding: 20px;">
+		  <h2>Dear ${recipientName},</h2>
+		  <p>Thank you for topping up your TheraWallet with TheraSwift.</p>
+		  <p>Payment of NGN ${topupAmount} has been successfully processed through Paystack, with the transaction reference:</p>
+		  <div class="success">${transactionReference}</div>
+		  <p class="details">Please allow up to 5 minutes for the transaction to be reflected in your TheraWallet balance.</p>
+		  <p>If you have any questions or concerns, please contact us at support@theraswift.com.</p>
+		  <p>Thank you for choosing TheraSwift.</p>
+		  <p>Best regards,</p>
+		  <p>TheraSwift Team</p>
+		</div>
+	  </body>
+	</html>
+  `;
+  

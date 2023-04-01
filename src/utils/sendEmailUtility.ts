@@ -1,11 +1,13 @@
 import {
   SendEmailType,
   sendGiftTopUpEmailType,
+  sendTopUpEmailType,
 } from "../types/generalTypes";
 import nodemailer from "nodemailer";
 import {
   htmlMailTemplate,
   senderEmailTemplate,
+  walletTopupEmailTemplate,
 } from "../templates/mailTemplate";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 
@@ -113,3 +115,43 @@ export const sendGiftTopUpRecipientEmail  = async ({
     throw error;
   }
 };
+
+
+
+
+export const sendTopUpEmail  = async ({
+  amount,
+  referenceId,
+  emailTo,
+  subject,
+  name
+}: sendTopUpEmailType) => {
+  // Define the nodemailer transporter
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    secure: true,
+    secureConnection: false,
+    port: 465,
+    auth: {
+      user: process.env.GMAIL_USERNAME,
+      pass: process.env.GMAIL_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: true,
+    },
+  } as SMTPTransport.Options);
+
+  try {
+    let response = await transporter.sendMail({
+      from: "Theraswift",
+      to: emailTo,
+      subject: subject,
+      html: walletTopupEmailTemplate(name!, amount!, referenceId!),
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// 

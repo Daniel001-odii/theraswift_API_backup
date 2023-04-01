@@ -1,8 +1,12 @@
 import MedicationModel from "../models/Medications.model";
 import { Request, Response, NextFunction } from "express";
+import { validateMedication } from "../middleware/medication.middlware";
 
 export const addMedicationController = async (req: Request, res: Response) => {
   try {
+     // Validate the request body using express-validator
+     await Promise.all(validateMedication.map((validation) => validation.run(req)));
+
     const {
       name,
       description,
