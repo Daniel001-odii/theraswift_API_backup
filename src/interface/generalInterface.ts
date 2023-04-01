@@ -69,7 +69,7 @@ export interface IMedication extends Document {
   manufacturer?: string;
   price?: number;
   available?: boolean;
-  expiryDate?: Date;
+  // expiryDate?: Date;
   sideEffects?: string[];
   ingredients?: string[];
   storageInstructions?: string;

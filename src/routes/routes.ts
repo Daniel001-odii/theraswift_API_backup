@@ -27,14 +27,14 @@ router.post("/login", validateLoginParams, loginController);
 router.post("/otp/send_mobile", mobileOtpController);
 router.post("/otp/verify_mobile", mobileOtpVerificationController);
 router.post("/otp/resend_mobile", mobileOtpResendController);
-router.post("/topUpWallet", topUpWalletController);
-router.post("/giftWalletTopUp", giftWalletTopUpController);
 router.post("/otp/send_email", sendEmailController);
 router.post("/otp/verify_email", verifyEmailController);
 router.post("/otp/resend_email", resendEmailController);
 router.post("/add_medication",checkAdminRole, addMedicationController);
 router.post("/edit_medication",checkAdminRole, editMedicationController);
 router.post("/order_medication",editMedicationController);
+router.post("/topUpWallet", topUpWalletController);
+router.post("/giftWalletTopUp", giftWalletTopUpController);
 
 // router.delete("/deleteTodo", deleteTodo);
 

@@ -29,9 +29,9 @@ const medicationSchema = new Schema({
     type: Boolean,
     default: true,
   },
-  expiryDate: {
-    type: Date,
-  },
+  // expiryDate: {
+  //   type: Date,
+  // },
   sideEffects: {
     type: [String],
   },

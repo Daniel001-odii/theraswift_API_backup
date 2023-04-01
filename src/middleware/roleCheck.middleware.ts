@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import UserModel from "../models/User.model";
 import { JwtPayload, CustomRequest } from "../interface/generalInterface";
 
-let secret = process.env.JWT_SECRET_KEY;
+
 
 
 
@@ -12,6 +12,7 @@ export const checkAdminRole = async (
   res: Response,
   next: NextFunction
 ) => {
+  let secret = process.env.JWT_SECRET_KEY;
   // Get JWT from Authorization header
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
