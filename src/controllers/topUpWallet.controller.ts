@@ -19,7 +19,7 @@ const topUpWalletController = async (
     userId,
     email,
     amount,
-    referenceId = 'T768990107951172',
+    referenceId = "T768990107951172",
     payment_method = "paystack",
   } = req.body;
 
@@ -107,7 +107,7 @@ export const giftWalletTopUpController = async (
     email,
     amount,
     senderId,
-    referenceId = 'T768990107951172',
+    referenceId = "T768990107951172",
     payment_method = "paystack",
   } = req.body;
 
@@ -134,8 +134,6 @@ export const giftWalletTopUpController = async (
       });
     }
 
-    //   checking if sender has enough money to gift
-    // let formattedSenderId = "234" + senderId;
     // TODO change to uiser id check
     let sender = await UserModel.findOne({ userId: senderId });
 
@@ -143,11 +141,26 @@ export const giftWalletTopUpController = async (
     console.log("verifying with paystack");
     await verifyPaystackPayment(referenceId);
     //   wallet topUp logic
-    let currentWalletBal = recipient!.theraWallet;
+    let recipientCurrentWalletBal = parseInt(
+      recipient!.theraWallet.toString()
+    ) as number;
+    let senderCurrentWalletBal = parseInt(
+      sender!.theraWallet.toString()
+    ) as number;
+    // check if sender's balance is enough for gifting
+    if (senderCurrentWalletBal < parseInt(amount)) {
+      return res.json({
+        message: "balance not enough for gifting",
+      });
+    }
+
+    console.log("senderCurrentWalletBal "+ senderCurrentWalletBal);
+    console.log("recipientCurrentWalletBal "+ recipientCurrentWalletBal);
+    
     //   deducting from the sender's wallet balance
-    sender!.theraWallet = currentWalletBal - amount;
+    sender!.theraWallet = senderCurrentWalletBal - parseInt(amount);
     //   adding to the receiver wallet balance
-    recipient!.theraWallet = currentWalletBal + amount;
+    recipient!.theraWallet = recipientCurrentWalletBal + amount;
 
     await recipient?.save();
     await sender?.save();
@@ -196,15 +209,18 @@ export const giftWalletTopUpController = async (
       recipientName: `${recipient!.firstName} ${recipient!.lastName}`,
       emailTo: sender!.email,
       subject: "Therawallet Gift Balance Top-up Notification",
+      senderName: `${sender!.firstName}`,
     };
 
     sendGiftTopUpSenderEmail(senderEmailNotificationData);
     let recipientEmailNotificationData = {
       amount,
       senderId: `${sender!.userId}`,
+      recipientId: `${recipient!.userId}`,
       senderName: `${sender!.firstName} ${sender!.lastName}`,
       emailTo: recipient!.email,
       subject: "Therawallet Gift Balance Top-up Notification",
+      recipientName: `${recipient!.firstName}`,
     };
 
     sendGiftTopUpRecipientEmail(recipientEmailNotificationData);

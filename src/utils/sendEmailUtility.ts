@@ -6,19 +6,17 @@ import {
 import nodemailer from "nodemailer";
 import {
   htmlMailTemplate,
+  receiverEmailTemplate,
   senderEmailTemplate,
   walletTopupEmailTemplate,
 } from "../templates/mailTemplate";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 
-export const sendEmail = async ({
-  emailTo,
-  subject,
-  otp,
-  firstName,
-}: SendEmailType) => {
+let transporter: any;
+
+const transporterInit = () => {
   // Define the nodemailer transporter
-  const transporter = nodemailer.createTransport({
+  transporter = nodemailer.createTransport({
     service: "gmail",
     secure: true,
     secureConnection: false,
@@ -31,6 +29,16 @@ export const sendEmail = async ({
       rejectUnauthorized: true,
     },
   } as SMTPTransport.Options);
+};
+
+export const sendEmail = async ({
+  emailTo,
+  subject,
+  otp,
+  firstName,
+}: SendEmailType) => {
+  // Init the nodemailer transporter
+  transporterInit();
 
   try {
     let response = await transporter.sendMail({
@@ -51,28 +59,22 @@ export const sendGiftTopUpSenderEmail = async ({
   recipientName,
   emailTo,
   subject,
+  senderName,
 }: sendGiftTopUpEmailType) => {
-  // Define the nodemailer transporter
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    secure: true,
-    secureConnection: false,
-    port: 465,
-    auth: {
-      user: process.env.GMAIL_USERNAME,
-      pass: process.env.GMAIL_PASSWORD,
-    },
-    tls: {
-      rejectUnauthorized: true,
-    },
-  } as SMTPTransport.Options);
+  // Init the nodemailer transporter
+  transporterInit();
 
   try {
     let response = await transporter.sendMail({
       from: "Theraswift",
       to: emailTo,
       subject: subject,
-      html: senderEmailTemplate(amount, recipientId!, recipientName!, subject),
+      html: senderEmailTemplate(
+        amount,
+        recipientId!,
+        recipientName!,
+        senderName!
+      ),
     });
     return response;
   } catch (error) {
@@ -80,35 +82,29 @@ export const sendGiftTopUpSenderEmail = async ({
   }
 };
 
-
-export const sendGiftTopUpRecipientEmail  = async ({
+export const sendGiftTopUpRecipientEmail = async ({
   amount,
   senderId,
+  recipientId,
   senderName,
   emailTo,
   subject,
+  recipientName,
 }: sendGiftTopUpEmailType) => {
-  // Define the nodemailer transporter
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    secure: true,
-    secureConnection: false,
-    port: 465,
-    auth: {
-      user: process.env.GMAIL_USERNAME,
-      pass: process.env.GMAIL_PASSWORD,
-    },
-    tls: {
-      rejectUnauthorized: true,
-    },
-  } as SMTPTransport.Options);
-
+  // Init the nodemailer transporter
+  transporterInit();
   try {
     let response = await transporter.sendMail({
       from: "Theraswift",
       to: emailTo,
       subject: subject,
-      html: senderEmailTemplate(amount, senderId!, senderName!, subject),
+      html: receiverEmailTemplate(
+        amount,
+        senderId!,
+        senderName!,
+        recipientId!,
+        recipientName!
+      ),
     });
     return response;
   } catch (error) {
@@ -116,30 +112,15 @@ export const sendGiftTopUpRecipientEmail  = async ({
   }
 };
 
-
-
-
-export const sendTopUpEmail  = async ({
+export const sendTopUpEmail = async ({
   amount,
   referenceId,
   emailTo,
   subject,
-  name
+  name,
 }: sendTopUpEmailType) => {
-  // Define the nodemailer transporter
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    secure: true,
-    secureConnection: false,
-    port: 465,
-    auth: {
-      user: process.env.GMAIL_USERNAME,
-      pass: process.env.GMAIL_PASSWORD,
-    },
-    tls: {
-      rejectUnauthorized: true,
-    },
-  } as SMTPTransport.Options);
+  // Init the nodemailer transporter
+  transporterInit();
 
   try {
     let response = await transporter.sendMail({
@@ -154,4 +135,4 @@ export const sendTopUpEmail  = async ({
   }
 };
 
-// 
+

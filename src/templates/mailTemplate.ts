@@ -55,7 +55,7 @@ export const senderEmailTemplate = (
   amount: string,
   recipientId: string,
   recipientName: string,
-  subject: string
+  senderName: string
 ): string => `
 <!DOCTYPE html>
 <html>
@@ -89,22 +89,25 @@ export const senderEmailTemplate = (
 			margin: 10px 0;
 			padding: 0;
 			color: #333333;
+			font-size:15px
 		}
 
 		.amount {
 			font-size: 18px;
 			font-weight: bold;
-			color: #008000;
+			color: #333;
 		}
 	</style>
 </head>
 <body>
 	<div class="container">
-		<h1>${subject}</h1>
-		<p>Dear ${recipientName},</p>
-		<p>We are pleased to inform you that a gift balance top-up of <span class="amount">$${parseInt(
+		<p>Dear ${senderName},</p>
+		<p>We are pleased to inform you that a gift balance top-up of <span class="amount">NGN${parseInt(
       amount
-    ).toFixed(2)}</span> has been successfully transferred to your account.</p>
+    ).toFixed(
+      2
+    )}</span> has been successfully transferred to <b>${recipientName}</b> with the user ID: <b>${recipientId}</b> from your theraWallet balance.</p>
+	<p>log into your theraSwift account to learn more.</p>
 		<p>Thank you for using our services.</p>
 		<p>Best regards,</p>
 		<p>The Sender</p>
@@ -113,11 +116,13 @@ export const senderEmailTemplate = (
 </html>
 `;
 
+// amount, senderId!, senderName!, subject
 export const receiverEmailTemplate = (
   amount: string,
   senderId: string,
   senderName: string,
-  subject: string
+  recieverId: string,
+  recipientName: string
 ): string => `
 <!DOCTYPE html>
 <html>
@@ -139,49 +144,46 @@ export const receiverEmailTemplate = (
 			margin: 0 auto;
 		}
 
-		h1 {
-			font-size: 24px;
-			font-weight: normal;
-			margin: 0;
-			padding: 0;
-			color: #333333;
-		}
-
 		p {
 			margin: 10px 0;
 			padding: 0;
 			color: #333333;
+			font-size:15px
 		}
 
 		.amount {
 			font-size: 18px;
 			font-weight: bold;
-			color: #008000;
+			color: #333;
 		}
+		h2 {
+			color: #333333;
+			text-transform: capitalize;
+		  }
 	</style>
 </head>
 <body>
 	<div class="container">
-		<h1>${subject}</h1>
-		<p>Dear ${senderName},</p>
-		<p>We are pleased to inform you that a gift balance top-up of <span class="amount">$${parseInt(amount).toFixed(
+	<h2>Dear ${recipientName},</h2>
+		<p>We are pleased to inform you that a gift balance top-up of <span class="amount">NGN${parseInt(
+      amount
+    ).toFixed(
       2
-    )}</span> has been successfully transferred to the account of the recipient.</p>
+    )}</span> has been successfully transferred to your theraWallet from <b>${senderName}</b> with the user ID: <b>${senderId}</b>.</p>
+	<p>log into your theraSwift account to learn more.</p>
 		<p>Thank you for using our services.</p>
 		<p>Best regards,</p>
-		<p>The Sender</p>
+		<p>TheraSwift Team</p>
 	</div>
 </body>
 </html>
 `;
 
-
-
-  export const walletTopupEmailTemplate = (
-	recipientName: string,
-	topupAmount: string,
-	transactionReference: string
-  ): string => `
+export const walletTopupEmailTemplate = (
+  recipientName: string,
+  topupAmount: string,
+  transactionReference: string
+): string => `
 	<html>
 	  <head>
 		<style>
@@ -242,4 +244,3 @@ export const receiverEmailTemplate = (
 	  </body>
 	</html>
   `;
-  

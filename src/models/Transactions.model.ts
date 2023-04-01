@@ -11,8 +11,7 @@ const UserSchema = new Schema(
         details: Object,
         amount: {
           type: Number,
-          required: true,
-          min: 0
+          required: true
         },
         created_at: {
           type: Date,
