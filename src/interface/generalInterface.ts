@@ -1,5 +1,6 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 import { Request } from "express";
+import { PrescriptionType } from "../models/Prescription.model";
 
 export interface IUser extends Document {
   userId: string;
@@ -103,4 +104,24 @@ export interface IOrder extends Document {
   status: "pending" | "cancelled" | "dispensed" | "delivered";
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface Prescription extends Document {
+  userId: Types.ObjectId;
+  type: PrescriptionType;
+  name: string;
+  dosage: string;
+  frequency: string;
+  startDate: Date;
+  endDate: Date;
+  doctor?: {
+    name:string,
+    phone:string,
+    address:string
+  };
+  pharmacy?: {
+    name:string,
+    phone:string,
+    address:string
+  };
 }

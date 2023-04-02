@@ -15,7 +15,9 @@ import {
   verifyEmailController,
   addMedicationController,
   editMedicationController,
-  addOrder
+  addOrder,
+  addPrescription,
+  getPrescription
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole } from "../middleware/roleCheck.middleware";
@@ -37,7 +39,8 @@ router.post("/order_medication",editMedicationController);
 router.post("/topup_wallet", topUpWalletController);
 router.post("/gift_wallet_topup", giftWalletTopUpController);
 router.post("/new_order", addOrder);
-
+router.post("/add_prescription",addPrescription)
+router.post("/get_prescription",getPrescription)
 // router.delete("/deleteTodo", deleteTodo);
 
 export default router;

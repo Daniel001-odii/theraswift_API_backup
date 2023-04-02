@@ -1,4 +1,5 @@
 import { Document, model, Schema } from "mongoose";
+import { Prescription } from "../interface/generalInterface";
 
 export enum PrescriptionType {
   DoctorPrescription = "doctor-prescription",
@@ -6,17 +7,7 @@ export enum PrescriptionType {
   NonPrescription = "non-prescription",
 }
 
-interface Prescription extends Document {
-  userId: Schema.Types.ObjectId;
-  type: PrescriptionType;
-  name: string;
-  dosage: string;
-  frequency: string;
-  startDate: Date;
-  endDate: Date;
-  doctor?: string;
-  pharmacy?: string;
-}
+
 
 const prescriptionSchema = new Schema<Prescription>({
   userId: {
@@ -29,8 +20,8 @@ const prescriptionSchema = new Schema<Prescription>({
   frequency: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
-  doctor: { type: String },
-  pharmacy: { type: String },
+  doctor: Object,
+  pharmacy: Object,
 });
 
 let PrescriptionModel = model<Prescription>("Prescription", prescriptionSchema);

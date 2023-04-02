@@ -31,3 +31,15 @@ export interface AddOrderRequestBody {
   shipping_address: string;
   order_type:string;
 }
+
+export interface AddPrescriptionRequest {
+  userId: Types.ObjectId;
+  type: PrescriptionType;
+  name: string;
+  dosage: string;
+  frequency: string;
+  startDate: Date;
+  endDate: Date;
+  doctor?: string;
+  pharmacy?: string;
+}

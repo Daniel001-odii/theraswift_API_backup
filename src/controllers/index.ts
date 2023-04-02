@@ -19,7 +19,7 @@ import {
 } from "./medication.controller";
 import { editMedicationController } from "./medication.controller";
 import {addOrder} from './orders.controller';
-
+import {addPrescription,getPrescription} from './prescription.controller';
 export {
   
   signUpController,
@@ -35,5 +35,7 @@ export {
   giftWalletTopUpController,
   addMedicationController,
   editMedicationController,
-  addOrder
+  addOrder,
+  addPrescription,
+  getPrescription
 };

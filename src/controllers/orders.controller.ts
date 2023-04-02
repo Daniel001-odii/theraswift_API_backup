@@ -4,7 +4,7 @@ import Order from "../models/Order.model";
 import Medication from "../models/Medications.model";
 import Prescription from "../models/Prescription.model";
 // import RefillRequest from '../models/RefillRequest';
-import { AddOrderRequestBody } from "../types/ordersInterface";
+import { AddOrderRequestBody } from "../interface/ordersInterface";
 import { IOrder } from "../interface/generalInterface";
 import TransactionsModel from "../models/Transactions.model";
 

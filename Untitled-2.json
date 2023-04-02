@@ -115,6 +115,26 @@
       "amount": 50.0
     },
     "shipping_address": "123 Main St, Anytown USA"
+  },
+  {
+    "userId": "64284e86656279c9c9a414df",
+    "type": "doctor-prescription",
+    "name": "Lisinopril Tablets",
+    "dosage": "1 tablet once daily with or without food",
+    "frequency": "daily",
+    "startDate": "2023-04-02",
+    "endDate": "2023-04-30",
+    "doctor": {
+      "name": "Dr. John Doe",
+      "phone": "123-456-7890",
+      "address": "123 Main St, Anytown, USA"
+    },
+    "pharmacy": {
+      "name": "ABC Pharmacy",
+      "phone": "555-123-4567",
+      "address": "456 Maple Ave, Anytown, USA"
+    }
   }
+  
   
 ]
