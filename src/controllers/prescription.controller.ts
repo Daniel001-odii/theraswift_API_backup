@@ -41,8 +41,10 @@ export const addPrescription = async (req: Request, res: Response) => {
 
 
 export  const getPrescription  = async (req: Request, res: Response) => {
+    let {prescription_id}  = req.body
     try {
-
+    let data = await Prescription.findById(prescription_id)
+    res.status(200).json({data})
     }catch(error) {
         res.status(500).json({message:"internal server error"})
         // throw Error(error)
