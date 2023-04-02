@@ -11,7 +11,7 @@
     },
     "amount": 1000
   },
-  
+
   {
     "user_id": "user123",
     "type": "wallet-topup",
@@ -21,7 +21,7 @@
     },
     "amount": 100
   },
-  
+
   {
     "user_id": "user123",
     "type": "product-order",
@@ -33,7 +33,7 @@
     },
     "amount": -20
   },
-  
+
   {
     "type": "prescription-order",
     "details": {
@@ -50,24 +50,71 @@
     }
   },
 
+  {
+    "userId": "64284e86656279c9c9a414df",
+    "products": [
+      {
+        "medication_id": "64287610e401378b125dd672",
+        "quantity": 2
+      },
+      {
+        "medication_id": "6428710ca7df18c69fcb878f",
+        "quantity": 1
+      }
+    ],
+    "prescription_input": {
+      "type": "doctor-prescription",
+      "name": "Medicine A",
+      "dosage": "1 tablet",
+      "frequency": "once a day",
+      "startDate": "2023-04-01T00:00:00Z",
+      "endDate": "2023-04-15T00:00:00Z",
+      "doctor": "Dr. John Doe"
+    },
+    "payment": {
+      "provider": "paystack",
+      "transaction_id": "1234567890",
+      "amount": 50.0
+    },
+    "shipping_address": "123 Main St, Anytown USA"
+  },
 
-{
-  "referenceId": "T768990107951172",
-  "userId": "7053578760",
-  "amount": 2000
-},
+  {
+    "referenceId": "T768990107951172",
+    "userId": "7053578760",
+    "amount": 2000
+  },
 
-{
-  "email": "yusufmustahan21@gmail.com",
-  "firstName": "Yusuf",
-  "dateOfBirth": "08-08-2008",
-  "lastName": "Mustapha",
-  "password": "123456",
-  "passwordConfirmation": "123456",
-  "mobileNumber": "2347053578760",
-  "gender": "male"
-}
+  {
+    "email": "yusufmustahan21@gmail.com",
+    "firstName": "Yusuf",
+    "dateOfBirth": "08-08-2008",
+    "lastName": "Mustapha",
+    "password": "123456",
+    "passwordConfirmation": "123456",
+    "mobileNumber": "2347053578760",
+    "gender": "male"
+  },
+
+  {
+    "userId": "64284e86656279c9c9a414df",
+    "products": [
+      {
+        "medication_id": "64287610e401378b125dd672",
+        "quantity": 2
+      },
+      {
+        "medication_id": "6428710ca7df18c69fcb878f",
+        "quantity": 1
+      }
+    ],
+    "prescription_id":"642968dbe5de59d4c36e5ada",
+    "payment": {
+      "provider": "paystack",
+      "transaction_id": "1234567890",
+      "amount": 50.0
+    },
+    "shipping_address": "123 Main St, Anytown USA"
+  }
   
 ]
-
-

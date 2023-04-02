@@ -13,9 +13,10 @@ import {
   resendEmailController,
   sendEmailController,
   verifyEmailController,
-  addMedicationController
+  addMedicationController,
+  editMedicationController,
+  addOrder
 } from "../controllers/";
-import { editMedicationController } from "../controllers/medication.controller";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole } from "../middleware/roleCheck.middleware";
 import { validateSignupParams } from "../middleware/signup.middleware";
@@ -33,8 +34,9 @@ router.post("/otp/resend_email", resendEmailController);
 router.post("/add_medication",checkAdminRole, addMedicationController);
 router.post("/edit_medication",checkAdminRole, editMedicationController);
 router.post("/order_medication",editMedicationController);
-router.post("/topUpWallet", topUpWalletController);
-router.post("/giftWalletTopUp", giftWalletTopUpController);
+router.post("/topup_wallet", topUpWalletController);
+router.post("/gift_wallet_topup", giftWalletTopUpController);
+router.post("/new_order", addOrder);
 
 // router.delete("/deleteTodo", deleteTodo);
 

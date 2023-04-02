@@ -17,7 +17,11 @@ import {
 import {
   addMedicationController
 } from "./medication.controller";
+import { editMedicationController } from "./medication.controller";
+import {addOrder} from './orders.controller';
+
 export {
+  
   signUpController,
   loginController,
   rootController,
@@ -29,5 +33,7 @@ export {
   sendEmailController,
   verifyEmailController,
   giftWalletTopUpController,
-  addMedicationController
+  addMedicationController,
+  editMedicationController,
+  addOrder
 };

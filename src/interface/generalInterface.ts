@@ -39,22 +39,20 @@ export interface ITransaction extends Document {
   details: {
     sender?: string;
     recipient?: string;
-    order_id?: string;
+    orderId?: string;
     medication_name?: string;
     quantity?: number;
     prescription_required?: boolean;
     payment_method?: string;
-    card_number?: string;
     transaction_id?: string;
     amount_paid?: number;
     currency?: string;
     payment_status?: string;
-    prescribing_doctor?: string;
-    prescription_number?: string;
-    prescription_date?: Date;
-    pharmacy_name?: string;
-    pharmacy_phone?: string;
-    pharmacist_name?: string;
+    prescription?: Object;
+    product_order_type?:
+      | "order-refill"
+      | "non-prescription-order"
+      | "prescription-order";
     // [key: string]: string | undefined;
   };
   amount: number;
@@ -89,8 +87,9 @@ export interface CustomRequest extends Request {
 
 export interface IOrder extends Document {
   userId: string;
+  type: string;
   products: {
-    product_id: string;
+    medication_id: string;
     quantity: number;
   }[];
   prescription?: string;
@@ -101,7 +100,7 @@ export interface IOrder extends Document {
     amount: number;
   };
   shipping_address: string;
-  status: "pending" | "in-transit" | "delivered";
+  status: "pending" | "cancelled" | "dispensed" | "delivered";
   createdAt?: Date;
   updatedAt?: Date;
 }
