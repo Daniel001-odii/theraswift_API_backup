@@ -75,6 +75,8 @@ export interface IMedication extends Document {
   contraindications?: string[];
   routeOfAdministration?: string;
   prescription_required: boolean;
+  category?: string;
+  image_url?: string;
 }
 
 export interface JwtPayload {
@@ -115,13 +117,21 @@ export interface Prescription extends Document {
   startDate: Date;
   endDate: Date;
   doctor?: {
-    name:string,
-    phone:string,
-    address:string
+    name: string;
+    phone: string;
+    address: string;
   };
   pharmacy?: {
-    name:string,
-    phone:string,
-    address:string
+    name: string;
+    phone: string;
+    address: string;
+  };
+}
+
+export interface CustomFileAppendedRequest extends Request {
+  file: {
+    buffer: Buffer;
+    mimetype: string;
+    filename: string;
   };
 }

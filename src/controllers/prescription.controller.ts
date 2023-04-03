@@ -39,14 +39,34 @@ export const addPrescription = async (req: Request, res: Response) => {
   }
 };
 
+export const getPrescriptionById = async (req: Request, res: Response) => {
+  let { prescription_id } = req.body;
+  try {
+    let data = await Prescription.findById(prescription_id);
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+    // throw Error(error)
+  }
+};
 
-export  const getPrescription  = async (req: Request, res: Response) => {
-    let {prescription_id}  = req.body
-    try {
-    let data = await Prescription.findById(prescription_id)
-    res.status(200).json({data})
-    }catch(error) {
-        res.status(500).json({message:"internal server error"})
-        // throw Error(error)
-    }
-}
+export const getPrescriptions = async (req: Request, res: Response) => {
+  try {
+    let data = await Prescription.find();
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+    // throw Error(error)
+  }
+};
+
+export const getUserPrescription = async (req: Request, res: Response) => {
+  let { userId } = req.body;
+  try {
+    let data = await Prescription.find({ userId });
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+    // throw Error(error)
+  }
+};

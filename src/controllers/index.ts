@@ -14,14 +14,16 @@ import {
   sendEmailController,
   verifyEmailController,
 } from "./emailOtp.controller";
-import {
-  addMedicationController
-} from "./medication.controller";
+import { addMedicationController } from "./medication.controller";
 import { editMedicationController } from "./medication.controller";
-import {addOrder} from './orders.controller';
-import {addPrescription,getPrescription} from './prescription.controller';
+import { addOrder } from "./orders.controller";
+import {
+  addPrescription,
+  getPrescriptions,
+  getPrescriptionById,
+  getUserPrescription,
+} from "./prescription.controller";
 export {
-  
   signUpController,
   loginController,
   rootController,
@@ -37,5 +39,7 @@ export {
   editMedicationController,
   addOrder,
   addPrescription,
-  getPrescription
+  getPrescriptionById,
+  getPrescriptions,
+  getUserPrescription,
 };
