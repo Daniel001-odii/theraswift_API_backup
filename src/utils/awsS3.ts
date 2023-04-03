@@ -7,7 +7,7 @@ const s3 = new AWS.S3({
 
 export const uploadToS3 = (buffer: Buffer, filename: string): Promise<AWS.S3.ManagedUpload.SendData> => {
   const params: AWS.S3.PutObjectRequest = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.AWS_BUCKET_NAME!,
     Key: filename,
     Body: buffer,
     ContentType: 'image/jpeg',

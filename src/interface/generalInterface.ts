@@ -1,6 +1,7 @@
 import { Document, Types } from "mongoose";
 import { Request } from "express";
 import { PrescriptionType } from "../models/Prescription.model";
+import { Multer } from 'multer';
 
 export interface IUser extends Document {
   userId: string;
@@ -129,9 +130,5 @@ export interface Prescription extends Document {
 }
 
 export interface CustomFileAppendedRequest extends Request {
-  file: {
-    buffer: Buffer;
-    mimetype: string;
-    filename: string;
-  };
+  file: Multer.File
 }
