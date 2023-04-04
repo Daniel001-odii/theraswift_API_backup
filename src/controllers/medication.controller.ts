@@ -37,6 +37,15 @@ export const addMedicationController = async (
       prescription_required,
     } = req.body;
 
+    let image_url = "";
+
+    if (req.file) {
+      const filename = uuidv4();
+      const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
+      image_url = result.Location;
+      console.log(result)
+    }
+
     // Save medication to MongoDB
     const newMedication = new MedicationModel({
       name,
@@ -53,16 +62,8 @@ export const addMedicationController = async (
       contraindications,
       routeOfAdministration,
       prescription_required,
+      image_url
     }) as IMedication;
-
-    if (req.file) {
-      const filename = uuidv4();
-      const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
-      newMedication.image_url = result.Location;
-
-      // Delete the file from the uploads folder
-      fs.unlinkSync(path.join(__dirname, "..", "uploads", req.file.filename));
-    }
 
     let medicationSaved = await newMedication.save();
     console.log(medicationSaved);

@@ -130,5 +130,9 @@ export interface Prescription extends Document {
 }
 
 export interface CustomFileAppendedRequest extends Request {
-  file: Multer.File
+  file: {
+    buffer: Buffer;
+    mimetype: string;
+    filename: string;
+  } & Multer.File;
 }

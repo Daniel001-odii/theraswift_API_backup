@@ -6,6 +6,9 @@ const s3 = new AWS.S3({
 });
 
 export const uploadToS3 = (buffer: Buffer, filename: string): Promise<AWS.S3.ManagedUpload.SendData> => {
+  console.log(process.env.AWS_ACCESS_KEY_ID)
+  console.log(process.env.AWS_SECRET_ACCESS_KEY)
+  console.log(process.env.AWS_BUCKET_NAME)
   const params: AWS.S3.PutObjectRequest = {
     Bucket: process.env.AWS_BUCKET_NAME!,
     Key: filename,

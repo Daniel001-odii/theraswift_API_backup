@@ -21,6 +21,9 @@ const medicationSchema = new Schema({
   manufacturer: {
     type: String,
   },
+  image_url: {
+    type: String,
+  },
   price: {
     type: Number,
     required: true,
