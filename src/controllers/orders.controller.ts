@@ -7,7 +7,7 @@ import Prescription from "../models/Prescription.model";
 import { AddOrderRequestBody } from "../interface/ordersInterface";
 import { IOrder } from "../interface/generalInterface";
 import TransactionsModel from "../models/Transactions.model";
-import {generateOrderId} from '../utils/orderIdGenerator'
+import { generateOrderId } from "../utils/orderIdGenerator";
 
 export const addOrder = async (req: Request, res: Response) => {
   try {
@@ -100,7 +100,6 @@ export const addOrder = async (req: Request, res: Response) => {
           //     message: "Prescription added successfully",
           //     prescription: savedPrescription,
           //   });
-
         } catch (error) {
           console.error(error);
           res.status(500).json({ message: "Error adding prescription", error });
@@ -112,7 +111,7 @@ export const addOrder = async (req: Request, res: Response) => {
 
     let orderId = await generateOrderId();
 
-    console.log("orderId ",orderId)
+    console.log("orderId ", orderId);
 
     // Create a new Order document
     let newOrder: IOrder;
@@ -154,10 +153,6 @@ export const addOrder = async (req: Request, res: Response) => {
 
     let newTransactionHistory = await newTransactionHistoryLog.save();
 
-    // console.log(newTransactionHistoryLog)
-
-    
-
     // Return the new Order document
     res.status(201).json({ message: "order created successfully", newOrder });
   } catch (error) {
@@ -165,3 +160,40 @@ export const addOrder = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+
+
+
+
+export const getOrderById = async (req: Request, res: Response) => {
+    let { order_id } = req.body;
+    try {
+      let data = await Order.findById(order_id);
+      res.status(200).json({ data });
+    } catch (error) {
+      res.status(500).json({ message: "internal server error" });
+      // throw Error(error)
+    }
+}
+
+export const getOrders = async (req: Request, res: Response) => {
+    try {
+      let data = await Order.find();
+      res.status(200).json({ data });
+    } catch (error) {
+      res.status(500).json({ message: "internal server error" });
+      // throw Error(error)
+    }
+  };
+
+  export const getUserOrders = async (req: Request, res: Response) => {
+    let { userId } = req.body;
+    try {
+      let data = await Order.find({ userId });
+      res.status(200).json({ data });
+    } catch (error) {
+      res.status(500).json({ message: "internal server error" });
+      // throw Error(error)
+    }
+  };

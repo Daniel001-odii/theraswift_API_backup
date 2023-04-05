@@ -19,13 +19,15 @@ import {
   addPrescription,
   getPrescriptions,
   getPrescriptionById,
-  getUserPrescription
+  getUserPrescription,
+  getOrderById,
+  getOrders,
+  getUserOrders,
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole } from "../middleware/roleCheck.middleware";
 import { validateSignupParams } from "../middleware/signup.middleware";
-import { multerUpload } from  '../middleware/multer.middleware';
-
+import { multerUpload } from "../middleware/multer.middleware";
 
 // theraswift routes
 router.get("/", rootController);
@@ -37,18 +39,25 @@ router.post("/otp/resend_mobile", mobileOtpResendController);
 router.post("/otp/send_email", sendEmailController);
 router.post("/otp/verify_email", verifyEmailController);
 router.post("/otp/resend_email", resendEmailController);
-router.post("/add_medication",checkAdminRole, multerUpload.single('image'), addMedicationController);
-router.put("/update_medication",checkAdminRole, editMedicationController);
-router.post("/order_medication",editMedicationController);
+router.post(
+  "/add_medication",
+  checkAdminRole,
+  multerUpload.single("image"),
+  addMedicationController
+);
+router.put("/update_medication", checkAdminRole, editMedicationController);
+router.post("/order_medication", editMedicationController);
 router.post("/topup_wallet", topUpWalletController);
 router.post("/gift_wallet_topup", giftWalletTopUpController);
 router.post("/new_order", addOrder);
-router.post("/add_prescription", addPrescription)
-router.get("/get_prescription_by_id",getPrescriptionById)
-router.get("/get_user_prescription",getUserPrescription)
-router.get("/get_all_prescriptions",getPrescriptions)
-// router.post('/medications', multerUpload.single('image'), createMedication);
-// router.get("/get_user_orders",getPrescription)
+router.get("/get_order_by_id", getOrderById);
+router.get("/get_orders", getOrders);
+router.get("/get_user_orders", getUserOrders);
+router.post("/add_prescription", addPrescription);
+router.get("/get_prescription_by_id", getPrescriptionById);
+router.get("/get_user_prescription", getUserPrescription);
+router.post("/delete_user_prescription", getUserPrescription);
+router.get("/get_all_prescriptions", getPrescriptions);
 // router.delete("/deleteTodo", deleteTodo);
 
 export default router;

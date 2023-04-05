@@ -16,7 +16,7 @@ import {
 } from "./emailOtp.controller";
 import { addMedicationController } from "./medication.controller";
 import { editMedicationController } from "./medication.controller";
-import { addOrder } from "./orders.controller";
+import { addOrder,getOrderById,getOrders,getUserOrders } from "./orders.controller";
 import {
   addPrescription,
   getPrescriptions,
@@ -42,4 +42,5 @@ export {
   getPrescriptionById,
   getPrescriptions,
   getUserPrescription,
+  getOrderById,getOrders,getUserOrders
 };
