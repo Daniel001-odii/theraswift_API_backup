@@ -7,6 +7,7 @@ import Prescription from "../models/Prescription.model";
 import { AddOrderRequestBody } from "../interface/ordersInterface";
 import { IOrder } from "../interface/generalInterface";
 import TransactionsModel from "../models/Transactions.model";
+import {generateOrderId} from '../utils/orderIdGenerator'
 
 export const addOrder = async (req: Request, res: Response) => {
   try {
@@ -99,6 +100,7 @@ export const addOrder = async (req: Request, res: Response) => {
           //     message: "Prescription added successfully",
           //     prescription: savedPrescription,
           //   });
+
         } catch (error) {
           console.error(error);
           res.status(500).json({ message: "Error adding prescription", error });
@@ -108,10 +110,15 @@ export const addOrder = async (req: Request, res: Response) => {
       await addPrescription();
     }
 
+    let orderId = await generateOrderId();
+
+    console.log("orderId ",orderId)
+
     // Create a new Order document
     let newOrder: IOrder;
     newOrder = new Order({
       userId,
+      orderId,
       type: order_type,
       products,
       prescription: existingPrescription
@@ -132,7 +139,8 @@ export const addOrder = async (req: Request, res: Response) => {
       type: "product-order",
       amount: payment.amount,
       details: {
-        orderId: orderCreated._id,
+        // orderId: orderCreated._id,
+        orderId: orderCreated.orderId,
         amount: payment.amount,
         currency: "NGN",
         payment_status: "success",
@@ -146,7 +154,7 @@ export const addOrder = async (req: Request, res: Response) => {
 
     let newTransactionHistory = await newTransactionHistoryLog.save();
 
-    console.log(newTransactionHistoryLog)
+    // console.log(newTransactionHistoryLog)
 
     
 

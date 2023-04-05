@@ -107,6 +107,7 @@ export interface IOrder extends Document {
   status: "pending" | "cancelled" | "dispensed" | "delivered";
   createdAt?: Date;
   updatedAt?: Date;
+  orderId:string
 }
 
 export interface Prescription extends Document {

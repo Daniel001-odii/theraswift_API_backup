@@ -30,6 +30,7 @@ export interface AddOrderRequestBody {
   payment: OrderPayment;
   shipping_address: string;
   order_type:string;
+  orderId:string
 }
 
 export interface AddPrescriptionRequest {
@@ -40,6 +41,6 @@ export interface AddPrescriptionRequest {
   frequency: string;
   startDate: Date;
   endDate: Date;
-  doctor?: string;
-  pharmacy?: string;
+  doctor?: Object;
+  pharmacy?: Object;
 }

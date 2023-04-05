@@ -53,6 +53,14 @@ const medicationSchema = new Schema({
   prescription_required: {
     type: Boolean,
   },
+  type:{
+    type:String,
+    required:true,
+  },
+  category:{
+    type:String,
+    required:true,
+  }
 });
 
 // Define medication model
