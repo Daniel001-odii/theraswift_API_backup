@@ -70,3 +70,14 @@ export const getUserPrescription = async (req: Request, res: Response) => {
     // throw Error(error)
   }
 };
+
+export const deleteUserPrescriptionById = async (req: Request, res: Response) => {
+  let { prescription_id } = req.body;
+  try {
+    let data = await Prescription.findByIdAndDelete(prescription_id);
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+    // throw Error(error)
+  }
+};
