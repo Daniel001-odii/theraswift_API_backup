@@ -65,6 +65,9 @@ const orderSchema = new Schema(
       enum: ["pending", "cancelled", "dispensed", "delivered"],
       default: "pending",
     },
+    dispenseInfo:{
+      
+    }
   },
   {
     timestamps: true,

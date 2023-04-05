@@ -38,7 +38,7 @@ router.post("/otp/send_email", sendEmailController);
 router.post("/otp/verify_email", verifyEmailController);
 router.post("/otp/resend_email", resendEmailController);
 router.post("/add_medication",checkAdminRole, multerUpload.single('image'), addMedicationController);
-router.post("/edit_medication",checkAdminRole, editMedicationController);
+router.put("/update_medication",checkAdminRole, editMedicationController);
 router.post("/order_medication",editMedicationController);
 router.post("/topup_wallet", topUpWalletController);
 router.post("/gift_wallet_topup", giftWalletTopUpController);

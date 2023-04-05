@@ -9,4 +9,5 @@ export const validateMedication = [
   body("price").notEmpty().isNumeric(),
   body("expiryDate").notEmpty().isISO8601().toDate(),
   body("routeOfAdministration").notEmpty(),
+  body("category").notEmpty(),
 ];

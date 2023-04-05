@@ -35,6 +35,7 @@ export const addMedicationController = async (
       contraindications,
       routeOfAdministration,
       prescription_required,
+      category,
     } = req.body;
 
     let image_url = "";
@@ -43,7 +44,7 @@ export const addMedicationController = async (
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
       image_url = result.Location;
-      console.log(result)
+      console.log(result);
     }
 
     // Save medication to MongoDB
@@ -62,7 +63,8 @@ export const addMedicationController = async (
       contraindications,
       routeOfAdministration,
       prescription_required,
-      image_url
+      image_url,
+      category,
     }) as IMedication;
 
     let medicationSaved = await newMedication.save();
@@ -81,26 +83,16 @@ export const addMedicationController = async (
 
 export const editMedicationController = async (req: Request, res: Response) => {
   try {
-    const {
-      medicationId,
-      name,
-      description,
-      dosage,
-      warnings,
-      manufacturer,
-      price,
-      available,
-      expiryDate,
-      sideEffects,
-      ingredients,
-      storageInstructions,
-      contraindications,
-      routeOfAdministration,
-      prescription_required,
-    } = req.body;
+    let { id } = req.params;
+    const updateFields = req.body;
+
+    if (updateFields.id) {
+      id = updateFields.id;
+      delete updateFields.id;
+    }
 
     let existingMedication = await MedicationModel.findOne({
-      _id: medicationId,
+      _id: id,
     });
 
     // Check if medication exists
@@ -108,31 +100,17 @@ export const editMedicationController = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Medication not found." });
     }
 
-    // Save medication to MongoDB
-    existingMedication.set({
-      name,
-      description,
-      dosage,
-      warnings,
-      manufacturer,
-      price,
-      available,
-      expiryDate,
-      sideEffects,
-      ingredients,
-      storageInstructions,
-      contraindications,
-      routeOfAdministration,
-      prescription_required,
-    });
+    const updatedMedication = await MedicationModel.findByIdAndUpdate(
+      id,
+      updateFields,
+      { new: true }
+    );
 
-    let medicationSaved = await existingMedication.save();
-
-    console.log(medicationSaved);
+    console.log(updatedMedication);
 
     res.send({
       message: "Medication updated successfully",
-      medication: medicationSaved,
+      medication: updatedMedication,
     });
   } catch (err) {
     console.log(err);
