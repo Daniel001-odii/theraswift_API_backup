@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { Multer } from "multer";
 
 export type ExpressArgs = {
   req: Request;
@@ -12,7 +13,7 @@ export type SendEmailType = {
   emailTo: string;
   subject: string;
   otp: string;
-  firstName: string;
+  firstName?: string;
 };
 
 export type sendGiftTopUpEmailType = {
@@ -25,11 +26,20 @@ export type sendGiftTopUpEmailType = {
   senderName?: string;
 };
 
-
 export type sendTopUpEmailType = {
   amount: string;
   referenceId?: string;
   emailTo: string;
   subject: string;
-  name:string
-}
+  name: string;
+};
+
+export type CustomFileAppendedRequest = {
+  file: {
+    buffer: Buffer;
+    mimetype: string;
+    filename: string;
+  } & Multer &
+    Request;
+  body: any;
+};

@@ -1,7 +1,6 @@
 import { Document, Types } from "mongoose";
 import { Request } from "express";
 import { PrescriptionType } from "../models/Prescription.model";
-import { Multer } from 'multer';
 
 export interface IUser extends Document {
   userId: string;
@@ -111,7 +110,8 @@ export interface IOrder extends Document {
 }
 
 export interface Prescription extends Document {
-  userId: Types.ObjectId;
+  // userId: Types.ObjectId;
+  userId: String;
   type: PrescriptionType;
   name: string;
   dosage: string;
@@ -130,10 +130,13 @@ export interface Prescription extends Document {
   };
 }
 
-export interface CustomFileAppendedRequest extends Request {
-  file: {
-    buffer: Buffer;
-    mimetype: string;
-    filename: string;
-  } & Multer.File;
+
+export interface IPasswordResetToken extends Document {
+  token: string;
+  userId?: string;
+  email: string;
+  phoneNumber: string;
+  tokenExpirationTime: Date;
+  otpExpirationTime:Date;
+  otp:String
 }

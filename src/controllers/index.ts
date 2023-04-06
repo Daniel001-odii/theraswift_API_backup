@@ -16,13 +16,27 @@ import {
 } from "./emailOtp.controller";
 import { addMedicationController } from "./medication.controller";
 import { editMedicationController } from "./medication.controller";
-import { addOrder,getOrderById,getOrders,getUserOrders } from "./orders.controller";
+import {
+  addOrder,
+  getOrderById,
+  getOrders,
+  getUserOrders,
+  updateOrderStatus,
+} from "./orders.controller";
 import {
   addPrescription,
   getPrescriptions,
   getPrescriptionById,
   getUserPrescription,
+  deleteUserPrescriptionById,
 } from "./prescription.controller";
+import { getUserTransactions } from "./transactions.controller";
+import {
+  emailOtpRequestController,
+  smsOtpRequestController,
+  verifyPasswordRecoveryOtpController,
+  updatePasswordController,
+} from "./passwordRecovery.controllers";
 export {
   signUpController,
   loginController,
@@ -41,6 +55,15 @@ export {
   addPrescription,
   getPrescriptionById,
   getPrescriptions,
+  deleteUserPrescriptionById,
   getUserPrescription,
-  getOrderById,getOrders,getUserOrders
+  getOrderById,
+  getOrders,
+  getUserOrders,
+  getUserTransactions,
+  updateOrderStatus,
+  emailOtpRequestController,
+  smsOtpRequestController,
+  verifyPasswordRecoveryOtpController,
+  updatePasswordController,
 };

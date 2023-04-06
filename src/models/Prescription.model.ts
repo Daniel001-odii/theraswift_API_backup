@@ -10,8 +10,12 @@ export enum PrescriptionType {
 
 
 const prescriptionSchema = new Schema<Prescription>({
+  // userId: {
+  //   type: Schema.Types.ObjectId,
+  //   required: true,
+  // },
   userId: {
-    type: Schema.Types.ObjectId,
+    type:String,
     required: true,
   },
   type: { type: String, enum: Object.values(PrescriptionType), required: true },

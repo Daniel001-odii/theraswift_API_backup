@@ -163,13 +163,10 @@ export const addOrder = async (req: Request, res: Response) => {
 
 
 
-
-
-
 export const getOrderById = async (req: Request, res: Response) => {
-    let { order_id } = req.body;
+    let { orderId } = req.body;
     try {
-      let data = await Order.findById(order_id);
+      let data = await Order.findOne({orderId});
       res.status(200).json({ data });
     } catch (error) {
       res.status(500).json({ message: "internal server error" });
@@ -197,3 +194,25 @@ export const getOrders = async (req: Request, res: Response) => {
       // throw Error(error)
     }
   };
+
+  export const updateOrderStatus = async (req: Request, res: Response) => {
+    let { orderId,orderStatus } = req.body;
+    try{
+      const orderInfo = await Order.findOne({ orderId });
+
+      if(!orderInfo){
+       return res.status(404).send({message:"Order not found "})
+      }
+
+      orderInfo.status = orderStatus
+
+      await orderInfo.save()
+
+      res.send({
+        message:"Order updated status successfully"
+      })
+
+    }catch(err){
+      res.status(500).json({ message: "internal server error" });
+    }
+  }

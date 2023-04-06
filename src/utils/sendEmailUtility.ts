@@ -6,6 +6,7 @@ import {
 import nodemailer from "nodemailer";
 import {
   htmlMailTemplate,
+  htmlPasswordRecoveryMailTemplate,
   receiverEmailTemplate,
   senderEmailTemplate,
   walletTopupEmailTemplate,
@@ -45,7 +46,7 @@ export const sendEmail = async ({
       from: "Theraswift",
       to: emailTo,
       subject: subject,
-      html: htmlMailTemplate(otp, firstName),
+      html: htmlMailTemplate(otp, firstName!),
     });
     return response;
   } catch (error) {
@@ -136,3 +137,24 @@ export const sendTopUpEmail = async ({
 };
 
 
+export const sendPasswordRecoveryEmail = async ({
+  emailTo,
+  subject,
+  otp,
+  firstName
+}: SendEmailType) => {
+  // Init the nodemailer transporter
+  transporterInit();
+
+  try {
+    let response = await transporter.sendMail({
+      from: "Theraswift",
+      to: emailTo,
+      subject: subject,
+      html: htmlPasswordRecoveryMailTemplate(otp,firstName),
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -4,11 +4,9 @@ import { validateMedication } from "../middleware/medication.middlware";
 import { v4 as uuidv4 } from "uuid";
 import { uploadToS3 } from "../utils/awsS3";
 import {
-  CustomFileAppendedRequest,
   IMedication,
 } from "../interface/generalInterface";
-import fs from "fs";
-import path from "path";
+import { CustomFileAppendedRequest } from "../types/generalTypes";
 
 export const addMedicationController = async (
   req: CustomFileAppendedRequest,
