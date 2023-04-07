@@ -37,6 +37,8 @@ import {
   verifyPasswordRecoveryOtpController,
   updatePasswordController,
 } from "./passwordRecovery.controllers";
+import { sendSmsController } from "./sendSms.controller";
+
 export {
   signUpController,
   loginController,
@@ -66,4 +68,5 @@ export {
   smsOtpRequestController,
   verifyPasswordRecoveryOtpController,
   updatePasswordController,
+  sendSmsController,
 };

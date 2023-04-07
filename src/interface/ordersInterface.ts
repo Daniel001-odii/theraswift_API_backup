@@ -35,12 +35,12 @@ export interface AddOrderRequestBody {
 
 export interface AddPrescriptionRequest {
   userId: Types.ObjectId;
-  type: PrescriptionType;
-  name: string;
-  dosage: string;
-  frequency: string;
-  startDate: Date;
-  endDate: Date;
+  type?: PrescriptionType;
+  name?: string;
+  dosage?: string;
+  frequency?: string;
+  startDate?: Date;
+  endDate?: Date;
   doctor?: Object;
   pharmacy?: Object;
 }
