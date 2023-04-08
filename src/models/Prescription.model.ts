@@ -26,6 +26,7 @@ const prescriptionSchema = new Schema<Prescription>({
   endDate: { type: Date, required: true },
   doctor: Object,
   pharmacy: Object,
+  prescriptionImageUrl: String
 });
 
 let PrescriptionModel = model<Prescription>("Prescription", prescriptionSchema);

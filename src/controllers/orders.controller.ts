@@ -8,6 +8,9 @@ import { AddOrderRequestBody } from "../interface/ordersInterface";
 import { IOrder } from "../interface/generalInterface";
 import TransactionsModel from "../models/Transactions.model";
 import { generateOrderId } from "../utils/orderIdGenerator";
+import { uploadToS3 } from "../utils/awsS3";
+import { v4 as uuidv4 } from "uuid";
+import UserModel from "../models/User.model";
 
 export const addOrder = async (req: Request, res: Response) => {
   try {
@@ -16,7 +19,7 @@ export const addOrder = async (req: Request, res: Response) => {
       products,
       prescription_input,
       prescription_id,
-      refill_request_id,
+      delivery_time_chosen,
       payment,
       shipping_address,
       order_type,
@@ -24,9 +27,33 @@ export const addOrder = async (req: Request, res: Response) => {
 
     console.log("userId ", userId);
 
+    // Check if the email already exists in the database
+    const existingUser = await UserModel.findOne({ userId });
+
+    if (!existingUser) {
+      return res.status(400).json({ message: "User does not exists" });
+    }
+
     // Validate the request body
-    if (!userId || !products || !payment || !shipping_address) {
+    if (
+      !userId ||
+      !products ||
+      !payment ||
+      !shipping_address ||
+      !delivery_time_chosen
+    ) {
       return res.status(400).json({ error: "Invalid request body" });
+    }
+
+    // Check if the user's wallet balance is less than the payment amount
+    if (
+      parseInt(existingUser.theraWallet.toString()) <
+      parseInt(payment.amount.toString())
+    ) {
+      // If the user's balance is insufficient, return an error message
+      return res.json({
+        message: "You do not have enough balance to complete this order",
+      });
     }
 
     // Validate the product IDs and quantities
@@ -95,11 +122,6 @@ export const addOrder = async (req: Request, res: Response) => {
           });
 
           savedPrescription = await newPrescription?.save();
-
-          //   res.status(201).json({
-          //     message: "Prescription added successfully",
-          //     prescription: savedPrescription,
-          //   });
         } catch (error) {
           console.error(error);
           res.status(500).json({ message: "Error adding prescription", error });
@@ -107,6 +129,21 @@ export const addOrder = async (req: Request, res: Response) => {
       };
 
       await addPrescription();
+    }
+
+    let prescription_image_url = "";
+
+    if (req.file) {
+      const filename = uuidv4();
+      const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
+      prescription_image_url = result.Location;
+
+      const newPrescription = new Prescription({
+        userId,
+        prescriptionImageUrl: prescription_image_url,
+      });
+
+      savedPrescription = await newPrescription?.save();
     }
 
     let orderId = await generateOrderId();
@@ -125,6 +162,7 @@ export const addOrder = async (req: Request, res: Response) => {
         : savedPrescription?._id,
       payment,
       shipping_address,
+      delivery_time_chosen,
     });
 
     if (!newOrder) return;
@@ -161,58 +199,55 @@ export const addOrder = async (req: Request, res: Response) => {
   }
 };
 
-
-
 export const getOrderById = async (req: Request, res: Response) => {
-    let { orderId } = req.body;
-    try {
-      let data = await Order.findOne({orderId});
-      res.status(200).json({ data });
-    } catch (error) {
-      res.status(500).json({ message: "internal server error" });
-      // throw Error(error)
-    }
-}
+  let { orderId } = req.body;
+  try {
+    let data = await Order.findOne({ orderId });
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+    // throw Error(error)
+  }
+};
 
 export const getOrders = async (req: Request, res: Response) => {
-    try {
-      let data = await Order.find();
-      res.status(200).json({ data });
-    } catch (error) {
-      res.status(500).json({ message: "internal server error" });
-      // throw Error(error)
-    }
-  };
-
-  export const getUserOrders = async (req: Request, res: Response) => {
-    let { userId } = req.body;
-    try {
-      let data = await Order.find({ userId });
-      res.status(200).json({ data });
-    } catch (error) {
-      res.status(500).json({ message: "internal server error" });
-      // throw Error(error)
-    }
-  };
-
-  export const updateOrderStatus = async (req: Request, res: Response) => {
-    let { orderId,orderStatus } = req.body;
-    try{
-      const orderInfo = await Order.findOne({ orderId });
-
-      if(!orderInfo){
-       return res.status(404).send({message:"Order not found "})
-      }
-
-      orderInfo.status = orderStatus
-
-      await orderInfo.save()
-
-      res.send({
-        message:"Order updated status successfully"
-      })
-
-    }catch(err){
-      res.status(500).json({ message: "internal server error" });
-    }
+  try {
+    let data = await Order.find();
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+    // throw Error(error)
   }
+};
+
+export const getUserOrders = async (req: Request, res: Response) => {
+  let { userId } = req.body;
+  try {
+    let data = await Order.find({ userId });
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+    // throw Error(error)
+  }
+};
+
+export const updateOrderStatus = async (req: Request, res: Response) => {
+  let { orderId, orderStatus } = req.body;
+  try {
+    const orderInfo = await Order.findOne({ orderId });
+
+    if (!orderInfo) {
+      return res.status(404).send({ message: "Order not found " });
+    }
+
+    orderInfo.status = orderStatus;
+
+    await orderInfo.save();
+
+    res.send({
+      message: "Order updated status successfully",
+    });
+  } catch (err) {
+    res.status(500).json({ message: "internal server error" });
+  }
+};

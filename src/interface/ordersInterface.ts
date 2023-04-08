@@ -13,9 +13,10 @@ interface OrderPayment {
 }
 
 export interface AddOrderRequestBody {
-  userId: Types.ObjectId;
+  userId: string;
   products: OrderProduct[];
   prescription_id?: Types.ObjectId;
+  delivery_time_chosen:string;
   prescription_input?: {
     type: PrescriptionType;
     name: string;
@@ -34,7 +35,7 @@ export interface AddOrderRequestBody {
 }
 
 export interface AddPrescriptionRequest {
-  userId: Types.ObjectId;
+  userId: string;
   type?: PrescriptionType;
   name?: string;
   dosage?: string;

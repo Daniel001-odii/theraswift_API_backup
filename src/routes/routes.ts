@@ -30,6 +30,14 @@ import {
   smsOtpRequestController,
   updatePasswordController,
   sendSmsController,
+  addFamilyController,
+  getUserFamilyController,
+  deleteUserFamilyController,
+  addHmoController,
+  getHMOByIdController,
+  getAllHMOController,
+  getUserHMOsController,
+  deleteUserHMOByIdController,
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole } from "../middleware/roleCheck.middleware";
@@ -55,7 +63,7 @@ router.post(
 router.put("/update_medication", checkAdminRole, editMedicationController);
 router.post("/topup_wallet", topUpWalletController);
 router.post("/gift_wallet_topup", giftWalletTopUpController);
-router.post("/new_order", addOrder);
+router.post("/new_order", multerUpload.single("image"), addOrder);
 router.get("/get_order_by_id", getOrderById);
 router.get("/get_orders", getOrders);
 router.get("/get_user_orders", getUserOrders);
@@ -71,5 +79,13 @@ router.post("/otp/send_password_recovery_sms", smsOtpRequestController);
 router.post("/otp/verify_password_recovery_otp", smsOtpRequestController);
 router.post("/otp/update_password", updatePasswordController);
 router.post("/send_sms", sendSmsController);
+router.post("/add_family", addFamilyController);
+router.post("/get_user_family", getUserFamilyController);
+router.post("/delete_user_family", deleteUserFamilyController);
+router.post("/add_hmo", multerUpload.single("image"), addHmoController);
+router.post("/get_hmo_by_id", getHMOByIdController);
+router.post("/get_user_hmo", getUserHMOsController);
+router.post("/get_all_hmo", getAllHMOController);
+router.post("/delete_user_hmo", deleteUserHMOByIdController);
 
 export default router;

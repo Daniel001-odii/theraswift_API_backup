@@ -38,6 +38,18 @@ import {
   updatePasswordController,
 } from "./passwordRecovery.controllers";
 import { sendSmsController } from "./sendSms.controller";
+import {
+  addFamilyController,
+  getUserFamilyController,
+  deleteUserFamilyController,
+} from "./family.controller";
+import {
+  addHmoController,
+  getHMOByIdController,
+  getAllHMOController,
+  getUserHMOsController,
+  deleteUserHMOByIdController,
+} from "./hmo.controllers";
 
 export {
   signUpController,
@@ -69,4 +81,12 @@ export {
   verifyPasswordRecoveryOtpController,
   updatePasswordController,
   sendSmsController,
+  addFamilyController,
+  getUserFamilyController,
+  deleteUserFamilyController,
+  addHmoController,
+  getHMOByIdController,
+  getAllHMOController,
+  getUserHMOsController,
+  deleteUserHMOByIdController,
 };

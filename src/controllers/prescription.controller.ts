@@ -36,7 +36,7 @@ export const addPrescription = async (
 
     const prescription = new Prescription({
       userId,
-      prescription_image_url,
+      prescriptionImageUrl:prescription_image_url,
     });
 
     await prescription.save();

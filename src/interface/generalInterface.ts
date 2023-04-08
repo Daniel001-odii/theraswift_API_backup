@@ -106,7 +106,7 @@ export interface IOrder extends Document {
   status: "pending" | "cancelled" | "dispensed" | "delivered";
   createdAt?: Date;
   updatedAt?: Date;
-  orderId:string
+  orderId: string;
 }
 
 export interface Prescription extends Document {
@@ -117,6 +117,7 @@ export interface Prescription extends Document {
   dosage: string;
   frequency: string;
   startDate: Date;
+  prescriptionImageUrl: String;
   endDate: Date;
   doctor?: {
     name: string;
@@ -130,13 +131,29 @@ export interface Prescription extends Document {
   };
 }
 
-
 export interface IPasswordResetToken extends Document {
   token: string;
   userId?: string;
   email: string;
   phoneNumber: string;
   tokenExpirationTime: Date;
-  otpExpirationTime:Date;
-  otp:String
+  otpExpirationTime: Date;
+  otp: String;
+}
+
+export interface IFamily {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  dateOfBirth: string;
+  mobileNumber: string;
+  gender: string;
+}
+
+export interface IHMO {
+  userId: String;
+  HmoName: String;
+  front_insurance_image: String;
+  back_insurance_image: String;
 }

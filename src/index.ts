@@ -6,10 +6,21 @@ import { logger } from "./middleware/logger";
 import routes from "./routes/routes";
 import mongoose, { ConnectOptions, MongooseOptions } from "mongoose";
 import dotenv from "dotenv";
-import { sendGiftTopUpSenderEmail } from "./utils/sendEmailUtility";
+import csrf from "csurf";
+import rateLimit from 'express-rate-limit';
+
+
 const app = express();
+const csrfProtection = csrf({ cookie: true });
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
 
 // Middleware
+app.use(limiter);
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
