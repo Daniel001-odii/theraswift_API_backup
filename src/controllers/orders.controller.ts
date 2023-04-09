@@ -11,7 +11,7 @@ import { generateOrderId } from "../utils/orderIdGenerator";
 import { uploadToS3 } from "../utils/awsS3";
 import { v4 as uuidv4 } from "uuid";
 import UserModel from "../models/User.model";
-import { sendOrderStatusEmail } from "../utils/sendEmailUtility";
+import { sendOrderCompleteEmail, sendOrderStatusEmail } from "../utils/sendEmailUtility";
 import { request } from "http";
 import shippingAddressModel from "../models/ShippingAddress.model";
 
@@ -26,7 +26,7 @@ export const addOrder = async (req: Request, res: Response) => {
       payment,
       shipping_address,
       order_type,
-      prescriptionCompleted
+      prescriptionCompleted,
     } = req.body as AddOrderRequestBody;
 
     console.log("userId ", userId);
@@ -336,9 +336,9 @@ export const uncompletedOrdersControllers = async (
       orderInfo.prescriptionCompleted = true;
 
       await orderInfo.save();
-      // send mail to notify user of the rejected order
+      //TODO send mail to notify user of the rejected order
 
-      // mail the admin too
+      //TODO mail the admin too
 
       // save the information to transaction history for user
       const newTransactionHistoryLog = new TransactionsModel({
@@ -413,23 +413,20 @@ export const uncompletedOrdersControllers = async (
       firstName: `${existingUser!.firstName}`,
       emailTo: existingUser!.email,
       subject: "Therawallet Gift Balance Top-up Notification",
-      orderStatus:'dispensed',
+      orderStatus: "dispensed",
     };
 
     sendOrderStatusEmail(senderEmailOrderStatusData);
 
+    // mail the admin
+    let senderEmailOrderCompletedData = {
+      emailTo: existingUser!.email,
+      subject: "Therawallet Gift Balance Top-up Notification",
+      deliveryDate: "20/34/5",
+      orderId: orderInfo.orderId,
+    };
 
-    //TODO this should be done 
-
-    // mail the admin too
-    // let senderEmailOrderStatusData = {
-    //   firstName: `${existingUser!.firstName}`,
-    //   emailTo: existingUser!.email,
-    //   subject: "Therawallet Gift Balance Top-up Notification",
-    //   orderStatus:'dispensed',
-    // };
-
-    // sendOrderStatusEmail(senderEmailOrderStatusData);
+    sendOrderCompleteEmail(senderEmailOrderCompletedData);
 
     // save the information to transaction history for user
     const newTransactionHistoryLog = new TransactionsModel({

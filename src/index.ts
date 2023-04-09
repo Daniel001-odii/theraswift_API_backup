@@ -8,10 +8,22 @@ import mongoose, { ConnectOptions, MongooseOptions } from "mongoose";
 import dotenv from "dotenv";
 import csrf from "csurf";
 import rateLimit from 'express-rate-limit';
+import { Server, Socket } from 'socket.io';
+import http from 'http'
+import handleSocketConnection from "./utils/socket";
 
 
 const app = express();
 const csrfProtection = csrf({ cookie: true });
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
+
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -52,6 +64,10 @@ console.log(process.env.MONGODB_URI);
 
 // Router middleware
 app.use("/", routes);
+
+
+// Handle socket connections
+handleSocketConnection(io);
 
 
 // app initialized port

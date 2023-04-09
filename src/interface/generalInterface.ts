@@ -167,3 +167,10 @@ export interface IHMO {
   front_insurance_image: String;
   back_insurance_image: String;
 }
+
+export interface IMessage {
+  from: string;
+  to: string;
+  text: string;
+  createdAt: Date;
+}

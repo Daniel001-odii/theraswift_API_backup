@@ -52,10 +52,15 @@ import {
   deleteUserHMOByIdController,
 } from "./hmo.controllers";
 import {
-  addShippingAddressControllers,
+  addShippingAddressController,
   getUserShippingAddressController,
   getUserShippingAddressByIdController,
 } from "./addShippingAddress.controller";
+import {
+  addChatsController,
+  getChats,
+} from "./chatMessages.controller";
+import { getUsersController } from "./user.controller";
 
 export {
   signUpController,
@@ -95,8 +100,11 @@ export {
   getAllHMOController,
   getUserHMOsController,
   deleteUserHMOByIdController,
-  addShippingAddressControllers,
+  addShippingAddressController,
   uncompletedOrdersControllers,
   getUserShippingAddressController,
   getUserShippingAddressByIdController,
+  addChatsController,
+  getChats,
+  getUsersController,
 };

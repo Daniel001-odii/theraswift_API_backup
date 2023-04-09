@@ -1,4 +1,5 @@
 import {
+  orderCompletedEmailType,
   orderStatusEmailType,
   SendEmailType,
   sendGiftTopUpEmailType,
@@ -12,6 +13,7 @@ import {
   receiverEmailTemplate,
   senderEmailTemplate,
   walletTopupEmailTemplate,
+  orderCompleteEmailTemplate,
 } from "../templates/mailTemplate";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 
@@ -174,10 +176,35 @@ export const sendOrderStatusEmail = async ({
       from: "Theraswift",
       to: emailTo,
       subject: subject,
-      html: orderStatusTemplate(firstName!, orderStatus),
+      html: orderStatusTemplate(firstName!, orderStatus!),
     });
     return response;
   } catch (error) {
     throw error;
   }
 };
+
+
+
+export const sendOrderCompleteEmail = async ({
+  emailTo,
+  subject,
+  deliveryDate,
+  orderId,
+}: orderCompletedEmailType) => {
+  // Init the nodemailer transporter
+  transporterInit();
+
+  try {
+    let response = await transporter.sendMail({
+      from: "Theraswift",
+      to: emailTo,
+      subject: subject,
+      html: orderCompleteEmailTemplate(orderId!, deliveryDate!),
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+

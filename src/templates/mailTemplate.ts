@@ -245,10 +245,10 @@ export const walletTopupEmailTemplate = (
 	</html>
   `;
 
-
-
-
-  export const passwordRecoveryMailTemplate = (otp: string,firstName:string) => `
+export const passwordRecoveryMailTemplate = (
+  otp: string,
+  firstName: string
+) => `
   <html>
     <head>
       <style>
@@ -299,12 +299,7 @@ export const walletTopupEmailTemplate = (
   </html>
 `;
 
-
-
-
-
-
-export const orderStatusTemplate = (firstName:string,orderStatus: string) => `
+export const orderStatusTemplate = (firstName: string, orderStatus: string) => `
 <!DOCTYPE html>
 <html>
   <head>
@@ -376,3 +371,129 @@ export const orderStatusTemplate = (firstName:string,orderStatus: string) => `
 </html>
 `;
 
+export const orderCompleteEmailTemplate = (orderId: string, deliveryDate: string) => `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Complete Notification</title>
+    <style>
+      /* Reset styles */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Email styles */
+      body {
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.4;
+        color: #444444;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #0077c0;
+      }
+
+      p {
+        margin-bottom: 20px;
+      }
+
+      .order-details {
+        margin-bottom: 20px;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border-radius: 5px;
+      }
+
+      .order-details h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #444444;
+      }
+
+      .order-details p {
+        margin-bottom: 5px;
+      }
+
+      .delivery-details {
+        margin-bottom: 20px;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border-radius: 5px;
+      }
+
+      .delivery-details h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #444444;
+      }
+
+      .delivery-details p {
+        margin-bottom: 5px;
+      }
+
+      /* Button styles */
+      .btn {
+        display: inline-block;
+        background-color: #0077c0;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: #00538b;
+      }
+
+      /* Utility classes */
+      .text-center {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Order Complete Notification</h1>
+      <p>Dear Admin,</p>
+      <p>We are pleased to inform you that order #${orderId} has been completed and is ready for delivery.</p>
+      <div class="order-details">
+        <h2>Order Details</h2>
+        <p><strong>Order ID:</strong> ${orderId}</p>
+        <p><strong>Order Status:</strong>Complete</p>
+      </div>
+      <div class="delivery-details">
+        <h2>Delivery Details</h2>
+        <p><strong>Delivery Date:</strong>
+        </p>
+        <p>${deliveryDate}</p>
+      </div>
+      <p>Thank you for choosing Theraswift!</p>
+      <p>Sincerely,</p>
+      <p>The Theraswift Team</p>
+    </div>
+  </body>
+</html>
+`;

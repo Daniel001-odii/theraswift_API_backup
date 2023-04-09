@@ -19,9 +19,18 @@ export type SendEmailType = {
 export type orderStatusEmailType = {
   emailTo: string;
   subject: string;
-  orderStatus: string;
+  orderStatus?: string;
   firstName?: string;
 };
+
+export type orderCompletedEmailType = {
+  emailTo: string;
+  subject: string;
+  deliveryDate:string,
+  orderId:string,
+};
+
+
 
 export type sendGiftTopUpEmailType = {
   amount: string;

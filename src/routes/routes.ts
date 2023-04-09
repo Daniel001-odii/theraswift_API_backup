@@ -39,14 +39,17 @@ import {
   getUserHMOsController,
   deleteUserHMOByIdController,
   uncompletedOrdersControllers,
-  addShippingAddressControllers,
+  addShippingAddressController,
   getUserShippingAddressController,
   getUserShippingAddressByIdController,
+  getUsersController,
+  addChatsController, getChats
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole } from "../middleware/roleCheck.middleware";
 import { validateSignupParams } from "../middleware/signup.middleware";
 import { multerUpload } from "../middleware/multer.middleware";
+
 
 // theraswift routes
 router.get("/", rootController);
@@ -91,9 +94,15 @@ router.post("/get_hmo_by_id", getHMOByIdController);
 router.post("/get_user_hmo", getUserHMOsController);
 router.post("/get_all_hmo", getAllHMOController);
 router.post("/delete_user_hmo", deleteUserHMOByIdController);
-router.post('/complete_order',uncompletedOrdersControllers);
-router.post('/add_shipping_address',addShippingAddressControllers);
-router.post('/get_user_shipping_address',getUserShippingAddressController);
-router.post('/get_user_shipping_address_by_id',getUserShippingAddressByIdController);
+router.post("/complete_order", uncompletedOrdersControllers);
+router.post("/add_shipping_address", addShippingAddressController);
+router.post("/get_user_shipping_address", getUserShippingAddressController);
+router.post(
+  "/get_user_shipping_address_by_id",
+  getUserShippingAddressByIdController
+);
+router.get("/get_chats", getChats);
+router.post('/add_chats', addChatsController)
+router.get('get_users', getUsersController)
 
 export default router;

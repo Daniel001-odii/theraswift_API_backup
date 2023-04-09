@@ -3,7 +3,7 @@ import { IShippingAddress } from "../interface/generalInterface";
 import shippingAddressModel from "../models/ShippingAddress.model";
 import UserModel from "../models/User.model";
 
-export const addShippingAddressControllers = async (
+export const addShippingAddressController = async (
   req: Request,
   res: Response
 ) => {
