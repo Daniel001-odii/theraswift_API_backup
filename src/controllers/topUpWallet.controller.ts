@@ -30,7 +30,7 @@ const topUpWalletController = async (
     });
   }
   try {
-    // Check if the mobile number already exists in the database
+    // Check if the user exists in the database
     let user;
 
     // if (email) {
