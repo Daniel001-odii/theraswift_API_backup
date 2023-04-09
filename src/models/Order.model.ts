@@ -1,11 +1,11 @@
+import { truncate } from "fs/promises";
 import { Schema, model } from "mongoose";
 import { IOrder } from "../interface/generalInterface";
 
 const orderSchema = new Schema(
   {
     userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
       required: true,
     },
     orderId:{
@@ -60,10 +60,17 @@ const orderSchema = new Schema(
       type: String,
       required: true,
     },
+    deliver_time:{
+      type:String
+    },
     status: {
       type: String,
-      enum: ["pending", "cancelled", "dispensed", "delivered"],
+      enum: ["pending", "cancelled", "dispensed", "delivered","rejected"],
       default: "pending",
+    },
+    prescriptionCompleted:{
+      type:Boolean,
+      default: true
     },
     dispenseInfo:{
       

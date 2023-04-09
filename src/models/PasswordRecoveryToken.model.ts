@@ -1,8 +1,7 @@
 import { IPasswordResetToken } from "../interface/generalInterface";
-import mongoose from "mongoose";
+import {Schema,model} from "mongoose";
 
-const PasswordResetTokenSchema = new mongoose.Schema({
-
+const PasswordResetTokenSchema = new Schema({
   otp: { type: String, required: true },
   token: { type: String, required: true },
   userId: String,
@@ -12,7 +11,7 @@ const PasswordResetTokenSchema = new mongoose.Schema({
   otpExpirationTime: { type: Date, required: true },
 });
 
-const PasswordResetToken = mongoose.model<IPasswordResetToken>(
+const PasswordResetToken = model<IPasswordResetToken>(
   "PasswordResetToken",
   PasswordResetTokenSchema
 );

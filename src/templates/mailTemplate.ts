@@ -248,7 +248,7 @@ export const walletTopupEmailTemplate = (
 
 
 
-  export const htmlPasswordRecoveryMailTemplate = (otp: string,firstName:string) => `
+  export const passwordRecoveryMailTemplate = (otp: string,firstName:string) => `
   <html>
     <head>
       <style>
@@ -298,3 +298,81 @@ export const walletTopupEmailTemplate = (
     </body>
   </html>
 `;
+
+
+
+
+
+
+export const orderStatusTemplate = (firstName:string,orderStatus: string) => `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TheraSwift Order Status Update</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.4;
+        color: #444444;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #005b9a;
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      p {
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      .status {
+        font-size: 18px;
+        font-weight: bold;
+        color: #005b9a;
+        text-transform: capitalize;
+      }
+
+      .button {
+        display: inline-block;
+        background-color: #005b9a;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+
+      .button:hover {
+        background-color: #003d6b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>TheraSwift Order Status Update</h1>
+      <p>Hello ${firstName},</p>
+      <p>Your order has been updated to <span class="status">${orderStatus}</span> status.</p>
+      <p>If you have any questions or concerns, please don't hesitate to contact us.</p>
+      <p>Thank you for choosing TheraSwift!</p>
+      <p>Sincerely,</p>
+      <p>The TheraSwift Team</p>
+      <br>
+      <p>
+        <a href="#" class="button">View Order Details</a>
+      </p>
+    </div>
+  </body>
+</html>
+`;
+

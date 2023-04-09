@@ -60,8 +60,7 @@ const topUpWalletController = async (
 
     await user?.save();
 
-    //TODO save log in transaction history
-    console.log("saving transaction log in history");
+    //save log in transaction history
     const newTopupTransactionLog = new TransactionsModel({
       userId: user.userId,
       amount,
@@ -76,7 +75,7 @@ const topUpWalletController = async (
     });
     let savedHistory = await newTopupTransactionLog.save();
     console.log(savedHistory);
-    //TODO send email notification to user
+    // send email notification to user
     let data = {
       name: user.firstName,
       amount,
@@ -134,7 +133,7 @@ export const giftWalletTopUpController = async (
       });
     }
 
-    // TODO change to uiser id check
+
     let sender = await UserModel.findOne({ userId: senderId });
 
     // verify payment in paystack here
@@ -165,8 +164,7 @@ export const giftWalletTopUpController = async (
     await recipient?.save();
     await sender?.save();
 
-    //TODO save log in transaction history
-    console.log("saving transaction log in history");
+    //save log in transaction history
     const newSenderHistoryLog = new TransactionsModel({
       userId: recipient.userId,
       amount,
@@ -200,9 +198,7 @@ export const giftWalletTopUpController = async (
     await newRecipientHistoryLog.save();
     await newSenderHistoryLog.save();
 
-    //TODO send email notification to sender
-    console.log("sending notification email to receiver and sender");
-    // senderEmailTemplate
+    //send email notification to sender
     let senderEmailNotificationData = {
       amount,
       recipientId: `${recipient!.userId}`,

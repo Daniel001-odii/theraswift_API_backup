@@ -1,4 +1,5 @@
 import {
+  orderStatusEmailType,
   SendEmailType,
   sendGiftTopUpEmailType,
   sendTopUpEmailType,
@@ -6,7 +7,8 @@ import {
 import nodemailer from "nodemailer";
 import {
   htmlMailTemplate,
-  htmlPasswordRecoveryMailTemplate,
+  passwordRecoveryMailTemplate,
+  orderStatusTemplate,
   receiverEmailTemplate,
   senderEmailTemplate,
   walletTopupEmailTemplate,
@@ -136,12 +138,11 @@ export const sendTopUpEmail = async ({
   }
 };
 
-
 export const sendPasswordRecoveryEmail = async ({
   emailTo,
   subject,
   otp,
-  firstName
+  firstName,
 }: SendEmailType) => {
   // Init the nodemailer transporter
   transporterInit();
@@ -151,7 +152,29 @@ export const sendPasswordRecoveryEmail = async ({
       from: "Theraswift",
       to: emailTo,
       subject: subject,
-      html: htmlPasswordRecoveryMailTemplate(otp,firstName),
+      html: passwordRecoveryMailTemplate(otp, firstName!),
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendOrderStatusEmail = async ({
+  emailTo,
+  subject,
+  orderStatus,
+  firstName,
+}: orderStatusEmailType) => {
+  // Init the nodemailer transporter
+  transporterInit();
+
+  try {
+    let response = await transporter.sendMail({
+      from: "Theraswift",
+      to: emailTo,
+      subject: subject,
+      html: orderStatusTemplate(firstName!, orderStatus),
     });
     return response;
   } catch (error) {

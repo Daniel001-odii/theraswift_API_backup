@@ -31,7 +31,8 @@ export interface AddOrderRequestBody {
   payment: OrderPayment;
   shipping_address: string;
   order_type:string;
-  orderId:string
+  orderId:string,
+  prescriptionCompleted:boolean
 }
 
 export interface AddPrescriptionRequest {

@@ -103,11 +103,21 @@ export interface IOrder extends Document {
     amount: number;
   };
   shipping_address: string;
-  status: "pending" | "cancelled" | "dispensed" | "delivered";
+  status: "pending" | "cancelled" | "dispensed" | "delivered" | "rejected";
   createdAt?: Date;
   updatedAt?: Date;
   orderId: string;
+  prescriptionCompleted: boolean;
+  delivery_time_chosen: string;
 }
+
+export interface IShippingAddress extends Document {
+  userId: string;
+  shipping_address: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 
 export interface Prescription extends Document {
   // userId: Types.ObjectId;

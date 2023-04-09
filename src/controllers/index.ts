@@ -22,6 +22,7 @@ import {
   getOrders,
   getUserOrders,
   updateOrderStatus,
+  uncompletedOrdersControllers,
 } from "./orders.controller";
 import {
   addPrescription,
@@ -50,6 +51,11 @@ import {
   getUserHMOsController,
   deleteUserHMOByIdController,
 } from "./hmo.controllers";
+import {
+  addShippingAddressControllers,
+  getUserShippingAddressController,
+  getUserShippingAddressByIdController,
+} from "./addShippingAddress.controller";
 
 export {
   signUpController,
@@ -89,4 +95,8 @@ export {
   getAllHMOController,
   getUserHMOsController,
   deleteUserHMOByIdController,
+  addShippingAddressControllers,
+  uncompletedOrdersControllers,
+  getUserShippingAddressController,
+  getUserShippingAddressByIdController,
 };

@@ -38,6 +38,10 @@ import {
   getAllHMOController,
   getUserHMOsController,
   deleteUserHMOByIdController,
+  uncompletedOrdersControllers,
+  addShippingAddressControllers,
+  getUserShippingAddressController,
+  getUserShippingAddressByIdController,
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole } from "../middleware/roleCheck.middleware";
@@ -87,5 +91,9 @@ router.post("/get_hmo_by_id", getHMOByIdController);
 router.post("/get_user_hmo", getUserHMOsController);
 router.post("/get_all_hmo", getAllHMOController);
 router.post("/delete_user_hmo", deleteUserHMOByIdController);
+router.post('/complete_order',uncompletedOrdersControllers);
+router.post('/add_shipping_address',addShippingAddressControllers);
+router.post('/get_user_shipping_address',getUserShippingAddressController);
+router.post('/get_user_shipping_address_by_id',getUserShippingAddressByIdController);
 
 export default router;

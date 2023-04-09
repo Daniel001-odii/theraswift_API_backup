@@ -5,12 +5,15 @@ import Medication from "../models/Medications.model";
 import Prescription from "../models/Prescription.model";
 // import RefillRequest from '../models/RefillRequest';
 import { AddOrderRequestBody } from "../interface/ordersInterface";
-import { IOrder } from "../interface/generalInterface";
+import { IOrder, IShippingAddress, IUser } from "../interface/generalInterface";
 import TransactionsModel from "../models/Transactions.model";
 import { generateOrderId } from "../utils/orderIdGenerator";
 import { uploadToS3 } from "../utils/awsS3";
 import { v4 as uuidv4 } from "uuid";
 import UserModel from "../models/User.model";
+import { sendOrderStatusEmail } from "../utils/sendEmailUtility";
+import { request } from "http";
+import shippingAddressModel from "../models/ShippingAddress.model";
 
 export const addOrder = async (req: Request, res: Response) => {
   try {
@@ -23,11 +26,12 @@ export const addOrder = async (req: Request, res: Response) => {
       payment,
       shipping_address,
       order_type,
+      prescriptionCompleted
     } = req.body as AddOrderRequestBody;
 
     console.log("userId ", userId);
 
-    // Check if the email already exists in the database
+    // Check if the user exists in the database
     const existingUser = await UserModel.findOne({ userId });
 
     if (!existingUser) {
@@ -148,8 +152,6 @@ export const addOrder = async (req: Request, res: Response) => {
 
     let orderId = await generateOrderId();
 
-    console.log("orderId ", orderId);
-
     // Create a new Order document
     let newOrder: IOrder;
     newOrder = new Order({
@@ -163,10 +165,19 @@ export const addOrder = async (req: Request, res: Response) => {
       payment,
       shipping_address,
       delivery_time_chosen,
+      prescriptionCompleted,
     });
 
     if (!newOrder) return;
 
+    let userTheraBalance =
+      parseInt(existingUser.theraWallet.toString()) -
+      parseInt(payment.amount.toString());
+
+    existingUser.theraWallet = userTheraBalance;
+
+    // update user balance after order
+    await existingUser.save();
     // Save the new Order document to the database
     let orderCreated = await newOrder?.save();
 
@@ -181,6 +192,7 @@ export const addOrder = async (req: Request, res: Response) => {
         amount: payment.amount,
         currency: "NGN",
         payment_status: "success",
+        order_status: "pending",
         prescription: existingPrescription
           ? existingPrescription?._id
           : savedPrescription?._id,
@@ -244,10 +256,205 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 
     await orderInfo.save();
 
+    let existingUser: any;
+
+    if (orderStatus === "cancelled") {
+      let orderPrice = orderInfo.payment.amount;
+      let userId = orderInfo.userId;
+
+      // Check if the email already exists in the database
+      existingUser = (await UserModel.findOne({ userId })) as IUser;
+
+      if (!existingUser) {
+        return res.status(400).json({ message: "User does not exists" });
+      }
+
+      let newBalance =
+        parseInt(existingUser.theraWallet.toString()) +
+        parseInt(orderPrice.toString());
+
+      existingUser.theraWallet = newBalance;
+
+      await existingUser.save();
+    }
+    // else if (orderStatus === "dispensed") {
+
+    // }
+
+    let senderEmailOrderStatusData = {
+      firstName: `${existingUser!.firstName}`,
+      emailTo: existingUser!.email,
+      subject: "Therawallet Gift Balance Top-up Notification",
+      orderStatus,
+    };
+
+    sendOrderStatusEmail(senderEmailOrderStatusData);
+
     res.send({
       message: "Order updated status successfully",
     });
   } catch (err) {
+    res.status(500).json({ message: "internal server error" });
+  }
+};
+
+export const uncompletedOrdersControllers = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const {
+      order_id,
+      user_id,
+      finalize_status,
+      prescription_id,
+      delivery_time_chosen,
+      street_address,
+      street_number,
+      shipping_address_id,
+    } = req.body;
+
+    // check if needed parameters are sent in the body
+    if (!order_id || !user_id || !finalize_status)
+      return res
+        .status(400)
+        .json({ message: "please send required body queries" });
+
+    const orderInfo = await Order.findOne({ orderId: order_id });
+
+    if (!orderInfo) return res.status(404).json({ message: "order not found" });
+
+    // Check if the user exists in the database
+    const existingUser = await UserModel.findOne({ userId: user_id });
+
+    if (!existingUser) {
+      return res.status(400).json({ message: "User does not exists" });
+    }
+
+    if (finalize_status === false) {
+      orderInfo.status = "rejected";
+      orderInfo.prescriptionCompleted = true;
+
+      await orderInfo.save();
+      // send mail to notify user of the rejected order
+
+      // mail the admin too
+
+      // save the information to transaction history for user
+      const newTransactionHistoryLog = new TransactionsModel({
+        userId: user_id,
+        type: "product-order",
+        amount: orderInfo.payment.amount,
+        details: {
+          orderId: orderInfo.orderId,
+          amount: orderInfo.payment.amount,
+          currency: "NGN",
+          payment_status: "error",
+          order_status: "rejected",
+          prescription: prescription_id,
+          product_order_type: "prescription-order",
+        },
+        created_at: new Date(),
+      });
+
+      await newTransactionHistoryLog.save();
+
+      return res.json({ message: "Order rejected successfully" });
+    }
+
+    // continue order if not order is not rejected
+
+    let newShippingAddress: IShippingAddress = {} as IShippingAddress;
+
+    if (street_address && street_number) {
+      newShippingAddress = new shippingAddressModel({
+        userId: user_id,
+        street_address,
+        street_number,
+      });
+
+      await newShippingAddress.save();
+    }
+
+    if (!newShippingAddress?._id || !shipping_address_id) {
+      return res.json({ message: "please pass in shipping informations" });
+    }
+
+    // Check if the user's wallet balance is less than the payment amount
+    if (
+      parseInt(existingUser.theraWallet.toString()) <
+      parseInt(orderInfo.payment.amount.toString())
+    ) {
+      // If the user's balance is insufficient, return an error message
+      return res.json({
+        message: "You do not have enough balance to complete this order",
+      });
+    }
+
+    let userTheraBalance =
+      parseInt(existingUser.theraWallet.toString()) -
+      parseInt(orderInfo.payment.amount.toString());
+
+    existingUser.theraWallet = userTheraBalance;
+
+    // update user balance after order
+    await existingUser.save();
+
+    orderInfo.status = "dispensed";
+    orderInfo.prescriptionCompleted = true;
+    orderInfo.shipping_address = newShippingAddress
+      ? newShippingAddress._id
+      : shipping_address_id;
+    orderInfo.delivery_time_chosen = delivery_time_chosen;
+
+    await orderInfo.save();
+    // send mail to notify user of the dispensed order
+    let senderEmailOrderStatusData = {
+      firstName: `${existingUser!.firstName}`,
+      emailTo: existingUser!.email,
+      subject: "Therawallet Gift Balance Top-up Notification",
+      orderStatus:'dispensed',
+    };
+
+    sendOrderStatusEmail(senderEmailOrderStatusData);
+
+
+    //TODO this should be done 
+
+    // mail the admin too
+    // let senderEmailOrderStatusData = {
+    //   firstName: `${existingUser!.firstName}`,
+    //   emailTo: existingUser!.email,
+    //   subject: "Therawallet Gift Balance Top-up Notification",
+    //   orderStatus:'dispensed',
+    // };
+
+    // sendOrderStatusEmail(senderEmailOrderStatusData);
+
+    // save the information to transaction history for user
+    const newTransactionHistoryLog = new TransactionsModel({
+      userId: user_id,
+      type: "product-order",
+      amount: orderInfo.payment.amount,
+      details: {
+        orderId: orderInfo.orderId,
+        amount: orderInfo.payment.amount,
+        currency: "NGN",
+        payment_status: "success",
+        order_status: "dispensed",
+        prescription: prescription_id,
+        product_order_type: "prescription-order",
+        shipping_address: newShippingAddress
+          ? newShippingAddress._id
+          : shipping_address_id,
+      },
+      created_at: new Date(),
+    });
+
+    await newTransactionHistoryLog.save();
+
+    return res.json({ message: "Order dispensed successfully" });
+  } catch (err: any) {
     res.status(500).json({ message: "internal server error" });
   }
 };
