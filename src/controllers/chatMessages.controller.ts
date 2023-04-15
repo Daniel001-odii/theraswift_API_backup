@@ -1,49 +1,41 @@
-import { Router, Request, Response } from "express";
-import { Types } from "mongoose";
-import { Server } from "socket.io";
-import { IMessageDocument, Message } from "../models/ChatMessages.model";
 
-const router: Router = Router();
+import { Request, Response } from 'express';
+import Chat from '../models/ChatMessages.model';
 
 export const getChats = async (req: Request, res: Response) => {
   try {
-    const { fromUserId, toUserId } = req.body;
-    const messages: IMessageDocument[] = await Message.find({
-      $or: [
-        { from: fromUserId, to: toUserId },
-        { from: toUserId, to: fromUserId },
-      ],
+    const { userId } = req.params;
+
+    // Find all chats involving user
+    const chats = await Chat.find({
+      $or: [{ sender: userId }, { receiver: userId }],
     })
-      .populate("from", "username")
-      .populate("to", "username")
-      .sort("createdAt");
-    res.json(messages);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+      .populate('sender', '-password')
+      .populate('receiver', '-password')
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({ chats });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
-export const addChatsController = async (req: Request, res: Response) => {
+export const sendChat = async (req: Request, res: Response) => {
   try {
-    const { fromUserId, toUserId, text } = req.body;
-    const message = new Message({ from: fromUserId, to: toUserId, text });
-    await message.save();
-    res.json(message);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-};
+    const { sender, receiver, message } = req.body;
 
-export const handleSocketAddMessages = async (
-  io: Server,
-  payload: { fromUserId: string; toUserId: string; text: string }
-): Promise<void> => {
-  try {
-    const { fromUserId, toUserId, text } = payload;
-    const message = new Message({ from: fromUserId, to: toUserId, text });
-    await message.save();
-    io.to(toUserId).to(fromUserId).emit("message", message);
-  } catch (error: any) {
-    throw new Error(error.message);
+    // Create new chat
+    const chat = new Chat({
+      sender,
+      receiver,
+      message,
+    });
+    await chat.save();
+
+    return res.status(201).json({ message: 'Chat sent successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
   }
 };

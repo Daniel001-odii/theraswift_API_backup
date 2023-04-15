@@ -10,7 +10,7 @@ import csrf from "csurf";
 import rateLimit from 'express-rate-limit';
 import { Server, Socket } from 'socket.io';
 import http from 'http'
-import handleSocketConnection from "./utils/socket";
+import handleSocketConnection, { socket } from "./utils/socket";
 
 
 const app = express();
@@ -67,7 +67,7 @@ app.use("/", routes);
 
 
 // Handle socket connections
-handleSocketConnection(io);
+socket(server);
 
 
 // app initialized port

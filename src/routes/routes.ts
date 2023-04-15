@@ -43,13 +43,15 @@ import {
   getUserShippingAddressController,
   getUserShippingAddressByIdController,
   getUsersController,
-  addChatsController, getChats
+  // addChatsController,
+  getChats,
+  createCareerOpening,
+  getCareerOpenings,
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole } from "../middleware/roleCheck.middleware";
 import { validateSignupParams } from "../middleware/signup.middleware";
 import { multerUpload } from "../middleware/multer.middleware";
-
 
 // theraswift routes
 router.get("/", rootController);
@@ -102,7 +104,9 @@ router.post(
   getUserShippingAddressByIdController
 );
 router.get("/get_chats", getChats);
-router.post('/add_chats', addChatsController)
-router.get('get_users', getUsersController)
+// router.post('/add_chats', addChatsController)
+router.get("get_users", getUsersController);
+router.post("/add_career_openings", checkAdminRole, createCareerOpening);
+router.get("/get_career_openings", getCareerOpenings);
 
 export default router;

@@ -1,26 +1,17 @@
-import { Document, Model, model, Schema } from "mongoose";
+import { Schema, model, Document } from 'mongoose';
 
-interface IMessage {
-  from: string;
-  to: string;
-  text: string;
+interface IChat extends Document {
+  sender: string;
+  receiver: string;
+  message: string;
   createdAt: Date;
 }
 
-interface IMessageDocument extends IMessage, Document {}
-
-interface IMessageModel extends Model<IMessageDocument> {}
-
-const messageSchema: Schema<IMessageDocument, IMessageModel> = new Schema({
-  from: { type: String, required: true },
-  to: { type: String, required: true },
-  text: String,
+const ChatSchema: Schema = new Schema({
+  sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  receiver: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  message: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
-const Message: IMessageModel = model<IMessageDocument, IMessageModel>(
-  "Message",
-  messageSchema
-);
-
-export { IMessage, IMessageDocument, IMessageModel, Message };
+export default model<IChat>('Chat', ChatSchema);

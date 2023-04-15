@@ -174,3 +174,11 @@ export interface IMessage {
   text: string;
   createdAt: Date;
 }
+
+export interface ICareerOpening extends Document {
+  position: string;
+  location: string;
+  description: string;
+  requirements: string;
+  contactEmail: string;
+}

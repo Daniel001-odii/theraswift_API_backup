@@ -57,10 +57,14 @@ import {
   getUserShippingAddressByIdController,
 } from "./addShippingAddress.controller";
 import {
-  addChatsController,
+  // addChatsController,
   getChats,
 } from "./chatMessages.controller";
 import { getUsersController } from "./user.controller";
+import {
+  createCareerOpening,
+  getCareerOpenings,
+} from "./careerOpening.controller";
 
 export {
   signUpController,
@@ -104,7 +108,9 @@ export {
   uncompletedOrdersControllers,
   getUserShippingAddressController,
   getUserShippingAddressByIdController,
-  addChatsController,
+  // addChatsController,
   getChats,
   getUsersController,
+  createCareerOpening,
+  getCareerOpenings,
 };
