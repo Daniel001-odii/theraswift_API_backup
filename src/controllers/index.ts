@@ -58,7 +58,7 @@ import {
 } from "./addShippingAddress.controller";
 import {
   // addChatsController,
-  getChats,
+  getChatsController,
 } from "./chatMessages.controller";
 import { getUsersController } from "./user.controller";
 import {
@@ -108,8 +108,7 @@ export {
   uncompletedOrdersControllers,
   getUserShippingAddressController,
   getUserShippingAddressByIdController,
-  // addChatsController,
-  getChats,
+  getChatsController,
   getUsersController,
   createCareerOpening,
   getCareerOpenings,

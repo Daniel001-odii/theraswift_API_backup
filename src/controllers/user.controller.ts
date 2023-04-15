@@ -1,9 +1,10 @@
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 import User from "../models/User.model";
 
-const router: Router = Router();
-
-export const getUsersController = async (req: Request, res: Response) => {
+export const getUsersController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const users = await User.find({});
     res.json(users);
@@ -11,5 +12,3 @@ export const getUsersController = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-export default router;

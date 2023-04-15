@@ -43,8 +43,7 @@ import {
   getUserShippingAddressController,
   getUserShippingAddressByIdController,
   getUsersController,
-  // addChatsController,
-  getChats,
+  getChatsController,
   createCareerOpening,
   getCareerOpenings,
 } from "../controllers/";
@@ -103,8 +102,8 @@ router.post(
   "/get_user_shipping_address_by_id",
   getUserShippingAddressByIdController
 );
-router.get("/get_chats", getChats);
-// router.post('/add_chats', addChatsController)
+// router.get("/get_chats", getChatsController);
+// // router.post('/add_chats', addChatsController)
 router.get("get_users", getUsersController);
 router.post("/add_career_openings", checkAdminRole, createCareerOpening);
 router.get("/get_career_openings", getCareerOpenings);
