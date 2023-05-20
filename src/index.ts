@@ -42,7 +42,7 @@ dotenv.config();
 
 // database connection
 const MONGODB_URI = process.env.MONGODB_URI as string;
-// process.env.MONGODB_URI!
+// process.env.MONGODB_URI! --
 
 (async () => {
   try {
