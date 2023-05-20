@@ -47,7 +47,7 @@
     "fs": "^0.0.1-security",
     "helmet": "^6.0.1",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.3",
+    "mongoose": ">=14.20.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",
     "otp-generator": "^4.0.1",
