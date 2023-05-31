@@ -42,8 +42,6 @@ app.use(logger);
 dotenv.config();
 // Configure Express to use EJS as the view engine
 app.set('view engine', 'ejs');
-// Serve static files from the public directory
-app.use(express.static('public'));
 app.set('views', path.join(__dirname, '/', 'views'));
 app.use(express.urlencoded({ extended: true }));
 

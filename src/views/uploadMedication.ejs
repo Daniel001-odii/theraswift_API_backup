@@ -8,18 +8,18 @@
 </head>
 <body>
   <div class="container mt-5">
-    <% if (error) { %>
-      <div class="alert alert-danger" role="alert">
-        <%= error %>
-      </div>
-    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
     <h1>Add Medication</h1>
-    <form action="/medications" method="POST" enctype="multipart/form-data">
+    <form action="/add_medication" method="POST" enctype="multipart/form-data">
       <div class="mb-3">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" id="name" name="name" required>
       </div>
-      <!-- Add other input fields here -->
+     
 
       <div class="mb-3">
         <label for="prescriptionRequired" class="form-label">Prescription Required</label>
@@ -33,6 +33,13 @@
         <label for="image" class="form-label">Image</label>
         <input type="file" class="form-control" id="image" name="image">
       </div>
+
+      <div class="mb-3">
+        <label for="name" class="form-label">Description</label>
+        <textarea type="text" class="form-control" id="description" name="description" required></textarea>
+      </div>
+
+     
 
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
