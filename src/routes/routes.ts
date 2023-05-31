@@ -65,7 +65,7 @@ router.post("/otp/verify_email", verifyEmailController);
 router.post("/otp/resend_email", resendEmailController);
 router.post(
   "/add_medication",
-  checkAdminRole,
+  // checkAdminRole,
   multerUpload.single("image"),
   addMedicationController
 );
