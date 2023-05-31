@@ -10,8 +10,77 @@ export const addMedicationFrontendController = async (
   req: CustomFileAppendedRequest,
   res: Response
 ): Promise<void> => {
-  res.render("uploadMedication",{ error: null });
+  res.render("uploadMedication", { error: null });
 };
+
+// export const addMedicationController = async (
+//   req: CustomFileAppendedRequest,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     // Validate the request body using express-validator
+//     await Promise.all(
+//       validateMedication.map((validation) => validation.run(req))
+//     );
+
+//     const {
+//       name,
+//       description,
+//       dosage,
+//       warnings,
+//       manufacturer,
+//       price,
+//       available,
+//       expiryDate,
+//       sideEffects,
+//       ingredients,
+//       storageInstructions,
+//       contraindications,
+//       routeOfAdministration,
+//       prescription_required,
+//       category,
+//     } = req.body;
+
+//     let image_url = "";
+
+//     if (req.file) {
+//       const filename = uuidv4();
+//       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
+//       image_url = result.Location;
+//       console.log(result);
+//     }
+
+//     // Save medication to MongoDB
+//     const newMedication = new MedicationModel({
+//       name,
+//       description,
+//       dosage,
+//       warnings,
+//       manufacturer,
+//       price,
+//       available,
+//       expiryDate,
+//       sideEffects,
+//       ingredients,
+//       storageInstructions,
+//       contraindications,
+//       routeOfAdministration,
+//       prescription_required,
+//       image_url,
+//       category,
+//     }) as IMedication;
+
+//     let medicationSaved = await newMedication.save();
+//     console.log(medicationSaved);
+//     res.send({
+//       message: "Medication saved successfully",
+//       medication: medicationSaved,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     throw err;
+//   }
+// };
 
 export const addMedicationController = async (
   req: CustomFileAppendedRequest,
@@ -50,6 +119,22 @@ export const addMedicationController = async (
       console.log(result);
     }
 
+    const sideEffectsArray: string[] = Array.isArray(sideEffects)
+      ? sideEffects
+      : sideEffects
+      ? sideEffects.includes(",")
+        ? sideEffects.split(",").map((effect: any) => effect.trim())
+        : [sideEffects]
+      : [];
+
+    const ingredientsArray: string[] = Array.isArray(ingredients)
+      ? ingredients
+      : ingredients
+      ? ingredients.includes(",")
+        ? ingredients.split(",").map((ingredient: any) => ingredient.trim())
+        : [ingredients]
+      : [];
+
     // Save medication to MongoDB
     const newMedication = new MedicationModel({
       name,
@@ -60,8 +145,8 @@ export const addMedicationController = async (
       price,
       available,
       expiryDate,
-      sideEffects,
-      ingredients,
+      sideEffects: sideEffectsArray,
+      ingredients: ingredientsArray,
       storageInstructions,
       contraindications,
       routeOfAdministration,
