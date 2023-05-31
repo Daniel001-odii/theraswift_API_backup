@@ -3,10 +3,15 @@ import { Request, Response, NextFunction } from "express";
 import { validateMedication } from "../middleware/medication.middlware";
 import { v4 as uuidv4 } from "uuid";
 import { uploadToS3 } from "../utils/awsS3";
-import {
-  IMedication,
-} from "../interface/generalInterface";
+import { IMedication } from "../interface/generalInterface";
 import { CustomFileAppendedRequest } from "../types/generalTypes";
+
+export const addMedicationFrontendController = async (
+  req: CustomFileAppendedRequest,
+  res: Response
+): Promise<void> => {
+  res.render("uploadMedication",{ error: null });
+};
 
 export const addMedicationController = async (
   req: CustomFileAppendedRequest,

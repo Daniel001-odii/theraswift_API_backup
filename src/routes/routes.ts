@@ -46,6 +46,7 @@ import {
   getChatsController,
   createCareerOpening,
   getCareerOpenings,
+  addMedicationFrontendController
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole, checkRole } from "../middleware/roleCheck.middleware";
@@ -127,5 +128,5 @@ router.post(
   createCareerOpening
 );
 router.get("/get_career_openings", checkRole, getCareerOpenings);
-
+router.get('/add_medication',addMedicationFrontendController)
 export default router;

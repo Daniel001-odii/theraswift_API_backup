@@ -33,6 +33,7 @@ export const sendChatController = async (req: Request, res: Response) => {
       receiver,
       message,
     });
+    
     await chat.save();
 
     return res.status(201).json({ message: "Chat sent successfully" });

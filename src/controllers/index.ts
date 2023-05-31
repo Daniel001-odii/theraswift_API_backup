@@ -14,8 +14,11 @@ import {
   sendEmailController,
   verifyEmailController,
 } from "./emailOtp.controller";
-import { addMedicationController } from "./medication.controller";
-import { editMedicationController } from "./medication.controller";
+import {
+  addMedicationController,
+  editMedicationController,
+  addMedicationFrontendController,
+} from "./medication.controller";
 import {
   addOrder,
   getOrderById,
@@ -112,4 +115,5 @@ export {
   getUsersController,
   createCareerOpening,
   getCareerOpenings,
+  addMedicationFrontendController,
 };

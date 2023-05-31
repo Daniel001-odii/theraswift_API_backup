@@ -11,6 +11,7 @@ import rateLimit from 'express-rate-limit';
 import { Server, Socket } from 'socket.io';
 import http from 'http'
 import handleSocketConnection, { socket } from "./utils/socket";
+import path from 'path';
 
 
 const app = express();
@@ -39,6 +40,12 @@ app.use(cors());
 app.use(helmet());
 app.use(logger);
 dotenv.config();
+// Configure Express to use EJS as the view engine
+app.set('view engine', 'ejs');
+// Serve static files from the public directory
+app.use(express.static('public'));
+app.set('views', path.join(__dirname, '/', 'views'));
+app.use(express.urlencoded({ extended: true }));
 
 // database connection
 const MONGODB_URI = process.env.MONGODB_URI as string;
