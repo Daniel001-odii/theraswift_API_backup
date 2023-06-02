@@ -10,7 +10,9 @@
     />
   </head>
   <body>
-    <div class="container mt-5">
+    <div class="container mb-5 mt-2">
+      <%- include('tabs', { activeTab: 'get_medications' }) %>
+      
       <% if (typeof error !== 'undefined' && error) { %>
       <div class="alert alert-danger" role="alert"><%= error %></div>
       <% } %>

@@ -7,16 +7,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0/css/bootstrap.min.css">
 </head>
 <body>
-  <div class="container mt-5">
+  <div class="container mt-3">
+    <%- include('tabs', { activeTab: 'all_medications' }) %>
     <% if (typeof error !== 'undefined' && error) { %>
       <div class="alert alert-danger" role="alert">
         <%= error %>
       </div>
     <% } %>
-    <h1>All Medications</h1>
+    <h1 class="mb-5 mt-2">All Medications</h1>
     <% if (typeof medications !== 'undefined' && medications.length > 0) { %>
       <% medications.forEach((medication) => { %>
-        <div class="card mb-3">
+        <div class="card mb-2">
           <div class="card-body">
             <h5 class="card-title"><%= medication.name %></h5>
             <p class="card-text"><strong>Description:</strong> <%= medication.description %></p>

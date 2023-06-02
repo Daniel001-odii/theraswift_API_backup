@@ -10,11 +10,13 @@
     />
   </head>
   <body>
-    <div class="container mt-5">
+    <div class="container mt-2">
+      <%- include('tabs', { activeTab: 'add_medication' }) %>
+      
       <% if (typeof error !== 'undefined' && error) { %>
       <div class="alert alert-danger" role="alert"><%= error %></div>
       <% } %>
-      <h1 class="mb-5">Upload New Medication</h1>
+      <h1 class="mb-5 mt-2">Upload New Medication</h1>
       <form
         action="/add_medication"
         method="POST"
