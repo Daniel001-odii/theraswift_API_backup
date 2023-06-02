@@ -108,6 +108,8 @@ export const addMedicationController = async (
       routeOfAdministration,
       prescription_required,
       category,
+      medicationTypes,
+      medicationForms,
     } = req.body;
 
     let image_url = "";
@@ -135,6 +137,26 @@ export const addMedicationController = async (
         : [ingredients]
       : [];
 
+    const medicationTypesArray: string[] = Array.isArray(medicationTypes)
+      ? medicationTypes
+      : medicationTypes
+      ? medicationTypes.includes(",")
+        ? medicationTypes
+            .split(",")
+            .map((medicationType: any) => medicationType.trim())
+        : [medicationTypes]
+      : [];
+
+    const medicationFormsArray: string[] = Array.isArray(medicationForms)
+      ? medicationForms
+      : medicationForms
+      ? medicationForms.includes(",")
+        ? medicationForms
+            .split(",")
+            .map((medicationForm: any) => medicationForm.trim())
+        : [medicationForms]
+      : [];
+
     // Save medication to MongoDB
     const newMedication = new MedicationModel({
       name,
@@ -153,6 +175,8 @@ export const addMedicationController = async (
       prescription_required,
       image_url,
       category,
+      medicationTypes: medicationTypesArray,
+      medicationForms: medicationFormsArray,
     }) as IMedication;
 
     let medicationSaved = await newMedication.save();
@@ -172,11 +196,11 @@ export const addMedicationController = async (
 export const editMedicationController = async (req: Request, res: Response) => {
   try {
     let { id } = req.params;
-    const updateFields = req.body;
+    const updatedFields = req.body;
 
-    if (updateFields.id) {
-      id = updateFields.id;
-      delete updateFields.id;
+    if (updatedFields.id) {
+      id = updatedFields.id;
+      delete updatedFields.id;
     }
 
     let existingMedication = await MedicationModel.findOne({
@@ -190,7 +214,7 @@ export const editMedicationController = async (req: Request, res: Response) => {
 
     const updatedMedication = await MedicationModel.findByIdAndUpdate(
       id,
-      updateFields,
+      updatedFields,
       { new: true }
     );
 

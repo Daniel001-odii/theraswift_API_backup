@@ -14,14 +14,14 @@
       <% if (typeof error !== 'undefined' && error) { %>
       <div class="alert alert-danger" role="alert"><%= error %></div>
       <% } %>
-      <h1>Add Medication</h1>
+      <h1 class="mb-5">Upload New Medication</h1>
       <form
         action="/add_medication"
         method="POST"
         enctype="multipart/form-data"
       >
         <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
+          <label for="name" class="form-label">Medication Name (General Name) <b>*Required</b></label>
           <input
             type="text"
             class="form-control"
@@ -32,18 +32,42 @@
         </div>
 
         <div class="mb-3">
-          <label for="manufacturer" class="form-label">Manufacturer</label>
+          <label for="medicationTypes" class="form-label">Medication Types (separated by commas) <b>*Optional</b></label>
+          <input
+            type="text"
+            class="form-control"
+            id="medicationTypes"
+            name="medicationTypes"
+            required
+          />
+        </div>
+
+
+        <div class="mb-3">
+          <label for="manufacturer" class="form-label">Manufacturer <b>*Optional</b></label>
           <input
             type="text"
             class="form-control"
             id="manufacturer"
             name="manufacturer"
-            required
           />
         </div>
 
+
         <div class="mb-3">
-          <label for="price" class="form-label">Price</label>
+          <label for="medicationForms" class="form-label">Medication Forms (separated by commas) <b>*Optional</b></label>
+          <input
+            type="text"
+            class="form-control"
+            id="medicationForms"
+            name="medicationForms"
+          />
+        </div>
+
+       
+
+        <div class="mb-3">
+          <label for="price" class="form-label">Medication Price <b>*Required</b></label>
           <input
             type="number"
             class="form-control"
@@ -54,7 +78,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="dosage" class="form-label">Dosage</label>
+          <label for="dosage" class="form-label">Medication Dosage (separated by commas) <b>*Required</b></label>
           <input
             type="text"
             class="form-control"
@@ -65,7 +89,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="quantity" class="form-label">Quantity</label>
+          <label for="quantity" class="form-label">Quantity <b>*Required</b></label>
           <input
             type="number"
             class="form-control"
@@ -76,7 +100,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="available" class="form-label">Available</label>
+          <label for="available" class="form-label">Available <b>*Required</b></label>
           <div class="form-check">
             <input
               class="form-check-input"
@@ -102,54 +126,50 @@
 
         <div class="mb-3">
           <label for="sideEffects" class="form-label"
-            >Side Effects (separated by commas)</label
+            >Side Effects (separated by commas) <b>*Optional</b></label
           >
           <input
             type="text"
             class="form-control"
             id="sideEffects"
             name="sideEffects"
-            required
           />
         </div>
 
         <div class="mb-3">
           <label for="ingredients" class="form-label"
-            >Ingredients (separated by commas)</label
+            >Ingredients (separated by commas) <b>*Optional</b></label
           >
           <input
             type="text"
             class="form-control"
             id="ingredients"
             name="ingredients"
-            required
           />
         </div>
 
         <div class="mb-3">
           <label for="storageInstructions" class="form-label"
-            >Storage Instructions</label
+            >Storage Instructions <b>*Optional</b></label
           >
           <textarea
             class="form-control"
             id="storageInstructions"
             name="storageInstructions"
-            required
           ></textarea>
         </div>
 
         <div class="mb-3">
           <label for="routeOfAdministration" class="form-label"
-            >Route of Administration</label
+            >Route of Administration <b>*Optional</b></label
           >
           <select
             class="form-select"
             id="routeOfAdministration"
             name="routeOfAdministration"
-            required
           >
             <option value="" selected disabled>
-              Select Route of Administration
+              Select Route of Administration 
             </option>
             <option value="Oral">Oral</option>
             <option value="Topical">Topical</option>
@@ -159,13 +179,13 @@
         </div>
 
         <div class="mb-3">
-          <label for="prescriptionRequired" class="form-label"
-            >Prescription Required</label
+          <label for="category" class="form-label"
+            >Prescription Type <b>*Required</b></label
           >
           <select
             class="form-select"
-            id="prescriptionRequired"
-            name="prescriptionRequired"
+            id="category"
+            name="category"
             required
           >
             <option value="prescription">Prescription</option>
@@ -176,22 +196,20 @@
         </div>
 
         <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
+          <label for="description" class="form-label">Description <b>*Optional</b></label>
           <textarea
             class="form-control"
             id="description"
             name="description"
-            required
           ></textarea>
         </div>
 
         <div class="mb-3">
-          <label for="warnings" class="form-label">Warnings</label>
+          <label for="warnings" class="form-label">Warnings <b>*Optional</b></label>
           <textarea
             class="form-control"
             id="warnings"
             name="warnings"
-            required
           ></textarea>
         </div>
 
@@ -202,22 +220,22 @@
 
         <div class="mb-3">
           <label for="contraindications" class="form-label"
-            >Contraindications</label
+            >Contraindications <b>*Optional</b></label
           >
           <textarea
             class="form-control"
             id="contraindications"
             name="contraindications"
-            required
           ></textarea>
         </div>
 
         <div class="mb-3">
-          <label for="image" class="form-label">Image</label>
+          <label for="image" class="form-label">Image <b>*Optional</b></label>
           <input type="file" class="form-control" id="image" name="image" />
         </div>
 
-        <button type="submit" class="btn btn-primary mb-5">Submit</button>
+        <button type="submit" class="btn btn-primary mb-5 mr-5">Submit</button>
+        <p class="text text-secondary mb-5">View All</p>
       </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>

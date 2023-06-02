@@ -9,11 +9,11 @@ const medicationSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+    // required: true,
   },
   dosage: {
     type: String,
-    required: true,
+    // required: true,
   },
   warnings: {
     type: String,
@@ -21,6 +21,7 @@ const medicationSchema = new Schema({
   manufacturer: {
     type: String,
   },
+
   image_url: {
     type: String,
   },
@@ -55,7 +56,15 @@ const medicationSchema = new Schema({
   },
   type:{
     type:String,
-    required:true,
+    // required:true,
+  },
+  medicationForms:{
+    type:[String],
+    // required:true,
+  },
+  medicationTypes:{
+    type:[String],
+    // required:true,
   },
   category:{
     type:String,
