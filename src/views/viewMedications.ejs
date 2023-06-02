@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Medications</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger" role="alert">
+        <%= error %>
+      </div>
+    <% } %>
+    <h1>All Medications</h1>
+    <% if (typeof medications !== 'undefined' && medications.length > 0) { %>
+      <% medications.forEach((medication) => { %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title"><%= medication.name %></h5>
+            <p class="card-text"><strong>Description:</strong> <%= medication.description %></p>
+            <p class="card-text"><strong>Dosage:</strong> <%= medication.dosage %></p>
+            <p class="card-text"><strong>Warnings:</strong> <%= medication.warnings %></p>
+            <p class="card-text"><strong>Manufacturer:</strong> <%= medication.manufacturer %></p>
+            <p class="card-text"><strong>Price:</strong> <%= medication.price %></p>
+            <p class="card-text"><strong>Available:</strong> <%= medication.available %></p>
+            <p class="card-text"><strong>Expiry Date:</strong> <%= medication.expiryDate %></p>
+            <p class="card-text"><strong>Side Effects:</strong> <%= medication.sideEffects.join(", ") %></p>
+            <p class="card-text"><strong>Ingredients:</strong> <%= medication.ingredients.join(", ") %></p>
+            <p class="card-text"><strong>Storage Instructions:</strong> <%= medication.storageInstructions %></p>
+            <p class="card-text"><strong>Contraindications:</strong> <%= medication.contraindications %></p>
+            <p class="card-text"><strong>Route of Administration:</strong> <%= medication.routeOfAdministration %></p>
+            <p class="card-text"><strong>Prescription Required:</strong> <%= medication.prescription_required %></p>
+            <img src="<%= medication.image_url %>" alt="Medication Image" class="img-fluid">
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No medications found.</p>
+    <% } %>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

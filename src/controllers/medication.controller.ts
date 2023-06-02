@@ -13,6 +13,22 @@ export const addMedicationFrontendController = async (
   res.render("uploadMedication", { error: null });
 };
 
+export const getAllMedicationFrontendController = async (
+  req: CustomFileAppendedRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const medications = await MedicationModel.find();
+    res.render("viewMedications", { error: null, medications });
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+
+
+
 // export const addMedicationController = async (
 //   req: CustomFileAppendedRequest,
 //   res: Response
@@ -223,6 +239,23 @@ export const editMedicationController = async (req: Request, res: Response) => {
     res.send({
       message: "Medication updated successfully",
       medication: updatedMedication,
+    });
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+
+export const getAllMedicationsController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const medications = await MedicationModel.find();
+    res.send({
+      message: "Successfully retrieved all medications",
+      medications: medications,
     });
   } catch (err) {
     console.log(err);

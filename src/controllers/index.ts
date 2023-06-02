@@ -18,6 +18,8 @@ import {
   addMedicationController,
   editMedicationController,
   addMedicationFrontendController,
+  getAllMedicationsController,
+  getAllMedicationFrontendController
 } from "./medication.controller";
 import {
   addOrder,
@@ -116,4 +118,6 @@ export {
   createCareerOpening,
   getCareerOpenings,
   addMedicationFrontendController,
+  getAllMedicationsController,
+  getAllMedicationFrontendController
 };
