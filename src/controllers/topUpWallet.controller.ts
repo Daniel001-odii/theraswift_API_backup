@@ -49,20 +49,11 @@ const topUpWalletController = async (
 
     // verify payment in paystack here
     console.log("verifying with paystack");
-    // await verifyPaystackPayment(referenceId);
-    // //   wallet topUp logic
-    // let currentWalletBal = user!.theraWallet;
-    // // adding to the user's wallet balance
-    // let newBalance = parseInt(currentWalletBal) + parseInt(amount);
-    console.log("verifying with paystack");
     await verifyPaystackPayment(referenceId);
-    // wallet top-up logic
-    let currentWalletBal = parseInt(user!.theraWallet); // Parse the current wallet balance as a number
-    let newBalance = currentWalletBal + parseInt(amount); // Perform arithmetic operations on the parsed values
-
-    // user!.theraWallet = newBalance.toString(); // Convert the new balance back to a string
-
-    user!.theraWallet = newBalance;
+    //   wallet topUp logic
+    let currentWalletBal = user!.theraWallet;
+    // adding to the user's wallet balance
+    user!.theraWallet = currentWalletBal + parseInt(amount);
 
     // console.log("added " + parseInt(currentWalletBal) + parseInt(amount));
     // console.log("current bal " + parseInt(currentWalletBal));
@@ -142,6 +133,7 @@ export const giftWalletTopUpController = async (
       });
     }
 
+
     let sender = await UserModel.findOne({ userId: senderId });
 
     // verify payment in paystack here
@@ -161,9 +153,9 @@ export const giftWalletTopUpController = async (
       });
     }
 
-    console.log("senderCurrentWalletBal " + senderCurrentWalletBal);
-    console.log("recipientCurrentWalletBal " + recipientCurrentWalletBal);
-
+    console.log("senderCurrentWalletBal "+ senderCurrentWalletBal);
+    console.log("recipientCurrentWalletBal "+ recipientCurrentWalletBal);
+    
     //   deducting from the sender's wallet balance
     sender!.theraWallet = senderCurrentWalletBal - parseInt(amount);
     //   adding to the receiver wallet balance
