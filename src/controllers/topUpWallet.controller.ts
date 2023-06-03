@@ -51,7 +51,7 @@ const topUpWalletController = async (
     console.log("verifying with paystack");
     await verifyPaystackPayment(referenceId);
     //   wallet topUp logic
-    let currentWalletBal: number = user!.theraWallet; // Assuming user!.theraWallet is a number
+    let currentWalletBal: number = user!.theraWallet as number; // Cast user!.theraWallet to 'number'
     // adding to the user's wallet balance
     user!.theraWallet = currentWalletBal + parseInt(amount); // Parse the amount and perform the addition
     
