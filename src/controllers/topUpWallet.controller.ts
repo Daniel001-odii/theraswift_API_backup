@@ -18,7 +18,7 @@ const topUpWalletController = async (
   const {
     userId,
     email,
-    amount,
+    amount:string,
     referenceId = "T768990107951172",
     payment_method = "paystack",
   } = req.body;
