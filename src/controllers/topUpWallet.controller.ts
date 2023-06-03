@@ -53,7 +53,9 @@ const topUpWalletController = async (
     //   wallet topUp logic
     let currentWalletBal = user!.theraWallet;
     // adding to the user's wallet balance
-    user!.theraWallet = parseInt(currentWalletBal) + parseInt(amount);
+    let newBalance = parseInt(currentWalletBal) + parseInt(amount);
+    
+    user!.theraWallet = newBalance.toString()
 
     // console.log("added " + parseInt(currentWalletBal) + parseInt(amount));
     // console.log("current bal " + parseInt(currentWalletBal));
