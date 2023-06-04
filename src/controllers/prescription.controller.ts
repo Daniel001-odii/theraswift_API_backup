@@ -15,7 +15,7 @@ export const addPrescription = async (
     //   userId,
     //   type,
     //   name,
-    //   dosage,
+    //   strength,
     //   frequency,
     //   startDate,
     //   endDate,

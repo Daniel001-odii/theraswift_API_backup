@@ -69,7 +69,7 @@
        
 
         <div class="mb-3">
-          <label for="price" class="form-label">Medication Price <b>*Required</b></label>
+          <label for="price" class="form-label">Medication Price <b>*Optional</b></label>
           <input
             type="number"
             class="form-control"
@@ -80,12 +80,12 @@
         </div>
 
         <div class="mb-3">
-          <label for="dosage" class="form-label">Medication Dosage (separated by commas) <b>*Required</b></label>
+          <label for="strength" class="form-label">Medication Strength (separated by commas) <b>*Required</b></label>
           <input
             type="text"
             class="form-control"
-            id="dosage"
-            name="dosage"
+            id="strength"
+            name="strength"
             required
           />
         </div>
@@ -180,21 +180,8 @@
           </select>
         </div>
 
-        <div class="mb-3">
-          <label for="category" class="form-label"
-            >Prescription Type <b>*Required</b></label
-          >
-          <select
-            class="form-select"
-            id="category"
-            name="category"
-            required
-          >
-            <option value="prescription">Prescription</option>
-            <option value="non-prescription">
-              Non-Prescription / Essentials
-            </option>
-          </select>
+        <div class="mb-0">
+         <input type='hidden' name="" value="essential" />
         </div>
 
         <div class="mb-3">
@@ -215,10 +202,7 @@
           ></textarea>
         </div>
 
-        <!-- <div class="mb-3">
-        <label for="expiryDate" class="form-label">Expiry Date</label>
-        <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
-      </div> -->
+     
 
         <div class="mb-3">
           <label for="contraindications" class="form-label"

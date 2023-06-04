@@ -20,7 +20,7 @@ export interface AddOrderRequestBody {
   prescription_input?: {
     type: PrescriptionType;
     name: string;
-    dosage: string;
+    strength: string;
     frequency: string;
     startDate: Date;
     endDate: Date;
@@ -39,7 +39,7 @@ export interface AddPrescriptionRequest {
   userId: string;
   type?: PrescriptionType;
   name?: string;
-  dosage?: string;
+  strength?: string;
   frequency?: string;
   startDate?: Date;
   endDate?: Date;

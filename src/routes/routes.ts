@@ -48,7 +48,8 @@ import {
   getCareerOpenings,
   addMedicationFrontendController,
   getAllMedicationsController,
-  getAllMedicationFrontendController
+  getAllMedicationFrontendController,
+  adEssentialsMedicationFrontendController
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole, checkRole } from "../middleware/roleCheck.middleware";
@@ -133,5 +134,7 @@ router.get("/get_career_openings", checkRole, getCareerOpenings);
 router.get('/add_medication',addMedicationFrontendController)
 router.get('/all_medication',getAllMedicationFrontendController)
 router.get("/get_medications", getAllMedicationFrontendController);
+router.get("/add_essentials_medication", adEssentialsMedicationFrontendController);
+
 
 export default router;

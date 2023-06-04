@@ -13,6 +13,15 @@ export const addMedicationFrontendController = async (
   res.render("uploadMedication", { error: null });
 };
 
+
+export const adEssentialsMedicationFrontendController = async (
+  req: CustomFileAppendedRequest,
+  res: Response
+): Promise<void> => {
+  res.render("essentialsUploadMedication", { error: null });
+};
+
+
 export const getAllMedicationFrontendController = async (
   req: CustomFileAppendedRequest,
   res: Response
@@ -42,7 +51,7 @@ export const getAllMedicationFrontendController = async (
 //     const {
 //       name,
 //       description,
-//       dosage,
+//       strength,
 //       warnings,
 //       manufacturer,
 //       price,
@@ -70,7 +79,7 @@ export const getAllMedicationFrontendController = async (
 //     const newMedication = new MedicationModel({
 //       name,
 //       description,
-//       dosage,
+//       strength,
 //       warnings,
 //       manufacturer,
 //       price,
@@ -111,7 +120,7 @@ export const addMedicationController = async (
     const {
       name,
       description,
-      dosage,
+      strength,
       warnings,
       manufacturer,
       price,
@@ -177,7 +186,7 @@ export const addMedicationController = async (
     const newMedication = new MedicationModel({
       name,
       description,
-      dosage,
+      strength,
       warnings,
       manufacturer,
       price,

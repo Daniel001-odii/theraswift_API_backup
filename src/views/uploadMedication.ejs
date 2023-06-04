@@ -69,7 +69,7 @@
        
 
         <div class="mb-3">
-          <label for="price" class="form-label">Medication Price <b>*Required</b></label>
+          <label for="price" class="form-label">Medication Price <b>*Optional</b></label>
           <input
             type="number"
             class="form-control"
@@ -80,12 +80,12 @@
         </div>
 
         <div class="mb-3">
-          <label for="dosage" class="form-label">Medication Dosage (separated by commas) <b>*Required</b></label>
+          <label for="strength" class="form-label">Medication Strength (separated by commas) <b>*Required</b></label>
           <input
             type="text"
             class="form-control"
-            id="dosage"
-            name="dosage"
+            id="strength"
+            name="strength"
             required
           />
         </div>
@@ -191,8 +191,8 @@
             required
           >
             <option value="prescription">Prescription</option>
-            <option value="non-prescription">
-              Non-Prescription / Essentials
+            <option value="general">
+              General - (Non-Prescription / Essentials)
             </option>
           </select>
         </div>

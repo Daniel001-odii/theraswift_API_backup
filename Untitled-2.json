@@ -65,7 +65,7 @@
     "prescription_input": {
       "type": "doctor-prescription",
       "name": "Medicine A",
-      "dosage": "1 tablet",
+      "strength": "1 tablet",
       "frequency": "once a day",
       "startDate": "2023-04-01T00:00:00Z",
       "endDate": "2023-04-15T00:00:00Z",
@@ -120,7 +120,7 @@
     "userId": "64284e86656279c9c9a414df",
     "type": "doctor-prescription",
     "name": "Lisinopril Tablets",
-    "dosage": "1 tablet once daily with or without food",
+    "strength": "1 tablet once daily with or without food",
     "frequency": "daily",
     "startDate": "2023-04-02",
     "endDate": "2023-04-30",

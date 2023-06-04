@@ -20,7 +20,7 @@ const prescriptionSchema = new Schema<Prescription>({
   },
   type: { type: String, enum: Object.values(PrescriptionType), required: true },
   name: { type: String, required: true },
-  dosage: { type: String, required: true },
+  strength: { type: String, required: true },
   frequency: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },

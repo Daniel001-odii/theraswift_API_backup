@@ -19,7 +19,8 @@ import {
   editMedicationController,
   addMedicationFrontendController,
   getAllMedicationsController,
-  getAllMedicationFrontendController
+  getAllMedicationFrontendController,
+  adEssentialsMedicationFrontendController
 } from "./medication.controller";
 import {
   addOrder,
@@ -119,5 +120,6 @@ export {
   getCareerOpenings,
   addMedicationFrontendController,
   getAllMedicationsController,
-  getAllMedicationFrontendController
+  getAllMedicationFrontendController,
+  adEssentialsMedicationFrontendController
 };

@@ -11,7 +11,7 @@ const medicationSchema = new Schema({
     type: String,
     // required: true,
   },
-  dosage: {
+  strength: {
     type: String,
     // required: true,
   },
@@ -27,7 +27,7 @@ const medicationSchema = new Schema({
   },
   price: {
     type: Number,
-    required: true,
+    required: false,
   },
   available: {
     type: Boolean,

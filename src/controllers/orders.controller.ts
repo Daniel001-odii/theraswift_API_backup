@@ -117,7 +117,7 @@ export const addOrder = async (req: Request, res: Response) => {
             userId,
             type: prescription_input?.type,
             name: prescription_input?.name,
-            dosage: prescription_input?.dosage,
+            strength: prescription_input?.strength,
             frequency: prescription_input?.frequency,
             startDate: prescription_input?.startDate,
             endDate: prescription_input?.endDate,

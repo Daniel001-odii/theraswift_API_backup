@@ -63,7 +63,7 @@ export interface ITransaction extends Document {
 export interface IMedication extends Document {
   name: string;
   description: string;
-  dosage: string;
+  strength: string;
   warnings?: string;
   manufacturer?: string;
   price?: number;
@@ -124,7 +124,7 @@ export interface Prescription extends Document {
   userId: String;
   type: PrescriptionType;
   name: string;
-  dosage: string;
+  strength: string;
   frequency: string;
   startDate: Date;
   prescriptionImageUrl: String;
