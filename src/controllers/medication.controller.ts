@@ -13,14 +13,12 @@ export const addMedicationFrontendController = async (
   res.render("uploadMedication", { error: null });
 };
 
-
 export const adEssentialsMedicationFrontendController = async (
   req: CustomFileAppendedRequest,
   res: Response
 ): Promise<void> => {
   res.render("essentialsUploadMedication", { error: null });
 };
-
 
 export const getAllMedicationFrontendController = async (
   req: CustomFileAppendedRequest,
@@ -35,8 +33,49 @@ export const getAllMedicationFrontendController = async (
   }
 };
 
+// DELETE endpoint for deleting a medication
+export const deleteMedication = async (
+  req: CustomFileAppendedRequest,
+  res: Response
+) => {
+  try {
+    const medication = await MedicationModel.findByIdAndDelete(req.params.id);
+    if (!medication) {
+      return res.status(404).json({ error: "Medication not found" });
+    }
+    res.json({ message: "Medication deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
+// DELETE endpoint for deleting a medication through an external API
+export const deleteMedicationFrontend = async (
+  req: CustomFileAppendedRequest,
+  res: Response
+) => {
+  // try {
+  //   const medication = await MedicationModel.findByIdAndDelete(req.params.id);
+  //   if (!medication) {
+  //     return res.status(404).json({ error: "Medication not found" });
+  //   }
 
+  //   // Add your code to interact with the external API and delete the medication
+
+  //   res.json({ message: "Medication deleted successfully from external API" });
+  // } catch (error) {
+  //   res.status(500).json({ error: "Internal server error" });
+  // }
+  try {
+    const medication = await MedicationModel.findByIdAndDelete(req.params.id);
+    if (!medication) {
+      return res.status(404).json({ error: "Medication not found" });
+    }
+    res.redirect("/get_medications?success=Deleted+Successfully");
+  } catch (error: any) {
+    res.redirect("/get_medications?error=" + encodeURIComponent(error.message));
+  }
+};
 
 // export const addMedicationController = async (
 //   req: CustomFileAppendedRequest,
@@ -254,7 +293,6 @@ export const editMedicationController = async (req: Request, res: Response) => {
     throw err;
   }
 };
-
 
 export const getAllMedicationsController = async (
   req: Request,

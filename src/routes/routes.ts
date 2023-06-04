@@ -49,7 +49,9 @@ import {
   addMedicationFrontendController,
   getAllMedicationsController,
   getAllMedicationFrontendController,
-  adEssentialsMedicationFrontendController
+  adEssentialsMedicationFrontendController,
+  deleteMedication,
+  deleteMedicationFrontend
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole, checkRole } from "../middleware/roleCheck.middleware";
@@ -135,6 +137,8 @@ router.get('/add_medication',addMedicationFrontendController)
 router.get('/all_medication',getAllMedicationFrontendController)
 router.get("/get_medications", getAllMedicationFrontendController);
 router.get("/add_essentials_medication", adEssentialsMedicationFrontendController);
+router.delete("/delete_medication/:id",deleteMedication)
+router.post("/delete_medication_frontend/:id",deleteMedicationFrontend)
 
 
 export default router;

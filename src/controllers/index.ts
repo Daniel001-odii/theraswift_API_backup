@@ -20,7 +20,9 @@ import {
   addMedicationFrontendController,
   getAllMedicationsController,
   getAllMedicationFrontendController,
-  adEssentialsMedicationFrontendController
+  adEssentialsMedicationFrontendController,
+  deleteMedication,
+  deleteMedicationFrontend
 } from "./medication.controller";
 import {
   addOrder,
@@ -121,5 +123,7 @@ export {
   addMedicationFrontendController,
   getAllMedicationsController,
   getAllMedicationFrontendController,
-  adEssentialsMedicationFrontendController
+  adEssentialsMedicationFrontendController,
+  deleteMedication,
+  deleteMedicationFrontend
 };
