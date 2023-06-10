@@ -148,6 +148,6 @@ router.get("/add_essentials_medication", adEssentialsMedicationFrontendControlle
 router.delete("/delete_medication/:id",deleteMedication)
 router.post("/delete_medication_frontend/:id",deleteMedicationFrontend)
 router.post("/get_wallet_balance",WalletBalanceController)
-router.post("/refreshTokenVerification",refreshTokenVerification)
+router.post("/refresh_token_verification",refreshTokenVerification)
 
 export default router;
