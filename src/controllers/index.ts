@@ -77,6 +77,7 @@ import {
   getCareerOpenings,
 } from "./careerOpening.controller";
 import { WalletBalanceController } from "./theraWallet.controller";
+import { refreshTokenVerification } from "./refreshToken.controller";
 
 export {
   signUpController,
@@ -132,5 +133,6 @@ export {
   deleteMedicationFrontend,
   getUserController,
   getUserWithAccessTokenController,
-  WalletBalanceController
+  WalletBalanceController,
+  refreshTokenVerification
 };
