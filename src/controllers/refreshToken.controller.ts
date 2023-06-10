@@ -4,7 +4,7 @@ import UserModel from "../models/User.model";
 import { JwtPayload, CustomRequest } from "../interface/generalInterface";
 
 // refresh token verification route controller
-const refreshTokenVerification = async (
+export const refreshTokenVerification = async (
   req: CustomRequest,
   res: Response,
   next: NextFunction
@@ -43,4 +43,4 @@ const refreshTokenVerification = async (
   });
 };
 
-export default refreshTokenVerification;
+// export default refreshTokenVerification;
