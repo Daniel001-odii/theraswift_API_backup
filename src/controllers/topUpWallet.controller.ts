@@ -25,9 +25,10 @@ const topUpWalletController = async (
 
   //   Checking the parameters passed in the body
   if (userId && email) {
-    res.status(500).json({
+     res.status(500).json({
       message: "please pass in either a user_id or an email address",
     });
+    return;
   }
   try {
     // Check if the user exists in the database
@@ -150,7 +151,7 @@ export const giftWalletTopUpController = async (
     // check if sender's balance is enough for gifting
     if (senderCurrentWalletBal < parseInt(amount)) {
       return res.json({
-        message: "balance not enough for gifting",
+        message: "balance is not enough for gifting",
       });
     }
 
@@ -229,3 +230,4 @@ export const giftWalletTopUpController = async (
     return res.status(500).json({ message: "Server error" });
   }
 };
+

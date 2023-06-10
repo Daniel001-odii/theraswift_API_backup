@@ -82,6 +82,7 @@ export interface IMedication extends Document {
 export interface JwtPayload {
   email: string;
   mobile: string;
+  userId: string;
 }
 
 export interface CustomRequest extends Request {
@@ -112,12 +113,16 @@ export interface IOrder extends Document {
 }
 
 export interface IShippingAddress extends Document {
-  userId: string;
+  userId: String;
+  street_address: String;
+  street_number: String;
+  delivery_instruction: String;
+  leave_with_doorman: String;
+  lga: String;
   shipping_address: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
-
 
 export interface Prescription extends Document {
   // userId: Types.ObjectId;

@@ -51,7 +51,10 @@ import {
   getAllMedicationFrontendController,
   adEssentialsMedicationFrontendController,
   deleteMedication,
-  deleteMedicationFrontend
+  deleteMedicationFrontend,
+  getUserController,
+  getUserWithAccessTokenController,
+  WalletBalanceController
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole, checkRole } from "../middleware/roleCheck.middleware";
@@ -81,6 +84,10 @@ router.post("/new_order", checkRole, multerUpload.single("image"), addOrder);
 router.get("/get_order_by_id", checkRole, getOrderById);
 router.get("/get_orders", checkRole, getOrders);
 router.get("/get_user_orders", checkRole, getUserOrders);
+
+router.get("/get_user_with_access_token_controller", checkRole, getUserWithAccessTokenController);
+router.get("/get_user_controller", checkRole, getUserWithAccessTokenController);
+
 router.put("/update_order_status", checkAdminRole, updateOrderStatus);
 router.post(
   "/send_prescription",
@@ -139,6 +146,7 @@ router.get("/get_medications", getAllMedicationFrontendController);
 router.get("/add_essentials_medication", adEssentialsMedicationFrontendController);
 router.delete("/delete_medication/:id",deleteMedication)
 router.post("/delete_medication_frontend/:id",deleteMedicationFrontend)
+router.post("/get_wallet_balance",WalletBalanceController)
 
 
 export default router;

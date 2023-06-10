@@ -4,6 +4,7 @@ import UserModel from "../models/User.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
+import { userIdGen } from "../utils/userIdGen";
 
 // login users
 const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -14,10 +15,23 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { email, password, phoneNumber } = req.body;
 
-    // try find user with email
-    const user = await UserModel.findOne({ email });
+    if (email && phoneNumber) {
+      return res.status(500).json({
+        message: "Please pass in either a mobile number or an email address",
+      });
+    }
+
+    let user;
+
+    if (email) {
+      // try find user with email
+      user = await UserModel.findOne({ email });
+    } else if (phoneNumber) {
+      // try find user with email
+      user = await UserModel.findOne({ phoneNumber });
+    }
 
     // check if user exists
     if (!user) {
@@ -33,6 +47,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     // generate access token
     const accessToken = jwt.sign(
       {
+        userId: user.userId,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -42,19 +57,34 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       { expiresIn: "1h" }
     );
 
+    const refreshToken = jwt.sign(
+      {
+        userId: user.userId,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+      },
+      process.env.REFRESH_JWT_SECRET_KEY!,
+      { expiresIn: "24h" }
+    );
+
     // return access token
     res.json({
       message: "Login successful",
       user: {
         _id: user._id,
+        userId: user.userId,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         gender: user.gender,
         mobileNumber: user.mobileNumber,
         role: user.role,
+        walletBalance: user.theraWallet
       },
       accessToken,
+      refreshToken,
     });
   } catch (err) {
     // login error

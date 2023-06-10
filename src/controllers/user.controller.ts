@@ -1,13 +1,80 @@
-import { Request, Response } from "express";
-import User from "../models/User.model";
+import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import UserModel from "../models/User.model";
+import { JwtPayload, CustomRequest } from "../interface/generalInterface";
 
 export const getUsersController = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const users = await User.find({});
+    const users = await UserModel.find({});
     res.json(users);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUserController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { email, userId } = req.body;
+
+    if (userId && email) {
+      res.status(500).json({
+        message: "please pass in either a user_id or an email address",
+      });
+      return;
+    }
+
+    let user;
+    // Find the token in the database
+    if (email) {
+      user = await UserModel.findOne({ email });
+    }
+
+    if (userId) {
+      user = await UserModel.findOne({
+        userId,
+      });
+    }
+    res.json(user);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUserWithAccessTokenController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+   
+    let secret = process.env.JWT_SECRET_KEY;
+    // Get JWT from Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+    //   res.status(200).json({
+    //     welcome: "welcome to theraswift api",
+    //   });
+    const { userId, email } = jwt.verify(
+      token!,
+      secret!
+    ) as unknown as JwtPayload;
+
+    let user;
+    // Find the token in the database
+    if (email) {
+      user = await UserModel.findOne({ email });
+    } else {
+      user = await UserModel.findOne({
+        userId,
+      });
+    }
+    res.json(user);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

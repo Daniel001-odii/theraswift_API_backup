@@ -68,11 +68,15 @@ import {
   // addChatsController,
   getChatsController,
 } from "./chatMessages.controller";
-import { getUsersController } from "./user.controller";
+import { getUsersController,
+  getUserController,
+  getUserWithAccessTokenController
+ } from "./user.controller";
 import {
   createCareerOpening,
   getCareerOpenings,
 } from "./careerOpening.controller";
+import { WalletBalanceController } from "./theraWallet.controller";
 
 export {
   signUpController,
@@ -125,5 +129,8 @@ export {
   getAllMedicationFrontendController,
   adEssentialsMedicationFrontendController,
   deleteMedication,
-  deleteMedicationFrontend
+  deleteMedicationFrontend,
+  getUserController,
+  getUserWithAccessTokenController,
+  WalletBalanceController
 };

@@ -30,7 +30,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     const userEmailExists = await UserModel.findOne({ email });
     const userNumberExists = await UserModel.findOne({ mobileNumber });
 
-    console.log(userEmailExists,userNumberExists);
+    // console.log(userEmailExists,userNumberExists);
 
     // check if user exists
     if (userEmailExists || userNumberExists) {
@@ -74,19 +74,37 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       { expiresIn: "1h" }
     );
 
+
+    const refreshToken = jwt.sign(
+      {
+        userId: userSaved.userId,
+        email: userSaved.email,
+        firstName: userSaved.firstName,
+        lastName: userSaved.lastName,
+        role: userSaved.role,
+      },
+      process.env.REFRESH_JWT_SECRET_KEY!,
+      { expiresIn: "24h" }
+    );
+
+
+
+
     res.json({
       message: "Signup successful",
       user: {
         _id: userSaved._id,
-        userID: userSaved.userId,
+        userId: userSaved.userId,
         firstName: userSaved.firstName,
         lastName: userSaved.lastName,
         email: userSaved.email,
         gender: userSaved.gender,
         mobileNumber: userSaved.mobileNumber,
         role: userSaved.role,
+        walletBalance: userSaved.theraWallet
       },
       accessToken,
+      refreshToken
     });
   } catch (err) {
     // signup error

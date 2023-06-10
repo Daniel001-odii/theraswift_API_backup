@@ -8,16 +8,18 @@ export const addShippingAddressController = async (
   res: Response
 ) => {
   try {
-    const { user_id, street_address, street_number } = req.body;
+    const { userId, street_address, street_number,  delivery_instruction,
+      leave_with_doorman,
+      lga } = req.body;
 
     // check if needed parameters are sent in the body
-    if (!street_address || !user_id || !street_number)
+    if (!street_address || !userId || !street_number)
       return res
         .status(400)
         .json({ message: "please send required body queries" });
 
     // Check if the user exists in the database
-    const existingUser = await UserModel.findOne({ userId: user_id });
+    const existingUser = await UserModel.findOne({ userId });
 
     if (!existingUser) {
       return res.status(400).json({ message: "User does not exists" });
@@ -26,9 +28,12 @@ export const addShippingAddressController = async (
     let newShippingAddress: IShippingAddress = {} as IShippingAddress;
 
     newShippingAddress = new shippingAddressModel({
-      userId: user_id,
+      userId,
       street_address,
       street_number,
+      delivery_instruction,
+      leave_with_doorman,
+      lga
     });
 
     await newShippingAddress.save();
