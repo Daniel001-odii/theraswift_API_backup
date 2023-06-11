@@ -22,8 +22,9 @@ export const refreshTokenVerification = async (
  
   console.log(token)
 
-  
-  const payload = jwt.verify(token, secret!) as unknown as JwtPayload;
+
+  try{
+    const payload = jwt.verify(token, secret!) as unknown as JwtPayload;
 
   // Check if email and mobile are in the MongoDB
   const user = await UserModel.findOne({
@@ -48,6 +49,9 @@ export const refreshTokenVerification = async (
     message: "AccessToken regeneration  successful",
     accessToken,
   });
+  }catch(error){
+    console.log(error)
+  }
 };
 
 // export default refreshTokenVerification;
