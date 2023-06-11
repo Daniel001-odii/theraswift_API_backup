@@ -15,6 +15,10 @@ export const refreshTokenVerification = async (
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
+
+  if (!token) {
+    return res.status(401).json({ message: "Authorization refresh token missing" });
+  }
  
   const payload = jwt.verify(token!, secret!) as unknown as JwtPayload;
 
