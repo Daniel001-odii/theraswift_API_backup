@@ -51,7 +51,6 @@ export const getUserWithAccessTokenController = async (
   res: Response
 ): Promise<void> => {
   try {
-   
     let secret = process.env.JWT_SECRET_KEY;
     // Get JWT from Authorization header
     const authHeader = req.headers.authorization;
@@ -74,7 +73,19 @@ export const getUserWithAccessTokenController = async (
         userId,
       });
     }
-    res.json(user);
+    res.json({
+      user: {
+        _id: user._id,
+        userId: user.userId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        gender: user.gender,
+        mobileNumber: user.mobileNumber,
+        role: user.role,
+        walletBalance: user.theraWallet,
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
