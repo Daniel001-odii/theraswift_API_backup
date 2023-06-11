@@ -75,15 +75,15 @@ export const getUserWithAccessTokenController = async (
     }
     res.json({
       user: {
-        _id: user._id,
-        userId: user.userId,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        gender: user.gender,
-        mobileNumber: user.mobileNumber,
-        role: user.role,
-        walletBalance: user.theraWallet,
+        _id: user?._id,
+        userId: user?.userId,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        email: user?.email,
+        gender: user?.gender,
+        mobileNumber: user?.mobileNumber,
+        role: user?.role,
+        walletBalance: user?.theraWallet,
       },
     });
   } catch (error: any) {
