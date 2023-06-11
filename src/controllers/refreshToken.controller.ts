@@ -9,48 +9,47 @@ export const refreshTokenVerification = async (
   res: Response,
   next: NextFunction
 ) => {
-
   let secret = process.env.REFRESH_JWT_SECRET_KEY;
   // Get JWT from Authorization header
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
-
   if (!token) {
-    return res.status(401).json({ message: "Authorization refresh token missing" });
+    return res
+      .status(401)
+      .json({ message: "Authorization refresh token missing" });
   }
- 
-  console.log(token)
 
+  console.log(token);
 
-  try{
+  try {
     const payload = jwt.verify(token, secret!) as unknown as JwtPayload;
 
-  // Check if email and mobile are in the MongoDB
-  const user = await UserModel.findOne({
-    email: payload.email,
-    mobile: payload.mobile,
-    role: { $in: ["admin", "user"] },
-  });
+    // Check if email and mobile are in the MongoDB
+    const user = await UserModel.findOne({
+      email: payload.email,
+      mobile: payload.mobile,
+      role: { $in: ["admin", "user"] },
+    });
 
-  const accessToken = jwt.sign(
-    {
-      userId: user?.userId,
-      email: user?.email,
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      role: user?.role,
-    },
-    process.env.JWT_SECRET_KEY!,
-    { expiresIn: "1h" }
-  );
+    const accessToken = jwt.sign(
+      {
+        userId: user?.userId,
+        email: user?.email,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        role: user?.role,
+      },
+      process.env.JWT_SECRET_KEY!,
+      { expiresIn: "1h" }
+    );
 
-  res.json({
-    message: "AccessToken regeneration  successful",
-    accessToken,
-  });
-  }catch(error){
-    console.log(error)
+    res.json({
+      message: "AccessToken regeneration  successful",
+      accessToken,
+    });
+  } catch (error:any) {
+    res.status(500).json({ error: error.message });
   }
 };
 
