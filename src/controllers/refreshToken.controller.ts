@@ -20,7 +20,10 @@ export const refreshTokenVerification = async (
     return res.status(401).json({ message: "Authorization refresh token missing" });
   }
  
-  const payload = jwt.verify(token!, secret!) as unknown as JwtPayload;
+  console.log(token)
+
+  
+  const payload = jwt.verify(token, secret!) as unknown as JwtPayload;
 
   // Check if email and mobile are in the MongoDB
   const user = await UserModel.findOne({
