@@ -1,4 +1,6 @@
+import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
+import { JwtPayload, CustomRequest } from "../interface/generalInterface";
 import FamilyModel from "../models/Family.model";
 
 export const addFamilyController = async (req: Request, res: Response) => {
@@ -31,7 +33,13 @@ export const addFamilyController = async (req: Request, res: Response) => {
 
 export const getUserFamilyController = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.body;
+    // const { userId } = req.body;
+    let secret = process.env.JWT_SECRET_KEY;
+    // Get JWT from Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+    const { userId } = jwt.verify(token!, secret!) as unknown as JwtPayload;
 
     if (!userId) return res.json({ message: "please send user id" });
 
@@ -46,7 +54,22 @@ export const getUserFamilyController = async (req: Request, res: Response) => {
   }
 };
 
+// export const getUserFamilyWithAuthTokenController = async (req: Request, res: Response) => {
+//   try {
+//     const { userId } = req.body;
 
+//     if (!userId) return res.json({ message: "please send user id" });
+
+//     let userFamilies = await FamilyModel.find({ userId });
+
+//     res.status(201).json({
+//       message: "Family members retrieved successfully",
+//       family_members: userFamilies,
+//     });
+//   } catch (err: any) {
+//     throw err.message;
+//   }
+// };
 
 export const deleteUserFamilyController = async (
   req: Request,
