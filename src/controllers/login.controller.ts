@@ -15,9 +15,9 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, phoneNumber } = req.body;
+    const { email, password, mobileNumber } = req.body;
 
-    if (email && phoneNumber) {
+    if (email && mobileNumber) {
       return res.status(500).json({
         message: "Please pass in either a mobile number or an email address",
       });
@@ -28,9 +28,9 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     if (email) {
       // try find user with email
       user = await UserModel.findOne({ email });
-    } else if (phoneNumber) {
+    } else if (mobileNumber) {
       // try find user with email
-      user = await UserModel.findOne({ phoneNumber });
+      user = await UserModel.findOne({ mobileNumber });
     }
 
     // check if user exists
@@ -81,7 +81,8 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         gender: user.gender,
         mobileNumber: user.mobileNumber,
         role: user.role,
-        walletBalance: user.theraWallet
+        walletBalance: user.theraWallet,
+        dateOfBirth: user?.dateOfBirth
       },
       accessToken,
       refreshToken,

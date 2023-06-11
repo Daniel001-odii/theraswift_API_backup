@@ -8,9 +8,14 @@ export const addShippingAddressController = async (
   res: Response
 ) => {
   try {
-    const { userId, street_address, street_number,  delivery_instruction,
+    const {
+      userId,
+      street_address,
+      street_number,
+      delivery_instruction,
       leave_with_doorman,
-      lga } = req.body;
+      lga,
+    } = req.body;
 
     // check if needed parameters are sent in the body
     if (!street_address || !userId || !street_number)
@@ -33,7 +38,7 @@ export const addShippingAddressController = async (
       street_number,
       delivery_instruction,
       leave_with_doorman,
-      lga
+      lga,
     });
 
     await newShippingAddress.save();
@@ -44,7 +49,10 @@ export const addShippingAddressController = async (
   }
 };
 
-export const getUserShippingAddressController = async (req: Request, res: Response) => {
+export const getUserShippingAddressController = async (
+  req: Request,
+  res: Response
+) => {
   let { userId } = req.body;
   try {
     let data = await shippingAddressModel.find({ userId });

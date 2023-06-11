@@ -101,7 +101,8 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
         gender: userSaved.gender,
         mobileNumber: userSaved.mobileNumber,
         role: userSaved.role,
-        walletBalance: userSaved.theraWallet
+        walletBalance: userSaved.theraWallet,
+        dateOfBirth: userSaved.dateOfBirth
       },
       accessToken,
       refreshToken

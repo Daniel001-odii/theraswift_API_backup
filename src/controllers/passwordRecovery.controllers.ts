@@ -63,9 +63,9 @@ export const emailOtpRequestController = async (
 // send sms otp to the users mobile phone & save it to the database or update
 export const smsOtpRequestController = async (req: Request, res: Response) => {
   try {
-    const { phoneNumber } = req.body;
+    const { mobileNumber } = req.body;
     // Check if the user exists
-    const user = await UserModel.findOne({ phoneNumber });
+    const user = await UserModel.findOne({ mobileNumber });
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -76,7 +76,7 @@ export const smsOtpRequestController = async (req: Request, res: Response) => {
     // Save the OTP in the database
     const createdTime = new Date();
 
-    const tokenExists = await PasswordResetTokenModel.findOne({ phoneNumber });
+    const tokenExists = await PasswordResetTokenModel.findOne({ mobileNumber });
 
     if (tokenExists) {
       tokenExists.otp = otp;
@@ -98,7 +98,7 @@ export const smsOtpRequestController = async (req: Request, res: Response) => {
       user!.firstName
     } your Theraswift password recovery verification OTP is ${otp}`;
 
-    let data = { to: phoneNumber, sms };
+    let data = { to: mobileNumber, sms };
 
     sendSms(data);
 
@@ -155,11 +155,11 @@ export const verifyPasswordRecoveryOtpController = async (
 };
 
 export const updatePasswordController = async (req: Request, res: Response) => {
-  const { token, password, email, phoneNumber } = req.body;
+  const { token, password, email, mobileNumber } = req.body;
 
   let passwordResetTokenInfo: any;
 
-  if (email && phoneNumber)
+  if (email && mobileNumber)
     return res
       .status(400)
       .json({ message: "either password or email should be provided" });
@@ -169,9 +169,9 @@ export const updatePasswordController = async (req: Request, res: Response) => {
     passwordResetTokenInfo = await PasswordResetTokenModel.findOne({ email });
   }
 
-  if (phoneNumber) {
+  if (mobileNumber) {
     passwordResetTokenInfo = await PasswordResetTokenModel.findOne({
-      phoneNumber,
+      mobileNumber,
     });
   }
 

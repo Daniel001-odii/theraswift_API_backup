@@ -3,9 +3,9 @@ import { sendSms } from "../utils/sendSmsUtility";
 
 export const sendSmsController = async (req: Request, res: Response) => {
   try {
-    const { sms, mobileNumber } = req.body;
+    const { smsInformation, mobileNumber } = req.body;
 
-    let data = { to: mobileNumber, sms };
+    let data = { to: mobileNumber, sms:smsInformation };
 
     sendSms(data);
   } catch (err: any) {

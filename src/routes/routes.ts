@@ -98,56 +98,56 @@ router.post(
 );
 router.get("/get_prescription_by_id", checkRole, getPrescriptionById);
 router.get("/get_user_prescriptions", checkRole, getUserPrescription);
-router.post("/delete_user_prescription", checkRole, deleteUserPrescriptionById);
-router.get("/get_all_prescriptions", checkRole, getPrescriptions);
+router.delete("/delete_user_prescription", checkRole, deleteUserPrescriptionById);
+router.get("/get_all_prescriptions", checkAdminRole, getPrescriptions);
 router.get("/get_user_transactions", checkRole, getUserTransactions);
 router.post("/otp/send_password_recovery_email", emailOtpRequestController);
 router.post("/otp/send_password_recovery_sms", smsOtpRequestController);
-router.post("/otp/verify_password_recovery_otp", smsOtpRequestController);
-router.post("/otp/update_password", updatePasswordController);
-router.post("/send_sms", sendSmsController);
+
+// router.post("/otp/verify_password_recovery_otp", smsOtpRequestController);
+
+router.post("/update_password", updatePasswordController);
+
+router.post("/send_sms",checkAdminRole,sendSmsController);
 router.post("/add_family", checkRole, addFamilyController);
-router.post("/get_user_family", checkRole, getUserFamilyController);
-router.post("/delete_user_family", checkRole, deleteUserFamilyController);
+router.get("/get_user_family", checkRole, getUserFamilyController);
+router.delete("/delete_user_family", checkRole, deleteUserFamilyController);
 router.post(
   "/add_hmo",
   checkRole,
   multerUpload.single("image"),
   addHmoController
 );
-router.post("/get_hmo_by_id", checkRole, getHMOByIdController);
-router.post("/get_user_hmo", checkRole, getUserHMOsController);
-router.post("/get_all_hmo", checkRole, getAllHMOController);
-router.post("/delete_user_hmo", checkRole, deleteUserHMOByIdController);
+router.get("/get_hmo_by_user_id", checkRole, getHMOByIdController);
+router.get("/get_user_hmo", checkRole, getUserHMOsController);
+router.get("/get_all_hmo", checkAdminRole, getAllHMOController);
+router.delete("/delete_user_hmo", checkRole, deleteUserHMOByIdController);
 router.post("/complete_order", checkRole, uncompletedOrdersControllers);
 router.post("/add_shipping_address", checkRole, addShippingAddressController);
-router.post(
+router.get(
   "/get_user_shipping_address",
   checkRole,
   getUserShippingAddressController
 );
-router.post(
+router.get(
   "/get_user_shipping_address_by_id",
   checkRole,
   getUserShippingAddressByIdController
 );
-// router.get("/get_chats", getChatsController);
-// // router.post('/add_chats', addChatsController)
-router.get("get_users", checkRole, getUsersController);
+router.get("get_users", checkAdminRole, getUsersController);
 router.post(
   "/add_career_openings",
   checkAdminRole,
-  checkAdminRole,
   createCareerOpening
 );
-router.get("/get_career_openings", checkRole, getCareerOpenings);
+router.get("/get_career_openings", getCareerOpenings);
 router.get('/add_medication',addMedicationFrontendController)
 router.get('/all_medication',getAllMedicationFrontendController)
 router.get("/get_medications", getAllMedicationFrontendController);
 router.get("/add_essentials_medication", adEssentialsMedicationFrontendController);
-router.delete("/delete_medication/:id",deleteMedication)
+router.delete("/delete_medication_by_id",checkAdminRole,deleteMedication)
 router.post("/delete_medication_frontend/:id",deleteMedicationFrontend)
-router.post("/get_wallet_balance",WalletBalanceController)
+router.get("/get_wallet_balance",checkRole,WalletBalanceController)
 router.post("/refresh_token_verification",refreshTokenVerification)
 
 export default router;

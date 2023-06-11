@@ -8,7 +8,7 @@ export const addFamilyController = async (req: Request, res: Response) => {
     const { full_name, date_of_birth, gender, email, mobile_number, userId } =
       req.body;
 
-    if (!full_name || !date_of_birth || !gender)
+    if (!full_name || !date_of_birth || !gender || !userId)
       return res.json({ message: "Family input not completed" });
 
     const newFamily = new FamilyModel({

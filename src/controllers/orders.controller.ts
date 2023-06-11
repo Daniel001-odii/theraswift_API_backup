@@ -211,6 +211,8 @@ export const addOrder = async (req: Request, res: Response) => {
   }
 };
 
+
+
 export const getOrderById = async (req: Request, res: Response) => {
   let { orderId } = req.body;
   try {
@@ -338,7 +340,26 @@ export const uncompletedOrdersControllers = async (
       await orderInfo.save();
       //TODO send mail to notify user of the rejected order
 
-      //TODO mail the admin too
+    let senderEmailOrderStatusData = {
+      firstName: `${existingUser!.firstName}`,
+      emailTo: existingUser!.email,
+      subject: "Therawallet Rejected Order Notification",
+      orderStatus: "rejected",
+    };
+
+    sendOrderStatusEmail(senderEmailOrderStatusData);
+
+    // mail the admin
+    let senderEmailOrderCompletedData = {
+      emailTo: existingUser!.email,
+      subject: "Therawallet Rejected Order Notification",
+      orderId: orderInfo.orderId,
+    };
+
+    sendOrderCompleteEmail(senderEmailOrderCompletedData);
+
+
+    
 
       // save the information to transaction history for user
       const newTransactionHistoryLog = new TransactionsModel({
@@ -412,7 +433,7 @@ export const uncompletedOrdersControllers = async (
     let senderEmailOrderStatusData = {
       firstName: `${existingUser!.firstName}`,
       emailTo: existingUser!.email,
-      subject: "Therawallet Gift Balance Top-up Notification",
+      subject: "Therawallet Dispensed Order Notification",
       orderStatus: "dispensed",
     };
 
@@ -421,8 +442,9 @@ export const uncompletedOrdersControllers = async (
     // mail the admin
     let senderEmailOrderCompletedData = {
       emailTo: existingUser!.email,
-      subject: "Therawallet Gift Balance Top-up Notification",
-      deliveryDate: "20/34/5",
+      subject: "Therawallet Completed Order Notification",
+      // deliveryDate: "20/34/5",
+      deliveryDate: delivery_time_chosen,
       orderId: orderInfo.orderId,
     };
 

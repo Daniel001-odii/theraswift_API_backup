@@ -8,7 +8,7 @@ export const getUsersController = async (
   res: Response
 ): Promise<void> => {
   try {
-    const users = await UserModel.find({});
+    const users = await UserModel.find();
     res.json(users);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -84,6 +84,7 @@ export const getUserWithAccessTokenController = async (
         mobileNumber: user?.mobileNumber,
         role: user?.role,
         walletBalance: user?.theraWallet,
+        dateOfBirth: user?.dateOfBirth
       },
     });
   } catch (error: any) {

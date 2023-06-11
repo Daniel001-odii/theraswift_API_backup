@@ -6,7 +6,7 @@ const PasswordResetTokenSchema = new Schema({
   token: { type: String, required: true },
   userId: String,
   email: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
+  mobileNumber: { type: String, required: true },
   tokenExpirationTime: { type: Date, required: true },
   otpExpirationTime: { type: Date, required: true },
 });

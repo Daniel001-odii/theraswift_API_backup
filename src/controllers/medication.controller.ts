@@ -39,7 +39,10 @@ export const deleteMedication = async (
   res: Response
 ) => {
   try {
-    const medication = await MedicationModel.findByIdAndDelete(req.params.id);
+
+    let {medication_id} = req.body
+
+    const medication = await MedicationModel.findByIdAndDelete(medication_id);
     if (!medication) {
       return res.status(404).json({ error: "Medication not found" });
     }
@@ -54,18 +57,6 @@ export const deleteMedicationFrontend = async (
   req: CustomFileAppendedRequest,
   res: Response
 ) => {
-  // try {
-  //   const medication = await MedicationModel.findByIdAndDelete(req.params.id);
-  //   if (!medication) {
-  //     return res.status(404).json({ error: "Medication not found" });
-  //   }
-
-  //   // Add your code to interact with the external API and delete the medication
-
-  //   res.json({ message: "Medication deleted successfully from external API" });
-  // } catch (error) {
-  //   res.status(500).json({ error: "Internal server error" });
-  // }
   try {
     const medication = await MedicationModel.findByIdAndDelete(req.params.id);
     if (!medication) {

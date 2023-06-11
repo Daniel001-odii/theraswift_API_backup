@@ -150,7 +150,7 @@ export interface IPasswordResetToken extends Document {
   token: string;
   userId?: string;
   email: string;
-  phoneNumber: string;
+  mobileNumber: string;
   tokenExpirationTime: Date;
   otpExpirationTime: Date;
   otp: String;

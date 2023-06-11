@@ -26,7 +26,7 @@ export type orderStatusEmailType = {
 export type orderCompletedEmailType = {
   emailTo: string;
   subject: string;
-  deliveryDate:string,
+  deliveryDate?:string,
   orderId:string,
 };
 
