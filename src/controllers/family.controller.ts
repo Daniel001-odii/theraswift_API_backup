@@ -27,7 +27,7 @@ export const addFamilyController = async (req: Request, res: Response) => {
       family_member: savedUser,
     });
   } catch (err: any) {
-    throw err.message;
+    res.status(500).json({error:err.message})
   }
 };
 
@@ -50,7 +50,7 @@ export const getUserFamilyController = async (req: Request, res: Response) => {
       family_members: userFamilies,
     });
   } catch (err: any) {
-    throw err.message;
+    res.status(500).json({error:err.message})
   }
 };
 
@@ -67,7 +67,7 @@ export const getUserFamilyController = async (req: Request, res: Response) => {
 //       family_members: userFamilies,
 //     });
 //   } catch (err: any) {
-//     throw err.message;
+//     res.status(500).json({error:err.message;
 //   }
 // };
 
@@ -88,6 +88,6 @@ export const deleteUserFamilyController = async (
       family_members: userFamilies,
     });
   } catch (err: any) {
-    throw err.message;
+    res.status(500).json({error:err.message})
   }
 };
