@@ -30,7 +30,7 @@ const io = new Server(server, {
 // });
 
 // Middleware
-app.use(limiter);
+// app.use(limiter);
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
