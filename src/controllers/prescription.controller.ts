@@ -56,8 +56,8 @@ export const getPrescriptionById = async (req: Request, res: Response) => {
     let data = await Prescription.findById(prescription_id);
     res.status(200).json({ data });
   } catch (error: any) {
-    res.status(500).json({ message: "internal server error" });
-    throw Error(error.message);
+     res.status(500).json({error:error.message})
+    // throw Error(error.message);
   }
 };
 
@@ -66,8 +66,8 @@ export const getPrescriptions = async (req: Request, res: Response) => {
     let data = await Prescription.find();
     res.status(200).json({ data });
   } catch (error: any) {
-    res.status(500).json({ message: "internal server error" });
-    throw Error(error.message);
+     res.status(500).json({error:error.message})
+    // throw Error(error.message);
   }
 };
 
@@ -77,8 +77,8 @@ export const getUserPrescription = async (req: Request, res: Response) => {
     let data = await Prescription.find({ userId });
     res.status(200).json({ data });
   } catch (error: any) {
-    res.status(500).json({ message: "internal server error" });
-    throw Error(error.message);
+     res.status(500).json({error:error.message})
+    // throw Error(error.message);
   }
 };
 
@@ -91,7 +91,7 @@ export const deleteUserPrescriptionById = async (
     let data = await Prescription.findByIdAndDelete(prescription_id);
     res.status(200).json({ data });
   } catch (error: any) {
-    res.status(500).json({ message: "internal server error" });
-    throw Error(error.message);
+     res.status(500).json({error:error.message})
+    // throw Error(error.message);
   }
 };

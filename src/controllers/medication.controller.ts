@@ -27,9 +27,10 @@ export const getAllMedicationFrontendController = async (
   try {
     const medications = await MedicationModel.find();
     res.render("viewMedications", { error: null, medications });
-  } catch (err) {
+  } catch (err:any) {
     console.log(err);
-    throw err;
+    // throw err;
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -39,8 +40,7 @@ export const deleteMedication = async (
   res: Response
 ) => {
   try {
-
-    let {medication_id} = req.body
+    let { medication_id } = req.body;
 
     const medication = await MedicationModel.findByIdAndDelete(medication_id);
     if (!medication) {
@@ -240,9 +240,10 @@ export const addMedicationController = async (
       message: "Medication saved successfully",
       medication: medicationSaved,
     });
-  } catch (err) {
+  } catch (err:any) {
     console.log(err);
-    throw err;
+    // throw err;
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -279,9 +280,10 @@ export const editMedicationController = async (req: Request, res: Response) => {
       message: "Medication updated successfully",
       medication: updatedMedication,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.log(err);
-    throw err;
+    // throw err;
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -295,8 +297,9 @@ export const getAllMedicationsController = async (
       message: "Successfully retrieved all medications",
       medications: medications,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.log(err);
-    throw err;
+    // throw err;
+    res.status(500).json({ error: err.message });
   }
 };

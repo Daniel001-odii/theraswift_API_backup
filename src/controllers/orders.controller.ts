@@ -12,7 +12,6 @@ import { uploadToS3 } from "../utils/awsS3";
 import { v4 as uuidv4 } from "uuid";
 import UserModel from "../models/User.model";
 import { sendOrderCompleteEmail, sendOrderStatusEmail } from "../utils/sendEmailUtility";
-import { request } from "http";
 import shippingAddressModel from "../models/ShippingAddress.model";
 
 export const addOrder = async (req: Request, res: Response) => {
@@ -159,9 +158,7 @@ export const addOrder = async (req: Request, res: Response) => {
       orderId,
       type: order_type,
       products,
-      prescription: existingPrescription
-        ? existingPrescription?._id
-        : savedPrescription?._id,
+      prescription: existingPrescription ? (existingPrescription._id || null) : (savedPrescription?._id || null),
       payment,
       shipping_address,
       delivery_time_chosen,
@@ -205,9 +202,9 @@ export const addOrder = async (req: Request, res: Response) => {
 
     // Return the new Order document
     res.status(201).json({ message: "order created successfully", newOrder });
-  } catch (error) {
+  } catch (error:any) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({error:error.message})
   }
 };
 
@@ -218,8 +215,8 @@ export const getOrderById = async (req: Request, res: Response) => {
   try {
     let data = await Order.findOne({ orderId });
     res.status(200).json({ data });
-  } catch (error) {
-    res.status(500).json({ message: "internal server error" });
+  } catch (error:any) {
+    res.status(500).json({error:error.message})
     // throw Error(error)
   }
 };
@@ -228,8 +225,8 @@ export const getOrders = async (req: Request, res: Response) => {
   try {
     let data = await Order.find();
     res.status(200).json({ data });
-  } catch (error) {
-    res.status(500).json({ message: "internal server error" });
+  } catch (error:any) {
+    res.status(500).json({error:error.message})
     // throw Error(error)
   }
 };
@@ -239,8 +236,8 @@ export const getUserOrders = async (req: Request, res: Response) => {
   try {
     let data = await Order.find({ userId });
     res.status(200).json({ data });
-  } catch (error) {
-    res.status(500).json({ message: "internal server error" });
+  } catch (error:any) {
+    res.status(500).json({error:error.message})
     // throw Error(error)
   }
 };
@@ -295,8 +292,8 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     res.send({
       message: "Order updated status successfully",
     });
-  } catch (err) {
-    res.status(500).json({ message: "internal server error" });
+  } catch (err:any) {
+    res.status(500).json({error:err.message})
   }
 };
 
@@ -474,6 +471,6 @@ export const uncompletedOrdersControllers = async (
 
     return res.json({ message: "Order dispensed successfully" });
   } catch (err: any) {
-    res.status(500).json({ message: "internal server error" });
+    res.status(500).json({error:err.message})
   }
 };

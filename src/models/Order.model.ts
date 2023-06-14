@@ -42,7 +42,7 @@ const orderSchema = new Schema(
       type: {
         provider: {
           type: String,
-          enum: ["paystack", "flutterwave", "stripe"],
+          enum: ["paystack", "flutterwave", "stripe",'medwallet'],
           required: true,
         },
         transaction_id: {
