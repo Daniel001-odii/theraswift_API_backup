@@ -22,7 +22,7 @@ const orderSchema = new Schema(
         medication_id: {
           type: Schema.Types.ObjectId,
           ref: "Medications",
-          required: true,
+          required: false,
         },
         quantity: {
           type: Number,
@@ -30,7 +30,7 @@ const orderSchema = new Schema(
         },
       },
     ],
-    prescription: {
+    prescriptionId: {
       type: Schema.Types.ObjectId,
       ref: "Prescription",
     },

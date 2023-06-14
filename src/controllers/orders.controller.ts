@@ -158,7 +158,7 @@ export const addOrder = async (req: Request, res: Response) => {
       orderId,
       type: order_type,
       products,
-      prescription: existingPrescription ? (existingPrescription._id || null) : (savedPrescription?._id || null),
+      prescriptionId: existingPrescription ? (existingPrescription._id || null) : (savedPrescription?._id || null),
       payment,
       shipping_address,
       delivery_time_chosen,

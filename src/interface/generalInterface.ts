@@ -96,7 +96,7 @@ export interface IOrder extends Document {
     medication_id: string;
     quantity: number;
   }[];
-  prescription?: string;
+  prescriptionId?: string;
   refill_request_id?: string;
   payment: {
     provider: "paystack" | "flutterwave" | "stripe";
