@@ -77,8 +77,10 @@ import {
   getCareerOpenings,
 } from "./careerOpening.controller";
 import { WalletBalanceController } from "./theraWallet.controller";
-import { refreshTokenVerification } from "./refreshToken.controller";
-
+import { refreshTokenVerificationController } from "./refreshToken.controller";
+import {  addUsersWeDontDeliverToController,
+  getUsersWeDontDeliverToController,
+  getUsersWeDontDeliverToByIdController} from './usersWeDontDeliverTo.controller'
 export {
   signUpController,
   loginController,
@@ -134,5 +136,8 @@ export {
   getUserController,
   getUserWithAccessTokenController,
   WalletBalanceController,
-  refreshTokenVerification
+  refreshTokenVerificationController,
+  addUsersWeDontDeliverToController,
+  getUsersWeDontDeliverToController,
+  getUsersWeDontDeliverToByIdController
 };

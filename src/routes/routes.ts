@@ -55,7 +55,10 @@ import {
   getUserController,
   getUserWithAccessTokenController,
   WalletBalanceController,
-  refreshTokenVerification
+  refreshTokenVerificationController,
+  addUsersWeDontDeliverToController,
+  getUsersWeDontDeliverToController,
+  getUsersWeDontDeliverToByIdController
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole, checkRole } from "../middleware/roleCheck.middleware";
@@ -148,6 +151,9 @@ router.get("/add_essentials_medication", adEssentialsMedicationFrontendControlle
 router.delete("/delete_medication_by_id",checkAdminRole,deleteMedication)
 router.post("/delete_medication_frontend/:id",deleteMedicationFrontend)
 router.get("/get_wallet_balance",checkRole,WalletBalanceController)
-router.post("/refresh_token_verification",refreshTokenVerification)
+router.post("/refresh_token_verification",refreshTokenVerificationController)
+router.post('/add_user_we_dont_deliver_to', addUsersWeDontDeliverToController);
+router.get('/get_users_we_dont_deliver_to', getUsersWeDontDeliverToController);
+router.get('/get_user_we_dont_deliver_to_by_id', getUsersWeDontDeliverToByIdController);
 
 export default router;

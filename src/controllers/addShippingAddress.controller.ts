@@ -41,9 +41,9 @@ export const addShippingAddressController = async (
       lga,
     });
 
-    await newShippingAddress.save();
+    let newShippingAddressResp = await newShippingAddress.save();
 
-    return res.json({ message: "Shipping address created successfully" });
+    return res.json({ message: "Shipping address created successfully",address_added:newShippingAddressResp });
   } catch (err: any) {
     res.status(500).json({ message: "internal server error" });
   }
@@ -56,7 +56,7 @@ export const getUserShippingAddressController = async (
   let { userId } = req.body;
   try {
     let data = await shippingAddressModel.find({ userId });
-    res.status(200).json({ data });
+    res.status(200).json({ user_address:data,message: "Shipping address retrieved successfully" });
   } catch (error) {
     res.status(500).json({ message: "internal server error" });
     // throw Error(error)
