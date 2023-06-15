@@ -187,3 +187,9 @@ export interface ICareerOpening extends Document {
   requirements: string;
   contactEmail: string;
 }
+
+export interface IUsersWeDontDeliverTo extends Document {
+  email: string;
+  address: string;
+  state: string;
+}
