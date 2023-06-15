@@ -4,20 +4,18 @@ import { IUsersWeDontDeliverTo } from "../interface/generalInterface";
 const UsersWeDontDeliverToSchema = new Schema({
   email: {
     type: String,
-    required: true,
-    unique: true,
+    required: false,
+    unique: false,
   },
   address: {
     type: String,
-    required: true,
+    required: false,
   },
   state: {
     type: String,
-    required: true,
+    required: false,
   },
 });
-
-module.exports = mongoose.model('User', UsersWeDontDeliverToSchema);
 
 const UsersWeDontDeliverToModel = model<IUsersWeDontDeliverTo>('UsersWeDontDeliverTo', UsersWeDontDeliverToSchema);
 
