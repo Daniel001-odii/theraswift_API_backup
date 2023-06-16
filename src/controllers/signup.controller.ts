@@ -44,7 +44,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 
     // format mobile number to international format
     let newNum = modifiedPhoneNumber(mobileNumber);
-    console.log(newNum);
+    console.log("newNum ",newNum);
     // getting userID out of users mobile number
     let userId = userIdGen(mobileNumber);
 
@@ -86,9 +86,6 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       process.env.REFRESH_JWT_SECRET_KEY!,
       { expiresIn: "24h" }
     );
-
-
-
 
     res.json({
       message: "Signup successful",
