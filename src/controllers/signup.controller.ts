@@ -44,7 +44,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 
     // format mobile number to international format
     let newNum = modifiedPhoneNumber(mobileNumber);
-    console.log("newNum ",newNum);
+    // console.log("newNum ",newNum);
     // getting userID out of users mobile number
     let userId = userIdGen(mobileNumber);
 

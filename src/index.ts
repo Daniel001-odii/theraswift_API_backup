@@ -12,7 +12,6 @@ import { Server, Socket } from "socket.io";
 import http from "http";
 import handleSocketConnection, { socket } from "./utils/socket";
 import path from "path";
-
 const app = express();
 const csrfProtection = csrf({ cookie: true });
 
@@ -84,6 +83,7 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
 
 // GMAIL_USERNAME='yumustyology@gmail.com'
 // GMAIL_PASSWORD='gdcduniexzzthcau'
