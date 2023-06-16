@@ -86,10 +86,10 @@ Object.defineProperty(exports, "getHMOByIdController", { enumerable: true, get: 
 Object.defineProperty(exports, "getAllHMOController", { enumerable: true, get: function () { return hmo_controllers_1.getAllHMOController; } });
 Object.defineProperty(exports, "getUserHMOsController", { enumerable: true, get: function () { return hmo_controllers_1.getUserHMOsController; } });
 Object.defineProperty(exports, "deleteUserHMOByIdController", { enumerable: true, get: function () { return hmo_controllers_1.deleteUserHMOByIdController; } });
-const addShippingAddress_controller_1 = require("./addShippingAddress.controller");
-Object.defineProperty(exports, "addShippingAddressController", { enumerable: true, get: function () { return addShippingAddress_controller_1.addShippingAddressController; } });
-Object.defineProperty(exports, "getUserShippingAddressController", { enumerable: true, get: function () { return addShippingAddress_controller_1.getUserShippingAddressController; } });
-Object.defineProperty(exports, "getUserShippingAddressByIdController", { enumerable: true, get: function () { return addShippingAddress_controller_1.getUserShippingAddressByIdController; } });
+const shippingAddress_controller_1 = require("./shippingAddress.controller");
+Object.defineProperty(exports, "addShippingAddressController", { enumerable: true, get: function () { return shippingAddress_controller_1.addShippingAddressController; } });
+Object.defineProperty(exports, "getUserShippingAddressController", { enumerable: true, get: function () { return shippingAddress_controller_1.getUserShippingAddressController; } });
+Object.defineProperty(exports, "getUserShippingAddressByIdController", { enumerable: true, get: function () { return shippingAddress_controller_1.getUserShippingAddressByIdController; } });
 const chatMessages_controller_1 = require("./chatMessages.controller");
 Object.defineProperty(exports, "getChatsController", { enumerable: true, get: function () { return 
     // addChatsController,
