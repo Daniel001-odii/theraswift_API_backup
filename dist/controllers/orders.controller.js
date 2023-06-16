@@ -45,7 +45,7 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (parseInt(existingUser.theraWallet.toString()) <
             parseInt(payment.amount.toString())) {
             // If the user's balance is insufficient, return an error message
-            return res.json({
+            return res.status(500).json({
                 message: "You do not have enough balance to complete this order",
             });
         }
@@ -65,9 +65,9 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     .json({ error: `Invalid medication quantity: ${quantity}` });
             }
         }
-        if (prescription_id && prescription_input) {
+        if (prescription_id && prescription_input && req.file) {
             return res.status(400).json({
-                error: `Invalid entry, only a input prescription_id or new prescription can be accepted`,
+                error: `Invalid entry, only one from either prescription id, prescription input or prescription image can be accepted`,
             });
         }
         let existingPrescription;
@@ -149,7 +149,7 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // save the information to transaction history for user
         const newTransactionHistoryLog = new Transactions_model_1.default({
             userId,
-            type: "product-order",
+            type: "medication-order",
             amount: payment.amount,
             details: {
                 // orderId: orderCreated._id,
@@ -289,7 +289,7 @@ const uncompletedOrdersControllers = (req, res) => __awaiter(void 0, void 0, voi
             // save the information to transaction history for user
             const newTransactionHistoryLog = new Transactions_model_1.default({
                 userId: user_id,
-                type: "product-order",
+                type: "medication-order",
                 amount: orderInfo.payment.amount,
                 details: {
                     orderId: orderInfo.orderId,
@@ -358,7 +358,7 @@ const uncompletedOrdersControllers = (req, res) => __awaiter(void 0, void 0, voi
         // save the information to transaction history for user
         const newTransactionHistoryLog = new Transactions_model_1.default({
             userId: user_id,
-            type: "product-order",
+            type: "medication-order",
             amount: orderInfo.payment.amount,
             details: {
                 orderId: orderInfo.orderId,

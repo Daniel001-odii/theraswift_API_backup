@@ -45,7 +45,8 @@ export const addShippingAddressController = async (
 
     return res.json({ message: "Shipping address created successfully",address_added:newShippingAddressResp });
   } catch (err: any) {
-    res.status(500).json({ message: "internal server error" });
+    res.status(500).json({ error:err.message, message: "internal server error" });
+    console.log(err.message)
   }
 };
 

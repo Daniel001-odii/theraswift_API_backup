@@ -54,7 +54,7 @@ export const addOrder = async (req: Request, res: Response) => {
       parseInt(payment.amount.toString())
     ) {
       // If the user's balance is insufficient, return an error message
-      return res.json({
+      return res.status(500).json({
         message: "You do not have enough balance to complete this order",
       });
     }
@@ -78,9 +78,9 @@ export const addOrder = async (req: Request, res: Response) => {
       }
     }
 
-    if (prescription_id && prescription_input) {
+    if (prescription_id && prescription_input && req.file) {
       return res.status(400).json({
-        error: `Invalid entry, only a input prescription_id or new prescription can be accepted`,
+        error: `Invalid entry, only one from either prescription id, prescription input or prescription image can be accepted`,
       });
     }
 
@@ -148,6 +148,7 @@ export const addOrder = async (req: Request, res: Response) => {
 
       savedPrescription = await newPrescription?.save();
     }
+    
 
     let orderId = await generateOrderId();
 
@@ -181,7 +182,7 @@ export const addOrder = async (req: Request, res: Response) => {
     // save the information to transaction history for user
     const newTransactionHistoryLog = new TransactionsModel({
       userId,
-      type: "product-order",
+      type: "medication-order",
       amount: payment.amount,
       details: {
         // orderId: orderCreated._id,
@@ -361,7 +362,7 @@ export const uncompletedOrdersControllers = async (
       // save the information to transaction history for user
       const newTransactionHistoryLog = new TransactionsModel({
         userId: user_id,
-        type: "product-order",
+        type: "medication-order",
         amount: orderInfo.payment.amount,
         details: {
           orderId: orderInfo.orderId,
@@ -450,7 +451,7 @@ export const uncompletedOrdersControllers = async (
     // save the information to transaction history for user
     const newTransactionHistoryLog = new TransactionsModel({
       userId: user_id,
-      type: "product-order",
+      type: "medication-order",
       amount: orderInfo.payment.amount,
       details: {
         orderId: orderInfo.orderId,

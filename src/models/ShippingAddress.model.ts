@@ -20,11 +20,11 @@ const shippingAddressSchema = new Schema(
       required: false,
     },
     leave_with_doorman: {
-      type: String,
+      type: Boolean,
       required: false,
     },
     lga: {
-      type: Boolean,
+      type: String,
       default: false,
     },
   },

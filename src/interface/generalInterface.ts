@@ -99,8 +99,8 @@ export interface IOrder extends Document {
   prescriptionId?: string;
   refill_request_id?: string;
   payment: {
-    provider: "paystack" | "flutterwave" | "stripe";
-    transaction_id: string;
+    provider: "paystack" | "flutterwave" | "stripe" | "medwallet";
+    transaction_id?: string;
     amount: number;
   };
   shipping_address: string;
