@@ -104,9 +104,10 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       accessToken,
       refreshToken
     });
-  } catch (err) {
+  } catch (err:any) {
     // signup error
-    next?.(err);
+    res.status(500).json({ message: err.message });
+
   }
 };
 
