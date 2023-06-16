@@ -82,7 +82,7 @@ export const getUserShippingAddressController = async (
     //   res.status(200).json({
     //     welcome: "welcome to theraswift api",
     //   });
-    const { userId, email } = jwt.verify(
+    const { userId } = jwt.verify(
       token!,
       secret!
     ) as unknown as JwtPayload;
