@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import { IShippingAddress } from "../interface/generalInterface";
+import { IShippingAddress,JwtPayload, CustomRequest } from "../interface/generalInterface";
 import shippingAddressModel from "../models/ShippingAddress.model";
 import UserModel from "../models/User.model";
+import jwt from "jsonwebtoken";
+
 
 export const addShippingAddressController = async (
   req: Request,
@@ -67,8 +69,25 @@ export const getUserShippingAddressController = async (
   req: Request,
   res: Response
 ) => {
-  let { userId } = req.body;
+  // let { userId } = req.body;
+
+
   try {
+
+    let secret = process.env.JWT_SECRET_KEY;
+    // Get JWT from Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+  
+    //   res.status(200).json({
+    //     welcome: "welcome to theraswift api",
+    //   });
+    const { userId, email } = jwt.verify(
+      token!,
+      secret!
+    ) as unknown as JwtPayload;
+
+    
     let data = await shippingAddressModel.find({ userId });
 
     if (!data || data.length === 0) {
