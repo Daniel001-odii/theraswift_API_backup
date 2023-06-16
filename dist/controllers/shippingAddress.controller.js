@@ -61,15 +61,15 @@ const addShippingAddressController = (req, res) => __awaiter(void 0, void 0, voi
 exports.addShippingAddressController = addShippingAddressController;
 const getUserShippingAddressController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // let { userId } = req.body;
-    let secret = process.env.JWT_SECRET_KEY;
-    // Get JWT from Authorization header
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(" ")[1];
-    //   res.status(200).json({
-    //     welcome: "welcome to theraswift api",
-    //   });
-    const { userId, email } = jsonwebtoken_1.default.verify(token, secret);
     try {
+        let secret = process.env.JWT_SECRET_KEY;
+        // Get JWT from Authorization header
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(" ")[1];
+        //   res.status(200).json({
+        //     welcome: "welcome to theraswift api",
+        //   });
+        const { userId } = jsonwebtoken_1.default.verify(token, secret);
         let data = yield ShippingAddress_model_1.default.find({ userId });
         if (!data || data.length === 0) {
             return res.status(200).json({

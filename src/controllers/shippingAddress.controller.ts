@@ -76,7 +76,7 @@ export const getUserShippingAddressController = async (
 
     let secret = process.env.JWT_SECRET_KEY;
     // Get JWT from Authorization header
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers.a;'uthorization;
     const token = authHeader && authHeader.split(" ")[1];
   
     //   res.status(200).json({
