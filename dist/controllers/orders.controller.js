@@ -24,6 +24,7 @@ const uuid_1 = require("uuid");
 const User_model_1 = __importDefault(require("../models/User.model"));
 const sendEmailUtility_1 = require("../utils/sendEmailUtility");
 const ShippingAddress_model_1 = __importDefault(require("../models/ShippingAddress.model"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId, products, prescription_input, prescription_id, delivery_time_chosen, payment, shipping_address, order_type, prescriptionCompleted, } = req.body;
@@ -199,8 +200,13 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getOrders = getOrders;
 const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { userId } = req.body;
+    // let { userId } = req.body;
     try {
+        let secret = process.env.JWT_SECRET_KEY;
+        // Get JWT from Authorization header
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(" ")[1];
+        const { userId } = jsonwebtoken_1.default.verify(token, secret);
         let data = yield Order_model_1.default.find({ userId });
         res.status(200).json({ user_orders: data, message: "Orders retrieved successfully" });
     }

@@ -15,7 +15,7 @@ const orderSchema = new Schema(
     },
     type:{
       type: String,
-      required:true,
+      required:false,
     },
     products: [
       {
@@ -47,7 +47,7 @@ const orderSchema = new Schema(
         },
         transaction_id: {
           type: String,
-          required: true,
+          required: false,
         },
         amount: {
           type: Number,
@@ -72,9 +72,9 @@ const orderSchema = new Schema(
       type:Boolean,
       default: true
     },
-    dispenseInfo:{
+    // dispenseInfo:{
       
-    }
+    // }
   },
   {
     timestamps: true,

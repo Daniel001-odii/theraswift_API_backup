@@ -13,7 +13,7 @@ const orderSchema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        required: true,
+        required: false,
     },
     products: [
         {
@@ -45,7 +45,7 @@ const orderSchema = new mongoose_1.Schema({
             },
             transaction_id: {
                 type: String,
-                required: true,
+                required: false,
             },
             amount: {
                 type: Number,
@@ -70,7 +70,8 @@ const orderSchema = new mongoose_1.Schema({
         type: Boolean,
         default: true
     },
-    dispenseInfo: {}
+    // dispenseInfo:{
+    // }
 }, {
     timestamps: true,
 });

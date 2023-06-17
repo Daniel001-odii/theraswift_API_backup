@@ -5,7 +5,7 @@ import Medication from "../models/Medications.model";
 import Prescription from "../models/Prescription.model";
 // import RefillRequest from '../models/RefillRequest';
 import { AddOrderRequestBody } from "../interface/ordersInterface";
-import { IOrder, IShippingAddress, IUser } from "../interface/generalInterface";
+import { IOrder, IShippingAddress, IUser,JwtPayload } from "../interface/generalInterface";
 import TransactionsModel from "../models/Transactions.model";
 import { generateOrderId } from "../utils/orderIdGenerator";
 import { uploadToS3 } from "../utils/awsS3";
@@ -13,6 +13,9 @@ import { v4 as uuidv4 } from "uuid";
 import UserModel from "../models/User.model";
 import { sendOrderCompleteEmail, sendOrderStatusEmail } from "../utils/sendEmailUtility";
 import shippingAddressModel from "../models/ShippingAddress.model";
+import jwt from "jsonwebtoken";
+
+
 
 export const addOrder = async (req: Request, res: Response) => {
   try {
@@ -233,8 +236,19 @@ export const getOrders = async (req: Request, res: Response) => {
 };
 
 export const getUserOrders = async (req: Request, res: Response) => {
-  let { userId } = req.body;
+  // let { userId } = req.body;
   try {
+
+    let secret = process.env.JWT_SECRET_KEY;
+    // Get JWT from Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+  const { userId } = jwt.verify(
+      token!,
+      secret!
+    ) as unknown as JwtPayload;
+
     let data = await Order.find({ userId });
     res.status(200).json({ user_orders:data,message:"Orders retrieved successfully" });
   } catch (error:any) {
