@@ -55,7 +55,7 @@ const orderSchema = new mongoose_1.Schema({
         required: true,
     },
     shipping_address: {
-        type: String,
+        type: {},
         required: true,
     },
     deliver_time: {

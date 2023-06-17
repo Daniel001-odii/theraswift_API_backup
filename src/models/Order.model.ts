@@ -57,7 +57,7 @@ const orderSchema = new Schema(
       required: true,
     },
     shipping_address: {
-      type: String,
+      type: {},
       required: true,
     },
     deliver_time:{
