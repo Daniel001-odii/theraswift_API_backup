@@ -58,5 +58,6 @@ export type CustomFileAppendedRequest = {
   } & Multer &
     Request;
   body: any;
-  params:any
+  params: any;
+  headers: any;
 };

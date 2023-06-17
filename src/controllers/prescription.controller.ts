@@ -5,6 +5,11 @@ import Prescription, { PrescriptionType } from "../models/Prescription.model";
 import { CustomFileAppendedRequest } from "../types/generalTypes";
 import { uploadToS3 } from "../utils/awsS3";
 import { v4 as uuidv4 } from "uuid";
+import jwt from "jsonwebtoken";
+import { JwtPayload, CustomRequest } from "../interface/generalInterface";
+
+
+
 
 export const addPrescription = async (
   req: CustomFileAppendedRequest,
@@ -23,7 +28,19 @@ export const addPrescription = async (
     //   pharmacy,
     // } = req.body as AddPrescriptionRequest;
 
-    const { userId } = req.body as AddPrescriptionRequest;
+    // const { userId } = req.body as AddPrescriptionRequest;
+
+    let secret = process.env.JWT_SECRET_KEY;
+    // Get JWT from Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+   
+    const { userId } = jwt.verify(
+      token!,
+      secret!
+    ) as unknown as JwtPayload;
+
 
     let prescription_image_url = "";
 

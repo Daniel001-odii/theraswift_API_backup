@@ -16,6 +16,7 @@ exports.deleteUserPrescriptionById = exports.getUserPrescription = exports.getPr
 const Prescription_model_1 = __importDefault(require("../models/Prescription.model"));
 const awsS3_1 = require("../utils/awsS3");
 const uuid_1 = require("uuid");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const addPrescription = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // const {
@@ -29,7 +30,12 @@ const addPrescription = (req, res) => __awaiter(void 0, void 0, void 0, function
         //   doctor,
         //   pharmacy,
         // } = req.body as AddPrescriptionRequest;
-        const { userId } = req.body;
+        // const { userId } = req.body as AddPrescriptionRequest;
+        let secret = process.env.JWT_SECRET_KEY;
+        // Get JWT from Authorization header
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(" ")[1];
+        const { userId } = jsonwebtoken_1.default.verify(token, secret);
         let prescription_image_url = "";
         if (req.file) {
             const filename = (0, uuid_1.v4)();
