@@ -45,7 +45,7 @@ export const refreshTokenVerificationController = async (
     );
 
     res.json({
-      message: "AccessToken regeneration  successful",
+      message: "AccessToken regenerated  successful",
       accessToken,
     });
   } catch (error:any) {

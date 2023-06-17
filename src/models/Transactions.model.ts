@@ -6,7 +6,7 @@ const UserSchema = new Schema(
         userId: String,
         type: {
           type: String,
-          enum: ['gift-balance', 'product-order', 'wallet-topup']
+          enum: ['gift-balance', 'product-order', 'wallet-topup','medication-order']
         },
         details: Object,
         amount: {

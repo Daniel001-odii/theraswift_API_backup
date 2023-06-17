@@ -43,7 +43,7 @@ const refreshTokenVerificationController = (req, res, next) => __awaiter(void 0,
             role: user === null || user === void 0 ? void 0 : user.role,
         }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
         res.json({
-            message: "AccessToken regeneration  successful",
+            message: "AccessToken regenerated  successful",
             accessToken,
         });
     }
