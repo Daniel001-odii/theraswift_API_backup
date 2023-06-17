@@ -202,7 +202,7 @@ const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     let { userId } = req.body;
     try {
         let data = yield Order_model_1.default.find({ userId });
-        res.status(200).json({ data });
+        res.status(200).json({ user_orders: data, message: "Orders retrieved successfully" });
     }
     catch (error) {
         res.status(500).json({ error: error.message });

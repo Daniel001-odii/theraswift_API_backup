@@ -148,7 +148,7 @@ export const addOrder = async (req: Request, res: Response) => {
 
       savedPrescription = await newPrescription?.save();
     }
-    
+
 
     let orderId = await generateOrderId();
 
@@ -236,7 +236,7 @@ export const getUserOrders = async (req: Request, res: Response) => {
   let { userId } = req.body;
   try {
     let data = await Order.find({ userId });
-    res.status(200).json({ data });
+    res.status(200).json({ user_orders:data,message:"Orders retrieved successfully" });
   } catch (error:any) {
     res.status(500).json({error:error.message})
     // throw Error(error)
