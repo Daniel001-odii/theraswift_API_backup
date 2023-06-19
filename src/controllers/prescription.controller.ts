@@ -47,7 +47,7 @@ export const addPrescription = async (
     if (req.file) {
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
-      prescription_image_url = result.Location;
+      prescription_image_url = result?.Location!;
       console.log(result);
     }
 

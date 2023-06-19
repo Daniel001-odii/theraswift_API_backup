@@ -19,7 +19,7 @@ export const addHmoController = async (req: Request, res: Response) => {
     if (req.file) {
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
-      insurance_image_url = result.Location;
+      insurance_image_url = result?.Location!;
       console.log(result);
     }
 

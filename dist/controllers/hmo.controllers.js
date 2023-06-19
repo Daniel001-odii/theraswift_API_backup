@@ -25,7 +25,7 @@ const addHmoController = (req, res) => __awaiter(void 0, void 0, void 0, functio
         if (req.file) {
             const filename = (0, uuid_1.v4)();
             const result = yield (0, awsS3_1.uploadToS3)(req.file.buffer, `${filename}.jpg`);
-            insurance_image_url = result.Location;
+            insurance_image_url = result === null || result === void 0 ? void 0 : result.Location;
             console.log(result);
         }
         const newHMO = new HMO_model_1.default({

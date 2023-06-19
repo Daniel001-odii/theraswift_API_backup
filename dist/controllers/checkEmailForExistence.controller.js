@@ -21,12 +21,18 @@ const checkEmailForExistenceController = (req, res) => __awaiter(void 0, void 0,
         if (user) {
             return res
                 .status(200)
-                .json({ message: "User exists with the provided email." });
+                .json({
+                message: "User exists with the provided email.",
+                existingUser: true,
+            });
         }
         else {
             return res
                 .status(200)
-                .json({ message: "No user exists with the provided email." });
+                .json({
+                message: "No user exists with the provided email.",
+                existingUser: false,
+            });
         }
     }
     catch (error) {

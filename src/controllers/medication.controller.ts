@@ -172,7 +172,7 @@ export const addMedicationController = async (
     if (req.file) {
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
-      image_url = result.Location;
+      image_url = result?.Location!;
       console.log(result);
     }
 

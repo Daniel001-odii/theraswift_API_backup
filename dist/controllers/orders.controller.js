@@ -117,7 +117,7 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (req.file) {
             const filename = (0, uuid_1.v4)();
             const result = yield (0, awsS3_1.uploadToS3)(req.file.buffer, `${filename}.jpg`);
-            prescription_image_url = result.Location;
+            prescription_image_url = result === null || result === void 0 ? void 0 : result.Location;
             const newPrescription = new Prescription_model_1.default({
                 userId,
                 prescriptionImageUrl: prescription_image_url,

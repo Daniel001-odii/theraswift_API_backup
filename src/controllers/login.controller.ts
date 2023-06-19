@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { userIdGen } from "../utils/userIdGen";
+import { modifiedPhoneNumber } from "../utils/mobileNumberFormatter";
 
 // login users
 const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -30,7 +31,8 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       user = await UserModel.findOne({ email });
     } else if (mobileNumber) {
       // try find user with email
-      user = await UserModel.findOne({ mobileNumber });
+      let phoneNumber = modifiedPhoneNumber(mobileNumber);
+      user = await UserModel.findOne({ mobileNumber: phoneNumber });
     }
 
     // check if user exists
@@ -82,15 +84,14 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         mobileNumber: user.mobileNumber,
         role: user.role,
         walletBalance: user.theraWallet,
-        dateOfBirth: user?.dateOfBirth
+        dateOfBirth: user?.dateOfBirth,
       },
       accessToken,
       refreshToken,
     });
-  } catch (err:any) {
+  } catch (err: any) {
     // login error
     res.status(500).json({ message: err.message });
-
   }
 };
 

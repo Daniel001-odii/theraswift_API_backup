@@ -16,6 +16,7 @@ const User_model_1 = __importDefault(require("../models/User.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const express_validator_1 = require("express-validator");
+const mobileNumberFormatter_1 = require("../utils/mobileNumberFormatter");
 // login users
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -36,7 +37,8 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         }
         else if (mobileNumber) {
             // try find user with email
-            user = yield User_model_1.default.findOne({ mobileNumber });
+            let phoneNumber = (0, mobileNumberFormatter_1.modifiedPhoneNumber)(mobileNumber);
+            user = yield User_model_1.default.findOne({ mobileNumber: phoneNumber });
         }
         // check if user exists
         if (!user) {
@@ -75,7 +77,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
                 mobileNumber: user.mobileNumber,
                 role: user.role,
                 walletBalance: user.theraWallet,
-                dateOfBirth: user === null || user === void 0 ? void 0 : user.dateOfBirth
+                dateOfBirth: user === null || user === void 0 ? void 0 : user.dateOfBirth,
             },
             accessToken,
             refreshToken,

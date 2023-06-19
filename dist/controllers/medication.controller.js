@@ -138,7 +138,7 @@ const addMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, 
         if (req.file) {
             const filename = (0, uuid_1.v4)();
             const result = yield (0, awsS3_1.uploadToS3)(req.file.buffer, `${filename}.jpg`);
-            image_url = result.Location;
+            image_url = result === null || result === void 0 ? void 0 : result.Location;
             console.log(result);
         }
         const sideEffectsArray = Array.isArray(sideEffects)
