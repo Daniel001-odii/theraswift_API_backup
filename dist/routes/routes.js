@@ -27,6 +27,7 @@ router.post("/new_order", roleCheck_middleware_1.checkRole, multer_middleware_1.
 router.get("/get_order_by_id", roleCheck_middleware_1.checkRole, controllers_1.getOrderById);
 router.get("/get_orders", roleCheck_middleware_1.checkRole, controllers_1.getOrders);
 router.get("/get_user_orders", roleCheck_middleware_1.checkRole, controllers_1.getUserOrders);
+router.get("/check_email_for_existence", controllers_1.checkEmailForExistenceController);
 router.get("/get_user_with_access_token", roleCheck_middleware_1.checkRole, controllers_1.getUserWithAccessTokenController);
 router.get("/get_user_info", roleCheck_middleware_1.checkRole, controllers_1.getUserWithAccessTokenController);
 router.put("/update_order_status", roleCheck_middleware_1.checkAdminRole, controllers_1.updateOrderStatus);

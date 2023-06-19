@@ -58,7 +58,8 @@ import {
   refreshTokenVerificationController,
   addUsersWeDontDeliverToController,
   getUsersWeDontDeliverToController,
-  getUsersWeDontDeliverToByIdController
+  getUsersWeDontDeliverToByIdController,
+  checkEmailForExistenceController
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole, checkRole } from "../middleware/roleCheck.middleware";
@@ -88,7 +89,7 @@ router.post("/new_order", checkRole, multerUpload.single("image"), addOrder);
 router.get("/get_order_by_id", checkRole, getOrderById);
 router.get("/get_orders", checkRole, getOrders);
 router.get("/get_user_orders", checkRole, getUserOrders);
-
+router.get("/check_email_for_existence", checkEmailForExistenceController)
 router.get("/get_user_with_access_token", checkRole, getUserWithAccessTokenController);
 router.get("/get_user_info", checkRole, getUserWithAccessTokenController);
 

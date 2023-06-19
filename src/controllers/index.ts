@@ -22,7 +22,7 @@ import {
   getAllMedicationFrontendController,
   adEssentialsMedicationFrontendController,
   deleteMedication,
-  deleteMedicationFrontend
+  deleteMedicationFrontend,
 } from "./medication.controller";
 import {
   addOrder,
@@ -68,19 +68,23 @@ import {
   // addChatsController,
   getChatsController,
 } from "./chatMessages.controller";
-import { getUsersController,
+import {
+  getUsersController,
   getUserController,
-  getUserWithAccessTokenController
- } from "./user.controller";
+  getUserWithAccessTokenController,
+} from "./user.controller";
 import {
   createCareerOpening,
   getCareerOpenings,
 } from "./careerOpening.controller";
 import { WalletBalanceController } from "./theraWallet.controller";
 import { refreshTokenVerificationController } from "./refreshToken.controller";
-import {  addUsersWeDontDeliverToController,
+import {
+  addUsersWeDontDeliverToController,
   getUsersWeDontDeliverToController,
-  getUsersWeDontDeliverToByIdController} from './usersWeDontDeliverTo.controller'
+  getUsersWeDontDeliverToByIdController,
+} from "./usersWeDontDeliverTo.controller";
+import { checkEmailForExistenceController } from "./checkEmailForExistence.controller";
 export {
   signUpController,
   loginController,
@@ -139,5 +143,6 @@ export {
   refreshTokenVerificationController,
   addUsersWeDontDeliverToController,
   getUsersWeDontDeliverToController,
-  getUsersWeDontDeliverToByIdController
+  getUsersWeDontDeliverToByIdController,
+  checkEmailForExistenceController,
 };
