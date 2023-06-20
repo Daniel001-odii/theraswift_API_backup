@@ -6,6 +6,7 @@ const htmlMailTemplate = (otp, firstName) => `
   <html>
     <head>
       <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400&family=Nunito:wght@200;300;400;500;600&display=swap');
         body {
           font-family: sans-serif;
           font-size: 13px;
@@ -25,6 +26,7 @@ const htmlMailTemplate = (otp, firstName) => `
           background-color: #ddd;
           box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
           backdrop-filter: blur(5px);
+          font-family: 'Inconsolata', monospace;
           font-size: 24px;
           font-weight: bold;
           color: #333333;
@@ -228,6 +230,7 @@ const passwordRecoveryMailTemplate = (otp, firstName) => `
   <html>
     <head>
       <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400&family=Nunito:wght@200;300;400;500;600&display=swap');
         body {
           font-family: sans-serif;
           font-size: 13px;
@@ -247,6 +250,7 @@ const passwordRecoveryMailTemplate = (otp, firstName) => `
           background-color: #ddd;
           box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
           backdrop-filter: blur(5px);
+          font-family: 'Inconsolata', monospace;
           font-size: 24px;
           font-weight: bold;
           color: #333333;
