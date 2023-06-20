@@ -64,8 +64,8 @@ const UserSchema = new Schema(
     },
     theraWallet: {
       type: Number,
-      min: 50000,
-      default:0
+      min: 0,
+      default:50000
     },
   },
   {
