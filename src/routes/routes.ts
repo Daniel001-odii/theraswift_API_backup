@@ -93,7 +93,7 @@ router.post("/new_order", checkRole, multerUpload.single("image"), addOrder);
 router.get("/get_order_by_id", checkRole, getOrderById);
 router.get("/get_orders", checkRole, getOrders);
 router.get("/get_user_orders", checkRole, getUserOrders);
-router.get("/check_email_for_existence", checkEmailForExistenceController)
+router.post("/check_email_for_existence", checkEmailForExistenceController)
 router.get("/get_user_with_access_token", checkRole, getUserWithAccessTokenController);
 router.get("/get_user_info", checkRole, getUserWithAccessTokenController);
 
@@ -164,7 +164,7 @@ router.get('/get_user_we_dont_deliver_to_by_id', getUsersWeDontDeliverToByIdCont
 router.post('/add_new_beneficiary',checkRole,addNewBeneficiaryController)
 router.get('/get_user_beneficiaries',checkRole,getUserBeneficiariesController)
 router.get('/get_user_beneficiary_by_id',checkRole,getUserBeneficiaryByIdController)
-router.get('/get_beneficiary_info',checkRole,getBeneficiaryInfoController)
+router.post('/check_beneficiary_info',checkRole,getBeneficiaryInfoController)
 
 
 
