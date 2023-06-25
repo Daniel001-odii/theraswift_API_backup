@@ -108,8 +108,8 @@ export const giftWalletTopUpController = async (
     email,
     amount,
     senderId,
-    referenceId = "T768990107951172",
-    payment_method = "paystack",
+    // referenceId = "T768990107951172",
+    payment_method,
   } = req.body;
 
   if (receiverId && email) {
@@ -140,7 +140,7 @@ export const giftWalletTopUpController = async (
 
     // verify payment in paystack here
     console.log("verifying with paystack");
-    await verifyPaystackPayment(referenceId);
+    // await verifyPaystackPayment(referenceId);
     //   wallet topUp logic
     let recipientCurrentWalletBal = parseInt(
       recipient!.theraWallet.toString()
@@ -174,7 +174,6 @@ export const giftWalletTopUpController = async (
         recipientId: `${recipient!.userId}`,
         recipientName: `${recipient!.firstName} ${recipient!.lastName}`,
         payment_method: payment_method,
-        reference_id: referenceId,
         currency: "NGN",
         payment_status: "success",
       },
@@ -189,7 +188,6 @@ export const giftWalletTopUpController = async (
         senderName: `${sender!.firstName} ${sender!.lastName}`,
         senderId: `${sender!.userId}`,
         payment_method: payment_method,
-        reference_id: referenceId,
         currency: "NGN",
         payment_status: "success",
       },

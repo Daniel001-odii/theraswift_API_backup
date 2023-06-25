@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { ITransaction } from "../interface/generalInterface";
 
-const UserSchema = new Schema(
+const TransactionSchema = new Schema(
   {
         userId: String,
         type: {
@@ -23,6 +23,6 @@ const UserSchema = new Schema(
   }
 );
 
-const TransactionsModel = model<ITransaction>("Transactions", UserSchema);
+const TransactionsModel = model<ITransaction>("Transactions", TransactionSchema);
 
 export default TransactionsModel;
