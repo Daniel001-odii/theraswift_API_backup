@@ -53,7 +53,7 @@ export const addShippingAddressController = async (
       LeaveWithDoorMan: newShippingAddressResp.leave_with_doorman,
     };
 
-    return res.json({
+    return res.status(201).json({
       message: "Shipping address created successfully",
       address_added: formattedAddress,
     });

@@ -124,6 +124,13 @@ export interface IShippingAddress extends Document {
   updatedAt?: Date;
 }
 
+export interface IBeneficiaryAdded extends Document {
+  userId:string,
+  firstName:string,
+  lastName:string
+  beneficiaryUserId:string
+}
+
 export interface Prescription extends Document {
   // userId: Types.ObjectId;
   userId: String;
@@ -193,3 +200,4 @@ export interface IUsersWeDontDeliverTo extends Document {
   address: string;
   state: string;
 }
+

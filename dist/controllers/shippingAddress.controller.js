@@ -46,7 +46,7 @@ const addShippingAddressController = (req, res) => __awaiter(void 0, void 0, voi
             deliveryInstruction: newShippingAddressResp.delivery_instruction,
             LeaveWithDoorMan: newShippingAddressResp.leave_with_doorman,
         };
-        return res.json({
+        return res.status(201).json({
             message: "Shipping address created successfully",
             address_added: formattedAddress,
         });

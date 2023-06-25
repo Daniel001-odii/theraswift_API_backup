@@ -85,6 +85,13 @@ import {
   getUsersWeDontDeliverToByIdController,
 } from "./usersWeDontDeliverTo.controller";
 import { checkEmailForExistenceController } from "./checkEmailForExistence.controller";
+import {
+  addNewBeneficiaryController,
+  getUserBeneficiariesController,
+  getUserBeneficiaryByIdController,
+  getBeneficiaryInfoController
+} from "./beneficiaries.controller";
+
 export {
   signUpController,
   loginController,
@@ -145,4 +152,8 @@ export {
   getUsersWeDontDeliverToController,
   getUsersWeDontDeliverToByIdController,
   checkEmailForExistenceController,
+  addNewBeneficiaryController,
+  getUserBeneficiariesController,
+  getUserBeneficiaryByIdController,
+  getBeneficiaryInfoController
 };
