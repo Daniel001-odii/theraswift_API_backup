@@ -19,6 +19,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const getBeneficiaryInfoController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { beneficiaryUserId } = req.body;
+        console.log("beneficiaryUserId ", beneficiaryUserId);
         // check if needed parameters are sent in the body
         if (!beneficiaryUserId)
             return res

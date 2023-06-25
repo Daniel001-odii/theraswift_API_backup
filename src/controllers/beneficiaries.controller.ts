@@ -15,6 +15,7 @@ export const getBeneficiaryInfoController = async (
   try {
     const { beneficiaryUserId } = req.body;
 
+    console.log("beneficiaryUserId ",beneficiaryUserId)
     // check if needed parameters are sent in the body
     if (!beneficiaryUserId)
       return res
@@ -44,6 +45,8 @@ export const getBeneficiaryInfoController = async (
     console.log(err.message);
   }
 };
+
+
 export const addNewBeneficiaryController = async (
   req: Request,
   res: Response
