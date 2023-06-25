@@ -87,7 +87,9 @@ const topUpWalletController = (req, res, next) => __awaiter(void 0, void 0, void
 exports.default = topUpWalletController;
 // giftTopUpWallet logic
 const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { receiverId, email, amount, senderId, referenceId = "T768990107951172", payment_method = "paystack", } = req.body;
+    const { receiverId, email, amount, senderId, 
+    // referenceId = "T768990107951172",
+    payment_method, } = req.body;
     if (receiverId && email) {
         res.status(500).json({
             message: "please pass in either a mobile number or an email address",
@@ -110,7 +112,7 @@ const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, 
         let sender = yield User_model_1.default.findOne({ userId: senderId });
         // verify payment in paystack here
         console.log("verifying with paystack");
-        yield (0, verifyPaystackPaymentUtility_1.verifyPaystackPayment)(referenceId);
+        // await verifyPaystackPayment(referenceId);
         //   wallet topUp logic
         let recipientCurrentWalletBal = parseInt(recipient.theraWallet.toString());
         let senderCurrentWalletBal = parseInt(sender.theraWallet.toString());
@@ -136,7 +138,6 @@ const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, 
                 recipientId: `${recipient.userId}`,
                 recipientName: `${recipient.firstName} ${recipient.lastName}`,
                 payment_method: payment_method,
-                reference_id: referenceId,
                 currency: "NGN",
                 payment_status: "success",
             },
@@ -150,7 +151,6 @@ const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, 
                 senderName: `${sender.firstName} ${sender.lastName}`,
                 senderId: `${sender.userId}`,
                 payment_method: payment_method,
-                reference_id: referenceId,
                 currency: "NGN",
                 payment_status: "success",
             },

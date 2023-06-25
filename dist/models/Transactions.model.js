@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const UserSchema = new mongoose_1.Schema({
+const TransactionSchema = new mongoose_1.Schema({
     userId: String,
     type: {
         type: String,
@@ -19,5 +19,5 @@ const UserSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-const TransactionsModel = (0, mongoose_1.model)("Transactions", UserSchema);
+const TransactionsModel = (0, mongoose_1.model)("Transactions", TransactionSchema);
 exports.default = TransactionsModel;
