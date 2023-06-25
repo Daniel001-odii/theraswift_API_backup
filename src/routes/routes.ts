@@ -161,10 +161,10 @@ router.post('/add_user_we_dont_deliver_to', addUsersWeDontDeliverToController);
 router.get('/get_users_we_dont_deliver_to', getUsersWeDontDeliverToController);
 router.get('/get_user_we_dont_deliver_to_by_id', getUsersWeDontDeliverToByIdController);
 //* Beneficiary routes
-router.post('add_new_beneficiary',checkRole,addNewBeneficiaryController)
-router.get('get_user_beneficiaries',checkRole,getUserBeneficiariesController)
-router.get('get_user_beneficiary_by_id',checkRole,getUserBeneficiaryByIdController)
-router.get('get_beneficiary_info',checkRole,getBeneficiaryInfoController)
+router.post('/add_new_beneficiary',checkRole,addNewBeneficiaryController)
+router.get('/get_user_beneficiaries',checkRole,getUserBeneficiariesController)
+router.get('/get_user_beneficiary_by_id',checkRole,getUserBeneficiaryByIdController)
+router.get('/get_beneficiary_info',checkRole,getBeneficiaryInfoController)
 
 
 
