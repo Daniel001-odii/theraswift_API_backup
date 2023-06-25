@@ -33,9 +33,9 @@ export const getBeneficiaryInfoController = async (
     }
 
     res.status(200).send({
-      userId: existingBeneficiaryUser.userId,
       firstName: existingBeneficiaryUser.firstName,
       lastName: existingBeneficiaryUser.lastName,
+      beneficiaryUserId: existingBeneficiaryUser.userId,
     });
   } catch (err: any) {
     res
@@ -86,9 +86,10 @@ export const addNewBeneficiaryController = async (
     let newBeneficiaryResp = await newBeneficiaryAdded.save();
 
     const formattedBeneficiary = {
-      userId: newBeneficiaryResp.userId,
+      userId,
       firstName: newBeneficiaryResp.firstName,
       lastName: newBeneficiaryResp.lastName,
+      beneficiaryUserId,
     };
 
     return res.status(201).json({
@@ -152,7 +153,6 @@ export const getUserBeneficiaryByIdController = async (
       return res.status(404).json({ message: "Beneficiary not found" });
 
     const formattedBeneficiary = {
-      userId: data.userId,
       beneficiaryUserId: data.userId,
       firstName: data.firstName,
       lastName: data.lastName,

@@ -34,9 +34,9 @@ const getBeneficiaryInfoController = (req, res) => __awaiter(void 0, void 0, voi
                 .json({ message: "Beneficiary does not exists as a user" });
         }
         res.status(200).send({
-            userId: existingBeneficiaryUser.userId,
             firstName: existingBeneficiaryUser.firstName,
             lastName: existingBeneficiaryUser.lastName,
+            beneficiaryUserId: existingBeneficiaryUser.userId,
         });
     }
     catch (err) {
@@ -78,9 +78,10 @@ const addNewBeneficiaryController = (req, res) => __awaiter(void 0, void 0, void
         });
         let newBeneficiaryResp = yield newBeneficiaryAdded.save();
         const formattedBeneficiary = {
-            userId: newBeneficiaryResp.userId,
+            userId,
             firstName: newBeneficiaryResp.firstName,
             lastName: newBeneficiaryResp.lastName,
+            beneficiaryUserId,
         };
         return res.status(201).json({
             message: "Beneficiary created successfully",
@@ -132,7 +133,6 @@ const getUserBeneficiaryByIdController = (req, res) => __awaiter(void 0, void 0,
         if (!data)
             return res.status(404).json({ message: "Beneficiary not found" });
         const formattedBeneficiary = {
-            userId: data.userId,
             beneficiaryUserId: data.userId,
             firstName: data.firstName,
             lastName: data.lastName,
