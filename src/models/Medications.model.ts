@@ -21,7 +21,6 @@ const medicationSchema = new Schema({
   manufacturer: {
     type: String,
   },
-
   image_url: {
     type: String,
   },
@@ -33,9 +32,6 @@ const medicationSchema = new Schema({
     type: Boolean,
     default: true,
   },
-  // expiryDate: {
-  //   type: Date,
-  // },
   sideEffects: {
     type: [String],
   },
@@ -51,25 +47,21 @@ const medicationSchema = new Schema({
   routeOfAdministration: {
     type: String,
   },
-  prescription_required: {
-    type: Boolean,
+  prescription_required_type: {
+    type: String,
   },
   type:{
     type:String,
-    // required:true,
   },
   medicationForms:{
     type:[String],
-    // required:true,
   },
   medicationTypes:{
     type:[String],
-    // required:true,
   },
-  category:{
+  essential_category:{
     type:String,
-    required:true,
-  }
+  },
 });
 
 // Define medication model

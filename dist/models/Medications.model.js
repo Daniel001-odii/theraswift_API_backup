@@ -32,9 +32,6 @@ const medicationSchema = new mongoose_1.Schema({
         type: Boolean,
         default: true,
     },
-    // expiryDate: {
-    //   type: Date,
-    // },
     sideEffects: {
         type: [String],
     },
@@ -50,25 +47,21 @@ const medicationSchema = new mongoose_1.Schema({
     routeOfAdministration: {
         type: String,
     },
-    prescription_required: {
-        type: Boolean,
+    prescription_required_type: {
+        type: String,
     },
     type: {
         type: String,
-        // required:true,
     },
     medicationForms: {
         type: [String],
-        // required:true,
     },
     medicationTypes: {
         type: [String],
-        // required:true,
     },
-    category: {
+    essential_category: {
         type: String,
-        required: true,
-    }
+    },
 });
 // Define medication model
 const Medication = (0, mongoose_1.model)("Medications", medicationSchema);
