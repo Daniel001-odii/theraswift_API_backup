@@ -105,7 +105,7 @@ const senderEmailTemplate = (amount, recipientId, recipientName, senderName) => 
 	<p>log into your theraSwift account to learn more.</p>
 		<p>Thank you for using our services.</p>
 		<p>Best regards,</p>
-		<p>The Sender</p>
+		<p>Theraswift Team</p>
 	</div>
 </body>
 </html>

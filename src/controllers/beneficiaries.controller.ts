@@ -3,6 +3,7 @@ import {
   IBeneficiaryAdded,
   JwtPayload,
   CustomRequest,
+  IUser
 } from "../interface/generalInterface";
 import beneficiariesModel from "../models/Beneficiaries.model";
 import UserModel from "../models/User.model";
@@ -23,7 +24,7 @@ export const getBeneficiaryInfoController = async (
         .json({ message: "please send required body queries" });
 
     // check if beneficiary exist in the database
-    const existingBeneficiaryUser = await UserModel.findOne({
+    const existingBeneficiaryUser =  await UserModel.findOne({
       userId: beneficiaryUserId,
     });
 
@@ -42,7 +43,6 @@ export const getBeneficiaryInfoController = async (
     res
       .status(500)
       .json({ error: err.message, message: "internal server error" });
-    console.log(err.message);
   }
 };
 
@@ -53,8 +53,7 @@ export const addNewBeneficiaryController = async (
 ) => {
   try {
     const { userId, beneficiaryUserId } = req.body;
-
-    // check if needed parameters are sent in the body
+ // check if needed parameters are sent in the body
     if (!userId || !beneficiaryUserId)
       return res
         .status(400)

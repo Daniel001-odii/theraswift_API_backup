@@ -44,7 +44,6 @@ const getBeneficiaryInfoController = (req, res) => __awaiter(void 0, void 0, voi
         res
             .status(500)
             .json({ error: err.message, message: "internal server error" });
-        console.log(err.message);
     }
 });
 exports.getBeneficiaryInfoController = getBeneficiaryInfoController;

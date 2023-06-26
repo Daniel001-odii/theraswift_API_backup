@@ -50,7 +50,7 @@ const topUpWalletController = async (
 
     // verify payment in paystack here
     console.log("verifying with paystack");
-    await verifyPaystackPayment(referenceId);
+    // await verifyPaystackPayment(referenceId);
     //   wallet topUp logic
     let currentWalletBal: number = user!.theraWallet as number; // Cast user!.theraWallet to 'number'
     // adding to the user's wallet balance
@@ -68,7 +68,7 @@ const topUpWalletController = async (
       amount,
       details: {
         payment_method: payment_method,
-        reference_id: referenceId,
+        // reference_id: referenceId,
         currency: "NGN",
         payment_status: "success",
       },
@@ -81,7 +81,7 @@ const topUpWalletController = async (
     let data = {
       name: user.firstName,
       amount,
-      referenceId,
+      // referenceId,
       subject: "Therawallet Top-up Notification",
       emailTo: user.email,
     };
@@ -113,8 +113,8 @@ export const giftWalletTopUpController = async (
   } = req.body;
 
   if (receiverId && email) {
-    res.status(500).json({
-      message: "please pass in either a mobile number or an email address",
+    return res.status(500).json({
+      message: "please pass in either a reciver id or an email address",
     });
   }
   try {
@@ -155,9 +155,7 @@ export const giftWalletTopUpController = async (
       });
     }
 
-    console.log("senderCurrentWalletBal "+ senderCurrentWalletBal);
-    console.log("recipientCurrentWalletBal "+ recipientCurrentWalletBal);
-    
+   
     //   deducting from the sender's wallet balance
     sender!.theraWallet = senderCurrentWalletBal - parseInt(amount);
     //   adding to the receiver wallet balance

@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.giftWalletTopUpController = void 0;
 const User_model_1 = __importDefault(require("../models/User.model"));
-const verifyPaystackPaymentUtility_1 = require("../utils/verifyPaystackPaymentUtility");
 const Transactions_model_1 = __importDefault(require("../models/Transactions.model"));
 const sendEmailUtility_1 = require("../utils/sendEmailUtility");
 // topUpWallet logic
@@ -43,7 +42,7 @@ const topUpWalletController = (req, res, next) => __awaiter(void 0, void 0, void
         }
         // verify payment in paystack here
         console.log("verifying with paystack");
-        yield (0, verifyPaystackPaymentUtility_1.verifyPaystackPayment)(referenceId);
+        // await verifyPaystackPayment(referenceId);
         //   wallet topUp logic
         let currentWalletBal = user.theraWallet; // Cast user!.theraWallet to 'number'
         // adding to the user's wallet balance
@@ -57,7 +56,7 @@ const topUpWalletController = (req, res, next) => __awaiter(void 0, void 0, void
             amount,
             details: {
                 payment_method: payment_method,
-                reference_id: referenceId,
+                // reference_id: referenceId,
                 currency: "NGN",
                 payment_status: "success",
             },
@@ -70,7 +69,7 @@ const topUpWalletController = (req, res, next) => __awaiter(void 0, void 0, void
         let data = {
             name: user.firstName,
             amount,
-            referenceId,
+            // referenceId,
             subject: "Therawallet Top-up Notification",
             emailTo: user.email,
         };
@@ -91,8 +90,8 @@ const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, 
     // referenceId = "T768990107951172",
     payment_method, } = req.body;
     if (receiverId && email) {
-        res.status(500).json({
-            message: "please pass in either a mobile number or an email address",
+        return res.status(500).json({
+            message: "please pass in either a reciver id or an email address",
         });
     }
     try {
@@ -122,8 +121,6 @@ const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, 
                 message: "balance is not enough for gifting",
             });
         }
-        console.log("senderCurrentWalletBal " + senderCurrentWalletBal);
-        console.log("recipientCurrentWalletBal " + recipientCurrentWalletBal);
         //   deducting from the sender's wallet balance
         sender.theraWallet = senderCurrentWalletBal - parseInt(amount);
         //   adding to the receiver wallet balance

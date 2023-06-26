@@ -58,6 +58,7 @@ export const deleteMedicationFrontend = async (
   res: Response
 ) => {
   try {
+    // TODO update this to body
     const medication = await MedicationModel.findByIdAndDelete(req.params.id);
     if (!medication) {
       return res.status(404).json({ error: "Medication not found" });

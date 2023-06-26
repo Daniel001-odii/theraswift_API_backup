@@ -55,6 +55,7 @@ exports.deleteMedication = deleteMedication;
 // DELETE endpoint for deleting a medication through an external API
 const deleteMedicationFrontend = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // TODO update this to body
         const medication = yield Medications_model_1.default.findByIdAndDelete(req.params.id);
         if (!medication) {
             return res.status(404).json({ error: "Medication not found" });
