@@ -51,6 +51,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         }
         // generate access token
         const accessToken = jsonwebtoken_1.default.sign({
+            _id: user === null || user === void 0 ? void 0 : user._id,
             userId: user.userId,
             email: user.email,
             firstName: user.firstName,
@@ -58,6 +59,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             role: user.role,
         }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
         const refreshToken = jsonwebtoken_1.default.sign({
+            _id: user === null || user === void 0 ? void 0 : user._id,
             userId: user.userId,
             email: user.email,
             firstName: user.firstName,

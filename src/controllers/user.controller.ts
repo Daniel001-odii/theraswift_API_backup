@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import UserModel from "../models/User.model";
 import { JwtPayload, CustomRequest } from "../interface/generalInterface";
-
+import {ObjectId} from 'mongoose'
 export const getUsersController = async (
   req: Request,
   res: Response
@@ -91,3 +91,70 @@ export const getUserWithAccessTokenController = async (
     res.status(500).json({ message: error.message });
   }
 };
+
+
+
+export const addUserMedicationController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    let {userMedications} = req.body
+    let secret = process.env.JWT_SECRET_KEY;
+    // Get JWT from Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+    const { userId, email, _id } = jwt.verify(
+      token!,
+      secret!
+    ) as unknown as JwtPayload;
+
+    let user;
+    // Find the token in the database
+    if (email) {
+      user = await UserModel.findOne({ email });
+    } else {
+      user = await UserModel.findOne({
+        userId,
+      });
+    }
+
+    if(!user){
+      return res.status(500).send("User not found!")
+    }
+
+     await UserModel.findOneAndUpdate(
+      {_id},
+      {$set:{userMedications}},
+    );
+
+    let updatedUserValue = await UserModel.findById(_id)
+
+    console.log(updatedUserValue)
+    console.log(_id)
+
+    res.json({
+        message: "Medication added to user successfully",
+      user: {
+        _id: updatedUserValue?._id,
+        userId: updatedUserValue?.userId,
+        firstName: updatedUserValue?.firstName,
+        lastName: updatedUserValue?.lastName,
+        email: updatedUserValue?.email,
+        gender: updatedUserValue?.gender,
+        mobileNumber: updatedUserValue?.mobileNumber,
+        role: updatedUserValue?.role,
+        walletBalance: updatedUserValue?.theraWallet,
+        dateOfBirth: updatedUserValue?.dateOfBirth,
+        userMedications: updatedUserValue?.userMedications
+      },
+    });
+    
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+

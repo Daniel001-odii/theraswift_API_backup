@@ -72,6 +72,7 @@ import {
   getUsersController,
   getUserController,
   getUserWithAccessTokenController,
+  addUserMedicationController
 } from "./user.controller";
 import {
   createCareerOpening,
@@ -155,5 +156,6 @@ export {
   addNewBeneficiaryController,
   getUserBeneficiariesController,
   getUserBeneficiaryByIdController,
-  getBeneficiaryInfoController
+  getBeneficiaryInfoController,
+  addUserMedicationController
 };

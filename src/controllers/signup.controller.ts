@@ -64,6 +64,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     // generate access token
     const accessToken = jwt.sign(
       {
+        _id: userSaved?._id,
         userId: userSaved.userId,
         email: userSaved.email,
         firstName: userSaved.firstName,
@@ -77,6 +78,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 
     const refreshToken = jwt.sign(
       {
+        _id: userSaved?._id,
         userId: userSaved.userId,
         email: userSaved.email,
         firstName: userSaved.firstName,

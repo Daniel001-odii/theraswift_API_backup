@@ -63,7 +63,8 @@ import {
   addNewBeneficiaryController,
   getUserBeneficiariesController,
   getUserBeneficiaryByIdController,
-  getBeneficiaryInfoController
+  getBeneficiaryInfoController,
+  addUserMedicationController
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole, checkRole } from "../middleware/roleCheck.middleware";
@@ -165,8 +166,7 @@ router.post('/add_new_beneficiary',checkRole,addNewBeneficiaryController)
 router.get('/get_user_beneficiaries',checkRole,getUserBeneficiariesController)
 router.get('/get_user_beneficiary_by_id',checkRole,getUserBeneficiaryByIdController)
 router.post('/check_beneficiary_info',checkRole,getBeneficiaryInfoController)
-
-
+router.post('/add_medication_to_user',addUserMedicationController)
 
 
 

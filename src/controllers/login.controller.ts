@@ -48,7 +48,8 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     // generate access token
     const accessToken = jwt.sign(
-      {
+      { 
+        _id: user?._id,
         userId: user.userId,
         email: user.email,
         firstName: user.firstName,
@@ -61,6 +62,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     const refreshToken = jwt.sign(
       {
+        _id: user?._id,
         userId: user.userId,
         email: user.email,
         firstName: user.firstName,

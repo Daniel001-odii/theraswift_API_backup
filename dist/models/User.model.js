@@ -64,7 +64,10 @@ const UserSchema = new mongoose_1.Schema({
     theraWallet: {
         type: Number,
         min: 0,
-        default: 50000
+        default: 0
+    },
+    userMedications: {
+        type: [String]
     },
 }, {
     timestamps: true,

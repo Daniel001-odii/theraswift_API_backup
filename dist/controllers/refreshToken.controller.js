@@ -36,6 +36,7 @@ const refreshTokenVerificationController = (req, res, next) => __awaiter(void 0,
             role: { $in: ["admin", "user"] },
         });
         const accessToken = jsonwebtoken_1.default.sign({
+            _id: user === null || user === void 0 ? void 0 : user._id,
             userId: user === null || user === void 0 ? void 0 : user.userId,
             email: user === null || user === void 0 ? void 0 : user.email,
             firstName: user === null || user === void 0 ? void 0 : user.firstName,

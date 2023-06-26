@@ -34,6 +34,7 @@ export const refreshTokenVerificationController = async (
 
     const accessToken = jwt.sign(
       {
+        _id: user?._id,
         userId: user?.userId,
         email: user?.email,
         firstName: user?.firstName,

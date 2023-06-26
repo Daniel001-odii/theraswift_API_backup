@@ -73,4 +73,5 @@ router.post('/add_new_beneficiary', roleCheck_middleware_1.checkRole, controller
 router.get('/get_user_beneficiaries', roleCheck_middleware_1.checkRole, controllers_1.getUserBeneficiariesController);
 router.get('/get_user_beneficiary_by_id', roleCheck_middleware_1.checkRole, controllers_1.getUserBeneficiaryByIdController);
 router.post('/check_beneficiary_info', roleCheck_middleware_1.checkRole, controllers_1.getBeneficiaryInfoController);
+router.post('/add_medication_to_user', controllers_1.addUserMedicationController);
 exports.default = router;

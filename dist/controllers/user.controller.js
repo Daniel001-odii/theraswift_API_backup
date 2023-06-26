@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserWithAccessTokenController = exports.getUserController = exports.getUsersController = void 0;
+exports.addUserMedicationController = exports.getUserWithAccessTokenController = exports.getUserController = exports.getUsersController = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const User_model_1 = __importDefault(require("../models/User.model"));
 const getUsersController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -91,3 +91,50 @@ const getUserWithAccessTokenController = (req, res) => __awaiter(void 0, void 0,
     }
 });
 exports.getUserWithAccessTokenController = getUserWithAccessTokenController;
+const addUserMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let { userMedications } = req.body;
+        let secret = process.env.JWT_SECRET_KEY;
+        // Get JWT from Authorization header
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(" ")[1];
+        const { userId, email, _id } = jsonwebtoken_1.default.verify(token, secret);
+        let user;
+        // Find the token in the database
+        if (email) {
+            user = yield User_model_1.default.findOne({ email });
+        }
+        else {
+            user = yield User_model_1.default.findOne({
+                userId,
+            });
+        }
+        if (!user) {
+            return res.status(500).send("User not found!");
+        }
+        yield User_model_1.default.findOneAndUpdate({ _id }, { $set: { userMedications } });
+        let updatedUserValue = yield User_model_1.default.findById(_id);
+        console.log(updatedUserValue);
+        console.log(_id);
+        res.json({
+            message: "Medication added to user successfully",
+            user: {
+                _id: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue._id,
+                userId: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.userId,
+                firstName: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.firstName,
+                lastName: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.lastName,
+                email: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.email,
+                gender: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.gender,
+                mobileNumber: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.mobileNumber,
+                role: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.role,
+                walletBalance: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.theraWallet,
+                dateOfBirth: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.dateOfBirth,
+                userMedications: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.userMedications
+            },
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.addUserMedicationController = addUserMedicationController;

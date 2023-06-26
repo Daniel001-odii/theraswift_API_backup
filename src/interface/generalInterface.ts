@@ -1,8 +1,9 @@
-import { Document, Types } from "mongoose";
+import { Document, Types, ObjectId } from "mongoose";
 import { Request } from "express";
 import { PrescriptionType } from "../models/Prescription.model";
 
 export interface IUser extends Document {
+  _id:ObjectId;
   userId: string;
   firstName: string;
   lastName: string;
@@ -25,6 +26,7 @@ export interface IUser extends Document {
     createdTime: Date;
     verified: boolean;
   };
+  userMedications:[string],
   theraWallet: Number;
 }
 
@@ -84,6 +86,7 @@ export interface JwtPayload {
   email: string;
   mobile: string;
   userId: string;
+  _id:string
 }
 
 export interface CustomRequest extends Request {
