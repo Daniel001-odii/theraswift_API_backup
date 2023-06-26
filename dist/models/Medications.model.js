@@ -62,6 +62,9 @@ const medicationSchema = new mongoose_1.Schema({
     essential_category: {
         type: String,
     },
+    quantity: {
+        type: String
+    }
 });
 // Define medication model
 const Medication = (0, mongoose_1.model)("Medications", medicationSchema);

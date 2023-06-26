@@ -134,7 +134,7 @@ const addMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, 
     try {
         // Validate the request body using express-validator
         yield Promise.all(medication_middlware_1.validateMedication.map((validation) => validation.run(req)));
-        const { name, description, strength, warnings, manufacturer, price, available, sideEffects, ingredients, storageInstructions, contraindications, routeOfAdministration, prescription_required_type, essential_category, medicationTypes, medicationForms, } = req.body;
+        const { name, description, strength, warnings, manufacturer, price, available, sideEffects, ingredients, storageInstructions, contraindications, routeOfAdministration, prescription_required_type, essential_category, medicationTypes, medicationForms, quantity } = req.body;
         let image_url = "";
         if (req.file) {
             const filename = (0, uuid_1.v4)();
@@ -182,6 +182,7 @@ const addMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, 
             warnings,
             manufacturer,
             price,
+            quantity,
             available,
             sideEffects: sideEffectsArray,
             ingredients: ingredientsArray,

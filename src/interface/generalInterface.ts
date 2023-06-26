@@ -77,6 +77,7 @@ export interface IMedication extends Document {
   prescription_required: boolean;
   category?: string;
   image_url?: string;
+  quantity?:string
 }
 
 export interface JwtPayload {

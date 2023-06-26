@@ -62,6 +62,9 @@ const medicationSchema = new Schema({
   essential_category:{
     type:String,
   },
+  quantity:{
+    type:String
+  }
 });
 
 // Define medication model

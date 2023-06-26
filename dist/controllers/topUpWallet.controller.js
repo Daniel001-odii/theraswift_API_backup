@@ -47,8 +47,6 @@ const topUpWalletController = (req, res, next) => __awaiter(void 0, void 0, void
         let currentWalletBal = user.theraWallet; // Cast user!.theraWallet to 'number'
         // adding to the user's wallet balance
         user.theraWallet = currentWalletBal + parseInt(amount); // Parse the amount and perform the addition
-        // console.log("added " + parseInt(currentWalletBal) + parseInt(amount));
-        // console.log("current bal " + parseInt(currentWalletBal));
         yield (user === null || user === void 0 ? void 0 : user.save());
         //save log in transaction history
         const newTopupTransactionLog = new Transactions_model_1.default({
@@ -124,7 +122,7 @@ const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, 
         //   deducting from the sender's wallet balance
         sender.theraWallet = senderCurrentWalletBal - parseInt(amount);
         //   adding to the receiver wallet balance
-        recipient.theraWallet = recipientCurrentWalletBal + amount;
+        recipient.theraWallet = recipientCurrentWalletBal + parseInt(amount);
         yield (recipient === null || recipient === void 0 ? void 0 : recipient.save());
         yield (sender === null || sender === void 0 ? void 0 : sender.save());
         //save log in transaction history

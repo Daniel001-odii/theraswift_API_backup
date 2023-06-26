@@ -165,6 +165,7 @@ export const addMedicationController = async (
       essential_category,
       medicationTypes,
       medicationForms,
+    quantity
     } = req.body;
 
     let image_url = "";
@@ -220,6 +221,7 @@ export const addMedicationController = async (
       warnings,
       manufacturer,
       price,
+      quantity,
       available,
       sideEffects: sideEffectsArray,
       ingredients: ingredientsArray,

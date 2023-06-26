@@ -50,15 +50,14 @@ const topUpWalletController = async (
 
     // verify payment in paystack here
     console.log("verifying with paystack");
+
     // await verifyPaystackPayment(referenceId);
+
     //   wallet topUp logic
     let currentWalletBal: number = user!.theraWallet as number; // Cast user!.theraWallet to 'number'
     // adding to the user's wallet balance
     user!.theraWallet = currentWalletBal + parseInt(amount); // Parse the amount and perform the addition
     
-
-    // console.log("added " + parseInt(currentWalletBal) + parseInt(amount));
-    // console.log("current bal " + parseInt(currentWalletBal));
 
     await user?.save();
 
@@ -159,7 +158,7 @@ export const giftWalletTopUpController = async (
     //   deducting from the sender's wallet balance
     sender!.theraWallet = senderCurrentWalletBal - parseInt(amount);
     //   adding to the receiver wallet balance
-    recipient!.theraWallet = recipientCurrentWalletBal + amount;
+    recipient!.theraWallet = recipientCurrentWalletBal + parseInt(amount);
 
     await recipient?.save();
     await sender?.save();

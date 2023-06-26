@@ -33,6 +33,9 @@ const verifyPaystackPayment = (reference) => __awaiter(void 0, void 0, void 0, f
         if (data.status == false) {
             throw Error(data.message);
         }
+        else {
+            console.error(data);
+        }
     }
     catch (error) {
         console.error(error);
