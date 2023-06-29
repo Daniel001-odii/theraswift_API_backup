@@ -28,10 +28,18 @@ export const refreshTokenVerificationController = async (
     // Check if email and mobile are in the MongoDB
     const user = await UserModel.findOne({
       email: payload.email,
-      mobile: payload.mobile,
-      role: { $in: ["admin", "user"] },
+      mobile: payload.mobileNumber,
+      role: { $in: ["admin","doctor", "user"] },
     });
 
+
+     // check if user exists
+     if (!user) {
+      return res
+        .status(403)
+        .json({ message: "Invalid refresh token credentials." });
+    }
+    
     const accessToken = jwt.sign(
       {
         _id: user?._id,
@@ -40,6 +48,7 @@ export const refreshTokenVerificationController = async (
         firstName: user?.firstName,
         lastName: user?.lastName,
         role: user?.role,
+        mobileNumber: user?.mobileNumber
       },
       process.env.JWT_SECRET_KEY!,
       { expiresIn: "1h" }

@@ -28,7 +28,7 @@ export const checkAdminRole = async (
     // Check if email and mobile are in the MongoDB and belong to an admin role
     const user = await UserModel.findOne({
       email: payload.email,
-      mobile: payload.mobile,
+      mobile: payload.mobileNumber,
       role: "admin",
     });
 
@@ -70,17 +70,20 @@ export const checkRole = async (
     // Verify JWT and extract payload
     const payload = jwt.verify(token, secret!) as unknown as JwtPayload;
 
+    console.log(payload.email)
+    console.log(payload.mobileNumber)
+
     // Check if email and mobile are in the MongoDB and belong to an admin or user role
     const user = await UserModel.findOne({
       email: payload.email,
-      mobileNumber: payload.mobile,
-      role: { $in: ["admin", "user","doctor"] },
+      mobileNumber: payload.mobileNumber,
+      role: { $in: ["user", "admin", "doctor"] },
     });
 
     if (!user) {
       return res
         .status(403)
-        .json({ message: "Access denied. Admin role required." });
+        .json({ message: "Access denied. A role required." });
     }
 
     // Add the payload to the request object for later use

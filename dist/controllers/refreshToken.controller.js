@@ -32,9 +32,15 @@ const refreshTokenVerificationController = (req, res, next) => __awaiter(void 0,
         // Check if email and mobile are in the MongoDB
         const user = yield User_model_1.default.findOne({
             email: payload.email,
-            mobile: payload.mobile,
-            role: { $in: ["admin", "user"] },
+            mobile: payload.mobileNumber,
+            role: { $in: ["admin", "doctor", "user"] },
         });
+        // check if user exists
+        if (!user) {
+            return res
+                .status(403)
+                .json({ message: "Invalid refresh token credentials." });
+        }
         const accessToken = jsonwebtoken_1.default.sign({
             _id: user === null || user === void 0 ? void 0 : user._id,
             userId: user === null || user === void 0 ? void 0 : user.userId,
@@ -42,6 +48,7 @@ const refreshTokenVerificationController = (req, res, next) => __awaiter(void 0,
             firstName: user === null || user === void 0 ? void 0 : user.firstName,
             lastName: user === null || user === void 0 ? void 0 : user.lastName,
             role: user === null || user === void 0 ? void 0 : user.role,
+            mobileNumber: user === null || user === void 0 ? void 0 : user.mobileNumber
         }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
         res.json({
             message: "AccessToken regenerated  successful",

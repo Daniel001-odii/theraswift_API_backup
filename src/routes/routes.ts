@@ -94,7 +94,9 @@ router.post("/topup_wallet", checkRole, topUpWalletController);
 router.post("/gift_wallet_topup", checkRole, giftWalletTopUpController);
 router.post("/new_order", checkRole, multerUpload.single("image"), addOrder);
 router.get("/get_order_by_id", checkRole, getOrderById);
-router.get("/get_orders", checkRole, getOrders);
+router.get("/get_orders", 
+checkRole, 
+getOrders);
 router.get("/get_user_orders", checkRole, getUserOrders);
 router.post("/check_email_for_existence", checkEmailForExistenceController)
 router.get("/get_user_with_access_token", checkRole, getUserWithAccessTokenController);

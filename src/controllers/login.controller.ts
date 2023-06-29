@@ -37,7 +37,7 @@ export const loginController = async (req: Request, res: Response, next: NextFun
 
     // check if user exists
     if (!user) {
-      return res.status(401).json({ message: "Invalid email" });
+      return res.status(401).json({ message: "Invalid credentials." });
     }
 
     // compare password with hashed password in database
@@ -54,6 +54,7 @@ export const loginController = async (req: Request, res: Response, next: NextFun
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        mobileNumber: user.mobileNumber,
         role: user.role,
       },
       process.env.JWT_SECRET_KEY!,
@@ -67,6 +68,7 @@ export const loginController = async (req: Request, res: Response, next: NextFun
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        mobileNumber: user.mobileNumber,
         role: user.role,
       },
       process.env.REFRESH_JWT_SECRET_KEY!,
@@ -137,7 +139,7 @@ export const doctorsLoginController = async (req: Request, res: Response, next: 
         mobileNumber: phoneNumber,
         role: { $in: ["admin", "doctor"] },
       });
-      
+
     }
 
     // check if user exists
@@ -163,6 +165,7 @@ export const doctorsLoginController = async (req: Request, res: Response, next: 
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        mobileNumber: user.mobileNumber,
         role: user.role,
       },
       process.env.JWT_SECRET_KEY!,
@@ -176,6 +179,7 @@ export const doctorsLoginController = async (req: Request, res: Response, next: 
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        mobileNumber: user.mobileNumber,
         role: user.role,
       },
       process.env.REFRESH_JWT_SECRET_KEY!,

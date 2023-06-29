@@ -43,7 +43,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         }
         // check if user exists
         if (!user) {
-            return res.status(401).json({ message: "Invalid email" });
+            return res.status(401).json({ message: "Invalid credentials." });
         }
         // compare password with hashed password in database
         const isPasswordMatch = yield bcrypt_1.default.compare(password, user.password);
@@ -57,6 +57,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            mobileNumber: user.mobileNumber,
             role: user.role,
         }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
         const refreshToken = jsonwebtoken_1.default.sign({
@@ -65,6 +66,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            mobileNumber: user.mobileNumber,
             role: user.role,
         }, process.env.REFRESH_JWT_SECRET_KEY, { expiresIn: "24h" });
         // return access token
@@ -139,6 +141,7 @@ const doctorsLoginController = (req, res, next) => __awaiter(void 0, void 0, voi
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            mobileNumber: user.mobileNumber,
             role: user.role,
         }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
         const refreshToken = jsonwebtoken_1.default.sign({
@@ -147,6 +150,7 @@ const doctorsLoginController = (req, res, next) => __awaiter(void 0, void 0, voi
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            mobileNumber: user.mobileNumber,
             role: user.role,
         }, process.env.REFRESH_JWT_SECRET_KEY, { expiresIn: "24h" });
         // return access token

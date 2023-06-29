@@ -217,43 +217,75 @@ export const addOrder = async (req: Request, res: Response) => {
 export const getOrderById = async (req: Request, res: Response) => {
   let { orderId } = req.body;
   try {
-    let data = await Order.findOne({ orderId });
+    let data = await Order.find()
+    .populate({
+      path: "products.medication",
+      select: "-_id -medicationForms -medicationTypes"
+    });
     res.status(200).json({ data });
   } catch (error:any) {
     res.status(500).json({error:error.message})
-    // throw Error(error)
   }
 };
 
-export const getOrders = async (req: Request, res: Response) => {
+
+
+export const getOrders = async function (req: Request, res: Response) {
   try {
-    let data = await Order.find();
-    res.status(200).json({ data });
-  } catch (error:any) {
-    res.status(500).json({error:error.message})
-    // throw Error(error)
+
+    const orders = await Order.find()
+      .populate({
+        path: "products.medication_id",
+        select: "-_id -medicationForms -medicationTypes"
+      });
+
+    res.status(200).json({ data: orders });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };
+
+
+
+// export const getUserOrders = async (req: Request, res: Response) => {
+
+//   try {
+
+//     let secret = process.env.JWT_SECRET_KEY;
+//     // Get JWT from Authorization header
+//     const authHeader = req.headers.authorization;
+//     const token = authHeader && authHeader.split(" ")[1];
+
+//   const { userId } = jwt.verify(
+//       token!,
+//       secret!
+//     ) as unknown as JwtPayload;
+
+//     let data = await Order.find({ userId });
+//     res.status(200).json({ user_orders:data,message:"Orders retrieved successfully" });
+//   } catch (error:any) {
+//     res.status(500).json({error:error.message})
+//   }
+// };
 
 export const getUserOrders = async (req: Request, res: Response) => {
-  // let { userId } = req.body;
   try {
-
-    let secret = process.env.JWT_SECRET_KEY;
+    const secret = process.env.JWT_SECRET_KEY;
     // Get JWT from Authorization header
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
 
-  const { userId } = jwt.verify(
-      token!,
-      secret!
-    ) as unknown as JwtPayload;
+    const { userId } = jwt.verify(token!, secret!) as { userId: string };
 
-    let data = await Order.find({ userId });
-    res.status(200).json({ user_orders:data,message:"Orders retrieved successfully" });
+    const userOrders = await Order.find()
+    .populate({
+      path: "products.medication_id",
+      select: "-_id -medicationForms -medicationTypes"
+    });
+
+    res.status(200).json({ user_orders: userOrders, message: "Orders retrieved successfully" });
   } catch (error:any) {
-    res.status(500).json({error:error.message})
-    // throw Error(error)
+    res.status(500).json({ error: error.message });
   }
 };
 

@@ -24,6 +24,8 @@ const orderSchema = new Schema(
           ref: "Medications",
           required: false,
         },
+        medicationForm: String,
+        medicationStrength: String,
         quantity: {
           type: Number,
           required: true,

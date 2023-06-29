@@ -84,7 +84,7 @@ export interface IMedication extends Document {
 
 export interface JwtPayload {
   email: string;
-  mobile: string;
+  mobileNumber: string;
   userId: string;
   _id:string
 }
@@ -97,8 +97,10 @@ export interface IOrder extends Document {
   userId: string;
   type: string;
   products: {
-    medication_id: string;
+    medication: string;
     quantity: number;
+    medicationForm: String,
+    medicationStrength: String,
   }[];
   prescriptionId?: string;
   refill_request_id?: string;

@@ -65,6 +65,7 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
             email: userSaved.email,
             firstName: userSaved.firstName,
             lastName: userSaved.lastName,
+            mobileNumber: user.mobileNumber,
             role: userSaved.role,
         }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
         const refreshToken = jsonwebtoken_1.default.sign({
@@ -73,6 +74,7 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
             email: userSaved.email,
             firstName: userSaved.firstName,
             lastName: userSaved.lastName,
+            mobileNumber: user.mobileNumber,
             role: userSaved.role,
         }, process.env.REFRESH_JWT_SECRET_KEY, { expiresIn: "24h" });
         res.json({

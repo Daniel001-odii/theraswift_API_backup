@@ -179,40 +179,66 @@ exports.addOrder = addOrder;
 const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { orderId } = req.body;
     try {
-        let data = yield Order_model_1.default.findOne({ orderId });
+        let data = yield Order_model_1.default.find()
+            .populate({
+            path: "products.medication",
+            select: "-_id -medicationForms -medicationTypes"
+        });
         res.status(200).json({ data });
     }
     catch (error) {
         res.status(500).json({ error: error.message });
-        // throw Error(error)
     }
 });
 exports.getOrderById = getOrderById;
-const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        let data = yield Order_model_1.default.find();
-        res.status(200).json({ data });
-    }
-    catch (error) {
-        res.status(500).json({ error: error.message });
-        // throw Error(error)
-    }
-});
+const getOrders = function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const orders = yield Order_model_1.default.find()
+                .populate({
+                path: "products.medication_id",
+                select: "-_id -medicationForms -medicationTypes"
+            });
+            res.status(200).json({ data: orders });
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+};
 exports.getOrders = getOrders;
+// export const getUserOrders = async (req: Request, res: Response) => {
+//   try {
+//     let secret = process.env.JWT_SECRET_KEY;
+//     // Get JWT from Authorization header
+//     const authHeader = req.headers.authorization;
+//     const token = authHeader && authHeader.split(" ")[1];
+//   const { userId } = jwt.verify(
+//       token!,
+//       secret!
+//     ) as unknown as JwtPayload;
+//     let data = await Order.find({ userId });
+//     res.status(200).json({ user_orders:data,message:"Orders retrieved successfully" });
+//   } catch (error:any) {
+//     res.status(500).json({error:error.message})
+//   }
+// };
 const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // let { userId } = req.body;
     try {
-        let secret = process.env.JWT_SECRET_KEY;
+        const secret = process.env.JWT_SECRET_KEY;
         // Get JWT from Authorization header
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.split(" ")[1];
         const { userId } = jsonwebtoken_1.default.verify(token, secret);
-        let data = yield Order_model_1.default.find({ userId });
-        res.status(200).json({ user_orders: data, message: "Orders retrieved successfully" });
+        const userOrders = yield Order_model_1.default.find()
+            .populate({
+            path: "products.medication_id",
+            select: "-_id -medicationForms -medicationTypes"
+        });
+        res.status(200).json({ user_orders: userOrders, message: "Orders retrieved successfully" });
     }
     catch (error) {
         res.status(500).json({ error: error.message });
-        // throw Error(error)
     }
 });
 exports.getUserOrders = getUserOrders;
