@@ -1,5 +1,5 @@
 import signUpController from "./signup.controller";
-import loginController from "./login.controller";
+import {loginController,doctorsLoginController} from "./login.controller";
 import rootController from "./root.controller";
 import topUpWalletController, {
   giftWalletTopUpController,
@@ -157,5 +157,6 @@ export {
   getUserBeneficiariesController,
   getUserBeneficiaryByIdController,
   getBeneficiaryInfoController,
-  addUserMedicationController
+  addUserMedicationController,
+  doctorsLoginController
 };

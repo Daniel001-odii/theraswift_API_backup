@@ -21,7 +21,7 @@ const mobileNumberFormatter_1 = require("../utils/mobileNumberFormatter");
 // signup logic
 const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, firstName, lastName, mobileNumber, password, dateOfBirth, gender, } = req.body;
+        const { email, firstName, lastName, mobileNumber, password, dateOfBirth, gender, role } = req.body;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -47,13 +47,14 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         // Save user to MongoDB
         const user = new User_model_1.default({
             userId,
-            email: email,
-            firstName: firstName,
-            dateOfBirth: dateOfBirth,
-            lastName: lastName,
+            email,
+            firstName,
+            dateOfBirth,
+            lastName,
             password: hashedPassword,
             mobileNumber: newNum,
-            gender: gender,
+            gender,
+            role
         });
         let userSaved = yield user.save();
         console.log(userSaved);

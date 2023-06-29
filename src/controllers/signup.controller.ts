@@ -18,6 +18,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       password,
       dateOfBirth,
       gender,
+      role
     } = req.body;
     // Check for validation errors
     const errors = validationResult(req);
@@ -51,13 +52,14 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     // Save user to MongoDB
     const user = new UserModel({
       userId,
-      email: email,
-      firstName: firstName,
-      dateOfBirth: dateOfBirth,
-      lastName: lastName,
+      email,
+      firstName,
+      dateOfBirth,
+      lastName,
       password: hashedPassword,
       mobileNumber: newNum,
-      gender: gender,
+      gender,
+      role
     });
     let userSaved = await user.save();
     console.log(userSaved);

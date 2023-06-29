@@ -11,6 +11,7 @@ const multer_middleware_1 = require("../middleware/multer.middleware");
 router.get("/", controllers_1.rootController);
 router.post("/signup", signup_middleware_1.validateSignupParams, controllers_1.signUpController);
 router.post("/login", login_middleware_1.validateLoginParams, controllers_1.loginController);
+router.post("/doctor_login", login_middleware_1.validateLoginParams, controllers_1.doctorsLoginController);
 router.post("/otp/send_mobile", controllers_1.mobileOtpController);
 router.post("/otp/verify_mobile", controllers_1.mobileOtpVerificationController);
 router.post("/otp/resend_mobile", controllers_1.mobileOtpResendController);
@@ -58,7 +59,7 @@ router.get("get_users", roleCheck_middleware_1.checkAdminRole, controllers_1.get
 router.post("/add_career_openings", roleCheck_middleware_1.checkAdminRole, controllers_1.createCareerOpening);
 router.get("/get_career_openings", controllers_1.getCareerOpenings);
 router.get('/add_medication', controllers_1.addMedicationFrontendController);
-router.get('/all_medication', controllers_1.getAllMedicationFrontendController);
+router.get('/get_all_medication', controllers_1.getAllMedicationsController);
 router.get("/get_medications", controllers_1.getAllMedicationFrontendController);
 router.get("/add_essentials_medication", controllers_1.adEssentialsMedicationFrontendController);
 router.delete("/delete_medication_by_id", roleCheck_middleware_1.checkAdminRole, controllers_1.deleteMedication);

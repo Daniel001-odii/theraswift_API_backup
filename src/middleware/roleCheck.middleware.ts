@@ -73,8 +73,8 @@ export const checkRole = async (
     // Check if email and mobile are in the MongoDB and belong to an admin or user role
     const user = await UserModel.findOne({
       email: payload.email,
-      mobile: payload.mobile,
-      role: { $in: ["admin", "user"] },
+      mobileNumber: payload.mobile,
+      role: { $in: ["admin", "user","doctor"] },
     });
 
     if (!user) {

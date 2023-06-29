@@ -62,8 +62,8 @@ const checkRole = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         // Check if email and mobile are in the MongoDB and belong to an admin or user role
         const user = yield User_model_1.default.findOne({
             email: payload.email,
-            mobile: payload.mobile,
-            role: { $in: ["admin", "user"] },
+            mobileNumber: payload.mobile,
+            role: { $in: ["admin", "user", "doctor"] },
         });
         if (!user) {
             return res

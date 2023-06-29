@@ -25,6 +25,7 @@ const getBeneficiaryInfoController = (req, res) => __awaiter(void 0, void 0, voi
             return res
                 .status(400)
                 .json({ message: "please send required body queries" });
+        console.log(beneficiaryUserId);
         // check if beneficiary exist in the database
         const existingBeneficiaryUser = yield User_model_1.default.findOne({
             userId: beneficiaryUserId,
@@ -34,6 +35,7 @@ const getBeneficiaryInfoController = (req, res) => __awaiter(void 0, void 0, voi
                 .status(400)
                 .json({ message: "Beneficiary does not exists as a user" });
         }
+        console.log(existingBeneficiaryUser);
         res.status(200).send({
             firstName: existingBeneficiaryUser.firstName,
             lastName: existingBeneficiaryUser.lastName,
@@ -81,7 +83,7 @@ const addNewBeneficiaryController = (req, res) => __awaiter(void 0, void 0, void
             userId,
             firstName: newBeneficiaryResp.firstName,
             lastName: newBeneficiaryResp.lastName,
-            beneficiaryUserId,
+            beneficiaryUserId: newBeneficiaryResp.beneficiaryUserId,
         };
         return res.status(201).json({
             message: "Beneficiary created successfully",
@@ -110,9 +112,9 @@ const getUserBeneficiariesController = (req, res) => __awaiter(void 0, void 0, v
                 message: "No Beneficiary found",
             });
         }
+        console.log(data);
         const formattedData = data.map((beneficiary) => ({
-            userId,
-            beneficiaryUserId: beneficiary.userId,
+            beneficiaryUserId: beneficiary.beneficiaryUserId,
             firstName: beneficiary.firstName,
             lastName: beneficiary.lastName,
         }));

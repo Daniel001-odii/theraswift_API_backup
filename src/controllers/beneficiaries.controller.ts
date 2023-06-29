@@ -23,6 +23,8 @@ export const getBeneficiaryInfoController = async (
         .status(400)
         .json({ message: "please send required body queries" });
 
+        console.log(beneficiaryUserId)
+
     // check if beneficiary exist in the database
     const existingBeneficiaryUser =  await UserModel.findOne({
       userId: beneficiaryUserId,
@@ -33,6 +35,8 @@ export const getBeneficiaryInfoController = async (
         .status(400)
         .json({ message: "Beneficiary does not exists as a user" });
     }
+
+    console.log(existingBeneficiaryUser)
 
     res.status(200).send({
       firstName: existingBeneficiaryUser.firstName,
@@ -61,6 +65,7 @@ export const addNewBeneficiaryController = async (
 
     // Check if the user exists in the database
     const existingUser = await UserModel.findOne({ userId });
+
     // check if beneficiary exist in the database
     const existingBeneficiaryUser = await UserModel.findOne({
       userId: beneficiaryUserId,
@@ -91,7 +96,7 @@ export const addNewBeneficiaryController = async (
       userId,
       firstName: newBeneficiaryResp.firstName,
       lastName: newBeneficiaryResp.lastName,
-      beneficiaryUserId,
+      beneficiaryUserId:newBeneficiaryResp.beneficiaryUserId,
     };
 
     return res.status(201).json({
@@ -127,9 +132,10 @@ export const getUserBeneficiariesController = async (
       });
     }
 
+    console.log(data)
+
     const formattedData = data.map((beneficiary) => ({
-      userId,
-      beneficiaryUserId: beneficiary.userId,
+      beneficiaryUserId: beneficiary.beneficiaryUserId,
       firstName: beneficiary.firstName,
       lastName: beneficiary.lastName,
     }));

@@ -4,6 +4,7 @@ const router = express.Router();
 import {
   signUpController,
   loginController,
+  doctorsLoginController,
   rootController,
   topUpWalletController,
   giftWalletTopUpController,
@@ -75,6 +76,7 @@ import { multerUpload } from "../middleware/multer.middleware";
 router.get("/", rootController);
 router.post("/signup", validateSignupParams, signUpController);
 router.post("/login", validateLoginParams, loginController);
+router.post("/doctor_login",validateLoginParams,doctorsLoginController)
 router.post("/otp/send_mobile", mobileOtpController);
 router.post("/otp/verify_mobile", mobileOtpVerificationController);
 router.post("/otp/resend_mobile", mobileOtpResendController);
@@ -137,7 +139,7 @@ router.get(
   "/get_user_shipping_address",
   checkRole,
   getUserShippingAddressController
-);
+);  
 router.get(
   "/get_user_shipping_address_by_id",
   checkRole,
@@ -151,7 +153,7 @@ router.post(
 );
 router.get("/get_career_openings", getCareerOpenings);
 router.get('/add_medication',addMedicationFrontendController)
-router.get('/all_medication',getAllMedicationFrontendController)
+router.get('/get_all_medication',getAllMedicationsController)
 router.get("/get_medications", getAllMedicationFrontendController);
 router.get("/add_essentials_medication", adEssentialsMedicationFrontendController);
 router.delete("/delete_medication_by_id",checkAdminRole,deleteMedication)
