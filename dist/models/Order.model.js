@@ -17,7 +17,7 @@ const orderSchema = new mongoose_1.Schema({
     },
     products: [
         {
-            medication_id: {
+            medication: {
                 type: mongoose_1.Schema.Types.ObjectId,
                 ref: "Medications",
                 required: false,

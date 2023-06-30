@@ -70,8 +70,8 @@ export const checkRole = async (
     // Verify JWT and extract payload
     const payload = jwt.verify(token, secret!) as unknown as JwtPayload;
 
-    console.log(payload.email)
-    console.log(payload.mobileNumber)
+    // console.log(payload.email)
+    // console.log(payload.mobileNumber)
 
     // Check if email and mobile are in the MongoDB and belong to an admin or user role
     const user = await UserModel.findOne({

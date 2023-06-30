@@ -19,7 +19,7 @@ const orderSchema = new Schema(
     },
     products: [
       {
-        medication_id: {
+        medication: {
           type: Schema.Types.ObjectId,
           ref: "Medications",
           required: false,

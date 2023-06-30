@@ -59,8 +59,8 @@ const checkRole = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     try {
         // Verify JWT and extract payload
         const payload = jsonwebtoken_1.default.verify(token, secret);
-        console.log(payload.email);
-        console.log(payload.mobileNumber);
+        // console.log(payload.email)
+        // console.log(payload.mobileNumber)
         // Check if email and mobile are in the MongoDB and belong to an admin or user role
         const user = yield User_model_1.default.findOne({
             email: payload.email,

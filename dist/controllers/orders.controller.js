@@ -53,7 +53,7 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // Validate the product IDs and quantities
         for (const { medication_id, quantity } of products) {
             let parsed_medication_id = new mongoose_1.default.Types.ObjectId(medication_id);
-            console.log("medication_id ", medication_id);
+            // console.log("medication_id ", medication_id);
             const medication = yield Medications_model_1.default.findById(parsed_medication_id);
             if (!medication) {
                 return res
@@ -196,7 +196,7 @@ const getOrders = function (req, res) {
         try {
             const orders = yield Order_model_1.default.find()
                 .populate({
-                path: "products.medication_id",
+                path: "products.medication",
                 select: "-_id -medicationForms -medicationTypes"
             });
             res.status(200).json({ data: orders });
@@ -232,7 +232,7 @@ const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const { userId } = jsonwebtoken_1.default.verify(token, secret);
         const userOrders = yield Order_model_1.default.find()
             .populate({
-            path: "products.medication_id",
+            path: "products.medication",
             select: "-_id -medicationForms -medicationTypes"
         });
         res.status(200).json({ user_orders: userOrders, message: "Orders retrieved successfully" });

@@ -66,7 +66,7 @@ export const addOrder = async (req: Request, res: Response) => {
     for (const { medication_id, quantity } of products) {
       let parsed_medication_id = new mongoose.Types.ObjectId(medication_id);
 
-      console.log("medication_id ", medication_id);
+      // console.log("medication_id ", medication_id);
 
       const medication = await Medication.findById(parsed_medication_id);
       if (!medication) {
@@ -235,7 +235,7 @@ export const getOrders = async function (req: Request, res: Response) {
 
     const orders = await Order.find()
       .populate({
-        path: "products.medication_id",
+        path: "products.medication",
         select: "-_id -medicationForms -medicationTypes"
       });
 
@@ -279,7 +279,7 @@ export const getUserOrders = async (req: Request, res: Response) => {
 
     const userOrders = await Order.find()
     .populate({
-      path: "products.medication_id",
+      path: "products.medication",
       select: "-_id -medicationForms -medicationTypes"
     });
 
