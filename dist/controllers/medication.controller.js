@@ -134,7 +134,7 @@ const addMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, 
     try {
         // Validate the request body using express-validator
         yield Promise.all(medication_middlware_1.validateMedication.map((validation) => validation.run(req)));
-        const { name, description, strength, warnings, manufacturer, price, available, sideEffects, ingredients, storageInstructions, contraindications, routeOfAdministration, prescription_required_type, essential_category, medicationTypes, medicationForms, quantity } = req.body;
+        const { name, description, strength, warnings, manufacturer, price, available, sideEffects, ingredients, storageInstructions, contraindications, routeOfAdministration, prescription_required_type, essential_category, medicationTypes, medicationForms, uses, quantity, } = req.body;
         let image_url = "";
         if (req.file) {
             const filename = (0, uuid_1.v4)();
@@ -194,6 +194,7 @@ const addMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, 
             essential_category,
             medicationTypes: medicationTypesArray,
             medicationForms: medicationFormsArray,
+            uses,
         });
         let medicationSaved = yield newMedication.save();
         console.log(medicationSaved);
@@ -226,7 +227,7 @@ const editMedicationController = (req, res) => __awaiter(void 0, void 0, void 0,
             return res.status(404).json({ message: "Medication not found." });
         }
         const updatedMedication = yield Medications_model_1.default.findByIdAndUpdate(id, updatedFields, { new: true });
-        console.log(updatedMedication);
+        // console.log(updatedMedication);
         res.send({
             message: "Medication updated successfully",
             medication: updatedMedication,

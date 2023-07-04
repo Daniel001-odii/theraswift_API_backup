@@ -1,5 +1,13 @@
-import signUpController from "./signup.controller";
-import {loginController,doctorsLoginController} from "./login.controller";
+import {
+  signUpController,
+  makeUserAdminController,
+  addAdminController,
+} from "./signup.controller";
+import {
+  loginController,
+  doctorsLoginController,
+  adminLoginController,
+} from "./login.controller";
 import rootController from "./root.controller";
 import topUpWalletController, {
   giftWalletTopUpController,
@@ -72,7 +80,7 @@ import {
   getUsersController,
   getUserController,
   getUserWithAccessTokenController,
-  addUserMedicationController
+  addUserMedicationController,
 } from "./user.controller";
 import {
   createCareerOpening,
@@ -90,7 +98,7 @@ import {
   addNewBeneficiaryController,
   getUserBeneficiariesController,
   getUserBeneficiaryByIdController,
-  getBeneficiaryInfoController
+  getBeneficiaryInfoController,
 } from "./beneficiaries.controller";
 
 export {
@@ -158,5 +166,8 @@ export {
   getUserBeneficiaryByIdController,
   getBeneficiaryInfoController,
   addUserMedicationController,
-  doctorsLoginController
+  doctorsLoginController,
+  adminLoginController,
+  makeUserAdminController,
+  addAdminController,
 };

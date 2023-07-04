@@ -64,6 +64,9 @@ const medicationSchema = new mongoose_1.Schema({
     },
     quantity: {
         type: String
+    },
+    uses: {
+        type: String
     }
 });
 // Define medication model

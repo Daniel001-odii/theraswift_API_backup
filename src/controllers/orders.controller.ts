@@ -165,7 +165,7 @@ export const addOrder = async (req: Request, res: Response) => {
       prescriptionId: existingPrescription ? (existingPrescription._id || null) : (savedPrescription?._id || null),
       payment,
       shipping_address,
-      delivery_time_chosen,
+      delivery_time:delivery_time_chosen,
       prescriptionCompleted,
     });
 
@@ -245,28 +245,6 @@ export const getOrders = async function (req: Request, res: Response) {
   }
 };
 
-
-
-// export const getUserOrders = async (req: Request, res: Response) => {
-
-//   try {
-
-//     let secret = process.env.JWT_SECRET_KEY;
-//     // Get JWT from Authorization header
-//     const authHeader = req.headers.authorization;
-//     const token = authHeader && authHeader.split(" ")[1];
-
-//   const { userId } = jwt.verify(
-//       token!,
-//       secret!
-//     ) as unknown as JwtPayload;
-
-//     let data = await Order.find({ userId });
-//     res.status(200).json({ user_orders:data,message:"Orders retrieved successfully" });
-//   } catch (error:any) {
-//     res.status(500).json({error:error.message})
-//   }
-// };
 
 export const getUserOrders = async (req: Request, res: Response) => {
   try {
@@ -470,7 +448,7 @@ export const uncompletedOrdersControllers = async (
     orderInfo.shipping_address = newShippingAddress
       ? newShippingAddress._id
       : shipping_address_id;
-    orderInfo.delivery_time_chosen = delivery_time_chosen;
+    orderInfo.delivery_time = delivery_time_chosen;
 
     await orderInfo.save();
     // send mail to notify user of the dispensed order

@@ -64,6 +64,9 @@ const medicationSchema = new Schema({
   },
   quantity:{
     type:String
+  },
+  uses:{
+    type:String
   }
 });
 

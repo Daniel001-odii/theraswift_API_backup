@@ -27,7 +27,7 @@ export const getAllMedicationFrontendController = async (
   try {
     const medications = await MedicationModel.find();
     res.render("viewMedications", { error: null, medications });
-  } catch (err:any) {
+  } catch (err: any) {
     console.log(err);
     // throw err;
     res.status(500).json({ error: err.message });
@@ -165,7 +165,8 @@ export const addMedicationController = async (
       essential_category,
       medicationTypes,
       medicationForms,
-    quantity
+      uses,
+      quantity,
     } = req.body;
 
     let image_url = "";
@@ -233,6 +234,7 @@ export const addMedicationController = async (
       essential_category,
       medicationTypes: medicationTypesArray,
       medicationForms: medicationFormsArray,
+      uses,
     }) as IMedication;
 
     let medicationSaved = await newMedication.save();
@@ -241,7 +243,7 @@ export const addMedicationController = async (
       message: "Medication saved successfully",
       medication: medicationSaved,
     });
-  } catch (err:any) {
+  } catch (err: any) {
     console.log(err);
     // throw err;
     res.status(500).json({ error: err.message });
@@ -275,7 +277,7 @@ export const editMedicationController = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    console.log(updatedMedication);
+    // console.log(updatedMedication);
 
     res.send({
       message: "Medication updated successfully",

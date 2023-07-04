@@ -115,7 +115,7 @@ export interface IOrder extends Document {
   updatedAt?: Date;
   orderId: string;
   prescriptionCompleted: boolean;
-  delivery_time_chosen: string;
+  delivery_time: string;
 }
 
 export interface IShippingAddress extends Document {
