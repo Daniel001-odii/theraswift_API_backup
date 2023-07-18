@@ -254,8 +254,8 @@ export const addMedicationController = async (
 
 export const editMedicationController = async (req: Request, res: Response) => {
   try {
-    let { id } = req.params;
-    const updatedFields = req.body;
+   // let { id } = req.params;
+    const {updatedFields, medication_id} = req.body;
 
     if (updatedFields.id) {
       id = updatedFields.id;
@@ -263,7 +263,7 @@ export const editMedicationController = async (req: Request, res: Response) => {
     }
 
     let existingMedication = await MedicationModel.findOne({
-      _id: id,
+      _id: medication_id,
     });
 
     // Check if medication exists
