@@ -78,7 +78,7 @@ export const loginController = async (req: Request, res: Response, next: NextFun
     // return access token
     res.json({
       message: "Login successful",
-      user: {
+      user: { 
         _id: user._id,
         userId: user.userId,
         firstName: user.firstName,

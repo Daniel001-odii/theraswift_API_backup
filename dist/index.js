@@ -21,9 +21,10 @@ const routes_1 = __importDefault(require("./routes/routes"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const csurf_1 = __importDefault(require("csurf"));
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
-const socket_1 = require("./utils/socket");
+const chatMessageSocketsConfig_1 = __importDefault(require("./sockets/chatMessageSocketsConfig"));
 const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 const csrfProtection = (0, csurf_1.default)({ cookie: true });
@@ -33,10 +34,10 @@ const io = new socket_io_1.Server(server, {
         origin: "*",
     },
 });
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 1000, // limit each IP to 100 requests per windowMs
-// });
+const limiter = (0, express_rate_limit_1.default)({
+    windowMs: 15 * 60 * 1000,
+    max: 1000, // limit each IP to 100 requests per windowMs
+});
 // Middleware
 // app.use(limiter);
 app.use(body_parser_1.default.json());
@@ -50,14 +51,6 @@ dotenv_1.default.config();
 app.set("view engine", "ejs");
 app.set("views", path_1.default.join(__dirname, "/", "views"));
 app.use(express_1.default.urlencoded({ extended: true }));
-// Set up Content Security Policy middleware
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     "Content-Security-Policy",
-//     "default-src 'self'; img-src 'self' data: https://theraswift-bucket.s3.amazonaws.com; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com"
-//   );
-//   next();
-// });
 // database connection
 const MONGODB_URI = process.env.MONGODB_URI;
 // process.env.MONGODB_URI! --
@@ -73,11 +66,10 @@ const MONGODB_URI = process.env.MONGODB_URI;
         console.log(`Initial Distribution API Database connection error occurred -`, err);
     }
 }))();
-// console.log(process.env.MONGODB_URI);
 // Router middleware
 app.use("/", routes_1.default);
 // Handle socket connections
-(0, socket_1.socket)(server);
+(0, chatMessageSocketsConfig_1.default)(io);
 // app initialized port
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

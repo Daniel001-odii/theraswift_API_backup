@@ -12,8 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendChatController = exports.getChatsController = void 0;
+exports.sendChatController = exports.getUsersChattedAdmin = exports.getChatsController = void 0;
 const ChatMessages_model_1 = __importDefault(require("../models/ChatMessages.model"));
+const User_model_1 = __importDefault(require("../models/User.model"));
+// Get all chats involving a user
 const getChatsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.body;
@@ -21,17 +23,31 @@ const getChatsController = (req, res) => __awaiter(void 0, void 0, void 0, funct
         const chats = yield ChatMessages_model_1.default.find({
             $or: [{ sender: userId }, { receiver: userId }],
         })
-            .populate("sender", "-password")
-            .populate("receiver", "-password")
+            .populate('sender', '-password')
+            .populate('receiver', '-password')
             .sort({ createdAt: -1 });
         res.status(200).json({ chats });
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: 'Server error' });
     }
 });
 exports.getChatsController = getChatsController;
+// Get users that have chatted with an admin
+const getUsersChattedAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { adminId } = req.body;
+        const users = yield User_model_1.default.find({ 'chats.adminId': adminId }).select('_id email');
+        res.status(200).json({ users });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+exports.getUsersChattedAdmin = getUsersChattedAdmin;
+// Send a chat message
 const sendChatController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { sender, receiver, message } = req.body;
@@ -42,11 +58,11 @@ const sendChatController = (req, res) => __awaiter(void 0, void 0, void 0, funct
             message,
         });
         yield chat.save();
-        return res.status(201).json({ message: "Chat sent successfully" });
+        res.status(201).json({ message: 'Chat sent successfully' });
     }
     catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: 'Server error' });
     }
 });
 exports.sendChatController = sendChatController;

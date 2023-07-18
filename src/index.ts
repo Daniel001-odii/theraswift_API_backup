@@ -10,9 +10,15 @@ import csrf from "csurf";
 import rateLimit from "express-rate-limit";
 import { Server, Socket } from "socket.io";
 import http from "http";
-import handleSocketConnection, { socket } from "./utils/socket";
+import chatSocketConfig from './sockets/chatMessageSocketsConfig'
 import path from "path";
+
+
+
 const app = express();
+
+
+
 const csrfProtection = csrf({ cookie: true });
 
 const server = http.createServer(app);
@@ -23,10 +29,12 @@ const io = new Server(server, {
   },
 });
 
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 1000, // limit each IP to 100 requests per windowMs
-// });
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // limit each IP to 100 requests per windowMs
+});
+
 
 // Middleware
 // app.use(limiter);
@@ -41,14 +49,8 @@ dotenv.config();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/", "views"));
 app.use(express.urlencoded({ extended: true }));
-// Set up Content Security Policy middleware
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     "Content-Security-Policy",
-//     "default-src 'self'; img-src 'self' data: https://theraswift-bucket.s3.amazonaws.com; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com"
-//   );
-//   next();
-// });
+
+
 
 // database connection
 const MONGODB_URI = process.env.MONGODB_URI as string;
@@ -69,13 +71,12 @@ const MONGODB_URI = process.env.MONGODB_URI as string;
   }
 })();
 
-// console.log(process.env.MONGODB_URI);
 
 // Router middleware
 app.use("/", routes);
 
 // Handle socket connections
-socket(server);
+chatSocketConfig(io);
 
 // app initialized port
 const port = process.env.PORT || 3000;

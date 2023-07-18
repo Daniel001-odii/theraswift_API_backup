@@ -45,6 +45,8 @@ import {
   getUserShippingAddressByIdController,
   getUsersController,
   getChatsController,
+  getUsersChattedAdmin,
+  sendChatController,
   createCareerOpening,
   getCareerOpenings,
   addMedicationFrontendController,
@@ -95,7 +97,11 @@ router.post(
   multerUpload.single("image"),
   addMedicationController
 );
-router.put("/update_medication", checkAdminRole, editMedicationController);
+router.put("/update_medication", 
+// checkAdminRole,
+ editMedicationController);
+router.delete("/delete_medication_by_id", checkAdminRole, deleteMedication);
+router.post("/add_medication_to_user", addUserMedicationController);
 router.post("/topup_wallet", checkRole, topUpWalletController);
 router.post("/gift_wallet_topup", checkRole, giftWalletTopUpController);
 router.post("/new_order", checkRole, multerUpload.single("image"), addOrder);
@@ -169,7 +175,6 @@ router.get(
   "/add_essentials_medication",
   adEssentialsMedicationFrontendController
 );
-router.delete("/delete_medication_by_id", checkAdminRole, deleteMedication);
 router.post("/delete_medication_frontend/:id", deleteMedicationFrontend);
 router.get("/get_wallet_balance", checkRole, WalletBalanceController);
 router.post("/refresh_token_verification", refreshTokenVerificationController);
@@ -192,6 +197,13 @@ router.get(
   getUserBeneficiaryByIdController
 );
 router.post("/check_beneficiary_info", checkRole, getBeneficiaryInfoController);
-router.post("/add_medication_to_user", addUserMedicationController);
-
+router.post("send_chat", 
+// checkRole,
+sendChatController)
+router.get("get_admin_users_chat", 
+// checkAdminRole,
+getUsersChattedAdmin)
+router.get("/get_chats",
+// checkRole, 
+getChatsController)
 export default router;

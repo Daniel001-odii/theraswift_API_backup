@@ -73,7 +73,8 @@ import {
   getUserShippingAddressByIdController,
 } from "./shippingAddress.controller";
 import {
-  // addChatsController,
+  getUsersChattedAdmin,
+  sendChatController,
   getChatsController,
 } from "./chatMessages.controller";
 import {
@@ -144,6 +145,8 @@ export {
   getUserShippingAddressController,
   getUserShippingAddressByIdController,
   getChatsController,
+  getUsersChattedAdmin,
+  sendChatController,
   getUsersController,
   createCareerOpening,
   getCareerOpenings,

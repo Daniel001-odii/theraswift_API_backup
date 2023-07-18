@@ -24,7 +24,11 @@ router.post("/otp/resend_email", controllers_1.resendEmailController);
 router.post("/add_medication", 
 // checkAdminRole,
 multer_middleware_1.multerUpload.single("image"), controllers_1.addMedicationController);
-router.put("/update_medication", roleCheck_middleware_1.checkAdminRole, controllers_1.editMedicationController);
+router.put("/update_medication", 
+// checkAdminRole,
+controllers_1.editMedicationController);
+router.delete("/delete_medication_by_id", roleCheck_middleware_1.checkAdminRole, controllers_1.deleteMedication);
+router.post("/add_medication_to_user", controllers_1.addUserMedicationController);
 router.post("/topup_wallet", roleCheck_middleware_1.checkRole, controllers_1.topUpWalletController);
 router.post("/gift_wallet_topup", roleCheck_middleware_1.checkRole, controllers_1.giftWalletTopUpController);
 router.post("/new_order", roleCheck_middleware_1.checkRole, multer_middleware_1.multerUpload.single("image"), controllers_1.addOrder);
@@ -65,7 +69,6 @@ router.get("/add_medication", controllers_1.addMedicationFrontendController);
 router.get("/get_all_medication", controllers_1.getAllMedicationsController);
 router.get("/get_medications", controllers_1.getAllMedicationFrontendController);
 router.get("/add_essentials_medication", controllers_1.adEssentialsMedicationFrontendController);
-router.delete("/delete_medication_by_id", roleCheck_middleware_1.checkAdminRole, controllers_1.deleteMedication);
 router.post("/delete_medication_frontend/:id", controllers_1.deleteMedicationFrontend);
 router.get("/get_wallet_balance", roleCheck_middleware_1.checkRole, controllers_1.WalletBalanceController);
 router.post("/refresh_token_verification", controllers_1.refreshTokenVerificationController);
@@ -77,5 +80,13 @@ router.post("/add_new_beneficiary", roleCheck_middleware_1.checkRole, controller
 router.get("/get_user_beneficiaries", roleCheck_middleware_1.checkRole, controllers_1.getUserBeneficiariesController);
 router.get("/get_user_beneficiary_by_id", roleCheck_middleware_1.checkRole, controllers_1.getUserBeneficiaryByIdController);
 router.post("/check_beneficiary_info", roleCheck_middleware_1.checkRole, controllers_1.getBeneficiaryInfoController);
-router.post("/add_medication_to_user", controllers_1.addUserMedicationController);
+router.post("send_chat", 
+// checkRole,
+controllers_1.sendChatController);
+router.get("get_admin_users_chat", 
+// checkAdminRole,
+controllers_1.getUsersChattedAdmin);
+router.get("/get_chats", 
+// checkRole, 
+controllers_1.getChatsController);
 exports.default = router;
