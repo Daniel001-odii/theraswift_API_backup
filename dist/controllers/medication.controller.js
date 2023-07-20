@@ -213,21 +213,19 @@ exports.addMedicationController = addMedicationController;
 // edit medication controller
 const editMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { id } = req.params;
-        const updatedFields = req.body;
+        // let { id } = req.params;
+        const { updatedFields, medication_id } = req.body;
         if (updatedFields.id) {
-            id = updatedFields.id;
             delete updatedFields.id;
         }
         let existingMedication = yield Medications_model_1.default.findOne({
-            _id: id,
+            _id: medication_id,
         });
         // Check if medication exists
         if (!existingMedication) {
             return res.status(404).json({ message: "Medication not found." });
         }
-        const updatedMedication = yield Medications_model_1.default.findByIdAndUpdate(id, updatedFields, { new: true });
-        // console.log(updatedMedication);
+        const updatedMedication = yield Medications_model_1.default.findByIdAndUpdate(medication_id, updatedFields, { new: true });
         res.send({
             message: "Medication updated successfully",
             medication: updatedMedication,

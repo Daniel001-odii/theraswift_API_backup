@@ -258,7 +258,6 @@ export const editMedicationController = async (req: Request, res: Response) => {
     const {updatedFields, medication_id} = req.body;
 
     if (updatedFields.id) {
-      id = updatedFields.id;
       delete updatedFields.id;
     }
 
@@ -272,12 +271,10 @@ export const editMedicationController = async (req: Request, res: Response) => {
     }
 
     const updatedMedication = await MedicationModel.findByIdAndUpdate(
-      id,
+      medication_id,
       updatedFields,
       { new: true }
     );
-
-    // console.log(updatedMedication);
 
     res.send({
       message: "Medication updated successfully",
