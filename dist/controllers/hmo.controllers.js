@@ -47,7 +47,7 @@ const addHmoController = (req, res) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.addHmoController = addHmoController;
 const getHMOByIdController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { hmo_id } = req.body;
+    let { hmo_id } = req.params;
     try {
         let data = yield HMO_model_1.default.findById(hmo_id);
         res.status(200).json({ data });
@@ -85,7 +85,7 @@ const getUserHMOsController = (req, res) => __awaiter(void 0, void 0, void 0, fu
 });
 exports.getUserHMOsController = getUserHMOsController;
 const deleteUserHMOByIdController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { hmo_id } = req.body;
+    let { hmo_id } = req.params;
     try {
         let data = yield HMO_model_1.default.findByIdAndDelete(hmo_id);
         res.status(200).json({ data });

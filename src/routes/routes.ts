@@ -49,12 +49,8 @@ import {
   sendChatController,
   createCareerOpening,
   getCareerOpenings,
-  addMedicationFrontendController,
   getAllMedicationsController,
-  getAllMedicationFrontendController,
-  adEssentialsMedicationFrontendController,
   deleteMedication,
-  deleteMedicationFrontend,
   getUserController,
   getUserWithAccessTokenController,
   WalletBalanceController,
@@ -71,13 +67,18 @@ import {
   adminLoginController,
   makeUserAdminController,
   addAdminController,
+  getTransactionById,
+  getAllTransactions,
+  saveDispenseLog,
+  getDispenseLogs,
+  getUserDispenseLogs,
+  getDispenseLogById,
 } from "../controllers/";
 import { validateLoginParams } from "../middleware/login.middleware";
 import { checkAdminRole, checkRole } from "../middleware/roleCheck.middleware";
 import { validateSignupParams } from "../middleware/signup.middleware";
 import { multerUpload } from "../middleware/multer.middleware";
 
-// theraswift routes
 router.get("/", rootController);
 router.post("/signup", validateSignupParams, signUpController);
 router.post("/add_admin", addAdminController);
@@ -93,13 +94,11 @@ router.post("/otp/verify_email", verifyEmailController);
 router.post("/otp/resend_email", resendEmailController);
 router.post(
   "/add_medication",
-  // checkAdminRole,
+  checkAdminRole,
   multerUpload.single("image"),
   addMedicationController
 );
-router.put("/update_medication", 
-// checkAdminRole,
- editMedicationController);
+router.put("/update_medication", checkAdminRole, editMedicationController);
 router.delete("/delete_medication_by_id", checkAdminRole, deleteMedication);
 router.post("/add_medication_to_user", addUserMedicationController);
 router.post("/topup_wallet", checkRole, topUpWalletController);
@@ -132,13 +131,11 @@ router.delete(
 );
 router.get("/get_all_prescriptions", checkAdminRole, getPrescriptions);
 router.get("/get_user_transactions", checkRole, getUserTransactions);
+router.get("/get_transaction_by_id", checkRole, getTransactionById);
+router.get("/get_all_transactions", checkRole, getAllTransactions);
 router.post("/otp/send_password_recovery_email", emailOtpRequestController);
 router.post("/otp/send_password_recovery_sms", smsOtpRequestController);
-
-// router.post("/otp/verify_password_recovery_otp", smsOtpRequestController);
-
 router.post("/update_password", updatePasswordController);
-
 router.post("/send_sms", checkAdminRole, sendSmsController);
 router.post("/add_family", checkRole, addFamilyController);
 router.get("/get_user_family", checkRole, getUserFamilyController);
@@ -168,14 +165,7 @@ router.get(
 router.get("get_users", checkAdminRole, getUsersController);
 router.post("/add_career_openings", checkAdminRole, createCareerOpening);
 router.get("/get_career_openings", getCareerOpenings);
-router.get("/add_medication", addMedicationFrontendController);
 router.get("/get_all_medication", getAllMedicationsController);
-router.get("/get_medications", getAllMedicationFrontendController);
-router.get(
-  "/add_essentials_medication",
-  adEssentialsMedicationFrontendController
-);
-router.post("/delete_medication_frontend/:id", deleteMedicationFrontend);
 router.get("/get_wallet_balance", checkRole, WalletBalanceController);
 router.post("/refresh_token_verification", refreshTokenVerificationController);
 router.post("/add_user_we_dont_deliver_to", addUsersWeDontDeliverToController);
@@ -197,13 +187,12 @@ router.get(
   getUserBeneficiaryByIdController
 );
 router.post("/check_beneficiary_info", checkRole, getBeneficiaryInfoController);
-router.post("send_chat", 
-// checkRole,
-sendChatController)
-router.get("get_admin_users_chat", 
-// checkAdminRole,
-getUsersChattedAdmin)
-router.get("/get_chats",
-// checkRole, 
-getChatsController)
+router.post("send_chat", checkRole, sendChatController);
+router.get("get_admin_users_chat", checkAdminRole, getUsersChattedAdmin);
+router.get("/get_chats", checkRole, getChatsController);
+router.post("/save_dispense_logs", checkRole, saveDispenseLog);
+router.get("/get_dispense_logs", checkRole, getDispenseLogs);
+router.get("/get_user_dispense_logs", checkRole, getUserDispenseLogs);
+router.get("/get_dispense_logs_by_id", checkRole, getDispenseLogById);
+
 export default router;

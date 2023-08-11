@@ -2,7 +2,8 @@ import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import UserModel from "../models/User.model";
 import { JwtPayload, CustomRequest } from "../interface/generalInterface";
-import {ObjectId} from 'mongoose'
+import { ObjectId } from "mongoose";
+
 export const getUsersController = async (
   req: Request,
   res: Response
@@ -35,12 +36,32 @@ export const getUserController = async (
       user = await UserModel.findOne({ email });
     }
 
-    if (userId) {
+    // check if user exists
+    if (!userId) {
+      res.status(401).json({ message: "Invalid credentials." });
+      return;
+    } else {
       user = await UserModel.findOne({
         userId,
       });
     }
-    res.json(user);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    const userInfo = {
+      userId: user.userId,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      mobileNumber: user.mobileNumber,
+      role: user.role,
+    };
+
+    res.status(200).json({ user: userInfo });
+
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -56,9 +77,6 @@ export const getUserWithAccessTokenController = async (
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
 
-    //   res.status(200).json({
-    //     welcome: "welcome to theraswift api",
-    //   });
     const { userId, email } = jwt.verify(
       token!,
       secret!
@@ -84,7 +102,7 @@ export const getUserWithAccessTokenController = async (
         mobileNumber: user?.mobileNumber,
         role: user?.role,
         walletBalance: user?.theraWallet,
-        dateOfBirth: user?.dateOfBirth
+        dateOfBirth: user?.dateOfBirth,
       },
     });
   } catch (error: any) {
@@ -92,14 +110,12 @@ export const getUserWithAccessTokenController = async (
   }
 };
 
-
-
 export const addUserMedicationController = async (
   req: Request,
   res: Response
 ) => {
   try {
-    let {userMedications} = req.body
+    let { userMedications } = req.body;
     let secret = process.env.JWT_SECRET_KEY;
     // Get JWT from Authorization header
     const authHeader = req.headers.authorization;
@@ -120,22 +136,16 @@ export const addUserMedicationController = async (
       });
     }
 
-    if(!user){
-      return res.status(500).send("User not found!")
+    if (!user) {
+      return res.status(500).send("User not found!");
     }
 
-     await UserModel.findOneAndUpdate(
-      {_id},
-      {$set:{userMedications}},
-    );
+    await UserModel.findOneAndUpdate({ _id }, { $set: { userMedications } });
 
-    let updatedUserValue = await UserModel.findById(_id)
-
-    console.log(updatedUserValue)
-    console.log(_id)
+    let updatedUserValue = await UserModel.findById(_id);
 
     res.json({
-        message: "Medication added to user successfully",
+      message: "Medication added to user successfully",
       user: {
         _id: updatedUserValue?._id,
         userId: updatedUserValue?.userId,
@@ -147,14 +157,10 @@ export const addUserMedicationController = async (
         role: updatedUserValue?.role,
         walletBalance: updatedUserValue?.theraWallet,
         dateOfBirth: updatedUserValue?.dateOfBirth,
-        userMedications: updatedUserValue?.userMedications
+        userMedications: updatedUserValue?.userMedications,
       },
     });
-    
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
-
-
-

@@ -6,33 +6,6 @@ import { uploadToS3 } from "../utils/awsS3";
 import { IMedication } from "../interface/generalInterface";
 import { CustomFileAppendedRequest } from "../types/generalTypes";
 
-export const addMedicationFrontendController = async (
-  req: CustomFileAppendedRequest,
-  res: Response
-): Promise<void> => {
-  res.render("uploadMedication", { error: null });
-};
-
-export const adEssentialsMedicationFrontendController = async (
-  req: CustomFileAppendedRequest,
-  res: Response
-): Promise<void> => {
-  res.render("essentialsUploadMedication", { error: null });
-};
-
-export const getAllMedicationFrontendController = async (
-  req: CustomFileAppendedRequest,
-  res: Response
-): Promise<void> => {
-  try {
-    const medications = await MedicationModel.find();
-    res.render("viewMedications", { error: null, medications });
-  } catch (err: any) {
-    console.log(err);
-    // throw err;
-    res.status(500).json({ error: err.message });
-  }
-};
 
 // DELETE endpoint for deleting a medication
 export const deleteMedication = async (
@@ -51,92 +24,6 @@ export const deleteMedication = async (
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-// DELETE endpoint for deleting a medication through an external API
-export const deleteMedicationFrontend = async (
-  req: CustomFileAppendedRequest,
-  res: Response
-) => {
-  try {
-    // TODO update this to body
-    const medication = await MedicationModel.findByIdAndDelete(req.params.id);
-    if (!medication) {
-      return res.status(404).json({ error: "Medication not found" });
-    }
-    res.redirect("/get_medications?success=Deleted+Successfully");
-  } catch (error: any) {
-    res.redirect("/get_medications?error=" + encodeURIComponent(error.message));
-  }
-};
-
-// export const addMedicationController = async (
-//   req: CustomFileAppendedRequest,
-//   res: Response
-// ): Promise<void> => {
-//   try {
-//     // Validate the request body using express-validator
-//     await Promise.all(
-//       validateMedication.map((validation) => validation.run(req))
-//     );
-
-//     const {
-//       name,
-//       description,
-//       strength,
-//       warnings,
-//       manufacturer,
-//       price,
-//       available,
-//       expiryDate,
-//       sideEffects,
-//       ingredients,
-//       storageInstructions,
-//       contraindications,
-//       routeOfAdministration,
-//       prescription_required,
-//       category,
-//     } = req.body;
-
-//     let image_url = "";
-
-//     if (req.file) {
-//       const filename = uuidv4();
-//       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
-//       image_url = result.Location;
-//       console.log(result);
-//     }
-
-//     // Save medication to MongoDB
-//     const newMedication = new MedicationModel({
-//       name,
-//       description,
-//       strength,
-//       warnings,
-//       manufacturer,
-//       price,
-//       available,
-//       expiryDate,
-//       sideEffects,
-//       ingredients,
-//       storageInstructions,
-//       contraindications,
-//       routeOfAdministration,
-//       prescription_required,
-//       image_url,
-//       category,
-//     }) as IMedication;
-
-//     let medicationSaved = await newMedication.save();
-//     console.log(medicationSaved);
-//     res.send({
-//       message: "Medication saved successfully",
-//       medication: medicationSaved,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     throw err;
-//   }
-// };
 
 export const addMedicationController = async (
   req: CustomFileAppendedRequest,
@@ -166,7 +53,7 @@ export const addMedicationController = async (
       medicationTypes,
       medicationForms,
       uses,
-      quantity,
+      quantity:medicationQuantities,
     } = req.body;
 
     let image_url = "";
@@ -214,6 +101,17 @@ export const addMedicationController = async (
         : [medicationForms]
       : [];
 
+
+      const medicationQuantitiesArray: string[] = Array.isArray(medicationQuantities)
+      ? medicationQuantities
+      : medicationQuantities
+      ? medicationQuantities.includes(",")
+        ? medicationQuantities
+            .split(",")
+            .map((medicationQuantity: any) => medicationQuantity.trim())
+        : [medicationQuantities]
+      : [];
+
     // Save medication to MongoDB
     const newMedication = new MedicationModel({
       name,
@@ -222,7 +120,7 @@ export const addMedicationController = async (
       warnings,
       manufacturer,
       price,
-      quantity,
+      quantity:medicationQuantitiesArray,
       available,
       sideEffects: sideEffectsArray,
       ingredients: ingredientsArray,
@@ -245,7 +143,6 @@ export const addMedicationController = async (
     });
   } catch (err: any) {
     console.log(err);
-    // throw err;
     res.status(500).json({ error: err.message });
   }
 };
@@ -282,7 +179,6 @@ export const editMedicationController = async (req: Request, res: Response) => {
     });
   } catch (err: any) {
     console.log(err);
-    // throw err;
     res.status(500).json({ error: err.message });
   }
 };
@@ -299,7 +195,6 @@ export const getAllMedicationsController = async (
     });
   } catch (err: any) {
     console.log(err);
-    // throw err;
     res.status(500).json({ error: err.message });
   }
 };

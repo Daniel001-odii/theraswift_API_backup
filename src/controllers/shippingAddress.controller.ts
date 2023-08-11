@@ -69,9 +69,7 @@ export const getUserShippingAddressController = async (
   req: Request,
   res: Response
 ) => {
-  // let { userId } = req.body;
-
-
+ 
   try {
 
     let secret = process.env.JWT_SECRET_KEY;
@@ -79,9 +77,6 @@ export const getUserShippingAddressController = async (
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
   
-    //   res.status(200).json({
-    //     welcome: "welcome to theraswift api",
-    //   });
     const { userId } = jwt.verify(
       token!,
       secret!
@@ -118,7 +113,7 @@ export const getUserShippingAddressByIdController = async (
   req: Request,
   res: Response
 ) => {
-  let { address_id } = req.body;
+  let { address_id } = req.params;
   try {
     let data = await shippingAddressModel.findById(address_id);
 

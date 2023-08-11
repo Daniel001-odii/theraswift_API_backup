@@ -34,7 +34,7 @@ const orderSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "Prescription",
     },
-    refill_request_id: {
+    refillRequestId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "RefillRequest",
     },
@@ -56,11 +56,11 @@ const orderSchema = new mongoose_1.Schema({
         },
         required: true,
     },
-    shipping_address: {
+    shippingAddress: {
         type: {},
         required: true,
     },
-    deliver_time: {
+    deliverTime: {
         type: String
     },
     status: {

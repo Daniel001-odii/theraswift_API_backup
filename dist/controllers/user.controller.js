@@ -39,12 +39,29 @@ const getUserController = (req, res) => __awaiter(void 0, void 0, void 0, functi
         if (email) {
             user = yield User_model_1.default.findOne({ email });
         }
-        if (userId) {
+        // check if user exists
+        if (!userId) {
+            res.status(401).json({ message: "Invalid credentials." });
+            return;
+        }
+        else {
             user = yield User_model_1.default.findOne({
                 userId,
             });
         }
-        res.json(user);
+        if (!user) {
+            res.status(404).json({ message: "User not found." });
+            return;
+        }
+        const userInfo = {
+            userId: user.userId,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            mobileNumber: user.mobileNumber,
+            role: user.role,
+        };
+        res.status(200).json({ user: userInfo });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -82,7 +99,7 @@ const getUserWithAccessTokenController = (req, res) => __awaiter(void 0, void 0,
                 mobileNumber: user === null || user === void 0 ? void 0 : user.mobileNumber,
                 role: user === null || user === void 0 ? void 0 : user.role,
                 walletBalance: user === null || user === void 0 ? void 0 : user.theraWallet,
-                dateOfBirth: user === null || user === void 0 ? void 0 : user.dateOfBirth
+                dateOfBirth: user === null || user === void 0 ? void 0 : user.dateOfBirth,
             },
         });
     }
@@ -114,8 +131,8 @@ const addUserMedicationController = (req, res) => __awaiter(void 0, void 0, void
         }
         yield User_model_1.default.findOneAndUpdate({ _id }, { $set: { userMedications } });
         let updatedUserValue = yield User_model_1.default.findById(_id);
-        console.log(updatedUserValue);
-        console.log(_id);
+        // console.log(updatedUserValue)
+        // console.log(_id)
         res.json({
             message: "Medication added to user successfully",
             user: {
@@ -129,7 +146,7 @@ const addUserMedicationController = (req, res) => __awaiter(void 0, void 0, void
                 role: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.role,
                 walletBalance: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.theraWallet,
                 dateOfBirth: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.dateOfBirth,
-                userMedications: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.userMedications
+                userMedications: updatedUserValue === null || updatedUserValue === void 0 ? void 0 : updatedUserValue.userMedications,
             },
         });
     }

@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-// import { ExpressArgs } from "../types/generalTypes";
 
 export const logger = (
     req: Request,

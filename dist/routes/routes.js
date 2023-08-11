@@ -7,7 +7,6 @@ const login_middleware_1 = require("../middleware/login.middleware");
 const roleCheck_middleware_1 = require("../middleware/roleCheck.middleware");
 const signup_middleware_1 = require("../middleware/signup.middleware");
 const multer_middleware_1 = require("../middleware/multer.middleware");
-// theraswift routes
 router.get("/", controllers_1.rootController);
 router.post("/signup", signup_middleware_1.validateSignupParams, controllers_1.signUpController);
 router.post("/add_admin", controllers_1.addAdminController);
@@ -21,12 +20,8 @@ router.post("/otp/resend_mobile", controllers_1.mobileOtpResendController);
 router.post("/otp/send_email", controllers_1.sendEmailController);
 router.post("/otp/verify_email", controllers_1.verifyEmailController);
 router.post("/otp/resend_email", controllers_1.resendEmailController);
-router.post("/add_medication", 
-// checkAdminRole,
-multer_middleware_1.multerUpload.single("image"), controllers_1.addMedicationController);
-router.put("/update_medication", 
-// checkAdminRole,
-controllers_1.editMedicationController);
+router.post("/add_medication", roleCheck_middleware_1.checkAdminRole, multer_middleware_1.multerUpload.single("image"), controllers_1.addMedicationController);
+router.put("/update_medication", roleCheck_middleware_1.checkAdminRole, controllers_1.editMedicationController);
 router.delete("/delete_medication_by_id", roleCheck_middleware_1.checkAdminRole, controllers_1.deleteMedication);
 router.post("/add_medication_to_user", controllers_1.addUserMedicationController);
 router.post("/topup_wallet", roleCheck_middleware_1.checkRole, controllers_1.topUpWalletController);
@@ -45,6 +40,8 @@ router.get("/get_user_prescriptions", roleCheck_middleware_1.checkRole, controll
 router.delete("/delete_user_prescription", roleCheck_middleware_1.checkRole, controllers_1.deleteUserPrescriptionById);
 router.get("/get_all_prescriptions", roleCheck_middleware_1.checkAdminRole, controllers_1.getPrescriptions);
 router.get("/get_user_transactions", roleCheck_middleware_1.checkRole, controllers_1.getUserTransactions);
+router.get("/get_transaction_by_id", roleCheck_middleware_1.checkRole, controllers_1.getTransactionById);
+router.get("/get_all_transactions", roleCheck_middleware_1.checkRole, controllers_1.getAllTransactions);
 router.post("/otp/send_password_recovery_email", controllers_1.emailOtpRequestController);
 router.post("/otp/send_password_recovery_sms", controllers_1.smsOtpRequestController);
 // router.post("/otp/verify_password_recovery_otp", smsOtpRequestController);
@@ -65,11 +62,7 @@ router.get("/get_user_shipping_address_by_id", roleCheck_middleware_1.checkRole,
 router.get("get_users", roleCheck_middleware_1.checkAdminRole, controllers_1.getUsersController);
 router.post("/add_career_openings", roleCheck_middleware_1.checkAdminRole, controllers_1.createCareerOpening);
 router.get("/get_career_openings", controllers_1.getCareerOpenings);
-router.get("/add_medication", controllers_1.addMedicationFrontendController);
 router.get("/get_all_medication", controllers_1.getAllMedicationsController);
-router.get("/get_medications", controllers_1.getAllMedicationFrontendController);
-router.get("/add_essentials_medication", controllers_1.adEssentialsMedicationFrontendController);
-router.post("/delete_medication_frontend/:id", controllers_1.deleteMedicationFrontend);
 router.get("/get_wallet_balance", roleCheck_middleware_1.checkRole, controllers_1.WalletBalanceController);
 router.post("/refresh_token_verification", controllers_1.refreshTokenVerificationController);
 router.post("/add_user_we_dont_deliver_to", controllers_1.addUsersWeDontDeliverToController);
@@ -80,13 +73,11 @@ router.post("/add_new_beneficiary", roleCheck_middleware_1.checkRole, controller
 router.get("/get_user_beneficiaries", roleCheck_middleware_1.checkRole, controllers_1.getUserBeneficiariesController);
 router.get("/get_user_beneficiary_by_id", roleCheck_middleware_1.checkRole, controllers_1.getUserBeneficiaryByIdController);
 router.post("/check_beneficiary_info", roleCheck_middleware_1.checkRole, controllers_1.getBeneficiaryInfoController);
-router.post("send_chat", 
-// checkRole,
-controllers_1.sendChatController);
-router.get("get_admin_users_chat", 
-// checkAdminRole,
-controllers_1.getUsersChattedAdmin);
-router.get("/get_chats", 
-// checkRole, 
-controllers_1.getChatsController);
+router.post("send_chat", roleCheck_middleware_1.checkRole, controllers_1.sendChatController);
+router.get("get_admin_users_chat", roleCheck_middleware_1.checkAdminRole, controllers_1.getUsersChattedAdmin);
+router.get("/get_chats", roleCheck_middleware_1.checkRole, controllers_1.getChatsController);
+router.post("/save_dispense_logs", roleCheck_middleware_1.checkRole, controllers_1.saveDispenseLog);
+router.get("/get_dispense_logs", roleCheck_middleware_1.checkRole, controllers_1.getDispenseLogs);
+router.get("/get_user_dispense_logs", roleCheck_middleware_1.checkRole, controllers_1.getUserDispenseLogs);
+router.get("/get_dispense_logs_by_id", roleCheck_middleware_1.checkRole, controllers_1.getDispenseLogById);
 exports.default = router;

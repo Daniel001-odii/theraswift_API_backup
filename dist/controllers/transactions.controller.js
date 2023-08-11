@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserTransactions = void 0;
+exports.getTransactionById = exports.getAllTransactions = exports.getUserTransactions = void 0;
 const Transactions_model_1 = __importDefault(require("../models/Transactions.model"));
 const getUserTransactions = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.body;
@@ -21,8 +21,31 @@ const getUserTransactions = (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(200).json({ data });
     }
     catch (error) {
-        res.status(500).json({ message: "internal server error" });
+        res.status(500).json({ message: "internal server error", error: error.message, });
         // throw Error(error)
     }
 });
 exports.getUserTransactions = getUserTransactions;
+const getAllTransactions = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let data = yield Transactions_model_1.default.find();
+        res.status(200).json({ data });
+    }
+    catch (error) {
+        res.status(500).json({ message: "internal server error", error: error.message, });
+        // throw Error(error)
+    }
+});
+exports.getAllTransactions = getAllTransactions;
+const getTransactionById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        let data = yield Transactions_model_1.default.findById(id);
+        res.status(200).json({ data });
+    }
+    catch (error) {
+        res.status(500).json({ message: "internal server error", error: error.message, });
+        // throw Error(error)
+    }
+});
+exports.getTransactionById = getTransactionById;

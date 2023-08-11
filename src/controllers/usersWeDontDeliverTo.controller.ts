@@ -40,7 +40,7 @@ export const getUsersWeDontDeliverToByIdController = async (
   req: Request,
   res: Response
 ) => {
-  const { id } = req.body;
+  const { id } = req.params;
 
   try {
     const user = await UsersWeDontDeliverTo.findById(id);

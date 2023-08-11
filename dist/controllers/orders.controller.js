@@ -28,7 +28,6 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId, products, prescription_input, prescription_id, delivery_time_chosen, payment, shipping_address, order_type, prescriptionCompleted, } = req.body;
-        console.log("userId ", userId);
         // Check if the user exists in the database
         const existingUser = yield User_model_1.default.findOne({ userId });
         if (!existingUser) {
@@ -53,7 +52,6 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // Validate the product IDs and quantities
         for (const { medication_id, quantity } of products) {
             let parsed_medication_id = new mongoose_1.default.Types.ObjectId(medication_id);
-            // console.log("medication_id ", medication_id);
             const medication = yield Medications_model_1.default.findById(parsed_medication_id);
             if (!medication) {
                 return res
@@ -82,13 +80,6 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     .json({ error: `Invalid prescription ID: ${prescription_id}` });
             }
         }
-        // Validate the refill request ID
-        // if (refill_request_id) {
-        //   const existingRefillRequest = await RefillRequest.findById(refill_request_id);
-        //   if (!existingRefillRequest) {
-        //     return res.status(400).json({ error: `Invalid refill request ID: ${refill_request_id}` });
-        //   }
-        // }
         let savedPrescription;
         if (prescription_input) {
             const addPrescription = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -132,7 +123,9 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             orderId,
             type: order_type,
             products,
-            prescriptionId: existingPrescription ? (existingPrescription._id || null) : ((savedPrescription === null || savedPrescription === void 0 ? void 0 : savedPrescription._id) || null),
+            prescriptionId: existingPrescription
+                ? existingPrescription._id || null
+                : (savedPrescription === null || savedPrescription === void 0 ? void 0 : savedPrescription._id) || null,
             payment,
             shipping_address,
             delivery_time: delivery_time_chosen,
@@ -153,16 +146,10 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             type: "medication-order",
             amount: payment.amount,
             details: {
-                // orderId: orderCreated._id,
                 orderId: orderCreated.orderId,
                 amount: payment.amount,
                 currency: "NGN",
                 payment_status: "success",
-                order_status: "pending",
-                prescription: existingPrescription
-                    ? existingPrescription === null || existingPrescription === void 0 ? void 0 : existingPrescription._id
-                    : savedPrescription === null || savedPrescription === void 0 ? void 0 : savedPrescription._id,
-                product_order_type: order_type,
             },
             created_at: new Date(),
         });
@@ -177,12 +164,11 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.addOrder = addOrder;
 const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { orderId } = req.body;
+    let { orderId } = req.params;
     try {
-        let data = yield Order_model_1.default.find()
-            .populate({
+        let data = yield Order_model_1.default.findOne({ orderId }).populate({
             path: "products.medication",
-            select: "-_id -medicationForms -medicationTypes"
+            select: "-_id -medicationForms -medicationTypes",
         });
         res.status(200).json({ data });
     }
@@ -194,10 +180,9 @@ exports.getOrderById = getOrderById;
 const getOrders = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const orders = yield Order_model_1.default.find()
-                .populate({
+            const orders = yield Order_model_1.default.find().populate({
                 path: "products.medication",
-                select: "-_id -medicationForms -medicationTypes"
+                select: "-_id -medicationForms -medicationTypes",
             });
             res.status(200).json({ data: orders });
         }
@@ -214,12 +199,16 @@ const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.split(" ")[1];
         const { userId } = jsonwebtoken_1.default.verify(token, secret);
-        const userOrders = yield Order_model_1.default.find()
-            .populate({
+        const userOrders = yield Order_model_1.default.find({ userId }).populate({
             path: "products.medication",
-            select: "-_id -medicationForms -medicationTypes"
+            select: "-_id -medicationForms -medicationTypes",
         });
-        res.status(200).json({ user_orders: userOrders, message: "Orders retrieved successfully" });
+        res
+            .status(200)
+            .json({
+            user_orders: userOrders,
+            message: "Orders retrieved successfully",
+        });
     }
     catch (error) {
         res.status(500).json({ error: error.message });
@@ -233,28 +222,32 @@ const updateOrderStatus = (req, res) => __awaiter(void 0, void 0, void 0, functi
         if (!orderInfo) {
             return res.status(404).send({ message: "Order not found " });
         }
+        if (!orderStatus) {
+            return res.status(404).send({ message: "Order status not found " });
+        }
         orderInfo.status = orderStatus;
-        yield orderInfo.save();
         let existingUser;
-        if (orderStatus === "cancelled") {
+        let userId = orderInfo.userId;
+        // Check if the email already exists in the database
+        existingUser = (yield User_model_1.default.findOne({ userId }));
+        if (!existingUser) {
+            return res.status(400).json({ message: "User does not exists" });
+        }
+        yield orderInfo.save();
+        if (orderStatus === "cancelled" || orderStatus === "rejected") {
             let orderPrice = orderInfo.payment.amount;
-            let userId = orderInfo.userId;
-            // Check if the email already exists in the database
-            existingUser = (yield User_model_1.default.findOne({ userId }));
-            if (!existingUser) {
-                return res.status(400).json({ message: "User does not exists" });
-            }
             let newBalance = parseInt(existingUser.theraWallet.toString()) +
                 parseInt(orderPrice.toString());
             existingUser.theraWallet = newBalance;
             yield existingUser.save();
         }
-        // else if (orderStatus === "dispensed") {
-        // }
+        else if (orderStatus === "dispensed") {
+            //INFO: There is no need in to do anything here as the order status has been updated before anything above. the "if(){}" block is needed to return the users money and update user balance by returning their money to their balance.
+        }
         let senderEmailOrderStatusData = {
             firstName: `${existingUser.firstName}`,
             emailTo: existingUser.email,
-            subject: "Therawallet Gift Balance Top-up Notification",
+            subject: "Theraswift Order status update Notification",
             orderStatus,
         };
         (0, sendEmailUtility_1.sendOrderStatusEmail)(senderEmailOrderStatusData);
@@ -267,77 +260,72 @@ const updateOrderStatus = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.updateOrderStatus = updateOrderStatus;
+// INFO: this to make users to either accept or cancel the prescription invoice sent from the admin
 const uncompletedOrdersControllers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { order_id, user_id, finalize_status, prescription_id, delivery_time_chosen, street_address, street_number, shipping_address_id, } = req.body;
+        const { orderId, userId, finalizeStatus, prescriptionId, deliveryTimeChosen, streetAddress, streetNumber, shippingAddressId, } = req.body;
         // check if needed parameters are sent in the body
-        if (!order_id || !user_id || !finalize_status)
+        if (!orderId || !userId || !finalizeStatus)
             return res
                 .status(400)
                 .json({ message: "please send required body queries" });
-        const orderInfo = yield Order_model_1.default.findOne({ orderId: order_id });
+        const orderInfo = yield Order_model_1.default.findOne({ orderId: orderId });
         if (!orderInfo)
             return res.status(404).json({ message: "order not found" });
         // Check if the user exists in the database
-        const existingUser = yield User_model_1.default.findOne({ userId: user_id });
+        const existingUser = yield User_model_1.default.findOne({ userId: userId });
         if (!existingUser) {
             return res.status(400).json({ message: "User does not exists" });
         }
-        if (finalize_status === false) {
-            orderInfo.status = "rejected";
+        if (finalizeStatus === 'cancelled') {
+            orderInfo.status = "cancelled";
             orderInfo.prescriptionCompleted = true;
             yield orderInfo.save();
-            //TODO send mail to notify user of the rejected order
+            //INFO: send mail to notify user of the rejected order
             let senderEmailOrderStatusData = {
                 firstName: `${existingUser.firstName}`,
                 emailTo: existingUser.email,
-                subject: "Therawallet Rejected Order Notification",
-                orderStatus: "rejected",
+                subject: "Theraswift Cancelled Order Notification",
+                orderStatus: "cancelled",
             };
             (0, sendEmailUtility_1.sendOrderStatusEmail)(senderEmailOrderStatusData);
             // mail the admin
             let senderEmailOrderCompletedData = {
                 emailTo: existingUser.email,
-                subject: "Therawallet Rejected Order Notification",
+                subject: "Theraswift Cancelled Order Notification",
                 orderId: orderInfo.orderId,
             };
             (0, sendEmailUtility_1.sendOrderCompleteEmail)(senderEmailOrderCompletedData);
             // save the information to transaction history for user
             const newTransactionHistoryLog = new Transactions_model_1.default({
-                userId: user_id,
+                userId,
                 type: "medication-order",
                 amount: orderInfo.payment.amount,
                 details: {
                     orderId: orderInfo.orderId,
-                    amount: orderInfo.payment.amount,
-                    currency: "NGN",
-                    payment_status: "error",
-                    order_status: "rejected",
-                    prescription: prescription_id,
-                    product_order_type: "prescription-order",
                 },
                 created_at: new Date(),
             });
             yield newTransactionHistoryLog.save();
             return res.json({ message: "Order rejected successfully" });
         }
-        // continue order if not order is not rejected
+        //INFO: continue code execution order if not order is not rejected
         let newShippingAddress = {};
-        if (street_address && street_number) {
+        if (streetAddress && streetNumber) {
             newShippingAddress = new ShippingAddress_model_1.default({
-                userId: user_id,
-                street_address,
-                street_number,
+                userId,
+                street_address: streetNumber,
+                street_number: streetNumber,
             });
             yield newShippingAddress.save();
         }
-        if (!(newShippingAddress === null || newShippingAddress === void 0 ? void 0 : newShippingAddress._id) || !shipping_address_id) {
-            return res.json({ message: "please pass in shipping informations" });
+        if (!(newShippingAddress === null || newShippingAddress === void 0 ? void 0 : newShippingAddress._id) || !shippingAddressId) {
+            return res.json({ message: "please pass in one shipping information" });
         }
-        // Check if the user's wallet balance is less than the payment amount
+        //INFO: Check if the user's wallet balance is less than the payment amount
         if (parseInt(existingUser.theraWallet.toString()) <
             parseInt(orderInfo.payment.amount.toString())) {
-            // If the user's balance is insufficient, return an error message
+            //INFO: If the user's balance is insufficient, return an error message
             return res.json({
                 message: "You do not have enough balance to complete this order",
             });
@@ -345,35 +333,34 @@ const uncompletedOrdersControllers = (req, res) => __awaiter(void 0, void 0, voi
         let userTheraBalance = parseInt(existingUser.theraWallet.toString()) -
             parseInt(orderInfo.payment.amount.toString());
         existingUser.theraWallet = userTheraBalance;
-        // update user balance after order
+        //INFO: update user balance after order to reduce user's balance.
         yield existingUser.save();
         orderInfo.status = "dispensed";
         orderInfo.prescriptionCompleted = true;
-        orderInfo.shipping_address = newShippingAddress
+        orderInfo.shippingAddress = newShippingAddress
             ? newShippingAddress._id
-            : shipping_address_id;
-        orderInfo.delivery_time = delivery_time_chosen;
+            : shippingAddressId;
+        orderInfo.deliveryTime = deliveryTimeChosen;
         yield orderInfo.save();
-        // send mail to notify user of the dispensed order
+        //INFO: send mail to notify user of the dispensed order
         let senderEmailOrderStatusData = {
             firstName: `${existingUser.firstName}`,
             emailTo: existingUser.email,
-            subject: "Therawallet Dispensed Order Notification",
+            subject: "Theraswift Dispensed Order Notification",
             orderStatus: "dispensed",
         };
         (0, sendEmailUtility_1.sendOrderStatusEmail)(senderEmailOrderStatusData);
-        // mail the admin
+        //INFO: send mail to notify admin of the dispensed order
         let senderEmailOrderCompletedData = {
             emailTo: existingUser.email,
-            subject: "Therawallet Completed Order Notification",
-            // deliveryDate: "20/34/5",
-            deliveryDate: delivery_time_chosen,
+            subject: "Therawswift Completed Order Notification",
+            deliveryDate: deliveryTimeChosen,
             orderId: orderInfo.orderId,
         };
         (0, sendEmailUtility_1.sendOrderCompleteEmail)(senderEmailOrderCompletedData);
         // save the information to transaction history for user
         const newTransactionHistoryLog = new Transactions_model_1.default({
-            userId: user_id,
+            userId,
             type: "medication-order",
             amount: orderInfo.payment.amount,
             details: {
@@ -381,12 +368,6 @@ const uncompletedOrdersControllers = (req, res) => __awaiter(void 0, void 0, voi
                 amount: orderInfo.payment.amount,
                 currency: "NGN",
                 payment_status: "success",
-                order_status: "dispensed",
-                prescription: prescription_id,
-                product_order_type: "prescription-order",
-                shipping_address: newShippingAddress
-                    ? newShippingAddress._id
-                    : shipping_address_id,
             },
             created_at: new Date(),
         });

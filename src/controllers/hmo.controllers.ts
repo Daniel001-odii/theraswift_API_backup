@@ -43,13 +43,12 @@ export const addHmoController = async (req: Request, res: Response) => {
 };
 
 export const getHMOByIdController = async (req: Request, res: Response) => {
-  let { hmo_id } = req.body;
+  let { hmo_id } = req.params;
   try {
     let data = await HMOModel.findById(hmo_id);
     res.status(200).json({ data });
   } catch (error: any) {
     res.status(500).json({ message: "internal server error" });
-    // throw Error(error.message);
     res.status(500).json({error:error.message})
   }
 };
@@ -60,7 +59,6 @@ export const getAllHMOController = async (req: Request, res: Response) => {
     res.status(200).json({ data });
   } catch (error: any) {
     res.status(500).json({ message: "internal server error" });
-    // throw Error(error.message);
     res.status(500).json({error:error.message})
   }
 };
@@ -72,7 +70,6 @@ export const getUserHMOsController = async (req: Request, res: Response) => {
     res.status(200).json({ data });
   } catch (error: any) {
     res.status(500).json({ message: "internal server error" });
-    // throw Error(error.message);
     res.status(500).json({error:error.message})
   }
 };
@@ -81,13 +78,12 @@ export const deleteUserHMOByIdController = async (
   req: Request,
   res: Response
 ) => {
-  let { hmo_id } = req.body;
+  let { hmo_id } = req.params;
   try {
     let data = await HMOModel.findByIdAndDelete(hmo_id);
     res.status(200).json({ data });
   } catch (error: any) {
     res.status(500).json({ message: "internal server error" });
-    // throw Error(error.message);
      res.status(500).json({error:error.message})
   }
 };

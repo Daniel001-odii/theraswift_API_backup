@@ -59,7 +59,7 @@ const addPrescription = (req, res) => __awaiter(void 0, void 0, void 0, function
 });
 exports.addPrescription = addPrescription;
 const getPrescriptionById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { prescription_id } = req.body;
+    let { prescription_id } = req.params;
     try {
         let data = yield Prescription_model_1.default.findById(prescription_id);
         res.status(200).json({ data });
@@ -94,7 +94,7 @@ const getUserPrescription = (req, res) => __awaiter(void 0, void 0, void 0, func
 });
 exports.getUserPrescription = getUserPrescription;
 const deleteUserPrescriptionById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { prescription_id } = req.body;
+    let { prescription_id } = req.params;
     try {
         let data = yield Prescription_model_1.default.findByIdAndDelete(prescription_id);
         res.status(200).json({ data });

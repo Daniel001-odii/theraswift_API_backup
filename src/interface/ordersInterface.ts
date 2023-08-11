@@ -32,7 +32,21 @@ export interface AddOrderRequestBody {
   shipping_address: string;
   order_type:string;
   orderId:string,
-  prescriptionCompleted:boolean
+  prescriptionCompleted:boolean;
+  profile_info:{
+    allergy:{
+      hasAllergy: Boolean,
+      information: String
+    },
+    medCondition:{
+      hasMedCondition: Boolean,
+      information: String
+    },
+    otherMedCondition:{
+      hasOtherMedication: Boolean,
+      information: String
+    }
+  }
 }
 
 export interface AddPrescriptionRequest {

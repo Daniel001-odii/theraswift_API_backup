@@ -129,7 +129,7 @@ const getUserBeneficiariesController = (req, res) => __awaiter(void 0, void 0, v
 });
 exports.getUserBeneficiariesController = getUserBeneficiariesController;
 const getUserBeneficiaryByIdController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { beneficiary_id } = req.body;
+    let { beneficiary_id } = req.params;
     try {
         let data = yield Beneficiaries_model_1.default.findById(beneficiary_id);
         if (!data)

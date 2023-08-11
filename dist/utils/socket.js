@@ -19,18 +19,18 @@ const ChatMessages_model_1 = __importDefault(require("../models/ChatMessages.mod
 const socket = (server) => {
     const io = new socket_io_1.Server(server, {
         cors: {
-            origin: '*',
+            origin: "*",
         },
     });
-    io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
+    io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
         const { userId } = socket.handshake.query;
         // Find user by ID
         const user = yield User_model_1.default.findById(userId);
         if (!user)
             return;
-        if (user.role === 'admin') {
+        if (user.role === "admin") {
             // Admin joins all rooms
-            const users = yield User_model_1.default.find({ role: 'user' });
+            const users = yield User_model_1.default.find({ role: "user" });
             // TODO return those who have chatted admin
             // for (const user of users) {
             //   socket.join(user.id);
@@ -38,13 +38,13 @@ const socket = (server) => {
         }
         else {
             // User joins room with admin
-            const admins = yield User_model_1.default.find({ role: 'admin' });
+            const admins = yield User_model_1.default.find({ role: "admin" });
             for (const admin of admins) {
                 socket.join(admin.id);
             }
         }
         // Listen for incoming chats
-        socket.on('chat', ({ sender, receiver, message }) => __awaiter(void 0, void 0, void 0, function* () {
+        socket.on("chat", ({ sender, receiver, message }) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 // Save chat to database
                 const chat = new ChatMessages_model_1.default({
@@ -54,7 +54,7 @@ const socket = (server) => {
                 });
                 yield chat.save();
                 // Emit chat to all sockets in the room
-                socket.to(receiver).emit('chat', chat);
+                socket.to(receiver).emit("chat", chat);
             }
             catch (error) {
                 console.error(error);

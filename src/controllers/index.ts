@@ -25,12 +25,8 @@ import {
 import {
   addMedicationController,
   editMedicationController,
-  addMedicationFrontendController,
   getAllMedicationsController,
-  getAllMedicationFrontendController,
-  adEssentialsMedicationFrontendController,
   deleteMedication,
-  deleteMedicationFrontend,
 } from "./medication.controller";
 import {
   addOrder,
@@ -47,7 +43,11 @@ import {
   getUserPrescription,
   deleteUserPrescriptionById,
 } from "./prescription.controller";
-import { getUserTransactions } from "./transactions.controller";
+import {
+  getUserTransactions,
+  getTransactionById,
+  getAllTransactions,
+} from "./transactions.controller";
 import {
   emailOtpRequestController,
   smsOtpRequestController,
@@ -101,6 +101,12 @@ import {
   getUserBeneficiaryByIdController,
   getBeneficiaryInfoController,
 } from "./beneficiaries.controller";
+import {
+  saveDispenseLog,
+  getDispenseLogs,
+  getUserDispenseLogs,
+  getDispenseLogById,
+} from "./dispenseMedication.controller";
 
 export {
   signUpController,
@@ -150,12 +156,8 @@ export {
   getUsersController,
   createCareerOpening,
   getCareerOpenings,
-  addMedicationFrontendController,
   getAllMedicationsController,
-  getAllMedicationFrontendController,
-  adEssentialsMedicationFrontendController,
   deleteMedication,
-  deleteMedicationFrontend,
   getUserController,
   getUserWithAccessTokenController,
   WalletBalanceController,
@@ -173,4 +175,10 @@ export {
   adminLoginController,
   makeUserAdminController,
   addAdminController,
+  getTransactionById,
+  getAllTransactions,
+  saveDispenseLog,
+  getDispenseLogs,
+  getUserDispenseLogs,
+  getDispenseLogById,
 };

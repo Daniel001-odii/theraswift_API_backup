@@ -8,14 +8,14 @@ const orderSchema = new Schema(
       type: String,
       required: true,
     },
-    orderId:{
-      type:String,
-      required:true,
-      unique:true
-    },
-    type:{
+    orderId: {
       type: String,
-      required:false,
+      required: true,
+      unique: true,
+    },
+    type: {
+      type: String,
+      required: false,
     },
     products: [
       {
@@ -36,7 +36,7 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Prescription",
     },
-    refill_request_id: {
+    refillRequestId: {
       type: Schema.Types.ObjectId,
       ref: "RefillRequest",
     },
@@ -44,7 +44,7 @@ const orderSchema = new Schema(
       type: {
         provider: {
           type: String,
-          enum: ["paystack", "flutterwave", "stripe",'medwallet'],
+          enum: ["paystack", "flutterwave", "stripe", "medwallet"],
           required: true,
         },
         transaction_id: {
@@ -58,24 +58,40 @@ const orderSchema = new Schema(
       },
       required: true,
     },
-    shipping_address: {
+    shippingAddress: {
       type: {},
       required: true,
     },
-    deliver_time:{
-      type:String
+    profile_info: {
+      type: {
+        allergy: {
+          hasAllergy: Boolean,
+          information: String,
+        },
+        medCondition: {
+          hasMedCondition: Boolean,
+          information: String,
+        },
+        otherMedCondition: {
+          hasOtherMedication: Boolean,
+          information: String,
+        },
+      },
+    },
+    deliverTime: {
+      type: String,
     },
     status: {
       type: String,
-      enum: ["pending", "cancelled", "dispensed", "delivered","rejected"],
+      enum: ["pending", "cancelled", "dispensed", "delivered", "rejected"],
       default: "pending",
     },
-    prescriptionCompleted:{
-      type:Boolean,
-      default: true
+    prescriptionCompleted: {
+      type: Boolean,
+      default: true,
     },
     // dispenseInfo:{
-      
+
     // }
   },
   {

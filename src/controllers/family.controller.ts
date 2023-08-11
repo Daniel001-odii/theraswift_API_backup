@@ -54,23 +54,6 @@ export const getUserFamilyController = async (req: Request, res: Response) => {
   }
 };
 
-// export const getUserFamilyWithAuthTokenController = async (req: Request, res: Response) => {
-//   try {
-//     const { userId } = req.body;
-
-//     if (!userId) return res.json({ message: "please send user id" });
-
-//     let userFamilies = await FamilyModel.find({ userId });
-
-//     res.status(201).json({
-//       message: "Family members retrieved successfully",
-//       family_members: userFamilies,
-//     });
-//   } catch (err: any) {
-//     res.status(500).json({error:err.message;
-//   }
-// };
-
 export const deleteUserFamilyController = async (
   req: Request,
   res: Response

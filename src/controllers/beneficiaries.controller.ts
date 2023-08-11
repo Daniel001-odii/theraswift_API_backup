@@ -153,7 +153,7 @@ export const getUserBeneficiaryByIdController = async (
   req: Request,
   res: Response
 ) => {
-  let { beneficiary_id } = req.body;
+  let { beneficiary_id } = req.params;
   try {
     let data = await beneficiariesModel.findById(beneficiary_id);
 

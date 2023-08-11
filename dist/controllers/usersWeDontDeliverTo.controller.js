@@ -45,7 +45,7 @@ const getUsersWeDontDeliverToController = (req, res) => __awaiter(void 0, void 0
 exports.getUsersWeDontDeliverToController = getUsersWeDontDeliverToController;
 // Find a user entry by ID
 const getUsersWeDontDeliverToByIdController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.body;
+    const { id } = req.params;
     try {
         const user = yield UsersWeDontDeliverTo_model_1.default.findById(id);
         if (!user) {

@@ -23,20 +23,21 @@ const topUpWalletController = async (
     payment_method = "paystack",
   } = req.body;
 
-  //   Checking the parameters passed in the body
-  if (userId && email) {
-     res.status(500).json({
-      message: "please pass in either a user_id or an email address",
-    });
-    return;
-  }
   try {
+    //   Checking the parameters passed in the body
+    if (userId && email) {
+      res.status(500).json({
+        message: "please pass in either a user_id or an email address",
+      });
+      return;
+    }
+
     // Check if the user exists in the database
     let user;
 
-    // if (email) {
-    //   user = await UserModel.findOne({ email });
-    // }
+    if (email) {
+      user = await UserModel.findOne({ email });
+    }
 
     if (userId) {
       user = await UserModel.findOne({ userId });
@@ -57,7 +58,6 @@ const topUpWalletController = async (
     let currentWalletBal: number = user!.theraWallet as number; // Cast user!.theraWallet to 'number'
     // adding to the user's wallet balance
     user!.theraWallet = currentWalletBal + parseInt(amount); // Parse the amount and perform the addition
-    
 
     await user?.save();
 
@@ -107,7 +107,7 @@ export const giftWalletTopUpController = async (
     email,
     amount,
     senderId,
-    // referenceId = "T768990107951172",
+   
     payment_method,
   } = req.body;
 
@@ -120,9 +120,9 @@ export const giftWalletTopUpController = async (
     // Check if the mobile number already exists in the database
     let recipient;
 
-    // if (email) {
-    //   user = await UserModel.findOne({ email });
-    // }
+    if (email) {
+      recipient = await UserModel.findOne({ email });
+    }
 
     if (receiverId) {
       recipient = await UserModel.findOne({ userId: receiverId });
@@ -133,7 +133,6 @@ export const giftWalletTopUpController = async (
         message: "user doesn't exist",
       });
     }
-
 
     let sender = await UserModel.findOne({ userId: senderId });
 
@@ -154,7 +153,6 @@ export const giftWalletTopUpController = async (
       });
     }
 
-   
     //   deducting from the sender's wallet balance
     sender!.theraWallet = senderCurrentWalletBal - parseInt(amount);
     //   adding to the receiver wallet balance
@@ -225,4 +223,3 @@ export const giftWalletTopUpController = async (
     return res.status(500).json({ message: "Server error" });
   }
 };
-

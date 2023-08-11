@@ -3,7 +3,7 @@ import { Request } from "express";
 import { PrescriptionType } from "../models/Prescription.model";
 
 export interface IUser extends Document {
-  _id:ObjectId;
+  _id: ObjectId;
   userId: string;
   firstName: string;
   lastName: string;
@@ -26,19 +26,31 @@ export interface IUser extends Document {
     createdTime: Date;
     verified: boolean;
   };
-  userMedications:[string],
+  userMedications: [string];
   theraWallet: Number;
+}
+
+export interface IDispenseLog extends Document {
+  userId: string;
+  fullName: string;
+  prescriber: string;
+  dispenser: string;
+  dosage: string;
+  dateOfBirth: string;
+  dateDispensed: string;
+  email: string;
+  orderId: string;
 }
 
 export interface ITransaction extends Document {
   userId: string;
   type:
-    | "gift-balance"
-    | "product-order"
-    | "wallet-topup"
-    | "order-refill"
-    | "non-prescription-order"
-    | "prescription-order";
+  | "gift-balance"
+  | "product-order"
+  | "wallet-topup"
+  | "order-refill"
+  | "non-prescription-order"
+  | "prescription-order";
   details: {
     sender?: string;
     recipient?: string;
@@ -53,10 +65,9 @@ export interface ITransaction extends Document {
     payment_status?: string;
     prescription?: Object;
     product_order_type?:
-      | "order-refill"
-      | "non-prescription-order"
-      | "prescription-order";
-    // [key: string]: string | undefined;
+    | "order-refill"
+    | "non-prescription-order"
+    | "prescription-order";
   };
   amount: number;
   created_at: Date;
@@ -79,14 +90,14 @@ export interface IMedication extends Document {
   prescription_required: boolean;
   category?: string;
   image_url?: string;
-  quantity?:string
+  quantity?: string;
 }
 
 export interface JwtPayload {
   email: string;
   mobileNumber: string;
   userId: string;
-  _id:string
+  _id: string;
 }
 
 export interface CustomRequest extends Request {
@@ -99,23 +110,37 @@ export interface IOrder extends Document {
   products: {
     medication: string;
     quantity: number;
-    medicationForm: String,
-    medicationStrength: String,
+    medicationForm: String;
+    medicationStrength: String;
   }[];
   prescriptionId?: string;
-  refill_request_id?: string;
+  refillRequestId?: string;
   payment: {
     provider: "paystack" | "flutterwave" | "stripe" | "medwallet";
-    transaction_id?: string;
+    transactionId?: string;
     amount: number;
   };
-  shipping_address: string;
+  shippingAddress: string;
   status: "pending" | "cancelled" | "dispensed" | "delivered" | "rejected";
   createdAt?: Date;
   updatedAt?: Date;
   orderId: string;
   prescriptionCompleted: boolean;
-  delivery_time: string;
+  deliveryTime: string;
+  profile_info: {
+    allergy: {
+      hasAllergy: Boolean,
+      information: String
+    }
+    medCondition: {
+      hasMedCondition: Boolean,
+      information: String
+    }
+    otherMedCondition: {
+      hasOtherMedication: Boolean,
+      information: String
+    }
+  }
 }
 
 export interface IShippingAddress extends Document {
@@ -131,14 +156,13 @@ export interface IShippingAddress extends Document {
 }
 
 export interface IBeneficiaryAdded extends Document {
-  userId:string,
-  firstName:string,
-  lastName:string
-  beneficiaryUserId:string
+  userId: string;
+  firstName: string;
+  lastName: string;
+  beneficiaryUserId: string;
 }
 
 export interface Prescription extends Document {
-  // userId: Types.ObjectId;
   userId: String;
   type: PrescriptionType;
   name: string;
@@ -206,4 +230,3 @@ export interface IUsersWeDontDeliverTo extends Document {
   address: string;
   state: string;
 }
-

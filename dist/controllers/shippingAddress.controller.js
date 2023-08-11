@@ -95,7 +95,7 @@ const getUserShippingAddressController = (req, res) => __awaiter(void 0, void 0,
 });
 exports.getUserShippingAddressController = getUserShippingAddressController;
 const getUserShippingAddressByIdController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { address_id } = req.body;
+    let { address_id } = req.params;
     try {
         let data = yield ShippingAddress_model_1.default.findById(address_id);
         if (!data)

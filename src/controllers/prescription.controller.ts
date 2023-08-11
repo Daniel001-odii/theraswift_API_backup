@@ -16,20 +16,7 @@ export const addPrescription = async (
   res: Response
 ) => {
   try {
-    // const {
-    //   userId,
-    //   type,
-    //   name,
-    //   strength,
-    //   frequency,
-    //   startDate,
-    //   endDate,
-    //   doctor,
-    //   pharmacy,
-    // } = req.body as AddPrescriptionRequest;
-
-    // const { userId } = req.body as AddPrescriptionRequest;
-
+  
     let secret = process.env.JWT_SECRET_KEY;
     // Get JWT from Authorization header
     const authHeader = req.headers.authorization;
@@ -68,13 +55,12 @@ export const addPrescription = async (
 };
 
 export const getPrescriptionById = async (req: Request, res: Response) => {
-  let { prescription_id } = req.body;
+  let { prescription_id } = req.params;
   try {
     let data = await Prescription.findById(prescription_id);
     res.status(200).json({ data });
   } catch (error: any) {
      res.status(500).json({error:error.message})
-    // throw Error(error.message);
   }
 };
 
@@ -84,7 +70,6 @@ export const getPrescriptions = async (req: Request, res: Response) => {
     res.status(200).json({ data });
   } catch (error: any) {
      res.status(500).json({error:error.message})
-    // throw Error(error.message);
   }
 };
 
@@ -95,7 +80,6 @@ export const getUserPrescription = async (req: Request, res: Response) => {
     res.status(200).json({ data });
   } catch (error: any) {
      res.status(500).json({error:error.message})
-    // throw Error(error.message);
   }
 };
 
@@ -103,12 +87,11 @@ export const deleteUserPrescriptionById = async (
   req: Request,
   res: Response
 ) => {
-  let { prescription_id } = req.body;
+  let { prescription_id } = req.params;
   try {
     let data = await Prescription.findByIdAndDelete(prescription_id);
     res.status(200).json({ data });
   } catch (error: any) {
      res.status(500).json({error:error.message})
-    // throw Error(error.message);
   }
 };
