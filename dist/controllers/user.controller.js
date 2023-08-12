@@ -74,9 +74,6 @@ const getUserWithAccessTokenController = (req, res) => __awaiter(void 0, void 0,
         // Get JWT from Authorization header
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.split(" ")[1];
-        //   res.status(200).json({
-        //     welcome: "welcome to theraswift api",
-        //   });
         const { userId, email } = jsonwebtoken_1.default.verify(token, secret);
         let user;
         // Find the token in the database
@@ -131,8 +128,6 @@ const addUserMedicationController = (req, res) => __awaiter(void 0, void 0, void
         }
         yield User_model_1.default.findOneAndUpdate({ _id }, { $set: { userMedications } });
         let updatedUserValue = yield User_model_1.default.findById(_id);
-        // console.log(updatedUserValue)
-        // console.log(_id)
         res.json({
             message: "Medication added to user successfully",
             user: {

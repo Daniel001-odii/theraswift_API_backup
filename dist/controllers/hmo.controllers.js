@@ -54,7 +54,6 @@ const getHMOByIdController = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
     catch (error) {
         res.status(500).json({ message: "internal server error" });
-        // throw Error(error.message);
         res.status(500).json({ error: error.message });
     }
 });
@@ -66,7 +65,6 @@ const getAllHMOController = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
     catch (error) {
         res.status(500).json({ message: "internal server error" });
-        // throw Error(error.message);
         res.status(500).json({ error: error.message });
     }
 });
@@ -79,7 +77,6 @@ const getUserHMOsController = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
     catch (error) {
         res.status(500).json({ message: "internal server error" });
-        // throw Error(error.message);
         res.status(500).json({ error: error.message });
     }
 });
@@ -92,7 +89,6 @@ const deleteUserHMOByIdController = (req, res) => __awaiter(void 0, void 0, void
     }
     catch (error) {
         res.status(500).json({ message: "internal server error" });
-        // throw Error(error.message);
         res.status(500).json({ error: error.message });
     }
 });

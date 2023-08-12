@@ -27,7 +27,7 @@ const ShippingAddress_model_1 = __importDefault(require("../models/ShippingAddre
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userId, products, prescription_input, prescription_id, delivery_time_chosen, payment, shipping_address, order_type, prescriptionCompleted, } = req.body;
+        const { userId, products, prescription_input, prescription_id, delivery_time_chosen, payment, shipping_address, order_type, prescriptionCompleted, profile_info } = req.body;
         // Check if the user exists in the database
         const existingUser = yield User_model_1.default.findOne({ userId });
         if (!existingUser) {
@@ -130,6 +130,7 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             shipping_address,
             delivery_time: delivery_time_chosen,
             prescriptionCompleted,
+            profile_info
         });
         if (!newOrder)
             return;

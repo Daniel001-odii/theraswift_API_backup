@@ -22,7 +22,6 @@ const getUserTransactions = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
     catch (error) {
         res.status(500).json({ message: "internal server error", error: error.message, });
-        // throw Error(error)
     }
 });
 exports.getUserTransactions = getUserTransactions;
@@ -33,7 +32,6 @@ const getAllTransactions = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     catch (error) {
         res.status(500).json({ message: "internal server error", error: error.message, });
-        // throw Error(error)
     }
 });
 exports.getAllTransactions = getAllTransactions;
@@ -45,7 +43,6 @@ const getTransactionById = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     catch (error) {
         res.status(500).json({ message: "internal server error", error: error.message, });
-        // throw Error(error)
     }
 });
 exports.getTransactionById = getTransactionById;

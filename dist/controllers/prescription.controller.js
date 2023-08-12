@@ -19,18 +19,6 @@ const uuid_1 = require("uuid");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const addPrescription = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const {
-        //   userId,
-        //   type,
-        //   name,
-        //   strength,
-        //   frequency,
-        //   startDate,
-        //   endDate,
-        //   doctor,
-        //   pharmacy,
-        // } = req.body as AddPrescriptionRequest;
-        // const { userId } = req.body as AddPrescriptionRequest;
         let secret = process.env.JWT_SECRET_KEY;
         // Get JWT from Authorization header
         const authHeader = req.headers.authorization;
@@ -66,7 +54,6 @@ const getPrescriptionById = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
     catch (error) {
         res.status(500).json({ error: error.message });
-        // throw Error(error.message);
     }
 });
 exports.getPrescriptionById = getPrescriptionById;
@@ -77,7 +64,6 @@ const getPrescriptions = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         res.status(500).json({ error: error.message });
-        // throw Error(error.message);
     }
 });
 exports.getPrescriptions = getPrescriptions;
@@ -89,7 +75,6 @@ const getUserPrescription = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
     catch (error) {
         res.status(500).json({ error: error.message });
-        // throw Error(error.message);
     }
 });
 exports.getUserPrescription = getUserPrescription;
@@ -101,7 +86,6 @@ const deleteUserPrescriptionById = (req, res) => __awaiter(void 0, void 0, void 
     }
     catch (error) {
         res.status(500).json({ error: error.message });
-        // throw Error(error.message);
     }
 });
 exports.deleteUserPrescriptionById = deleteUserPrescriptionById;

@@ -19,19 +19,19 @@ const sendEmailUtility_1 = require("../utils/sendEmailUtility");
 // topUpWallet logic
 const topUpWalletController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, email, amount, referenceId = "T768990107951172", payment_method = "paystack", } = req.body;
-    //   Checking the parameters passed in the body
-    if (userId && email) {
-        res.status(500).json({
-            message: "please pass in either a user_id or an email address",
-        });
-        return;
-    }
     try {
+        //   Checking the parameters passed in the body
+        if (userId && email) {
+            res.status(500).json({
+                message: "please pass in either a user_id or an email address",
+            });
+            return;
+        }
         // Check if the user exists in the database
         let user;
-        // if (email) {
-        //   user = await UserModel.findOne({ email });
-        // }
+        if (email) {
+            user = yield User_model_1.default.findOne({ email });
+        }
         if (userId) {
             user = yield User_model_1.default.findOne({ userId });
         }
@@ -84,9 +84,7 @@ const topUpWalletController = (req, res, next) => __awaiter(void 0, void 0, void
 exports.default = topUpWalletController;
 // giftTopUpWallet logic
 const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { receiverId, email, amount, senderId, 
-    // referenceId = "T768990107951172",
-    payment_method, } = req.body;
+    const { receiverId, email, amount, senderId, payment_method, } = req.body;
     if (receiverId && email) {
         return res.status(500).json({
             message: "please pass in either a reciver id or an email address",
@@ -95,9 +93,9 @@ const giftWalletTopUpController = (req, res, next) => __awaiter(void 0, void 0, 
     try {
         // Check if the mobile number already exists in the database
         let recipient;
-        // if (email) {
-        //   user = await UserModel.findOne({ email });
-        // }
+        if (email) {
+            recipient = yield User_model_1.default.findOne({ email });
+        }
         if (receiverId) {
             recipient = yield User_model_1.default.findOne({ userId: receiverId });
         }

@@ -9,7 +9,7 @@ const orderSchema = new mongoose_1.Schema({
     orderId: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     type: {
         type: String,
@@ -42,7 +42,7 @@ const orderSchema = new mongoose_1.Schema({
         type: {
             provider: {
                 type: String,
-                enum: ["paystack", "flutterwave", "stripe", 'medwallet'],
+                enum: ["paystack", "flutterwave", "stripe", "medwallet"],
                 required: true,
             },
             transaction_id: {
@@ -60,8 +60,24 @@ const orderSchema = new mongoose_1.Schema({
         type: {},
         required: true,
     },
+    profile_info: {
+        type: {
+            allergy: {
+                hasAllergy: Boolean,
+                information: String,
+            },
+            medCondition: {
+                hasMedCondition: Boolean,
+                information: String,
+            },
+            otherMedCondition: {
+                hasOtherMedication: Boolean,
+                information: String,
+            },
+        },
+    },
     deliverTime: {
-        type: String
+        type: String,
     },
     status: {
         type: String,
@@ -70,7 +86,7 @@ const orderSchema = new mongoose_1.Schema({
     },
     prescriptionCompleted: {
         type: Boolean,
-        default: true
+        default: true,
     },
     // dispenseInfo:{
     // }

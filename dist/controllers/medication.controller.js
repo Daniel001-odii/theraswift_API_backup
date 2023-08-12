@@ -116,7 +116,6 @@ const addMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, 
     }
     catch (err) {
         console.log(err);
-        // throw err;
         res.status(500).json({ error: err.message });
     }
 });
@@ -144,7 +143,6 @@ const editMedicationController = (req, res) => __awaiter(void 0, void 0, void 0,
     }
     catch (err) {
         console.log(err);
-        // throw err;
         res.status(500).json({ error: err.message });
     }
 });
@@ -159,7 +157,6 @@ const getAllMedicationsController = (req, res) => __awaiter(void 0, void 0, void
     }
     catch (err) {
         console.log(err);
-        // throw err;
         res.status(500).json({ error: err.message });
     }
 });

@@ -44,7 +44,6 @@ router.get("/get_transaction_by_id", roleCheck_middleware_1.checkRole, controlle
 router.get("/get_all_transactions", roleCheck_middleware_1.checkRole, controllers_1.getAllTransactions);
 router.post("/otp/send_password_recovery_email", controllers_1.emailOtpRequestController);
 router.post("/otp/send_password_recovery_sms", controllers_1.smsOtpRequestController);
-// router.post("/otp/verify_password_recovery_otp", smsOtpRequestController);
 router.post("/update_password", controllers_1.updatePasswordController);
 router.post("/send_sms", roleCheck_middleware_1.checkAdminRole, controllers_1.sendSmsController);
 router.post("/add_family", roleCheck_middleware_1.checkRole, controllers_1.addFamilyController);
