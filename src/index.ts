@@ -2,17 +2,22 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
-import { logger } from "./middleware/logger";
-import routes from "./routes/routes";
+//import { logger } from "./middleware/logger";
+//import routes from "./routes/routes";
 import mongoose, { ConnectOptions, MongooseOptions } from "mongoose";
 import dotenv from "dotenv";
 import csrf from "csurf";
 import rateLimit from "express-rate-limit";
 import { Server, Socket } from "socket.io";
 import http from "http";
-import chatSocketConfig from './sockets/chatMessageSocketsConfig'
-import * as swaggerDocument from './swagger/swagger.json';
-import swaggerUi from 'swagger-ui-express';
+//import chatSocketConfig from './sockets/chatMessageSocketsConfig'
+// import * as swaggerDocument from './swagger/swagger.json';
+// import swaggerUi from 'swagger-ui-express';
+
+//doctor routes
+import doctorRoute from "./doctor/routes/routes";
+//admin routes
+import adminRoute from "./admin/route/route";
 
 const app = express();
 
@@ -35,18 +40,19 @@ const limiter = rateLimit({
 
 
 
-app.use('/theraswift-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//app.use('/theraswift-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 
 // Middleware
 app.use(limiter);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup());
+//app.use('/api-docs', swaggerUi.serve, swaggerUi.setup());
 app.use(bodyParser.json());
+app.use(express.static('../public'));
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
-app.use(logger);
+//app.use(logger);
 dotenv.config();
 app.use(express.urlencoded({ extended: true }));
 
@@ -72,10 +78,12 @@ const MONGODB_URI = process.env.MONGODB_URI as string;
 
 
 // Router middleware
-app.use("/", routes);
+//app.use("/", routes);
+app.use("/doctor", doctorRoute);
+app.use("/admin", adminRoute);
 
 // Handle socket connections
-chatSocketConfig(io);
+//chatSocketConfig(io);
 
 // app initialized port
 const port = process.env.PORT || 3000;
