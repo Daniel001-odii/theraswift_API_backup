@@ -31,6 +31,9 @@ export const validatePatientRegParams = [
 export const validatePatientid = [
   body("id").notEmpty(),
 ];
+export const validatePatientidperson = [
+  body("patientId").notEmpty(),
+];
 
 export const validateEmail = [
   body("email").isEmail(),
@@ -40,4 +43,16 @@ export const validateResetPassword = [
   body("email").isEmail(),
   body("otp").notEmpty(),
   body("password").notEmpty(),
+];
+
+export const validateDrugPrescription = [
+  body("patientId").notEmpty(),
+  body("drugName").notEmpty(),
+  body("dosage").notEmpty(),
+  body("dosageForm")
+  .isIn(["tablet", "capsule", "syrub", "drop"])
+  .withMessage("dosage form must be either tablet, capsule, syrub or drop"),
+  body("frequency").notEmpty(),
+  body("route").notEmpty(),
+  body("duration").notEmpty(),
 ];

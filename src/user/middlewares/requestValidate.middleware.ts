@@ -17,3 +17,13 @@ export const validateSignupParams = [
     .isIn(["male", "female"])
     .withMessage("Gender must be either male or female"),
 ];
+
+export const validateEmailParams = [
+  body("email").isEmail(),
+];
+
+export const validateEmailVerificatioParams = [
+  body("email").isEmail(),
+  body("otp").notEmpty(),
+];
+

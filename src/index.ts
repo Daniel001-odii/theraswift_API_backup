@@ -18,6 +18,8 @@ import http from "http";
 import doctorRoute from "./doctor/routes/routes";
 //admin routes
 import adminRoute from "./admin/route/route";
+//user route
+import userRoute from "./user/route/route";
 
 const app = express();
 
@@ -81,6 +83,7 @@ const MONGODB_URI = process.env.MONGODB_URI as string;
 //app.use("/", routes);
 app.use("/doctor", doctorRoute);
 app.use("/admin", adminRoute);
+app.use("/user", userRoute);
 
 // Handle socket connections
 //chatSocketConfig(io);
