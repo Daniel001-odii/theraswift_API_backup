@@ -3,12 +3,10 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main  # Adjust this to your main branch name
-
+      - main  
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # You can choose the OS that fits your EC2 instance
-
+    runs-on: ubuntu-latest  
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -28,7 +26,7 @@ jobs:
         EOF
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        # You'll need to add your private key as a secret in your repository settings.
+        
 
     - name: Copy code to EC2
       run: |
@@ -36,7 +34,7 @@ jobs:
         scp -r ./ ubuntu@13.40.19.4:/projects/{{ github.event.repository.name }}
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        # You'll need to add your private key as a secret in your repository settings.
+        
 
     - name: SSH into EC2 and deploy Node.js 18
       run: |
