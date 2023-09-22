@@ -13,9 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Create SSH key file
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
     - name: SSH into EC2 and delete existing files
       run: |
-        ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@13.40.19.4 << EOF
+        ssh ubuntu@13.40.19.4 << EOF
           # Remove existing files and directories in the destination path
           rm -rf /projects/{{ github.event.repository.name }}/*
         EOF
@@ -25,7 +32,7 @@ jobs:
 
     - name: Copy code to EC2
       run: |
-        ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@13.40.19.4 "mkdir -p /projects/{{ github.event.repository.name }}"
+        ssh ubuntu@13.40.19.4 "mkdir -p /projects/{{ github.event.repository.name }}"
         scp -r ./ ubuntu@13.40.19.4:/projects/{{ github.event.repository.name }}
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -33,11 +40,10 @@ jobs:
 
     - name: SSH into EC2 and deploy Node.js 18
       run: |
-        ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@13.40.19.4 << EOF
+        ssh ubuntu@13.40.19.4 << EOF
           
           # Change to your application directory
           cd /projects/{{ github.event.repository.name }}
-
           # Check if the project directory exists
           if [ -d {{ github.event.repository.name }} ]; then
             # The project directory exists, update the code with Git
@@ -47,10 +53,8 @@ jobs:
             # The project directory doesn't exist, no need to clone
             echo "Project directory does not exist."
           fi
-
           # Install Node.js dependencies
           npm install
-
           # Start your Node.js application with PM2 using npm run dev
           pm2 restart {{ github.event.repository.name }} --update-env || pm2 start "npm run dev -p" --name {{ github.event.repository.name }}
         EOF
