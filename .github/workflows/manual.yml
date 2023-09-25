@@ -11,7 +11,7 @@ jobs:
 
     env:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      SSH_HOST: ubuntu@13.40.19.4
+      SSH_HOST: ubuntu@13.40.132.125
       SSH_IDENTITY_FILE: /home/runner/.ssh/id_rsa
       PROJECT_NAME: ${{ github.event.repository.name }}
 
