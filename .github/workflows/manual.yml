@@ -54,17 +54,19 @@ jobs:
 
     - name: SCP Copy to EC2
       run: |
-        sudo scp -vvv -r -o StrictHostKeyChecking=no -o ForwardAgent=no -i /home/runner/.ssh/id_rsa * $SSH_HOST:~/projects/$PROJECT_NAME
-        sudo scp -vvv -r -o StrictHostKeyChecking=no -o ForwardAgent=no -i /home/runner/.ssh/id_rsa .env $SSH_HOST:~/projects/$PROJECT_NAME/.env
+        sudo scp -r -o StrictHostKeyChecking=no -o ForwardAgent=no -i /home/runner/.ssh/id_rsa * $SSH_HOST:~/projects/$PROJECT_NAME
+        sudo scp -r -o StrictHostKeyChecking=no -o ForwardAgent=no -i /home/runner/.ssh/id_rsa .env $SSH_HOST:~/projects/$PROJECT_NAME/.env
         echo "Passed here oo"
       shell: /usr/bin/bash -e {0}
 
     - name: SSH into EC2 and deploy Node.js 18
       run: |
-        ssh -vvv -i /home/runner/.ssh/id_rsa $SSH_HOST << EOF
+        ssh -i /home/runner/.ssh/id_rsa $SSH_HOST << EOF
           # Change to your application directory
           cd ~/projects/$PROJECT_NAME
           # Check if the project directory exists
+          rm -rf node_modules
+          rm -rf package-lock.json
           if [ -d $PROJECT_NAME ]; then
             # The project directory exists,update the code with Git
             cd $PROJECT_NAME
@@ -76,5 +78,5 @@ jobs:
           # Install Node.js dependencies
           npm install
           # Start your Node.js application with PM2 using npm run dev
-          pm2 restart $PROJECT_NAME --update-env || pm2 start "npm run dev -p" --name $PROJECT_NAME
+          pm2 restart $PROJECT_NAME --update-env || pm2 start "npm run dev -p 3000" --name $PROJECT_NAME
         EOF
