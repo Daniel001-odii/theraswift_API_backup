@@ -76,6 +76,10 @@ jobs:
             echo "Project directory does not exist."
           fi
           # Install Node.js dependencies
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
+          echo $(nvm --version)
+          nvm use v18.16.0
           npm install
           # Start your Node.js application with PM2 using npm run dev
           pm2 restart $PROJECT_NAME --update-env || pm2 start "npm run dev -p 3000" --name $PROJECT_NAME
