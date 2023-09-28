@@ -10,6 +10,7 @@ import csrf from "csurf";
 import rateLimit from "express-rate-limit";
 import { Server, Socket } from "socket.io";
 import http from "http";
+//import path from path
 //import chatSocketConfig from './sockets/chatMessageSocketsConfig'
 // import * as swaggerDocument from './swagger/swagger.json';
 // import swaggerUi from 'swagger-ui-express';
@@ -23,6 +24,7 @@ import userRoute from "./user/route/route";
 
 const app = express();
 
+ 
 const csrfProtection = csrf({ cookie: true })
 
 const server = http.createServer(app);
@@ -49,14 +51,19 @@ const limiter = rateLimit({
 // Middleware
 app.use(limiter);
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup());
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('../public'));
+//app.use(express.static('../public'));
+app.use('/uploads', express.static('../public'));
 app.use(express.json());
-app.use(cors());
+//app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 app.use(helmet());
 //app.use(logger);
 dotenv.config();
-app.use(express.urlencoded({ extended: true }));
+
 
 
 

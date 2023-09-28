@@ -2,17 +2,18 @@ import { validationResult } from "express-validator";
 import { Request, Response } from "express";
 import UserModel from "../models/userReg.model";
 import { generateOTP, OTP_EXPIRY_TIME } from "../../utils/otpGenerator";
-import { sendEmail } from "../../utils/send_email_utility";
+import { sendSms } from "../../utils/sendSms.utility";
+import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
 
 //user send email /////////////
-export const userSendEmailController = async (
+export const userSendPhoneNumberController = async (
     req: Request,
     res: Response,
 ) => {
 
     try {
         const {
-          email,
+            mobileNumber,
         } = req.body;
         // Check for validation errors
         const errors = validationResult(req);
@@ -20,22 +21,25 @@ export const userSendEmailController = async (
         if (!errors.isEmpty()) {
           return res.status(400).json({ errors: errors.array() });
         }
+
+        // format mobile number to international format
+        let phonenumber = modifiedPhoneNumber(mobileNumber);
     
         // try find user with the same email
-        const user = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({ mobileNumber: phonenumber });
     
          // check if user exists
          if (!user) {
           return res
             .status(401)
-            .json({ message: "invalid email" });
+            .json({ message: "invalid mobile number" });
         }
 
         const otp = generateOTP()
 
         const createdTime = new Date();
 
-        user!.emailOtp = {
+        user!.phoneNumberOtp = {
             otp,
             createdTime,
             verified : false
@@ -43,16 +47,16 @@ export const userSendEmailController = async (
 
         await user?.save();
 
-        let emailData = {
-            emailTo: email,
-            subject: "Theraswift email verification",
-            otp,
-            firstName: user.firstName,
-        };
+        let sms = `Hello ${
+            user!.firstName
+        } your Theraswift mobile number verification OTP is ${otp}`;
+      
+        let data = { to: phonenumber, sms };
 
-        sendEmail(emailData);
+        sendSms(data);
+        
 
-        return res.status(200).json({ message: "OTP sent successfully to your email." });
+        return res.status(200).json({ message: `OTP sent successfully ${mobileNumber}: ${otp}`, });
     
       } catch (err: any) {
         // signup error
@@ -61,16 +65,15 @@ export const userSendEmailController = async (
     
 }
 
-
-//user verified email /////////////
-export const userEmailVerificationController = async (
+//user verified phone number /////////////
+export const userPhoneNumberVerificationController = async (
     req: Request,
     res: Response,
 ) => {
     try {
         const {
-          email,
-          otp
+            mobileNumber,
+            otp
         } = req.body;
         // Check for validation errors
         const errors = validationResult(req);
@@ -78,42 +81,46 @@ export const userEmailVerificationController = async (
         if (!errors.isEmpty()) {
           return res.status(400).json({ errors: errors.array() });
         }
+
+        // format mobile number to international format
+        let phonenumber = modifiedPhoneNumber(mobileNumber);
     
         // try find user with the same email
-        const user = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({ mobileNumber: phonenumber });
     
          // check if user exists
          if (!user) {
           return res
             .status(401)
-            .json({ message: "invalid email" });
+            .json({ message: "invalid mobile number" });
         }
 
-        if (user.emailOtp.otp != otp) {
+        if (user.phoneNumberOtp.otp != otp) {
             return res
             .status(401)
             .json({ message: "invalid otp" });
         }
 
-        if (user.emailOtp.verified) {
+        if (user.phoneNumberOtp.verified) {
             return res
             .status(401)
-            .json({ message: "email already verified" });
+            .json({ message: "mobile number already verified" });
         }
 
-        const timeDiff = new Date().getTime() - user.emailOtp.createdTime.getTime();
+        const timeDiff = new Date().getTime() - user.phoneNumberOtp.createdTime.getTime();
         if (timeDiff > OTP_EXPIRY_TIME) {
             return res.status(400).json({ message: "otp expired" });
         }
 
-        user.emailOtp.verified = true;
+        user.phoneNumberOtp.verified = true;
 
         await user.save();
 
-        return res.json({ message: "email verified successfully" });
+        return res.json({ message: "mobile number verified successfully" });
     
       } catch (err: any) {
         // signup error
         res.status(500).json({ message: err.message });
     }
 }
+

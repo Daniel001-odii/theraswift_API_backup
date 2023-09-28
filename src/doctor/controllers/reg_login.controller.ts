@@ -180,10 +180,11 @@ export const doctorRegisterPatient = async (
     let patientSaved = await patient.save();
 
     const domainName = req.hostname;
+    console.log(domainName);
     if (!file) {
       medicationImg = '';
     } else {
-      medicationImg = `${domainName}/public/uploads/${fileName}`;
+      medicationImg = `http://${domainName}:3000/public/uploads/${fileName}`;
     }
     
 

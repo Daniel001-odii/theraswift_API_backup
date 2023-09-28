@@ -2,6 +2,7 @@ import { Document, Types, ObjectId } from "mongoose";
 
 export interface IUserReg extends Document {
   _id: ObjectId;
+  userId: string;
   email: string;
   password: string;
   firstName: string;
@@ -9,8 +10,9 @@ export interface IUserReg extends Document {
   lastName: string;
   mobileNumber: number;
   gender: string;
-  createdAt: Date;
-  updatedAt: Date;
+  refererCode: string;
+  refererCredit: number;
+  totalMdicationCost: number;
   passwordOtp: {
     otp: string;
     createdTime: Date;
@@ -26,4 +28,11 @@ export interface IUserReg extends Document {
     createdTime: Date;
     verified: boolean;
   };
+}
+
+export interface ICode extends Document {
+  _id: ObjectId;
+  code: number;
+  createdAt: Date;
+  updatedAt: Date;
 }

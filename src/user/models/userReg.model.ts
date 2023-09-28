@@ -3,6 +3,11 @@ import { IUserReg } from "../interface/reg.interface";
 
 const UserSchema = new Schema(
     {
+      userId: {
+        type: String,
+        required: true,
+        unique: true,
+      },
       email: {
         type: String,
         required: true,
@@ -28,11 +33,25 @@ const UserSchema = new Schema(
       mobileNumber: {
         type: Number,
         required: true,
+        unique: true,
       },
       gender: {
         type: String,
         enum: ["male", "female"],
         required: true,
+      },
+      refererCode: {
+        type: String,
+        required: true,
+        unique: true,
+      },
+      refererCredit: {
+        type: Number,
+        default: 0,
+      },
+      totalMdicationCost:{
+        type: Number,
+        default: 0,
       },
       createdAt: {
         type: Date,
@@ -41,8 +60,7 @@ const UserSchema = new Schema(
       updatedAt: {
         type: Date,
         default: Date.now,
-      },
-      
+      }, 
       passwordOtp: {
         otp: String,
         createdTime: Date,
