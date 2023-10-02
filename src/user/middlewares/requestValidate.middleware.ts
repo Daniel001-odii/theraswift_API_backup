@@ -84,3 +84,7 @@ export const validateSearchMedicationByNameFRomDosageParams = [
   body("form").notEmpty(),
   body("dosage").notEmpty(),
 ];
+
+export const validateUserCartParams = [
+  body("cartId").notEmpty(),
+];

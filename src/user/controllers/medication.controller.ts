@@ -51,40 +51,28 @@ export const userAddMedicationController = async (
 
     const existUserMedication = await UserMedicationModel.findOne({userId, medicationId});
 
-  if (existUserMedication) {
-    existUserMedication.quantityOrder = existUserMedication.quantityOrder + 1;
-    const increaseMed = await existUserMedication.save();
-    return res.status(200).json({
-      message: "medication added succefully",
-      medication:{
-        firstName: userExist.firstName,
-        medicationId: medication._id,
-        userMedicationID: increaseMed._id,
-        name: medication.name,
-        description: medication.description,
-        price: medication.price,
-        form: medication.form,
-        dosage: medication.strength,
-        quantity: medication.quantity,
-        medicationImage: medication.medicationImage,
-        prescriptionRequired: medication.prescriptionRequired,
-        medicationQuantityRequested: increaseMed.quantityOrder,
-        totalCost: increaseMed.quantityOrder * parseInt(medication.price)
-      }
-    })
-  }
+    if (existUserMedication) {
+      return res
+          .status(401)
+          .json({ message: "medication already added" });
+    }
     
+    let prescriptionStatus = false;
+    if (medication.prescriptionRequired) {
+      prescriptionStatus = false;
+    }else{
+      prescriptionStatus = true;
+    }
+
     //if medication those not exist
     const userMedication = new UserMedicationModel({
       userId: userId,
       medicationId: medicationId,
-      quantityOrder: 1,
-    
+      prescriptionStatus: prescriptionStatus
     })
 
     const saveUserMedication = await userMedication.save();
 
-    await userExist.save();
 
     return res.status(200).json({
       message: "medication added succefully",
@@ -100,8 +88,6 @@ export const userAddMedicationController = async (
         quantity: medication.quantity,
         medicationImage: medication.medicationImage,
         prescriptionRequired: medication.prescriptionRequired,
-        medicationQuantityRequested: saveUserMedication.quantityOrder,
-        totalCost: saveUserMedication.quantityOrder * parseInt(medication.price)
       }
     })
   
@@ -112,163 +98,6 @@ export const userAddMedicationController = async (
   }
 
 }
-
-
-
-
-
-//user increase  medication /////////////
-export const userIncreaseMedicationController = async (
-  req: any,
-  res: Response,
-) => {
-
-  try {
-    const {
-      userMedicationId
-    } = req.body;
-
-    // Check for validation errors
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const user = req.user;
-    const userId = user.id
-
-    console.log(userId)
-
-    // check if the medication is in database
-    const userMedication = await UserMedicationModel.findOne({_id:  userMedicationId});
-
-    if (!userMedication) {
-      return res
-        .status(401)
-        .json({ message: "add medication first before increase the quantity"});
-    }
-
-    //get user info from databas
-    const userExist = await UserModel.findOne({_id: userId});
-
-    if (!userExist) {
-      return res
-        .status(401)
-        .json({ message: "invalid credential" });
-    }
-
-    userMedication.quantityOrder = userMedication.quantityOrder + 1;
-    const increaseMed = await userMedication.save();
-
-    const medication = await MedicationModel.findOne({_id: userMedication.medicationId});
-    
-    let price: string | any = medication?.price;
-
-    return res.status(200).json({
-      message: "medication quantity increase",
-      medication:{
-        firstName: userExist.firstName,
-        id: medication?._id,
-        name: medication?.name,
-        description: medication?.description,
-        price: medication?.price,
-        form: medication?.form,
-        strength: medication?.strength,
-        quantity: medication?.quantity,
-        medicationImage: medication?.medicationImage,
-        prescriptionRequired: medication?.prescriptionRequired,
-        medicationQuantityRequested: increaseMed.quantityOrder,
-        totalCost: increaseMed.quantityOrder * parseInt(price)
-      }
-    })
-    
-  } catch (err: any) {
-    // signup error
-    res.status(500).json({ message: err.message });
-  }
-
-}
-
-
-
-
-//user decrease  medication /////////////
-export const userDecreaseMedicationController = async (
-  req: any,
-  res: Response,
-) => {
-
-  try {
-    const {
-      userMedicationId
-    } = req.body;
-
-    // Check for validation errors
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const user = req.user;
-    const userId = user.id
-
-    console.log(userId)
-
-    // check if the medication is in database
-    const userMedication = await UserMedicationModel.findOne({_id:  userMedicationId});
-
-    if (!userMedication) {
-      return res
-        .status(401)
-        .json({ message: "add medication first before decrease the quantity"});
-    }
-
-    //get user info from databas
-    const userExist = await UserModel.findOne({_id: userId});
-
-    if (!userExist) {
-      return res
-        .status(401)
-        .json({ message: "invalid credential" });
-    }
-
-    userMedication.quantityOrder = userMedication.quantityOrder - 1;
-    const decreaseMed = await userMedication.save();
-
-    if (decreaseMed.quantityOrder == 0) {
-        await UserMedicationModel.findOneAndDelete({_id: userMedicationId}, {new: true});
-    }
-
-    const medication = await MedicationModel.findOne({_id: userMedication.medicationId});
-    
-    let price: string | any = medication?.price;
-
-    return res.status(200).json({
-      message: "medication quantity decrease",
-      medication:{
-        firstName: userExist.firstName,
-        id: medication?._id,
-        name: medication?.name,
-        description: medication?.description,
-        price: medication?.price,
-        form: medication?.form,
-        strength: medication?.strength,
-        quantity: medication?.quantity,
-        medicationImage: medication?.medicationImage,
-        prescriptionRequired: medication?.prescriptionRequired,
-        medicationQuantityRequested: decreaseMed.quantityOrder,
-        totalCost: decreaseMed.quantityOrder * parseInt(price)
-      }
-    })
-  } catch (err: any) {
-    // signup error
-    res.status(500).json({ message: err.message });
-  }
-
-}
-
 
 
 
@@ -541,7 +370,6 @@ export const userGetMedicationController = async (
       const userMedication = userMedications[i];
 
       const medication =  await MedicationModel.findOne({_id: userMedication.medicationId});
-      const price: any = medication?.price;
       
       const medObj = {
         medicationId: medication?._id,
@@ -554,8 +382,7 @@ export const userGetMedicationController = async (
         price: medication?.price,
         prescriptionRequired: medication?.prescriptionRequired,
         medicationImage: medication?.medicationImage,
-        quantityOrder: userMedication.quantityOrder,
-        totalCost: userMedication.quantityOrder * parseInt(price)
+        
       }
 
       medications.push(medObj);
@@ -569,5 +396,78 @@ export const userGetMedicationController = async (
     // signup error
     res.status(500).json({ message: err.message });
   }
+
+}
+
+
+
+//user add prescription image/////////////
+export const userAddPrescriptionImageController = async (
+  req: any,
+  res: Response,
+) => {
+
+try {
+  const {
+    userMedicationId,
+  } = req.body;
+
+  const file = req.file;
+
+  // Check for validation errors
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const user = req.user;
+  const userId = user.id
+
+
+  //get user info from databas
+  const userExist = await UserModel.findOne({_id: userId});
+
+  if (!userExist) {
+    return res
+      .status(401)
+      .json({ message: "invalid credential" });
+  }
+
+  const existUserMedication = await UserMedicationModel.findOne({_id: userMedicationId ,userId});
+
+  if (!existUserMedication) {
+    return res
+        .status(401)
+        .json({ message: "invalid medication ID" });
+  }
+  
+  let prescriptionImg;
+
+  if (!file) {
+    return res
+        .status(401)
+        .json({ message: "provide image" });
+  }else{
+    const filename = uuidv4();
+    const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
+    prescriptionImg = result?.Location!;
+    console.log(result);
+    //medicationImg = uploadToS3(file);
+  }
+
+  existUserMedication.prescriptionImage = prescriptionImg;
+  existUserMedication.prescriptionStatus = true;
+  const updatedMedication = await existUserMedication.save();
+  return res.status(200).json({
+    message: "medication added succefully",
+    medication: updatedMedication
+  })
+
+
+} catch (err: any) {
+  // signup error
+  res.status(500).json({ message: err.message });
+}
 
 }

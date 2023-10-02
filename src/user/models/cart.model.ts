@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { IUserMedication } from "../interface/medication.interface";
+import { ICart } from "../interface/cart.interface";
 
-const UserMedicationSchema = new Schema(
+const CartSchema = new Schema(
     {
       userId: {
         type: Schema.Types.ObjectId, ref: 'UserReg',
@@ -11,14 +11,13 @@ const UserMedicationSchema = new Schema(
         type: Schema.Types.ObjectId, ref: 'Medication',
         required: true,
       },
-      prescriptionStatus: {
-        type: Boolean,
+      userMedicationId: {
+        type: Schema.Types.ObjectId, ref: 'UserMedication',
         required: true,
-        default: true
       },
-      prescriptionImage: {
-        type: String,
-        default: "",
+      quantityrquired: {
+        type: Number,
+        required: true,
       },
       createdAt: {
         type: Date,
@@ -35,6 +34,6 @@ const UserMedicationSchema = new Schema(
     }
   );
   
-  const UserMedicationModel = model<IUserMedication>("UserMedication", UserMedicationSchema);
+  const CartModel = model<ICart>("Cart", CartSchema);
   
-  export default UserMedicationModel;
+  export default CartModel;
