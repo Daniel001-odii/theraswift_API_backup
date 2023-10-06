@@ -16,7 +16,9 @@ import {
     validateSearchMedicationByNameParams,
     validateSearchMedicationByNameFRomParams,
     validateSearchMedicationByNameFRomDosageParams,
-    validateUserCartParams
+    validateUserCartParams,
+    validateUserCheckOutParams,
+    validateUserCheckOutVerificationParams
 } from "../middlewares/requestValidate.middleware";
 import { userEmailSignInController, userMobileNumberSignInController, userSignUpController } from "../controllers/regLogin.controller";
 import { userSendEmailController, userEmailVerificationController } from "../controllers/emailVerification.controller";
@@ -27,6 +29,8 @@ import {
     userAddMedicationController, 
     userAddPrescriptionImageController, 
     userGetMedicationController,   
+    userMedicatonRequiredPrescriptionController,   
+    userPrescriptionStatusController,   
     userRemoveMedicationController, 
     userSearchMedicationController, 
     userSearchMedicationNameController,
@@ -35,6 +39,7 @@ import {
 } from "../controllers/medication.controller";
 import { upload } from "../../utils/upload.utility";
 import { userAddMedicationToCartController, userCartListController, userDecreaseMedicationToCartController, userIncreaseMedicationToCartController, userRemoveMedicationToCartController } from "../controllers/cart.controlller";
+import { userCheckOutController, userCheckOutPaymentVerificationController } from "../controllers/checkOut.controller";
 
 
 router.post("/user_signup", validateSignupParams, userSignUpController ); // user signup
@@ -61,14 +66,17 @@ router.get("/seach_medication_name_form", validateSearchMedicationByNameFRomPara
 router.get("/seach_medication_name_form_dosage", validateSearchMedicationByNameFRomDosageParams, userSearchMedicationNameFormDosageController ); // user search for medication by name, form and dosage
 router.get("/get_user_medication", checkUserRole, userGetMedicationController ); // get all medication for specific user
 router.post("/add_prescription_image", upload.single('prescription'), checkUserRole,   userAddPrescriptionImageController ); // user add priscription image
-
-
+router.get("/check_user_prescription_status",  checkUserRole,   userPrescriptionStatusController ); // check user prescription for medication
+router.get("/get_user_medication_require_prescription",  checkUserRole, userMedicatonRequiredPrescriptionController ); // get user medication that required prescrition
 
 router.post("/add_to_cart", validateAddMedicationParams, checkUserRole,   userAddMedicationToCartController ); // user add medication to cartlist
 router.post("/increase_from_cart", validateUserCartParams, checkUserRole,   userIncreaseMedicationToCartController ); // user increase medication from cart list
 router.post("/decrease_from_cart", validateUserCartParams, checkUserRole, userDecreaseMedicationToCartController ); // user decrease medication in cart list
 router.post("/remove_from_cart", validateUserCartParams, checkUserRole,   userRemoveMedicationToCartController ); // user remove medication from cart list
 router.get("/user_cart", checkUserRole,   userCartListController ); // user get all cart list
+
+router.post("/checkout", validateUserCheckOutParams, checkUserRole, userCheckOutController ); //  user checkout
+router.post("/checkout/verification", validateUserCheckOutVerificationParams, checkUserRole, userCheckOutPaymentVerificationController ); //  user checkout
 
 
 export default router;

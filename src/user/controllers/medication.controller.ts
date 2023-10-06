@@ -407,67 +407,233 @@ export const userAddPrescriptionImageController = async (
   res: Response,
 ) => {
 
-try {
-  const {
-    userMedicationId,
-  } = req.body;
+  try {
+    const {
+      userMedicationId,
+    } = req.body;
 
-  const file = req.file;
+    const file = req.file;
 
-  // Check for validation errors
-  const errors = validationResult(req);
+    // Check for validation errors
+    const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-  const user = req.user;
-  const userId = user.id
+    const user = req.user;
+    const userId = user.id
 
 
-  //get user info from databas
-  const userExist = await UserModel.findOne({_id: userId});
+    //get user info from databas
+    const userExist = await UserModel.findOne({_id: userId});
 
-  if (!userExist) {
-    return res
-      .status(401)
-      .json({ message: "invalid credential" });
-  }
-
-  const existUserMedication = await UserMedicationModel.findOne({_id: userMedicationId ,userId});
-
-  if (!existUserMedication) {
-    return res
+    if (!userExist) {
+      return res
         .status(401)
-        .json({ message: "invalid medication ID" });
+        .json({ message: "invalid credential" });
+    }
+
+    const existUserMedication = await UserMedicationModel.findOne({_id: userMedicationId ,userId});
+
+    if (!existUserMedication) {
+      return res
+          .status(401)
+          .json({ message: "invalid medication ID" });
+    }
+    
+    let prescriptionImg;
+
+    if (!file) {
+      return res
+          .status(401)
+          .json({ message: "provide image" });
+    }else{
+      const filename = uuidv4();
+      const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
+      prescriptionImg = result?.Location!;
+      console.log(result);
+      //medicationImg = uploadToS3(file);
+    }
+
+    existUserMedication.prescriptionImage = prescriptionImg;
+    existUserMedication.prescriptionStatus = true;
+    const updatedMedication = await existUserMedication.save();
+    return res.status(200).json({
+      message: "prescription added succefully",
+      medication: updatedMedication
+    })
+
+
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
   }
-  
-  let prescriptionImg;
 
-  if (!file) {
-    return res
-        .status(401)
-        .json({ message: "provide image" });
-  }else{
-    const filename = uuidv4();
-    const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
-    prescriptionImg = result?.Location!;
-    console.log(result);
-    //medicationImg = uploadToS3(file);
-  }
-
-  existUserMedication.prescriptionImage = prescriptionImg;
-  existUserMedication.prescriptionStatus = true;
-  const updatedMedication = await existUserMedication.save();
-  return res.status(200).json({
-    message: "medication added succefully",
-    medication: updatedMedication
-  })
-
-
-} catch (err: any) {
-  // signup error
-  res.status(500).json({ message: err.message });
 }
+
+
+
+
+//check user prescriptions status/////////////
+export const userPrescriptionStatusController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+     
+    } = req.body;
+
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const user = req.user;
+    const userId = user.id
+
+
+    //get user info from databas
+    const userExist = await UserModel.findOne({_id: userId});
+
+    if (!userExist) {
+      return res
+        .status(401)
+        .json({ message: "invalid credential" });
+    }
+
+    const userMedications = await UserMedicationModel.find({userId});
+
+    if (userMedications.length < 1) {
+      return res
+        .status(401)
+        .json({ message: "no medication for this user" });
+    }
+
+    let prescriptionId = [];
+
+    for (let i = 0; i < userMedications.length; i++) {
+      const userMedication = userMedications[i];
+
+      const medication = await MedicationModel.findOne({_id: userMedication.medicationId});
+
+      if (medication?.prescriptionRequired == true && userMedication.prescriptionStatus == false) {
+
+          prescriptionId.push(userMedication._id);
+      }
+      
+    }
+
+    if (prescriptionId.length > 0) {
+      return res
+      .status(401)
+      .json({ 
+        checkoutStatus: false,
+        message: "some meidcation need prescription" 
+      });
+    }
+    
+    return res.status(200).json({
+      checkoutStatus: true,
+      message: "no issue with prescription",
+    })
+
+
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+
+
+
+//get user medication that required prescription/////////////
+export const userMedicatonRequiredPrescriptionController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+     
+    } = req.body;
+
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const user = req.user;
+    const userId = user.id
+
+
+    //get user info from databas
+    const userExist = await UserModel.findOne({_id: userId});
+
+    if (!userExist) {
+      return res
+        .status(401)
+        .json({ message: "invalid credential" });
+    }
+
+    const userMedications = await UserMedicationModel.find({userId});
+
+    if (userMedications.length < 1) {
+      return res
+        .status(401)
+        .json({ message: "no medication for this user" });
+    }
+
+    let prescriptionId = [];
+
+    for (let i = 0; i < userMedications.length; i++) {
+      const userMedication = userMedications[i];
+
+      const medication = await MedicationModel.findOne({_id: userMedication.medicationId});
+
+      if (medication?.prescriptionRequired == true && userMedication.prescriptionStatus == false) {
+
+        const presObj = {
+          medicationId: medication._id,
+          userMedicationId: userMedication._id,
+          nema: medication.name,
+          ingridient: medication.ingredient,
+          form: medication.form,
+          dosage: medication.strength,
+          quanty: medication.quantity,
+          price: medication.price,
+          medicationImage: medication.medicationImage,
+          medInfo: medication.medInfo
+        }
+          prescriptionId.push(presObj);
+      }
+      
+    }
+
+    if (prescriptionId.length < 1) {
+      return res
+      .status(401)
+      .json({ 
+        message: "no meidcation need prescription" 
+      });
+    }
+    
+    return res.status(200).json({
+      medications: prescriptionId
+    })
+
+
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
 
 }

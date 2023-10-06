@@ -49,9 +49,9 @@ const UserSchema = new Schema(
         type: Number,
         default: 0,
       },
-      totalMdicationCost:{
-        type: Number,
-        default: 0,
+      reference: {
+        type: String,
+        default: "",
       },
       createdAt: {
         type: Date,

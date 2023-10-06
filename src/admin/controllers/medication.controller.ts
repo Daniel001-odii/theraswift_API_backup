@@ -25,7 +25,8 @@ export const adminAddMedicationController = async (
       quantity,
       prescriptionRequired,
       form,
-      ingredient
+      ingredient,
+      medInfo
     } = req.body;
 
     // Check for validation errors
@@ -56,6 +57,7 @@ export const adminAddMedicationController = async (
       medicationImage: medicationImg,
       prescriptionRequired,
       ingredient,
+      medInfo: medInfo,
       form: form
     })
 
@@ -76,7 +78,8 @@ export const adminAddMedicationController = async (
         medicationImage: medicationImg,
         prescriptionRequired: savedMedication.prescriptionRequired,
         forms: savedMedication.form,
-        ingredient: savedMedication.ingredient
+        ingredient: savedMedication.ingredient,
+        medInfo: savedMedication.medInfo
       }
     })
   
@@ -107,7 +110,8 @@ export const adminEditMedicationController = async (
       quantity,
       prescriptionRequired,
       form,
-      ingredient
+      ingredient,
+      medInfo,
     } = req.body;
 
     // Check for validation errors
@@ -128,7 +132,8 @@ export const adminEditMedicationController = async (
       quantity: quantity,
       prescriptionRequired,
       form: form,
-      ingredient
+      ingredient,
+      medInfo
     },
     {new: true}
    );
@@ -154,7 +159,8 @@ export const adminEditMedicationController = async (
         medicationImage: updatedMedication.medicationImage,
         prescriptionRequired: updatedMedication.prescriptionRequired,
         forms: updatedMedication.form,
-        ingredient: updatedMedication.ingredient
+        ingredient: updatedMedication.ingredient,
+        medInfo: updatedMedication.medInfo
       }
     })
   
@@ -212,7 +218,8 @@ export const adminDeleteMedicationController = async (
         medicationImage: deletedMedication.medicationImage,
         prescriptionRequired: deletedMedication.prescriptionRequired,
         forms: deletedMedication.form,
-        ingridient: deletedMedication.ingredient
+        ingridient: deletedMedication.ingredient,
+        medInfo: deletedMedication.medInfo
       }
     })
   
@@ -243,7 +250,7 @@ export const getAllMedicationController = async (
 }
 
 
-//get all medications /////////////
+//get single medications /////////////
 export const getsingleMedicationController = async (
     req: any,
     res: Response,

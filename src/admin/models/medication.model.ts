@@ -31,6 +31,10 @@ const MedicationSchema = new Schema(
       ingredient: {
         type: String,
       },
+      medInfo: {
+        type: String,
+        default: "",
+      },
       createdAt: {
         type: Date,
         default: Date.now,

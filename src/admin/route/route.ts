@@ -5,7 +5,8 @@ import {
     validateEmail,
     validateMedicationDeleteParams,
     validateMedicationEditParams,
-    validateResetPassword
+    validateResetPassword,
+    validateUserParams
 } from "../middleware/requestValidate.middleware";
 
 import { adminSignInController } from "../controllers/regLogin.controller";
@@ -17,6 +18,7 @@ import { checkAdminRole } from "../middleware/rolechecker.middleware";
 import { adminAddMedicationController, adminDeleteMedicationController, adminEditMedicationController, getAllMedicationController, getPageMedicationController, getSpecificNumbereMedicationController, getTotalMedicationController, getsingleMedicationController } from "../controllers/medication.controller";
 import imgae from "../middleware/image.middleware";
 import { upload } from "../../utils/upload.utility";
+import { getAllUsersController, getPageUserDeatilController, getsingleUserController } from "../controllers/userDetail.controller";
 
 
 router.post("/admin_signin", validateAdminSigninParams, adminSignInController); // admin login
@@ -30,6 +32,12 @@ router.post("/admin_single_medication", validateMedicationDeleteParams, getsingl
 router.post("/number_medication", getSpecificNumbereMedicationController); // get specific number of medication
 router.post("/page_medication", getPageMedicationController); // get page of medication
 router.get("/total_medication", getTotalMedicationController); // get total medication
+
+router.get("/all_user", checkAdminRole, getAllUsersController); // get total medication
+router.get("/page_user", checkAdminRole, getPageUserDeatilController); // get total medication
+router.get("/single_user", validateUserParams, checkAdminRole, getsingleUserController); // get total medication
+
+
 
 
 export default router;

@@ -11,6 +11,7 @@ export interface IMedication extends Document {
   prescriptionRequired: boolean;
   form: string;
   ingredient: string;
+  medInfo: string;
   createdAt: Date;
   updatedAt: Date;
 }

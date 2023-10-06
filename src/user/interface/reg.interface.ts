@@ -12,7 +12,7 @@ export interface IUserReg extends Document {
   gender: string;
   refererCode: string;
   refererCredit: number;
-  totalMdicationCost: number;
+  reference: string;
   passwordOtp: {
     otp: string;
     createdTime: Date;

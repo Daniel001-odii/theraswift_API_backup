@@ -88,3 +88,11 @@ export const validateSearchMedicationByNameFRomDosageParams = [
 export const validateUserCartParams = [
   body("cartId").notEmpty(),
 ];
+
+export const validateUserCheckOutParams = [
+  body("deliveryDate").notEmpty(),
+];
+
+export const validateUserCheckOutVerificationParams = [
+  body("reference").notEmpty(),
+];

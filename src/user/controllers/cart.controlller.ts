@@ -292,7 +292,7 @@ try {
     const price: any = medication?.price
 
     const cartObj = {
-      userId: userId,
+      cartId: cart._id,
       medicationId: cart.medicationId,
       userMedicationId: cart.userMedicationId,
       name: medication?.name,

@@ -39,10 +39,15 @@ export const validateMedicationEditParams = [
     .withMessage("prescriptionRequired must be either true or false"),
   body("form").notEmpty(),
   body("ingredient").notEmpty(),
+  body("medInfo").notEmpty(),
 ];
 
 export const validateMedicationDeleteParams = [
   body("medicationId").notEmpty(),
+];
+
+export const validateUserParams = [
+  body("userId").notEmpty(),
 ];
 
 
