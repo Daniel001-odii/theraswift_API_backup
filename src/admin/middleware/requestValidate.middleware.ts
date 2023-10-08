@@ -50,5 +50,9 @@ export const validateUserParams = [
   body("userId").notEmpty(),
 ];
 
+export const validateOrderParams = [
+  body("orderId").notEmpty(),
+];
+
 
 

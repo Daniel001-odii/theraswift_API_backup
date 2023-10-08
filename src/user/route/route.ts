@@ -20,7 +20,7 @@ import {
     validateUserCheckOutParams,
     validateUserCheckOutVerificationParams
 } from "../middlewares/requestValidate.middleware";
-import { userEmailSignInController, userMobileNumberSignInController, userSignUpController } from "../controllers/regLogin.controller";
+import { userEmailSignInController, userMobileNumberSignInController, userSignUpController, userdetailController } from "../controllers/regLogin.controller";
 import { userSendEmailController, userEmailVerificationController } from "../controllers/emailVerification.controller";
 import { userPhoneNumberVerificationController, userSendPhoneNumberController } from "../controllers/phoneNumberVerification.controller";
 import { userEmailForgotPasswordController, userEmailResetPasswordController, userMobileForgotPasswordController, userMobileResetPasswordController } from "../controllers/forgotResetPassword.controller";
@@ -55,7 +55,7 @@ router.post("/forgot_password_mobile", validatePhoneNumberParams, userMobileForg
 router.post("/reset_password_mobile", validatePhoneNumberResetPasswordParams, userMobileResetPasswordController); // user reset password with mobile number
 router.post("/email_login", validateEmailLoginParams, userEmailSignInController ); // user login with email
 router.post("/mobile_login", validatePhoneLoginParams, userMobileNumberSignInController ); // user login  with mobile number 
-
+router.get("/user_detail", checkUserRole, userdetailController ); // get login user detail
 
 
 router.post("/add_medication", validateUserAddMedicationParams, checkUserRole,   userAddMedicationController ); // user add medication

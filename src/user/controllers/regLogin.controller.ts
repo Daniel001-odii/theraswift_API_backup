@@ -244,3 +244,60 @@ try {
 }
 
 }
+
+
+
+
+//get login user deatial/////////////
+export const userdetailController = async (
+  req: any,
+  res: Response,
+) => {
+
+try {
+  const {
+    mobileNumber,
+    password,
+  } = req.body;
+  // Check for validation errors
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const user = req.user;
+  const userId = user.id
+
+  //get user info from databas
+  const userExist = await UserModel.findOne({_id: userId});
+
+  if (!userExist) {
+    return res
+      .status(401)
+      .json({ message: "invalid credential" });
+  }
+
+  res.json({
+   user: {
+    id: userExist._id,
+    userId: userExist.userId,
+    email: userExist.email,
+    mobileNumber: userExist.mobileNumber,
+    firstName: userExist.firstName,
+    lastName: userExist.lastName,
+    dateOfbirth: userExist.dateOfBirth,
+    gender: userExist.gender,
+    refererCode: userExist.refererCode,
+    referereCredit: userExist.refererCredit,
+    reference: userExist.reference
+   }
+    
+  });
+
+} catch (err: any) {
+  // signup error
+  res.status(500).json({ message: err.message });
+}
+
+}
