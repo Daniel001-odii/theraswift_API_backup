@@ -53,6 +53,11 @@ const UserSchema = new Schema(
         type: String,
         default: "",
       },
+      operatingLocation: {
+        type: String,
+        enum: ["Lagos", "Ogun"],
+        required: true,
+      },
       createdAt: {
         type: Date,
         default: Date.now,

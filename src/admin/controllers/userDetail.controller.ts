@@ -27,6 +27,7 @@ export const getAllUsersController = async (
       refererCode: user.refererCode,
       refererCredit: user.refererCredit,
       reference: user.reference,
+      operatingLocation: user.operatingLocation
     }
 
     userArry.push(userObj);
@@ -82,6 +83,7 @@ export const getPageUserDeatilController = async (
           refererCode: user.refererCode,
           refererCredit: user.refererCredit,
           reference: user.reference,
+          operatingLocation: user.operatingLocation
         }
 
         userArry.push(userObj);
@@ -112,6 +114,13 @@ export const getsingleUserController = async (
       userId, 
     } = req.body;
 
+    // Check for validation errors
+    const errors = validationResult(req);
+  
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const user = await UserModel.findOne({_id: userId});
 
     const userObj = {
@@ -126,6 +135,7 @@ export const getsingleUserController = async (
       refererCode: user?.refererCode,
       refererCredit: user?.refererCredit,
       reference: user?.reference,
+      operatingLocation: user?.operatingLocation
   }
 
     return res.status(200).json({

@@ -13,6 +13,7 @@ export interface IUserReg extends Document {
   refererCode: string;
   refererCredit: number;
   reference: string;
+  operatingLocation: string;
   passwordOtp: {
     otp: string;
     createdTime: Date;

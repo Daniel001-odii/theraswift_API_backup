@@ -16,6 +16,9 @@ export const validateSignupParams = [
   body("gender")
     .isIn(["male", "female"])
     .withMessage("Gender must be either male or female"),
+  body("operatingLocation")
+  .isIn(["Lagos", "Ogun"])
+  .withMessage("operating location must be either Lagos or Ogun"),
 ];
 
 export const validateEmailParams = [
