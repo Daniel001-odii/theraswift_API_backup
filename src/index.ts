@@ -12,6 +12,7 @@ import { Server, Socket } from "socket.io";
 import http from "http";
 //import path from path
 //import chatSocketConfig from './sockets/chatMessageSocketsConfig'
+import chatSocketConfigUser from "./user/socket/socket";
 // import * as swaggerDocument from './swagger/swagger.json';
 // import swaggerUi from 'swagger-ui-express';
 
@@ -93,7 +94,7 @@ app.use("/admin", adminRoute);
 app.use("/user", userRoute);
 
 // Handle socket connections
-//chatSocketConfig(io);
+chatSocketConfigUser(io);
 
 // app initialized port
 const port = process.env.PORT || 3000;
