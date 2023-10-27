@@ -1,18 +1,18 @@
 import { Document, Types, ObjectId } from "mongoose";
 import { IDoctorReg, IPatientReg } from "./reg_interface";
+import { IMedication } from "../../admin/interface/medication.interface";
 
 export interface IPatientPrescription extends Document {
     _id: ObjectId;
-    drugName: string;
     dosage: string;
-    dosageForm: string;
     frequency: number;
     route: string;
     duration: string;
     status: string;
-    processingStatus: string;
     doctorId: IDoctorReg['_id'];
-    patientId: IPatientReg['_id']
+    patientId: IPatientReg['_id'];
+    medicationId: IMedication['_id'];
+    clinicCode: string;
     createdAt: Date;
     updatedAt: Date;
   }

@@ -30,6 +30,10 @@ const DoctorSchema = new Schema(
         enum: ["clinic", "hospital", "HMO"],
         required: true,
       },
+      clinicCode: {
+        type: String,
+        default: '',
+      },
       createdAt: {
         type: Date,
         default: Date.now,

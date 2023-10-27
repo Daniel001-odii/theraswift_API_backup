@@ -1,27 +1,43 @@
 import { Schema, model } from "mongoose";
-import { IPatientPrescription } from "../interface/prescription.interface";
+import { IPatientHmo } from "../interface/patientHmo.interface";
 
-const PatientPrescriptionSchema = new Schema(
+const PatientHmoSchema = new Schema(
     {
-      dosage: {
+      firstName: {
         type: String,
         required: true,
       },
-      frequency: {
+      surname: {
         type: String,
         required: true,
       },
-      route: {
+      phoneNumber: {
         type: String,
         required: true,
       },
-      duration: {
+      EnroleNumber: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      address: {
+        type: String,
+        required: true,
+      },
+      medicalCode: {
+        type: String,
+        required: true,
+      },
+      medicalRecord: {
         type: String,
         required: true,
       },
       status: {
         type: String,
-        enum: ["delivered", "pending"],
+        enum: ["pending", "approved", "denied"],
         required: true,
       },
       doctorId:{
@@ -30,12 +46,8 @@ const PatientPrescriptionSchema = new Schema(
       patientId:{
         type: Schema.Types.ObjectId, ref: 'PatientReg'
       },
-      medicationId: {
-        type: Schema.Types.ObjectId, ref: 'Medication'
-      },
-      clinicCode: {
-        type: String,
-        required: true,
+      hmoID:{
+        type: Schema.Types.ObjectId, ref: 'DoctorReg'
       },
       createdAt: {
         type: Date,
@@ -52,6 +64,6 @@ const PatientPrescriptionSchema = new Schema(
     }
   );
   
-  const PatientPrescriptionModel = model<IPatientPrescription>("PatientPrescription", PatientPrescriptionSchema);
+  const PatientHmoModel = model<IPatientHmo>("PatientHmo", PatientHmoSchema);
   
-  export default PatientPrescriptionModel;
+  export default PatientHmoModel;

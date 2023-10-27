@@ -6,9 +6,6 @@ const MedicationSchema = new Schema(
       name: {
         type: String,
       },
-      description: {
-        type: String,
-      },
       price: {
         type: String,
       },

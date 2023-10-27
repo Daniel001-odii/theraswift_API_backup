@@ -38,6 +38,10 @@ const PatientSchema = new Schema(
         type: String,
         default: '',
       },
+      hmo: {
+        type: String,
+        default: '',
+      },
       doctorId:{
         type: Schema.Types.ObjectId, ref: 'DoctorReg'
       },

@@ -47,11 +47,8 @@ export const validateResetPassword = [
 
 export const validateDrugPrescription = [
   body("patientId").notEmpty(),
-  body("drugName").notEmpty(),
+  body("medicationId").notEmpty(),
   body("dosage").notEmpty(),
-  body("dosageForm")
-  .isIn(["tablet", "capsule", "syrub", "drop"])
-  .withMessage("dosage form must be either tablet, capsule, syrub or drop"),
   body("frequency").notEmpty(),
   body("route").notEmpty(),
   body("duration").notEmpty(),

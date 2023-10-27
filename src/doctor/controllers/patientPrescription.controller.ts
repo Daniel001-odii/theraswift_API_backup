@@ -2,7 +2,11 @@ import { validationResult } from "express-validator";
 import { Request, Response} from "express";
 import PatientPrescriptionModel from "../modal/patientPrescription.model";
 import PatientModel from "../modal/patient_reg.model";
+import MedicationModel from "../../admin/models/medication.model";
+import DoctorModel from "..//modal/doctor_reg.modal";
 
+
+// doctor prescribe medication for patient
 export const patientPrescriptionController = async (
     req: any,
     res: Response
@@ -12,12 +16,11 @@ export const patientPrescriptionController = async (
 
         const {
             patientId,
-            drugName,
             dosage,
-            dosageForm,
             frequency,
             route,
-            duration
+            duration,
+            medicationId
         } = req.body;
 
         const errors = validationResult(req);
@@ -34,18 +37,25 @@ export const patientPrescriptionController = async (
             .json({ message: "patient does not exist" });
         }
 
+        //check if the medication is available
+        const medication = await MedicationModel.findOne({_id: medicationId});
+        if (!medication) {
+            return res
+            .status(401)
+            .json({ message: "medication dose not exist" });
+        }
+
         // Save patient prescription  to MongoDB
 
         const patientPrescription = new PatientPrescriptionModel({
-            drugName,
             dosage,
-            dosageForm,
             frequency,
             route,
             duration,
-            status: "not delivered",
-            processingStatus: "working on it",
+            status: "pending",
             doctorId: doctor._id,
+            clinicCode: doctor.clinicCode,
+            medicationId: medicationId,
             patientId
         });
 
@@ -66,14 +76,12 @@ export const patientPrescriptionController = async (
             
             },
             prescription:{
-                drugName: patientPrescriptionSaved.drugName,
                 dosage: patientPrescriptionSaved.dosage,
-                dosageForm: patientPrescriptionSaved.dosageForm,
                 frequency: patientPrescriptionSaved.frequency,
                 route: patientPrescriptionSaved.route,
                 duration: patientPrescriptionSaved.duration,
-                status: patientPrescriptionSaved.status,
-                processingStatus: patientPrescriptionSaved.processingStatus        
+                status: patientPrescriptionSaved.status, 
+                medicationId: patientPrescriptionSaved.medicationId      
             }
 
         })
@@ -84,6 +92,9 @@ export const patientPrescriptionController = async (
         
     }
 }
+
+
+//patient medication detail
 
 export const patientPrescriptionDetailController = async (
     req: any,
@@ -110,7 +121,8 @@ export const patientPrescriptionDetailController = async (
             .json({ message: "patient does not exist" });
         }
 
-        const patientPrescriptionDetail = await PatientPrescriptionModel.find({patientId: patientId}).sort({createdAt: -1});
+        const patientPrescriptionDetail = await PatientPrescriptionModel.find({patientId: patientId}).populate('medicationId', 'name price strength quantity medicationImage prescriptionRequired form ingredient medInfo').sort({createdAt: -1});
+
 
         return res.status(200).json({
             message: `precription succefully added for ${patientExists.firstName}`,
@@ -167,7 +179,7 @@ export const patientPrescriptionDeliveredDetailController = async (
             .json({ message: "patient does not exist" });
         }
 
-        const patientPrescriptionDetail = await PatientPrescriptionModel.find({patientId: patientId, status: "delivered"}).sort({createdAt: -1});
+        const patientPrescriptionDetail = await PatientPrescriptionModel.find({patientId: patientId, status: "delivered"}).populate('medicationId', 'name price strength quantity medicationImage prescriptionRequired form ingredient medInfo').sort({createdAt: -1});
 
         return res.status(200).json({
             message: `precription succefully added for ${patientExists.firstName}`,
@@ -223,7 +235,7 @@ export const patientPrescriptionDetailNOTDeliveredController = async (
             .json({ message: "patient does not exist" });
         }
 
-        const patientPrescriptionDetail = await PatientPrescriptionModel.find({patientId: patientId, status: "not delivered"}).sort({createdAt: -1});
+        const patientPrescriptionDetail = await PatientPrescriptionModel.find({patientId: patientId, status: "pending"}).populate('medicationId', 'name price strength quantity medicationImage prescriptionRequired form ingredient medInfo').sort({createdAt: -1});
 
         return res.status(200).json({
             message: `precription succefully added for ${patientExists.firstName}`,

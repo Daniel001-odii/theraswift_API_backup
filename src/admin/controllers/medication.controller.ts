@@ -19,7 +19,6 @@ export const adminAddMedicationController = async (
 
     const {
       name,
-      description,
       price,
       strength,
       quantity,
@@ -50,7 +49,6 @@ export const adminAddMedicationController = async (
     
     const medication = new MedicationModel({
       name,
-      description,
       price: price,
       strength: strength,
       quantity: quantity,
@@ -71,7 +69,6 @@ export const adminAddMedicationController = async (
       medication:{
         id: savedMedication._id,
         name: savedMedication.name,
-        description: savedMedication.description,
         price: savedMedication.price,
         strength: savedMedication.strength,
         quantity: savedMedication.quantity,
@@ -104,7 +101,6 @@ export const adminEditMedicationController = async (
     const {
       medicationId,
       name,
-      description,
       price,
       strength,
       quantity,
@@ -126,7 +122,6 @@ export const adminEditMedicationController = async (
     {_id: medicationId}, 
     {
       name,
-      description,
       price: price,
       strength: strength,
       quantity: quantity,
@@ -152,7 +147,6 @@ export const adminEditMedicationController = async (
       medication:{
         id: updatedMedication._id,
         name: updatedMedication.name,
-        description: updatedMedication.description,
         prices: updatedMedication.price,
         strengths: updatedMedication.strength,
         quantities: updatedMedication.quantity,
@@ -211,7 +205,6 @@ export const adminDeleteMedicationController = async (
       deletedMedication:{
         id: deletedMedication._id,
         name: deletedMedication.name,
-        description: deletedMedication.description,
         price: deletedMedication.price,
         strength: deletedMedication.strength,
         quantity: deletedMedication.quantity,

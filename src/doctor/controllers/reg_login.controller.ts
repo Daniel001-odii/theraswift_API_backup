@@ -4,6 +4,9 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import DoctotModel from "../modal/doctor_reg.modal";
 import PatientModel from "../modal/patient_reg.model";
+import DoctorWalletModel from "../modal/doctorWallet.model";
+import { uploadToS3 } from "../../utils/aws3.utility";
+import { v4 as uuidv4 } from "uuid";
 
 
 //doctor signup /////////////
@@ -22,6 +25,7 @@ export const doctorSignUpController = async (
       password,
       title,
       organization,
+      clinicCode,
     } = req.body;
     // Check for validation errors
     const errors = validationResult(req);
@@ -43,6 +47,11 @@ export const doctorSignUpController = async (
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10); 
 
+    let doctorClinicCode = '';
+    if (clinicCode != '') {
+      doctorClinicCode = clinicCode
+    }
+
     // Save user to MongoDB
     const doctor = new DoctotModel({
       email,
@@ -51,8 +60,17 @@ export const doctorSignUpController = async (
       password: hashedPassword,
       title,
       organization,
+      clinicCode: doctorClinicCode
     });
     let doctorSaved = await doctor.save();
+
+    // //create doctor wallet Account
+    // const doctorWallet = new DoctorWalletModel({
+    //   amount: 0,
+    //   doctorId: doctorSaved._id
+    // })
+
+    // await doctorWallet.save();
 
 
     res.json({
@@ -113,6 +131,7 @@ export const doctorSignInController = async (
       { 
         _id: doctor?._id,
         email: doctor.email,
+        clinicCode: doctor.clinicCode
       },
       process.env.JWT_SECRET_KEY!,
       { expiresIn: "24h" }
@@ -132,8 +151,7 @@ export const doctorSignInController = async (
 }
 
 
-//doctor signIn /////////////
-
+//doctor register patient /////////////
 export const doctorRegisterPatient = async (
   req: any,
   res: Response,
@@ -143,8 +161,6 @@ export const doctorRegisterPatient = async (
   try {
      // Access the uploaded file details
     const file = req.file;
-    const fileName = file?.filename;
-    const filePath = file?.path;
     let medicationImg;
 
     const {
@@ -154,7 +170,8 @@ export const doctorRegisterPatient = async (
       phoneNumber,
       gender,
       address,
-      dateOFBirth
+      dateOFBirth,
+      hmo,
     } = req.body;
     // Check for validation errors
     const errors = validationResult(req);
@@ -163,7 +180,22 @@ export const doctorRegisterPatient = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
+    if (!file) {
+      medicationImg = '';
+    }else{
+      const filename = uuidv4();
+      const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
+      medicationImg = result?.Location!;
+      console.log(result);
+      //medicationImg = uploadToS3(file);
+    }
+
     const doctor = req.doctor;
+    let patientHmo = '';
+
+    if (hmo != '') {
+      patientHmo = hmo;
+    }
 
     // Save patient to MongoDB
     const patient = new PatientModel({
@@ -174,18 +206,11 @@ export const doctorRegisterPatient = async (
       gender,
       address,
       dateOFBirth,
-      medicalRecord: fileName,
-      doctorId: doctor._id
+      medicalRecord: medicationImg,
+      doctorId: doctor._id,
+      hmo: patientHmo,
     });
     let patientSaved = await patient.save();
-
-    const domainName = req.hostname;
-    console.log(domainName);
-    if (!file) {
-      medicationImg = '';
-    } else {
-      medicationImg = `http://${domainName}:3000/public/uploads/${fileName}`;
-    }
     
 
     return res.status(200).json({

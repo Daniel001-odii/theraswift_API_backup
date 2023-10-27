@@ -9,6 +9,7 @@ export interface IDoctorReg extends Document {
   password: string;
   title: string;
   organization: string;
+  clinicCode: string,
   createdAt: Date;
   updatedAt: Date;
   // verified: boolean; 
@@ -32,6 +33,7 @@ export interface IPatientReg extends Document {
   dateOFBirth: string;
   address: string;
   medicalRecord: string;
+  hmo: string;
   doctorId: IDoctorReg['_id'];
   createdAt: Date;
   updatedAt: Date;

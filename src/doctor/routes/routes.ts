@@ -37,6 +37,8 @@ router.post("/doctor_signup", validateDoctorSignupParams, doctorSignUpController
 router.post("/doctor_signin", validateDoctorSigninParams, doctorSignInController); // doctor login
 router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworController); // doctor forgot password
 router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password
+
+
 router.post("/register_patient", checkDoctorRole, upload, validatePatientRegParams,  doctorRegisterPatient); // doctor register his patient
 router.get("/all_registered_patient",  checkDoctorRole, doctorGetAllRegisteredPatient); // doctor get all his patient
 router.post("/single_registered_patient", validatePatientid,  checkDoctorRole, doctorGetSingleRegisteredPatient); // doctor get single patient

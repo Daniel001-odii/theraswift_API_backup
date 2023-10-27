@@ -17,7 +17,6 @@ export const validateResetPassword = [
 
 export const validateMedicationParams = [
   body("name").notEmpty(),
-  body("description").notEmpty(),
   body("manufacturer").notEmpty(),
   body("price").notEmpty(),
   body("strength").notEmpty(),
@@ -25,12 +24,12 @@ export const validateMedicationParams = [
   body("prescriptionRequired")
     .isIn([true, false])
     .withMessage("prescriptionRequired must be either true or false"),
+  body("medInfo").notEmpty(),
 ];
 
 export const validateMedicationEditParams = [
   body("medicationId").notEmpty(),
   body("name").notEmpty(),
-  body("description").notEmpty(),
   body("price").notEmpty(),
   body("strength").notEmpty(),
   body("quantity").notEmpty(),
