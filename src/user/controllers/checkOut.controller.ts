@@ -16,6 +16,11 @@ export const userCheckOutController = async (
   try {
     const {
         deliveryDate,
+        firstName,
+        lastName,
+        dateOfBirth,
+        gender,
+        address,
     } = req.body;
 
     const file = req.file;
@@ -58,8 +63,7 @@ export const userCheckOutController = async (
         const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId})
         if (medication && userMedication) {
             
-            if (medication.prescriptionRequired == true && userMedication.prescriptionStatus == false) {
-                
+            if (medication.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {  
                 continue;
             }
 
@@ -73,6 +77,7 @@ export const userCheckOutController = async (
                 quantity: medication.quantity,
                 price: medication.price.toString(),
                 orderQuantity: cart.quantityrquired.toString(),
+                refill: cart.refill,
             }
 
             medArray.push(medicationObt);
@@ -103,6 +108,11 @@ export const userCheckOutController = async (
         
         const order = new OrderModel({
             userId,
+            firstName,
+            lastName,
+            dateOfBirth,
+            gender,
+            address,
             paymentId: "referer credit",
             medications: medArray,
             deliveryDate: deliveryDate,
@@ -160,7 +170,6 @@ export const userCheckOutController = async (
     });
 
     const data = await response.json();
-    console.log(data);
 
     if (!data.status) {
       return res
@@ -168,9 +177,45 @@ export const userCheckOutController = async (
         .json({ message: "unable to initailize payment" });
     }
 
+    // Extract day, month, year, and time components
+    const day = currentDate.getDate(); // Day of the month (1-31)
+    const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
+    const year = currentDate.getFullYear(); // Full year (e.g., 2023)
+    const hours = currentDate.getHours(); // Hours (0-23)
+    const minutes = currentDate.getMinutes(); // Minutes (0-59)
+    const seconds = currentDate.getSeconds(); // Seconds (0-59)
+
+    // Format the components as a string
+    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+      
+      const order = new OrderModel({
+          userId,
+          firstName,
+          lastName,
+          dateOfBirth,
+          gender,
+          address,
+          paymentId: data.data.reference,
+          medications: medArray,
+          deliveryDate: deliveryDate,
+          refererBunousUsed: refCre,
+          totalAmount: totalCost.toString(),
+          amountPaid: amount,
+          paymentDate: formattedDate,
+          deliveredStatus: 'pending'
+      })
+
+      const savedOrdered = await order.save();
+
+      userExist.refererCredit = 0;
+      userExist.reference = data.data.reference
+      await userExist.save();
+
     return res.status(200).json({
+      message: "payment successfully initialize", 
       url: data.data.authorization_url,
-      reference: data.data.reference
+      reference: data.data.reference,
+      orderId: savedOrdered._id
     })
     
     
@@ -188,92 +233,180 @@ export const userCheckOutPaymentVerificationController = async (
   res: Response,
 ) => {
 
-try {
-  const {
-    reference,
-  } = req.body;
+  try {
+    const {
+      reference,
+      orderId,
+    } = req.body;
 
-  const paystackSecretKey = 'sk_test_b27336978f0f77d84915d7e883b0f756f6d150e7';
+    const paystackSecretKey = 'sk_test_b27336978f0f77d84915d7e883b0f756f6d150e7';
 
-  const response = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${paystackSecretKey}`,
-    },
-  });
+    const response = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${paystackSecretKey}`,
+      },
+    });
 
-  const data = await response.json();
-  console.log(data);
+    const data = await response.json();
+    console.log(data);
 
-  if (!data.status) {
-    return res
-        .status(401)
-        .json({ message: "Transaction reference not found" });   
-  }
+    if (!data.status) {
+      return res
+          .status(401)
+          .json({ message: "Transaction reference not found" });   
+    }
 
 
-  if (data.data.gateway_response != 'Successful') {
-    return res
-    .status(401)
-    .json({ message: "transaction was not completed" });   
-  }
-  const user = req.user;
-  const userId = user.id
-
-  //get user info from databas
-  const userExist = await UserModel.findOne({_id: userId});
-
-  if (!userExist) {
-    return res
+    if (data.data.gateway_response != 'Successful') {
+      return res
       .status(401)
-      .json({ message: "invalid credential" });
+      .json({ message: "transaction was not completed" });   
+    }
+    const user = req.user;
+    const userId = user.id
+
+    //get user info from databas
+    const userExist = await UserModel.findOne({_id: userId});
+
+    if (!userExist) {
+      return res
+        .status(401)
+        .json({ message: "invalid credential" });
+    }
+
+    const userIdVeri = data.data.metadata.userId;
+
+    if (userId != userIdVeri) {
+      return res
+      .status(401)
+      .json({ message: "invalid user" });  
+    }
+
+    const order = await OrderModel.findOneAndUpdate({_id: orderId, paymentId: reference, userId: userId, deliveredStatus: "pending"}, {deliveredStatus: "not delivered"}, {new: true});
+
+    if (!order) {
+      return res
+      .status(401)
+      .json({ message: "order not fund" }); 
+    }
+    
+    return res.status(200).json({
+      message: "transaction verified successfully",
+      order
+    })
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
   }
 
-  const userIdVeri = data.data.metadata.userId;
-
-  if (userId != userIdVeri) {
-    return res
-    .status(401)
-    .json({ message: "invalid user" });  
-  }
-
-  const order = await OrderModel.findOne({userId, paymentId: data.data.reference });
-
-  if (order) {
-    return res
-    .status(401)
-    .json({ message: "transaction already verified" });  
-  }
-
-  const newOrder = new OrderModel({
-    userId: data.data.metadata.userId,
-    paymentId: data.data.reference,
-    medications: data.data.metadata.medications,
-    deliveryDate: data.data.metadata.deliveryDate,
-    refererBunousUsed: data.data.metadata.refererBunousUsed,
-    totalAmount: data.data.metadata.totalAmount,
-    amountPaid: data.data.amount / 100,
-    paymentDate: data.data.transaction_date,
-    deliveredStatus: 'not delivered'
-  })
-
-  const savedOrder = await newOrder.save();
-
-  userExist.refererCredit = 0;
-  userExist.reference = data.data.reference
-  await userExist.save();
-
-  
-  return res.status(200).json({
-    message: "transaction verified successfully",
-    data: savedOrder
-  })
-
-  
-
-} catch (err: any) {
-  // signup error
-  res.status(500).json({ message: err.message });
 }
+
+
+//user pending order /////////////
+export const userGetPendingOrderController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+    } = req.body;
+
+   
+    const user = req.user;
+    const userId = user.id
+
+    //get user info from databas
+    const userExist = await UserModel.findOne({_id: userId});
+
+    if (!userExist) {
+      return res
+        .status(401)
+        .json({ message: "invalid credential" });
+    }
+
+    const pendingOrder = await OrderModel.find({userId, deliveredStatus: "pending"})
+
+    return res.status(200).json({
+      pendingOrder
+    })
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+
+
+//user not delivered order /////////////
+export const userGetNotDeliveredOrderController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+    } = req.body;
+
+   
+    const user = req.user;
+    const userId = user.id
+
+    //get user info from databas
+    const userExist = await UserModel.findOne({_id: userId});
+
+    if (!userExist) {
+      return res
+        .status(401)
+        .json({ message: "invalid credential" });
+    }
+
+    const notDeliveredOrder = await OrderModel.find({userId, deliveredStatus: "not delivered"})
+
+    return res.status(200).json({
+      notDeliveredOrder
+    })
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+
+//user delivered order /////////////
+export const userGetDeliveredOrderController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+    } = req.body;
+
+   
+    const user = req.user;
+    const userId = user.id
+
+    //get user info from databas
+    const userExist = await UserModel.findOne({_id: userId});
+
+    if (!userExist) {
+      return res
+        .status(401)
+        .json({ message: "invalid credential" });
+    }
+
+    const deliveredOrder = await OrderModel.find({userId, deliveredStatus: "delivered"})
+
+    return res.status(200).json({
+      deliveredOrder
+    })
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
 
 }

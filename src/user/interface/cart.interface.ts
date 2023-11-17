@@ -9,6 +9,7 @@ export interface ICart extends Document {
     medicationId: IMedication['_id'];
     userMedicationId: IUserMedication['_id'];
     quantityrquired: number;
+    refill: string;
     createdAt: Date;
     updatedAt: Date; 
 }

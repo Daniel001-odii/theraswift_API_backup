@@ -20,7 +20,8 @@ import { adminAddMedicationController, adminDeleteMedicationController, adminEdi
 import imgae from "../middleware/image.middleware";
 import { upload } from "../../utils/upload.utility";
 import { getAllUsersController, getPageUserDeatilController, getsingleUserController } from "../controllers/userDetail.controller";
-import { DeliveredOrderController, getAllOrderDeliveredController, getAllOrderNotDeliveredController, getPageOrderDeliveredController, getPageOrderNotDeliveredController, getSingleOrderDeliveredController, getSingleOrderNotDeliveredController } from "../controllers/order.controller";
+import { DeliveredOrderController, getAllOrderDeliveredController, getAllOrderNotDeliveredController, getPageOrderDeliveredController, getPageOrderNotDeliveredController, getPageOrderNotpendingController, getSingleOrderDeliveredController, getSingleOrderNotDeliveredController } from "../controllers/order.controller";
+import { adminGetDeliverdDoctorOder, adminGetPaidDoctorOder, adminGetPendingDoctorOder } from "../controllers/orderFromDoctor.controller";
 
 
 router.post("/admin_signin", validateAdminSigninParams, adminSignInController); // admin login
@@ -49,8 +50,18 @@ router.get("/single_order_not_deliver", validateOrderParams, checkAdminRole, get
 router.get("/all_order_deliver", checkAdminRole, getAllOrderDeliveredController); // get total order delivered
 router.get("/page_order_deliver", checkAdminRole, getPageOrderDeliveredController); // get page order delivered
 router.get("/single_order_deliver", validateOrderParams, checkAdminRole, getSingleOrderDeliveredController); // get single oder delivered
+router.get("/pending order", checkAdminRole, getPageOrderNotpendingController); // get pending order
 router.post("/delivered_order", validateOrderParams, checkAdminRole, DeliveredOrderController); //  delivered order
 
+
+
+
+/////////////////////////////////
+//////// doctor ///////////////
+/////////////////////////////
+router.get("/doctor_order_pending", checkAdminRole, adminGetPendingDoctorOder); // get order from doctor that is pending
+router.get("/doctor_order_paid", checkAdminRole, adminGetPaidDoctorOder); // get order from doctor that is paid
+router.get("/doctor_order_delivered", checkAdminRole, adminGetDeliverdDoctorOder); // get order from doctor that is delived
 
 
 export default router;

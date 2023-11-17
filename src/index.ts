@@ -31,11 +31,14 @@ const csrfProtection = csrf({ cookie: true })
 const server = http.createServer(app);
 
 
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-  },
-});
+// const io = new Server(server, {
+//   cors: {
+//     origin: "*",
+//   },
+// });
+
+const io = new Server(server);
+
 
 
 const limiter = rateLimit({
@@ -99,6 +102,10 @@ chatSocketConfigUser(io);
 // app initialized port
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+// app.listen(port, () => {
+//   console.log(`Server listening on port ${port}`);
+// });
+
+server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

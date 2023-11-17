@@ -19,8 +19,8 @@ const MedicationSchema = new Schema(
         type: String,
       },
       prescriptionRequired: {
-        type: Boolean,
-        default: false,
+        type: String,
+        enum: ["required", "not required", "neccessary"],
       },
       form:{
         type: String,

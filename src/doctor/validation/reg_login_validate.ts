@@ -53,3 +53,20 @@ export const validateDrugPrescription = [
   body("route").notEmpty(),
   body("duration").notEmpty(),
 ];
+
+export const validatePatientPrescriptionidperson = [
+  body("prescriptionId").notEmpty(),
+];
+
+export const validatePatientOderHmoperson = [
+  body("patientId").notEmpty(),
+  body("firstName").notEmpty(),
+  body("surname").notEmpty(),
+  body("phoneNumber").notEmpty(),
+  body("EnroleNumber").notEmpty(),
+  body("email").notEmpty(),
+  body("address").notEmpty(),
+  body("medicalCode").notEmpty(),
+  body("medicalRecord").notEmpty(),
+  body("hmoID").notEmpty(),
+];

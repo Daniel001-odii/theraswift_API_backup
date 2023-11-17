@@ -1,27 +1,28 @@
 import { Schema, model } from "mongoose";
-import { ICart } from "../interface/cart.interface";
+import { IFamilyReg } from "../interface/familyMember.interface";
 
-const CartSchema = new Schema(
+const FamilySchema = new Schema(
     {
       userId: {
         type: Schema.Types.ObjectId, ref: 'UserReg',
         required: true,
       },
-      medicationId: {
-        type: Schema.Types.ObjectId, ref: 'Medication',
-        required: true,
-      },
-      userMedicationId: {
-        type: Schema.Types.ObjectId, ref: 'UserMedication',
-        required: true,
-      },
-      quantityrquired: {
-        type: Number,
-        required: true,
-      },
-      refill: {
+      firstName: {
         type: String,
-        default: "no",
+        required: true,
+      },
+      dateOfBirth: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+      gender: {
+        type: String,
+        enum: ["male", "female"],
+        required: true,
       },
       createdAt: {
         type: Date,
@@ -30,14 +31,13 @@ const CartSchema = new Schema(
       updatedAt: {
         type: Date,
         default: Date.now,
-      },
-
+      }, 
     },
     {
       timestamps: true,
     }
   );
   
-  const CartModel = model<ICart>("Cart", CartSchema);
+  const FamilyModel = model<IFamilyReg>("FamilyReg", FamilySchema);
   
-  export default CartModel;
+  export default FamilyModel;

@@ -12,7 +12,8 @@ interface AdminJoin {
     AdminId: string;
 }
 
-export default (io: Server) => {
+// export default (io: Server) => {
+export default (io: any) => {
 
   io.on('connection', (socket: Socket) => {
 

@@ -1,27 +1,27 @@
 import { Schema, model } from "mongoose";
-import { ICart } from "../interface/cart.interface";
+import { IAddress } from "../interface/address.interface";
 
-const CartSchema = new Schema(
+const AddressSchema = new Schema(
     {
       userId: {
         type: Schema.Types.ObjectId, ref: 'UserReg',
         required: true,
       },
-      medicationId: {
-        type: Schema.Types.ObjectId, ref: 'Medication',
-        required: true,
-      },
-      userMedicationId: {
-        type: Schema.Types.ObjectId, ref: 'UserMedication',
-        required: true,
-      },
-      quantityrquired: {
-        type: Number,
-        required: true,
-      },
-      refill: {
+      streetAddress: {
         type: String,
-        default: "no",
+        required: true,
+      },
+      streetNO: {
+        type: String,
+        required: true,
+      },
+      LGA: {
+        type: String,
+        required: true,
+      },
+      DeliveryInstruction: {
+        type: String,
+        required: true,
       },
       createdAt: {
         type: Date,
@@ -30,14 +30,13 @@ const CartSchema = new Schema(
       updatedAt: {
         type: Date,
         default: Date.now,
-      },
-
+      }, 
     },
     {
       timestamps: true,
     }
   );
   
-  const CartModel = model<ICart>("Cart", CartSchema);
+  const UserAddressModel = model<IAddress>("UserAddress", AddressSchema);
   
-  export default CartModel;
+  export default UserAddressModel;

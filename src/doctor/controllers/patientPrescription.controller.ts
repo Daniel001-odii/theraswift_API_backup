@@ -264,3 +264,42 @@ export const patientPrescriptionDetailNOTDeliveredController = async (
         
     }
 }
+
+
+// doctor remove patient medication
+export const doctorRemovepatientPrescriptionController = async (
+    req: any,
+    res: Response
+) => {
+    try {
+        const doctor = req.doctor;
+
+        const {
+            prescriptionId,
+        } = req.body;
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
+       const removePrescription = await PatientPrescriptionModel.findOneAndDelete({_id: prescriptionId}, {new: true});
+
+       if (!removePrescription) {
+        return res.status(401)
+        .json({ message: "prescription not available" });
+       }
+
+       return res.status(200).json({
+        message: "prescription deleted successfuuy",
+        deletedMedication: removePrescription
+      })
+      
+    } catch (err: any) {
+        // signup error
+        res.status(500).json({ message: err.message });
+
+        
+    }
+}

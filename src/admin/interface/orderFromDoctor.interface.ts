@@ -1,36 +1,37 @@
 import { Document, Types, ObjectId } from "mongoose";
-import { IUserReg } from "../../user/interface/reg.interface";
+import { IDoctorReg, IPatientReg } from "../../doctor/interface/reg_interface";
 
 
 interface Medication {
     meidcationId: string;
     name: string;
     form: string;
-    dosage: string;
+    strength: string;
     quantity: string;
     price: string;
     orderQuantity: number;
-    refill: string;
+    dosage: string;
+    frequency: number;
+    route: string;
+    duration: string;
 }
 
 export interface MedicationDocument extends Medication, Document {}
 
 export interface IOrder extends Document {
   _id: ObjectId;
-  userId: IUserReg['_id'];
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  gender: string;
-  address: string;
+  patientId: IPatientReg['_id'];
+  doctortId: IDoctorReg['_id'];
+  clinicCode: string,
   paymentId: string;
   medications: MedicationDocument[];
   deliveryDate: string;
-  refererBunousUsed: string;
   totalAmount: string;
   amountPaid: string;
   paymentDate: string;
-  deliveredStatus: string;
+  methodOfPayment: string;
+  hmoName: string;
+  status: string;
   createdAt: Date;
   updatedAt: Date;
 }

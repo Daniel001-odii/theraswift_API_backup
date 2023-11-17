@@ -1,49 +1,41 @@
 import { Schema, model } from "mongoose";
-import { MedicationDocument, IOrder } from "../interface/order.interface";
+import { MedicationDocument, IOrder } from "../interface/orderFromDoctor.interface";
 
 
 const medicationSchema = new Schema<MedicationDocument>({
     meidcationId: String,
     name: String,
     form: String,
-    dosage: String,
+    strength: String,
     quantity: String,
     price: String,
     orderQuantity: Number,
-    refill: String
+    dosage: String,
+    frequency: Number,
+    route: String,
+    duration: String,
 });
 
 
 const OrderSchema = new Schema(
     {
-      userId: {
-        type: Schema.Types.ObjectId, ref: 'UserReg',
+      patientId: {
+        type: Schema.Types.ObjectId, ref: 'PatientReg',
+        required: true,
+      },
+      doctortId: {
+        type: Schema.Types.ObjectId, ref: 'DoctorReg',
+        required: true,
+      },
+      clinicCode: {
+        type: String,
         required: true,
       },
       paymentId: {
         type: String,
       },
-      firstName: {
-        type: String,
-      },
-      lastName: {
-        type: String,
-      },
-      dateOfBirth: {
-        type: String,
-      },
-      gender: {
-        type: String,
-        enum: ["male", "female"],
-      },
-      address: {
-        type: String,
-      },
       medications: [medicationSchema],
       deliveryDate: {
-        type: String,
-      },
-      refererBunousUsed: {
         type: String,
       },
       totalAmount: {
@@ -55,9 +47,18 @@ const OrderSchema = new Schema(
       paymentDate:{
         type: String,
       },
-      deliveredStatus: {
+      methodOfPaymen: {
         type: String,
-        enum: ["delivered", "pending", "not delivered"],
+        enum: ["HMO", "pocket"],
+        required: true,
+      },
+      hmoName: {
+        type: String,
+        default: "",
+      },
+      status: {
+        type: String,
+        enum: ["pending", "paid", "delivered"],
       },
       createdAt: {
         type: Date,
@@ -74,6 +75,6 @@ const OrderSchema = new Schema(
     }
   );
   
-  const OrderModel = model<IOrder>("Order", OrderSchema);
+  const OrderFormDoctorModel = model<IOrder>("OrderFromDoctor", OrderSchema);
   
-  export default OrderModel;
+  export default OrderFormDoctorModel;

@@ -18,15 +18,22 @@ import {
     validateSearchMedicationByNameFRomDosageParams,
     validateUserCartParams,
     validateUserCheckOutParams,
-    validateUserCheckOutVerificationParams
+    validateUserCheckOutVerificationParams,
+    validatefamilymemberParams,
+    validateAddressParams
 } from "../middlewares/requestValidate.middleware";
-import { userEmailSignInController, userMobileNumberSignInController, userSignUpController, userdetailController } from "../controllers/regLogin.controller";
+import { 
+    userAddAddressController,
+     userAddHmoController,
+     userEmailSignInController,
+     userGetAddressController, userGetHmoController, userGetMemberController, userMobileNumberSignInController, userRegistMemberController, userSignUpController, userdetailController } from "../controllers/regLogin.controller";
 import { userSendEmailController, userEmailVerificationController } from "../controllers/emailVerification.controller";
 import { userPhoneNumberVerificationController, userSendPhoneNumberController } from "../controllers/phoneNumberVerification.controller";
 import { userEmailForgotPasswordController, userEmailResetPasswordController, userMobileForgotPasswordController, userMobileResetPasswordController } from "../controllers/forgotResetPassword.controller";
 import { checkUserRole } from "../middlewares/roleChecker.middleware";
 import { 
     userAddMedicationController, 
+    userAddMedicationThroughImageController, 
     userAddPrescriptionImageController, 
     userGetMedicationController,   
     userMedicatonRequiredPrescriptionController,   
@@ -38,8 +45,8 @@ import {
     userSearchMedicationNameFormDosageController
 } from "../controllers/medication.controller";
 import { upload } from "../../utils/upload.utility";
-import { userAddMedicationToCartController, userCartListController, userDecreaseMedicationToCartController, userIncreaseMedicationToCartController, userRemoveMedicationToCartController } from "../controllers/cart.controlller";
-import { userCheckOutController, userCheckOutPaymentVerificationController } from "../controllers/checkOut.controller";
+import { userAddMedicationToCartController, userCartListController, userDecreaseMedicationToCartController, userIncreaseMedicationToCartController, userRefillStatusCartController, userRemoveMedicationToCartController } from "../controllers/cart.controlller";
+import { userCheckOutController, userCheckOutPaymentVerificationController, userGetDeliveredOrderController, userGetNotDeliveredOrderController, userGetPendingOrderController } from "../controllers/checkOut.controller";
 
 
 router.post("/user_signup", validateSignupParams, userSignUpController ); // user signup
@@ -56,6 +63,12 @@ router.post("/reset_password_mobile", validatePhoneNumberResetPasswordParams, us
 router.post("/email_login", validateEmailLoginParams, userEmailSignInController ); // user login with email
 router.post("/mobile_login", validatePhoneLoginParams, userMobileNumberSignInController ); // user login  with mobile number 
 router.get("/user_detail", checkUserRole, userdetailController ); // get login user detail
+router.post("/family_member", validatefamilymemberParams, checkUserRole, userRegistMemberController ); // regiter fimily member
+router.get("/family_detail", checkUserRole, userGetMemberController ); // get family member detail
+router.post("/new_address", validateAddressParams, checkUserRole, userAddAddressController ); // enter new adress
+router.get("/addresss_detail", checkUserRole, userGetAddressController ); // get address detail
+router.post("/add_hmo", upload.single('hmoImg'), checkUserRole, userAddHmoController ); // user add hmo
+router.get("/hmo_detail", checkUserRole, userGetHmoController ); // get hmo detail
 
 
 router.post("/add_medication", validateUserAddMedicationParams, checkUserRole,   userAddMedicationController ); // user add medication
@@ -68,15 +81,20 @@ router.get("/get_user_medication", checkUserRole, userGetMedicationController );
 router.post("/add_prescription_image", upload.single('prescription'), checkUserRole,   userAddPrescriptionImageController ); // user add priscription image
 router.get("/check_user_prescription_status",  checkUserRole,   userPrescriptionStatusController ); // check user prescription for medication
 router.get("/get_user_medication_require_prescription",  checkUserRole, userMedicatonRequiredPrescriptionController ); // get user medication that required prescrition
+router.post("/add_medication_by_img", upload.single('prescription'),  checkUserRole, userAddMedicationThroughImageController ); // user add medication by image
 
 router.post("/add_to_cart", validateAddMedicationParams, checkUserRole,   userAddMedicationToCartController ); // user add medication to cartlist
 router.post("/increase_from_cart", validateUserCartParams, checkUserRole,   userIncreaseMedicationToCartController ); // user increase medication from cart list
 router.post("/decrease_from_cart", validateUserCartParams, checkUserRole, userDecreaseMedicationToCartController ); // user decrease medication in cart list
 router.post("/remove_from_cart", validateUserCartParams, checkUserRole,   userRemoveMedicationToCartController ); // user remove medication from cart list
-router.get("/user_cart", checkUserRole,   userCartListController ); // user get all cart list
+router.get("/user_cart", checkUserRole, userCartListController ); // user get all cart list
+router.get("/cart_refill_status", validateUserCartParams, checkUserRole,   userRefillStatusCartController ); // change medication refill in cart
 
 router.post("/checkout", validateUserCheckOutParams, checkUserRole, userCheckOutController ); //  user checkout
 router.post("/checkout/verification", validateUserCheckOutVerificationParams, checkUserRole, userCheckOutPaymentVerificationController ); //  user checkout
+router.get("/pending_order", checkUserRole, userGetPendingOrderController ); // pending order
+router.get("/not_delevered_order", checkUserRole, userGetNotDeliveredOrderController ); // not delivered order
+router.get("/delivered_order", checkUserRole, userGetDeliveredOrderController ); //  delivered order
 
 
 export default router;

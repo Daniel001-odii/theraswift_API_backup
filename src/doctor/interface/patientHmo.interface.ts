@@ -1,5 +1,8 @@
 import { Document, Types, ObjectId } from "mongoose";
 import { IDoctorReg, IPatientReg } from "./reg_interface";
+import { IOrder } from "../../admin/interface/orderFromDoctor.interface";
+
+
 
 export interface IPatientHmo extends Document {
     _id: ObjectId;
@@ -15,6 +18,8 @@ export interface IPatientHmo extends Document {
     doctorId: IDoctorReg['_id'];
     patientId: IPatientReg['_id']
     hmoID: IDoctorReg['_id'];
+    clinicCode: string;
+    orderId: IOrder['_id'];
     createdAt: Date;
     updatedAt: Date;
   }

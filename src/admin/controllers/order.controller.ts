@@ -11,7 +11,15 @@ export const getAllOrderNotDeliveredController = async (
 ) => {
   try {
 
-    const orders = await OrderModel.find({deliveredStatus: "not delivered"}).sort({createdAt: -1});
+    const page = parseInt(req.body.page) || 1; // Page number, default to 1
+    const limit = parseInt(req.body.limit) || 50; // Documents per page, default to 10
+
+    const skip = (page - 1) * limit; // Calculate how many documents to skip= req.body;
+
+    const orders = await OrderModel.find({deliveredStatus: "not delivered"})
+    .sort({createdAt: -1})
+    .skip(skip)
+    .limit(limit);;
 
    let orderArry = [];
    for (let i = 0; i < orders.length; i++) {
@@ -29,14 +37,7 @@ export const getAllOrderNotDeliveredController = async (
       lastName: user?.lastName,
       mobileNumber: user?.mobileNumber,
       gender: user?.gender,
-      paymentId: order.paymentId,
-      medications: order.medications,
-      deliveryDate: order.deliveryDate,
-      refererBunousUsed: order.refererBunousUsed,
-      totalAmount: order.totalAmount,
-      amountPaid: order.amountPaid,
-      paymentDate: order.paymentDate,
-      deliveredStatus: order.deliveredStatus
+      order
     }
 
     orderArry.push(orderObj);
@@ -55,7 +56,7 @@ export const getAllOrderNotDeliveredController = async (
 }
 
 
-//get all order not deliver /////////////
+//get all page order not deliver /////////////
 export const getPageOrderNotDeliveredController = async (
     req: any,
     res: Response,
@@ -63,7 +64,7 @@ export const getPageOrderNotDeliveredController = async (
   try {
 
     const page = parseInt(req.body.page) || 1; // Page number, default to 1
-    const limit = parseInt(req.body.limit) || 10; // Documents per page, default to 10
+    const limit = parseInt(req.body.limit) || 50; // Documents per page, default to 10
 
     const skip = (page - 1) * limit; // Calculate how many documents to skip
 
@@ -89,14 +90,7 @@ export const getPageOrderNotDeliveredController = async (
       lastName: user?.lastName,
       mobileNumber: user?.mobileNumber,
       gender: user?.gender,
-      paymentId: order.paymentId,
-      medications: order.medications,
-      deliveryDate: order.deliveryDate,
-      refererBunousUsed: order.refererBunousUsed,
-      totalAmount: order.totalAmount,
-      amountPaid: order.amountPaid,
-      paymentDate: order.paymentDate,
-      deliveredStatus: order.deliveredStatus
+      order
     }
 
     orderArry.push(orderObj);
@@ -105,7 +99,7 @@ export const getPageOrderNotDeliveredController = async (
 
     return res.status(200).json({
         message: "success",
-        users: orderArry,
+        orders: orderArry,
         currentPage: page,
         totalPages: Math.ceil(totalOrders / limit),
     })
@@ -152,21 +146,14 @@ export const getSingleOrderNotDeliveredController = async (
       lastName: user?.lastName,
       mobileNumber: user?.mobileNumber,
       gender: user?.gender,
-      paymentId: order?.paymentId,
-      medications: order?.medications,
-      deliveryDate: order?.deliveryDate,
-      refererBunousUsed: order?.refererBunousUsed,
-      totalAmount: order?.totalAmount,
-      amountPaid: order?.amountPaid,
-      paymentDate: order?.paymentDate,
-      deliveredStatus: order?.deliveredStatus
+      order
     }
 
     
 
     return res.status(200).json({
         message: "success",
-        users: orderObj
+        order: orderObj
     })
  
   } catch (err: any) {
@@ -203,14 +190,7 @@ export const getAllOrderDeliveredController = async (
       lastName: user?.lastName,
       mobileNumber: user?.mobileNumber,
       gender: user?.gender,
-      paymentId: order.paymentId,
-      medications: order.medications,
-      deliveryDate: order.deliveryDate,
-      refererBunousUsed: order.refererBunousUsed,
-      totalAmount: order.totalAmount,
-      amountPaid: order.amountPaid,
-      paymentDate: order.paymentDate,
-      deliveredStatus: order.deliveredStatus
+     order
     }
 
     orderArry.push(orderObj);
@@ -219,7 +199,7 @@ export const getAllOrderDeliveredController = async (
 
     return res.status(200).json({
         message: "success",
-       users: orderArry
+       orders: orderArry
     })
  
   } catch (err: any) {
@@ -263,14 +243,7 @@ export const getPageOrderDeliveredController = async (
       lastName: user?.lastName,
       mobileNumber: user?.mobileNumber,
       gender: user?.gender,
-      paymentId: order.paymentId,
-      medications: order.medications,
-      deliveryDate: order.deliveryDate,
-      refererBunousUsed: order.refererBunousUsed,
-      totalAmount: order.totalAmount,
-      amountPaid: order.amountPaid,
-      paymentDate: order.paymentDate,
-      deliveredStatus: order.deliveredStatus
+      order
     }
 
     orderArry.push(orderObj);
@@ -279,7 +252,7 @@ export const getPageOrderDeliveredController = async (
 
     return res.status(200).json({
         message: "success",
-        users: orderArry,
+        orders: orderArry,
         currentPage: page,
         totalPages: Math.ceil(totalOrders / limit),
     })
@@ -326,21 +299,12 @@ export const getSingleOrderDeliveredController = async (
       lastName: user?.lastName,
       mobileNumber: user?.mobileNumber,
       gender: user?.gender,
-      paymentId: order?.paymentId,
-      medications: order?.medications,
-      deliveryDate: order?.deliveryDate,
-      refererBunousUsed: order?.refererBunousUsed,
-      totalAmount: order?.totalAmount,
-      amountPaid: order?.amountPaid,
-      paymentDate: order?.paymentDate,
-      deliveredStatus: order?.deliveredStatus
+      order
     }
-
-    
 
     return res.status(200).json({
         message: "success",
-        users: orderObj
+        order: orderObj
     })
  
   } catch (err: any) {
@@ -352,7 +316,65 @@ export const getSingleOrderDeliveredController = async (
 
 
 
-//delivered order /////////////
+//get all page order pending /////////////
+export const getPageOrderNotpendingController = async (
+  req: any,
+  res: Response,
+) => {
+try {
+
+  const page = parseInt(req.body.page) || 1; // Page number, default to 1
+  const limit = parseInt(req.body.limit) || 50; // Documents per page, default to 10
+
+  const skip = (page - 1) * limit; // Calculate how many documents to skip
+
+  const totalOrders = await OrderModel.countDocuments({deliveredStatus: "pending"}); // Get the total number of documents
+
+  const orders = await OrderModel.find({deliveredStatus: "pending"}).sort({createdAt: -1})
+  .skip(skip)
+  .limit(limit);
+
+ let orderArry = [];
+ for (let i = 0; i < orders.length; i++) {
+  const order = orders[i];
+
+  const user = await UserModel.findOne({_id: order.userId});
+
+  const orderObj = {
+    orderId: order._id,  
+    id: user?._id,
+    userId: user?.userId,
+    email: user?.email,
+    firstName: user?.firstName, 
+    dateOfBirth: user?.dateOfBirth,
+    lastName: user?.lastName,
+    mobileNumber: user?.mobileNumber,
+    gender: user?.gender,
+    order
+  }
+
+  orderArry.push(orderObj);
+  
+ }
+
+  return res.status(200).json({
+      message: "success",
+      orders: orderArry,
+      currentPage: page,
+      totalPages: Math.ceil(totalOrders / limit),
+  })
+
+} catch (err: any) {
+  // signup error
+  res.status(500).json({ message: err.message });
+}
+}
+
+
+
+
+
+// add press delivered order /////////////
 export const DeliveredOrderController = async (
     req: any,
     res: Response,
@@ -368,7 +390,6 @@ export const DeliveredOrderController = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
    
     const order = await OrderModel.findOne({_id: orderId, deliveredStatus: "not delivered"});
 
@@ -392,21 +413,14 @@ export const DeliveredOrderController = async (
       lastName: user?.lastName,
       mobileNumber: user?.mobileNumber,
       gender: user?.gender,
-      paymentId: order?.paymentId,
-      medications: order?.medications,
-      deliveryDate: order?.deliveryDate,
-      refererBunousUsed: order?.refererBunousUsed,
-      totalAmount: order?.totalAmount,
-      amountPaid: order?.amountPaid,
-      paymentDate: order?.paymentDate,
-      deliveredStatus: orderDelivered?.deliveredStatus
+     order
     }
 
     
 
     return res.status(200).json({
         message: "order Successfully delivered",
-        users: orderObj
+        order: orderObj
     })
  
   } catch (err: any) {

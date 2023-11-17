@@ -5,6 +5,7 @@ import UserMedicationModel from "../models/medication.model";
 import MedicationModel from "../../admin/models/medication.model";
 import { uploadToS3 } from "../../utils/aws3.utility";
 import { v4 as uuidv4 } from "uuid";
+import PatientMedicationByImage from "../models/medicationByImage.model";
 
 //user add medication /////////////
 export const userAddMedicationController = async (
@@ -262,7 +263,7 @@ export const userSearchMedicationNameController = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const medications =  await MedicationModel.find({name});
+    const medications =  await MedicationModel.find({name: { $regex: name, $options: 'i' }});
     return res.status(200).json({
       medications
     })
@@ -521,7 +522,7 @@ export const userPrescriptionStatusController = async (
 
       const medication = await MedicationModel.findOne({_id: userMedication.medicationId});
 
-      if (medication?.prescriptionRequired == true && userMedication.prescriptionStatus == false) {
+      if (medication?.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {
 
           prescriptionId.push(userMedication._id);
       }
@@ -599,7 +600,7 @@ export const userMedicatonRequiredPrescriptionController = async (
 
       const medication = await MedicationModel.findOne({_id: userMedication.medicationId});
 
-      if (medication?.prescriptionRequired == true && userMedication.prescriptionStatus == false) {
+      if (medication?.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {
 
         const presObj = {
           medicationId: medication._id,
@@ -637,3 +638,75 @@ export const userMedicatonRequiredPrescriptionController = async (
   }
 
 }
+
+
+
+//user add medication through image/////////////
+export const userAddMedicationThroughImageController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+    } = req.body;
+
+    const file = req.file;
+
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const user = req.user;
+    const userId = user.id
+
+
+    //get user info from databas
+    const userExist = await UserModel.findOne({_id: userId});
+
+    if (!userExist) {
+      return res
+        .status(401)
+        .json({ message: "invalid credential" });
+    }
+
+   
+    
+    let prescriptionImg;
+
+    if (!file) {
+      return res
+          .status(401)
+          .json({ message: "provide image" });
+    }else{
+      const filename = uuidv4();
+      const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
+      prescriptionImg = result?.Location!;
+      
+    }
+
+    const patientMedImg = new PatientMedicationByImage({
+      userId: userId,
+      patientMedicationImage: prescriptionImg
+    });
+
+    const savePatientMedImg = await patientMedImg.save()
+
+  
+    return res.status(200).json({
+      message: "prescription added succefully",
+      medication: savePatientMedImg
+    })
+
+
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+

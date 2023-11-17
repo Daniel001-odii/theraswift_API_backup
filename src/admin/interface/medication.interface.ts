@@ -7,7 +7,7 @@ export interface IMedication extends Document {
   strength: string;
   quantity: string;
   medicationImage: string;
-  prescriptionRequired: boolean;
+  prescriptionRequired: string;
   form: string;
   ingredient: string;
   medInfo: string;

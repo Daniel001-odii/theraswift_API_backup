@@ -94,8 +94,31 @@ export const validateUserCartParams = [
 
 export const validateUserCheckOutParams = [
   body("deliveryDate").notEmpty(),
+  body("firstName").notEmpty(),
+  body("dateOfBirth").notEmpty(),
+  body("address").notEmpty(),
+  body("lastName").notEmpty(),
+  body("gender")
+  .isIn(["male", "female"])
 ];
 
 export const validateUserCheckOutVerificationParams = [
   body("reference").notEmpty(),
+  body("orderId").notEmpty(),
+];
+
+export const validatefamilymemberParams = [
+  body("firstName").notEmpty(),
+  body("dateOfBirth").notEmpty(),
+  body("lastName").notEmpty(),
+  body("gender")
+    .isIn(["male", "female"])
+    .withMessage("Gender must be either male or female"),
+];
+
+export const validateAddressParams = [
+  body("streetAddress").notEmpty(),
+  body("streetNO").notEmpty(),
+  body("LGA").notEmpty(),
+  body("DeliveryInstruction").notEmpty(),
 ];

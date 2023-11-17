@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { IPatientHmo } from "../interface/patientHmo.interface";
+import { IPatientHmo, } from "../interface/patientHmo.interface";
 
 const PatientHmoSchema = new Schema(
     {
@@ -48,6 +48,13 @@ const PatientHmoSchema = new Schema(
       },
       hmoID:{
         type: Schema.Types.ObjectId, ref: 'DoctorReg'
+      },
+      clinicCode: {
+        type: String,
+        required: true,
+      },
+      orderId: {
+        type: Schema.Types.ObjectId, ref: 'OrderFromDoctor'
       },
       createdAt: {
         type: Date,

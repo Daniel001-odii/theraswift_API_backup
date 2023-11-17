@@ -304,6 +304,7 @@ try {
       medicationImage: medication?.medicationImage,
       quantityrquired: cart.quantityrquired,
       totalCost: cart.quantityrquired * parseInt(price),
+      refill: cart.refill,
     }
     
     cartLists.push(cartObj);
@@ -316,6 +317,64 @@ try {
       overallCost 
   })
 
+
+} catch (err: any) {
+  // signup error
+  res.status(500).json({ message: err.message });
+}
+
+}
+
+
+//user change refill status of medication in cart/////////////
+export const userRefillStatusCartController = async (
+  req: any,
+  res: Response,
+) => {
+
+try {
+  const {
+      cartId,
+  } = req.body;
+
+  // Check for validation errors
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const user = req.user;
+  const userId = user.id
+
+  //get user info from databas
+  const userExist = await UserModel.findOne({_id: userId});
+
+  if (!userExist) {
+    return res
+      .status(401)
+      .json({ message: "invalid credential" });
+  }
+
+  const cart = await CartModel.findOne({_id: cartId, userId: userId});
+
+  if (!cart) {
+    return res
+        .status(401)
+        .json({ message: "medication not in cart list" });
+  }
+
+  if (cart.refill == "no") {
+    cart.refill = "yes"
+  }else{
+    cart.refill = "no"
+  }
+
+  await cart.save();
+
+  return res.status(200).json({
+      message: "medication refill status change succefully",
+  })
 
 } catch (err: any) {
   // signup error
