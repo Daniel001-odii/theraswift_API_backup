@@ -53,5 +53,9 @@ export const validateOrderParams = [
   body("orderId").notEmpty(),
 ];
 
+export const validatEssentialCategoryParams = [
+  body("name").notEmpty(),
+];
+
 
 

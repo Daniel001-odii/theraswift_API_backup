@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 import { 
+    validatEssentialCategoryParams,
     validateAdminSigninParams,
     validateEmail,
     validateMedicationDeleteParams,
@@ -22,6 +23,8 @@ import { upload } from "../../utils/upload.utility";
 import { getAllUsersController, getPageUserDeatilController, getsingleUserController } from "../controllers/userDetail.controller";
 import { DeliveredOrderController, getAllOrderDeliveredController, getAllOrderNotDeliveredController, getPageOrderDeliveredController, getPageOrderNotDeliveredController, getPageOrderNotpendingController, getSingleOrderDeliveredController, getSingleOrderNotDeliveredController } from "../controllers/order.controller";
 import { adminGetDeliverdDoctorOder, adminGetPaidDoctorOder, adminGetPendingDoctorOder } from "../controllers/orderFromDoctor.controller";
+import { createEssentialCategoryController, getAllEssentialCategoryController, getPageEssentialCategoryController } from "../controllers/essentialCategory.controller";
+import { adminAddEssentialProductController, getPageEssentialProductController } from "../controllers/essentialProduct.controller";
 
 
 router.post("/admin_signin", validateAdminSigninParams, adminSignInController); // admin login
@@ -53,6 +56,12 @@ router.get("/single_order_deliver", validateOrderParams, checkAdminRole, getSing
 router.get("/pending order", checkAdminRole, getPageOrderNotpendingController); // get pending order
 router.post("/delivered_order", validateOrderParams, checkAdminRole, DeliveredOrderController); //  delivered order
 
+
+router.post("/create_category", validatEssentialCategoryParams, checkAdminRole, createEssentialCategoryController); //  create essential category
+router.get("/get_category", checkAdminRole, getAllEssentialCategoryController); // get essential category
+router.get("/get_page_category", checkAdminRole, getPageEssentialCategoryController); // get essential category
+router.post("/create_product",  checkAdminRole, upload.single('productImg'), adminAddEssentialProductController); // create essential product
+router.get("/get_product",  checkAdminRole, getPageEssentialProductController); // get essential page product
 
 
 
