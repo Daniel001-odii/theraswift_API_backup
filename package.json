@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
     "js-dev": "nodemon dist/index.ts",
-    "start": "pm2-runtime dist/index.js"
+    "start": "nodemon src/index.ts"
   },
   "engines": {
     "node": "18.16.0"
