@@ -85,7 +85,7 @@ const MONGODB_URI = process.env.MONGODB_URI as string;
 //app.use("/", routes);
 app.use(
   "/",
-  router.get("/hello", (req, res) => {
+  router.get("/", (req, res) => {
     res.json("Hello");
   })
 );
