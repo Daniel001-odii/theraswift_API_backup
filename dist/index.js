@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,40 +16,54 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
-const logger_1 = require("./middleware/logger");
-const routes_1 = __importDefault(require("./routes/routes"));
+//import { logger } from "./middleware/logger";
+//import routes from "./routes/routes";
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const csurf_1 = __importDefault(require("csurf"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
-const chatMessageSocketsConfig_1 = __importDefault(require("./sockets/chatMessageSocketsConfig"));
-const swaggerDocument = __importStar(require("./swagger/swagger.json"));
-const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+//import path from path
+//import chatSocketConfig from './sockets/chatMessageSocketsConfig'
+const socket_1 = __importDefault(require("./user/socket/socket"));
+// import * as swaggerDocument from './swagger/swagger.json';
+// import swaggerUi from 'swagger-ui-express';
+//doctor routes
+const routes_1 = __importDefault(require("./doctor/routes/routes"));
+//admin routes
+const route_1 = __importDefault(require("./admin/route/route"));
+//user route
+const route_2 = __importDefault(require("./user/route/route"));
 const app = (0, express_1.default)();
 const csrfProtection = (0, csurf_1.default)({ cookie: true });
 const server = http_1.default.createServer(app);
-const io = new socket_io_1.Server(server, {
-    cors: {
-        origin: "*",
-    },
-});
+// const io = new Server(server, {
+//   cors: {
+//     origin: "*",
+//   },
+// });
+const io = new socket_io_1.Server(server);
 const limiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
     max: 1000, // limit each IP to 100 requests per windowMs
 });
-app.use('/theraswift-api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+//app.use('/theraswift-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Middleware
 app.use(limiter);
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup());
-app.use(body_parser_1.default.json());
-app.use(express_1.default.json());
-app.use((0, cors_1.default)());
-app.use((0, helmet_1.default)());
-app.use(logger_1.logger);
-dotenv_1.default.config();
+//app.use('/api-docs', swaggerUi.serve, swaggerUi.setup());
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use(body_parser_1.default.json());
+//app.use(express.static('../public'));
+app.use('/uploads', express_1.default.static('../public'));
+app.use(express_1.default.json());
+//app.use(cors());
+app.use((0, cors_1.default)({
+    origin: '*'
+}));
+app.use((0, helmet_1.default)());
+//app.use(logger);
+dotenv_1.default.config();
 // database connection
 const MONGODB_URI = process.env.MONGODB_URI;
 (() => __awaiter(void 0, void 0, void 0, function* () {
@@ -88,11 +79,17 @@ const MONGODB_URI = process.env.MONGODB_URI;
     }
 }))();
 // Router middleware
-app.use("/", routes_1.default);
+//app.use("/", routes);
+app.use("/doctor", routes_1.default);
+app.use("/admin", route_1.default);
+app.use("/user", route_2.default);
 // Handle socket connections
-(0, chatMessageSocketsConfig_1.default)(io);
+(0, socket_1.default)(io);
 // app initialized port
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+// app.listen(port, () => {
+//   console.log(`Server listening on port ${port}`);
+// });
+server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
