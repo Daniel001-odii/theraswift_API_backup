@@ -35,6 +35,7 @@ const routes_1 = __importDefault(require("./doctor/routes/routes"));
 const route_1 = __importDefault(require("./admin/route/route"));
 //user route
 const route_2 = __importDefault(require("./user/route/route"));
+const router = express_1.default.Router();
 const app = (0, express_1.default)();
 const csrfProtection = (0, csurf_1.default)({ cookie: true });
 const server = http_1.default.createServer(app);
@@ -55,11 +56,11 @@ app.use(limiter);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
 //app.use(express.static('../public'));
-app.use('/uploads', express_1.default.static('../public'));
+app.use("/uploads", express_1.default.static("../public"));
 app.use(express_1.default.json());
 //app.use(cors());
 app.use((0, cors_1.default)({
-    origin: '*'
+    origin: "*",
 }));
 app.use((0, helmet_1.default)());
 //app.use(logger);
@@ -80,6 +81,9 @@ const MONGODB_URI = process.env.MONGODB_URI;
 }))();
 // Router middleware
 //app.use("/", routes);
+app.use("/", router.get("/hello", (req, res) => {
+    res.json("Hello");
+}));
 app.use("/doctor", routes_1.default);
 app.use("/admin", route_1.default);
 app.use("/user", route_2.default);

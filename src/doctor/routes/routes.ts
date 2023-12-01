@@ -38,7 +38,7 @@ import  upload  from "../middleware/medication_image.middleware";
 import { doctorSendPatientOderHmoController, doctorSendPatientOderOutOFPocketController, doctorgetPatientOderPaid, doctorgetPatientOderPending, doctorgetPatientOderdelieverd } from "../controllers/patientOder.controller";
 import { doctorgetPatientHmoApproved, doctorgetPatientHmoPending, doctorgetPatientHmodenied } from "../controllers/patientHmo.controller";
 
-router.get("/testGet", (req: any,res: { json: (arg0: string) => void; })=>{res.json('return get')});  // doctor signup
+router.get("/testGet", (req: any,res: { json: (arg0: string) => void; })=>{res.json('return get')}); 
 router.post("/doctor_signup", validateDoctorSignupParams, doctorSignUpController);  // doctor signup
 router.post("/doctor_signin", validateDoctorSigninParams, doctorSignInController); // doctor login
 router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworController); // doctor forgot password

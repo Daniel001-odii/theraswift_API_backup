@@ -8,8 +8,9 @@
     "dev": "nodemon src/index.ts",
     "js-dev": "nodemon dist/index.ts",
     "build": "rm -r ./dist && tsc && npm run copy-files",
-    "copy-files": "npx copyfiles .env dist/ package.json dist/ package-lock.json dist/",
-    "start": "nodemon src/index.ts"
+    "copy-files": "npx copyfiles .env dist/ package.json dist/ package-lock.json dist/ ecosystem.config.js dist/",
+    "start": "pm2 kill && pm2 reload ecosystem.config.js && pm2 list",
+    "build-start": "npm run build && npm start"
   },
   "engines": {
     "node": "18.16.0"
