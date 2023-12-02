@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "Backend App",
       script: "index.js",
-      instances: 4,
+      instances: 1,
       autorestart: true,  
     },
   ],
