@@ -1,9 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: "Backend App",
+      name: "backendApp2",
       script: "index.js",
-      instances: 1,
+      // instances: 1,
       autorestart: true,  
     },
   ],
