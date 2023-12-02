@@ -1,0 +1,36 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  Deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build & Deploy
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PK }}
+          HOSTNAME: ${{secrets.SSH_HOST}}
+          USER_NAME: ${{secrets.SSH_USER}} 
+
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+ 
+            # Now we have got the access of EC2 and we will start the deploy .
+              cd /home/ec2-user/repos/theraswift_backend_two && 
+              git checkout main && 
+              git pull origin main --force &&
+              node -v
+              npm ci &&
+              npm run build &&
+            #   sudo rm -r /var/www/test-fe/html &&
+            #   sudo cp -r dist /var/www/test-fe/html &&
+            #   sudo cd /var/www/test-fe/html &&
+            #   sudo npm ci &&
+              exit
+              '
