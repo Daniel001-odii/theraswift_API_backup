@@ -24,13 +24,14 @@ jobs:
             # Now we have got the access of EC2 and we will start the deploy .
               cd /home/ec2-user/repos/theraswift_backend_two && 
               git checkout main && 
-              git pull origin main --force &&
+              git pull origin main --force && echo UPDATED CODEBASE &&
               node -v
-              npm ci &&
-              npm run build &&
-            #   sudo rm -r /var/www/test-fe/html &&
-            #   sudo cp -r dist /var/www/test-fe/html &&
-            #   sudo cd /var/www/test-fe/html &&
-            #   sudo npm ci &&
+              npm ci && echo INSTALLED DEPENDENCIES &&
+              npm run build && echo BUILT CODE &&
+              sudo rm -r /var/www/api &&  echo  REMOVED DIST DIRECTORY &&
+              sudo mkdir -p /var/www/api/dist &&  echo  MADE DIST DIRECTORY &&
+              sudo mv dist /var/www/api &&  echo  MOVED BUILT CODE &&
+              sudo mv node_modules /var/www/api/dist &&  echo MOVED DEPENDENCIES &&
+              npm start &&
               exit
               '
