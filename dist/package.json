@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
     "js-dev": "nodemon dist/index.ts",
-    "build": "rm -rf ./dist && tsc && npm run copy-files",
+    "build": "rm -r ./dist && tsc && npm run copy-files",
     "copy-files": "npx copyfiles .env dist/ package.json dist/ package-lock.json dist/ ecosystem.config.js dist/",
-    "start": "pm2 reload ecosystem.config.js && pm2 list", 
+    "start": "pm2 kill && pm2 reload ecosystem.config.js && pm2 list",
     "build-start": "npm run build && npm start"
   },
   "engines": {

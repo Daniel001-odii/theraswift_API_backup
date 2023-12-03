@@ -38,6 +38,10 @@ import  upload  from "../middleware/medication_image.middleware";
 import { doctorSendPatientOderHmoController, doctorSendPatientOderOutOFPocketController, doctorgetPatientOderPaid, doctorgetPatientOderPending, doctorgetPatientOderdelieverd } from "../controllers/patientOder.controller";
 import { doctorgetPatientHmoApproved, doctorgetPatientHmoPending, doctorgetPatientHmodenied } from "../controllers/patientHmo.controller";
 
+
+router.post("/test", router.get("/", (req:any, res:any) => {
+    res.json("Hello");
+  }));  // doctor signup
 router.post("/doctor_signup", validateDoctorSignupParams, doctorSignUpController);  // doctor signup
 router.post("/doctor_signin", validateDoctorSigninParams, doctorSignInController); // doctor login
 router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworController); // doctor forgot password

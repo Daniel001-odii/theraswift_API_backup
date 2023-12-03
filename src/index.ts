@@ -22,14 +22,13 @@ import doctorRoute from "./doctor/routes/routes";
 import adminRoute from "./admin/route/route";
 //user route
 import userRoute from "./user/route/route";
+const router = express.Router();
 
 const app = express();
 
- 
-const csrfProtection = csrf({ cookie: true })
+const csrfProtection = csrf({ cookie: true });
 
 const server = http.createServer(app);
-
 
 // const io = new Server(server, {
 //   cors: {
@@ -39,18 +38,12 @@ const server = http.createServer(app);
 
 const io = new Server(server);
 
-
-
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 1000, // limit each IP to 100 requests per windowMs
 });
 
-
-
 //app.use('/theraswift-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-
 
 // Middleware
 app.use(limiter);
@@ -58,18 +51,17 @@ app.use(limiter);
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 //app.use(express.static('../public'));
-app.use('/uploads', express.static('../public'));
+app.use("/uploads", express.static("../public"));
 app.use(express.json());
 //app.use(cors());
-app.use(cors({
-    origin: '*'
-}));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(helmet());
 //app.use(logger);
 dotenv.config();
-
-
-
 
 // database connection
 const MONGODB_URI = process.env.MONGODB_URI as string;
@@ -89,9 +81,14 @@ const MONGODB_URI = process.env.MONGODB_URI as string;
   }
 })();
 
-
 // Router middleware
 //app.use("/", routes);
+app.use(
+  "/",
+  router.get("/", (req, res) => {
+    res.json("Hello");
+  })
+);
 app.use("/doctor", doctorRoute);
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
