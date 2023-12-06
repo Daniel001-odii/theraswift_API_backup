@@ -6,12 +6,13 @@ export interface IEssestialProduct extends Document {
   categoryId: IEssentailCategory['_id'];
   name: string;
   price: string;
-  strength: string;
+  uses: string;
   quantity: string;
   medicationImage: string;
-  form: string;
+  inventoryQauntity: string;
   ingredient: string;
-  medInfo: string;
+  expiryDate: string;
+  category: string;
   createdAt: Date;
   updatedAt: Date;
 }

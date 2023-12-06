@@ -13,7 +13,7 @@ const EssentialProductSchema = new Schema(
       price: {
         type: String,
       },
-      strength: {
+      uses: {
         type: String,
       },
       quantity: {
@@ -22,13 +22,17 @@ const EssentialProductSchema = new Schema(
       medicationImage: {
         type: String,
       },
-      form:{
+      inventoryQauntity:{
         type: String,
       },
       ingredient: {
         type: String,
       },
-      medInfo: {
+      expiryDate: {
+        type: String,
+        default: "",
+      },
+      category: {
         type: String,
         default: "",
       },

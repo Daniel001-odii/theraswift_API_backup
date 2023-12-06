@@ -57,5 +57,9 @@ export const validatEssentialCategoryParams = [
   body("name").notEmpty(),
 ];
 
+export const validatEssentialProuctIdParams = [
+  body("productId").notEmpty(),
+];
+
 
 
