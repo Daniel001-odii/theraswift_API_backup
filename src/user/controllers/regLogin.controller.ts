@@ -11,6 +11,80 @@ import UserHmoModel from "../models/hmo.model";
 import { uploadToS3 } from "../../utils/aws3.utility";
 import { v4 as uuidv4 } from "uuid";
 
+
+//user check email/////////////
+export const userCheckEmailController = async (
+  req: Request,
+  res: Response,
+) => {
+
+  try {
+    const {
+      email,
+      
+    } = req.body;
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // try find user with the same email
+    const userEmailExists = await UserModel.findOne({ email });
+  
+
+    // check if user exists
+    if (!userEmailExists) {
+      return res
+        .status(401)
+        .json({ message: "Email do not exists" });
+    }
+
+    res.json({
+      message: "Email already exist",
+    });
+    
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+
+//user check state/////////////
+export const userCheckStateController = async (
+  req: Request,
+  res: Response,
+) => {
+
+  try {
+    const {
+      address,
+      state
+      
+    } = req.body;
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    res.json({
+      message: "deliver location successfully saved",
+    });
+    
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+
+
 //user signup /////////////
 export const userSignUpController = async (
     req: Request,

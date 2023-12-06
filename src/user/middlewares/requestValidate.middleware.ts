@@ -122,3 +122,11 @@ export const validateAddressParams = [
   body("LGA").notEmpty(),
   body("DeliveryInstruction").notEmpty(),
 ];
+
+
+export const validateDeliveryStateParams = [
+  body("address").notEmpty(),
+  body("state")
+  .isIn(["Lagos", "Ogun"])
+  .withMessage("delivery state available are Lagos and Ogun"),
+];

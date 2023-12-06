@@ -20,11 +20,14 @@ import {
     validateUserCheckOutParams,
     validateUserCheckOutVerificationParams,
     validatefamilymemberParams,
-    validateAddressParams
+    validateAddressParams,
+    validateDeliveryStateParams
 } from "../middlewares/requestValidate.middleware";
 import { 
     userAddAddressController,
      userAddHmoController,
+     userCheckEmailController,
+     userCheckStateController,
      userEmailSignInController,
      userGetAddressController, userGetHmoController, userGetMemberController, userMobileNumberSignInController, userRegistMemberController, userSignUpController, userdetailController } from "../controllers/regLogin.controller";
 import { userSendEmailController, userEmailVerificationController } from "../controllers/emailVerification.controller";
@@ -49,6 +52,8 @@ import { userAddMedicationToCartController, userCartListController, userDecrease
 import { userCheckOutController, userCheckOutPaymentVerificationController, userGetDeliveredOrderController, userGetNotDeliveredOrderController, userGetPendingOrderController } from "../controllers/checkOut.controller";
 
 
+router.post("/check_email", validateEmailParams, userCheckEmailController ); // user check email
+router.post("/check_delivery_state", validateDeliveryStateParams, userCheckStateController ); // user check email
 router.post("/user_signup", validateSignupParams, userSignUpController ); // user signup
 router.post("/user_send_email", validateEmailParams, userSendEmailController ); // user send email
 router.post("/user_resend_email", validateEmailParams, userSendEmailController ); // user resend email
