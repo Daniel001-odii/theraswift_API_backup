@@ -102,6 +102,7 @@ export const userSignUpController = async (
       gender, 
       refererCode,
       operatingLocation,
+      address,
     } = req.body;
     // Check for validation errors
     const errors = validationResult(req);
@@ -164,7 +165,8 @@ export const userSignUpController = async (
       gender: gender,
       refererCode: newUserRefererCode,
       refererCredit: 500,
-      operatingLocation: operatingLocation
+      operatingLocation: operatingLocation,
+      address
     });
     
     let userSaved = await user.save();
@@ -180,7 +182,9 @@ export const userSignUpController = async (
         gender: userSaved.gender,
         mobileNumber: userSaved.mobileNumber,
         refererCode: userSaved.refererCode,
-        refererCredit: userSaved.refererCredit
+        refererCredit: userSaved.refererCredit,
+        address: userSaved.address,
+        state: userSaved.operatingLocation
       },
 
     });

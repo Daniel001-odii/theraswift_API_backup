@@ -19,6 +19,7 @@ export const validateSignupParams = [
   body("operatingLocation")
   .isIn(["Lagos", "Ogun"])
   .withMessage("operating location must be either Lagos or Ogun"),
+  body("address").notEmpty(),
 ];
 
 export const validateEmailParams = [
