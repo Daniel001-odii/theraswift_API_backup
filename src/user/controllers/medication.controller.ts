@@ -182,7 +182,7 @@ export const userSearchMedicationController = async (
   try {
     const {
       medicationName
-    } = req.body;
+    } = req.query;
     
     // const medication = await MedicationModel.find({
     //   name: { $regex: medicationName, $options: 'i' }, // Case-insensitive search
@@ -254,7 +254,7 @@ export const userSearchMedicationNameController = async (
   try {
     const {
       name
-    } = req.body;
+    } = req.query;
     
     // Check for validation errors
     const errors = validationResult(req);
@@ -287,7 +287,7 @@ export const userSearchMedicationNameFormController = async (
     const {
       name, 
       form
-    } = req.body;
+    } = req.query;
     
     // Check for validation errors
     const errors = validationResult(req);

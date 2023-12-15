@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 export const validateSignupParams = [
   body("email").isEmail(),
@@ -74,19 +74,19 @@ export const validateUserAddMedicationParams = [
 
 
 export const validateSearchMedicationByNameParams = [
-  body("name").notEmpty(),
+  query("name").notEmpty(),
 ];
 
 export const validateSearchMedicationByNameFRomParams = [
-  body("name").notEmpty(),
-  body("form").notEmpty(),
+  query("name").notEmpty(),
+  query("form").notEmpty(),
 ];
 
 
 export const validateSearchMedicationByNameFRomDosageParams = [
-  body("name").notEmpty(),
-  body("form").notEmpty(),
-  body("dosage").notEmpty(),
+  query("name").notEmpty(),
+  query("form").notEmpty(),
+  query("dosage").notEmpty(),
 ];
 
 export const validateUserCartParams = [
