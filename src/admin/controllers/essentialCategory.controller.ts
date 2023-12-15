@@ -31,7 +31,7 @@ export const createEssentialCategoryController = async (
     }
 
     if (!file) {
-      return res.status(401).json({ message: "provide product image." });
+      return res.status(401).json({ message: "provide category image." });
     }else{
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);

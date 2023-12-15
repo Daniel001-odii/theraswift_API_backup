@@ -13,7 +13,18 @@ interface Medication {
     refill: string;
 }
 
+interface EssentialProduct {
+  productId: string;
+  name: string;
+  quantity: string;
+  price: string;
+  orderQuantity: number;
+  refill: string;
+}
+
 export interface MedicationDocument extends Medication, Document {}
+
+export interface EssentialDocument extends EssentialProduct, Document {}
 
 export interface IOrder extends Document {
   _id: ObjectId;
@@ -24,7 +35,8 @@ export interface IOrder extends Document {
   gender: string;
   address: string;
   paymentId: string;
-  medications: MedicationDocument[];
+  medications?: MedicationDocument[];
+  ensential?: EssentialDocument[];
   deliveryDate: string;
   refererBunousUsed: string;
   totalAmount: string;

@@ -21,7 +21,10 @@ import {
     validateUserCheckOutVerificationParams,
     validatefamilymemberParams,
     validateAddressParams,
-    validateDeliveryStateParams
+    validateDeliveryStateParams,
+    validateEnssntialProoudtParams,
+    validateEnssntialCarttParams,
+    validateEnssntialcartIDtParams
 } from "../middlewares/requestValidate.middleware";
 import { 
     userAddAddressController,
@@ -50,6 +53,9 @@ import {
 import { upload } from "../../utils/upload.utility";
 import { userAddMedicationToCartController, userCartListController, userDecreaseMedicationToCartController, userIncreaseMedicationToCartController, userRefillStatusCartController, userRemoveMedicationToCartController } from "../controllers/cart.controlller";
 import { userCheckOutController, userCheckOutPaymentVerificationController, userGetDeliveredOrderController, userGetNotDeliveredOrderController, userGetPendingOrderController } from "../controllers/checkOut.controller";
+import { getEssentialProductBycategoryController, getPageEssentialCategoryController } from "../controllers/essentialProduct.category";
+import { addEssentialProductToCartController, decreaseEssentialProductToCartController, getEssentialProductInCartController, increaseEssentialProductToCartController } from "../controllers/essentialProductCart.controller";
+import { userCheckOutEssentialPRoductController } from "../controllers/checkOutEssential.Controller";
 
 
 router.post("/check_email", validateEmailParams, userCheckEmailController ); // user check email
@@ -100,6 +106,15 @@ router.post("/checkout/verification", validateUserCheckOutVerificationParams, ch
 router.get("/pending_order", checkUserRole, userGetPendingOrderController ); // pending order
 router.get("/not_delevered_order", checkUserRole, userGetNotDeliveredOrderController ); // not delivered order
 router.get("/delivered_order", checkUserRole, userGetDeliveredOrderController ); //  delivered order
+
+
+router.get("/ensentialCategory", checkUserRole, getPageEssentialCategoryController ); // list enssentail categories
+router.get("/ensentialProduct", validateEnssntialProoudtParams, checkUserRole, getEssentialProductBycategoryController ); // list enssentail product unde categories
+router.post("/ensentialProduct_add_cart", validateEnssntialCarttParams, checkUserRole, addEssentialProductToCartController ); // add product to cart
+router.post("/ensentialProduct_cart_increase", validateEnssntialcartIDtParams, checkUserRole, increaseEssentialProductToCartController ); // increase product in cart
+router.post("/ensentialProduct_cart_decrease", validateEnssntialcartIDtParams, checkUserRole, decreaseEssentialProductToCartController ); // decrease product in cart
+router.post("/ensentialProduct_cart_list", checkUserRole, getEssentialProductInCartController ); // get user cart list
+router.get("/checkout_enssential_product", checkUserRole, userCheckOutEssentialPRoductController ); // get user cart list
 
 
 export default router;

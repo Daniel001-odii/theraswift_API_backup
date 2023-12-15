@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { MedicationDocument, IOrder } from "../interface/order.interface";
+import { MedicationDocument, EssentialDocument, IOrder } from "../interface/order.interface";
 
 
 const medicationSchema = new Schema<MedicationDocument>({
@@ -11,6 +11,15 @@ const medicationSchema = new Schema<MedicationDocument>({
     price: String,
     orderQuantity: Number,
     refill: String
+});
+
+const EnsentailSchema = new Schema<EssentialDocument>({
+  productId: String,
+  name: String,
+  quantity: String,
+  price: String,
+  orderQuantity: Number,
+  refill: String,
 });
 
 
@@ -40,6 +49,7 @@ const OrderSchema = new Schema(
         type: String,
       },
       medications: [medicationSchema],
+      ensential: [EnsentailSchema],
       deliveryDate: {
         type: String,
       },

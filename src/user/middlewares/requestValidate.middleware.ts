@@ -131,3 +131,15 @@ export const validateDeliveryStateParams = [
   .isIn(["Lagos", "Ogun"])
   .withMessage("delivery state available are Lagos and Ogun"),
 ];
+
+export const validateEnssntialProoudtParams = [
+  body("categoryId").notEmpty(),
+];
+
+export const validateEnssntialCarttParams = [
+  body("productId").notEmpty(),
+];
+
+export const validateEnssntialcartIDtParams = [
+  body("enssentialCartId").notEmpty(),
+];

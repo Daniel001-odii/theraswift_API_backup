@@ -204,6 +204,11 @@ export const editEssentialProductController = async (
 
     const categoryDb = await EssentialCategoryModel.findOne({_id: categoryId})
 
+    
+    if (!categoryDb) {
+      return res.status(401).json({ message: "category do not exist" });
+    }
+
     const updatedProduct = await EssentialProductModel.findOneAndUpdate({_id: productId}, {
       categoryId,
       name,

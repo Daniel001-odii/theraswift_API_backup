@@ -58,7 +58,7 @@ router.get("/pending order", checkAdminRole, getPageOrderNotpendingController); 
 router.post("/delivered_order", validateOrderParams, checkAdminRole, DeliveredOrderController); //  delivered order
 
 //essential
-router.post("/create_category", validatEssentialCategoryParams, checkAdminRole, createEssentialCategoryController); //  create essential category
+router.post("/create_category", upload.single('categoryImg'), checkAdminRole, createEssentialCategoryController); //  create essential category
 router.get("/get_category", checkAdminRole, getAllEssentialCategoryController); // get essential category
 router.get("/get_page_category", checkAdminRole, getPageEssentialCategoryController); // get essential category
 router.post("/create_product",  checkAdminRole, upload.single('productImg'), adminAddEssentialProductController); // create essential product
