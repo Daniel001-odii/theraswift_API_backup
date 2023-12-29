@@ -3,18 +3,29 @@ const router = express.Router();
 import { 
     validatEssentialCategoryParams,
     validatEssentialProuctIdParams,
+    validatFrequenceAskParams,
     validateAdminSigninParams,
+    validateAdminSigninPhonNumberParams,
     validateEmail,
     validateMedicationDeleteParams,
     validateMedicationEditParams,
     validateOrderParams,
+    validatePhonNumber,
     validateResetPassword,
-    validateUserParams
+    validateResetPasswordByPhoneNumber,
+    validateSendEmailigninParams,
+    validateSendPhoneNumberParams,
+    validateSignupParams,
+    validateUserParams,
+    validateVerifyEmailEmailigninParams,
+    validateVerifyPhoneNumbweParams
 } from "../middleware/requestValidate.middleware";
 
-import { adminSignInController } from "../controllers/regLogin.controller";
+import { adminMobileNumberSignInController, adminSignInController, adminSignUpController } from "../controllers/regLogin.controller";
 import {
      adminForgotPassworController, 
+     adminMobileForgotPasswordController, 
+     adminMobileResetPasswordController, 
      adminResetPassworController 
 } from "../controllers/forgotPassword.controller";
 import { checkAdminRole } from "../middleware/rolechecker.middleware";
@@ -26,11 +37,21 @@ import { DeliveredOrderController, getAllOrderDeliveredController, getAllOrderNo
 import { adminGetDeliverdDoctorOder, adminGetPaidDoctorOder, adminGetPendingDoctorOder } from "../controllers/orderFromDoctor.controller";
 import { createEssentialCategoryController, getAllEssentialCategoryController, getPageEssentialCategoryController } from "../controllers/essentialCategory.controller";
 import { adminAddEssentialProductController, deleteEssentialProductController, editEssentialProductController, getPageEssentialProductController, searchEssentialProductByNameController } from "../controllers/essentialProduct.controller";
+import { adminEmailVerificationController, adminPhoneNumberVerificationController, adminSendEmailController, adminSendPhoneNumberController } from "../controllers/emailPhoneNumberVerification";
+import { adminFrequenceAskController, adminNewsletterSubcriberController } from "../controllers/frequencAskAndNewsletter.controller";
 
 
-router.post("/admin_signin", validateAdminSigninParams, adminSignInController); // admin login
-router.post("/admin_forgot_password", validateEmail, adminForgotPassworController); // admin forgot password
-router.post("/admin_reset_password", validateResetPassword, adminResetPassworController); // admin reset password
+router.post("/admin_signup", validateSignupParams, adminSignUpController); // admin signup
+router.post("/admin_send_email", validateSendEmailigninParams, adminSendEmailController); // admin send emai
+router.post("/admin_Verify_email", validateVerifyEmailEmailigninParams, adminEmailVerificationController); // admin verified email
+router.post("/admin_send_phone_number", validateSendPhoneNumberParams, adminSendPhoneNumberController); // admin send phone number
+router.post("/admin_Verify_phone_number", validateVerifyPhoneNumbweParams, adminPhoneNumberVerificationController); // admin verified phone number
+router.post("/admin_signin", validateAdminSigninParams, adminSignInController); // admin login by email
+router.post("/admin_signin_phone_number", validateAdminSigninPhonNumberParams, adminMobileNumberSignInController); // admin login by phone number
+router.post("/admin_forgot_password", validateEmail, adminForgotPassworController); // admin forgot password by email
+router.post("/admin_reset_password", validateResetPassword, adminResetPassworController); // admin reset password by email
+router.post("/admin_forgot_password_by_phone_number", validatePhonNumber, adminMobileForgotPasswordController); // admin forgot password by phone number
+router.post("/admin_reset_password_by_phone_number", validateResetPasswordByPhoneNumber, adminMobileResetPasswordController); // admin reset password by phone number
 
 
 router.post("/admin_add_medication", checkAdminRole, upload.single('medicationImg'), adminAddMedicationController); // admin add medication to databas
@@ -66,6 +87,11 @@ router.get("/get_product",  checkAdminRole, getPageEssentialProductController); 
 router.get("/search_product_name",  checkAdminRole, searchEssentialProductByNameController); // get essential product by name
 router.post("/edit_product",  checkAdminRole, upload.single('productImg'),  editEssentialProductController); // get essential product by name
 router.post("/delete_product", validatEssentialProuctIdParams,  checkAdminRole, deleteEssentialProductController); // get essential product by name
+
+
+router.post("/frequence_ask", validatFrequenceAskParams,  checkAdminRole, adminFrequenceAskController); // add question and answe
+router.get("/get_newsletters",  checkAdminRole, adminNewsletterSubcriberController); // get newslw=etter subscriber
+
 
 
 

@@ -56,6 +56,7 @@ import { userCheckOutController, userCheckOutPaymentVerificationController, user
 import { getEssentialProductBycategoryController, getPageEssentialCategoryController } from "../controllers/essentialProduct.category";
 import { addEssentialProductToCartController, decreaseEssentialProductToCartController, getEssentialProductInCartController, increaseEssentialProductToCartController } from "../controllers/essentialProductCart.controller";
 import { userCheckOutEssentialPRoductController } from "../controllers/checkOutEssential.Controller";
+import { frequenceAskQuestionController, subcribForNewsletterController } from "../controllers/newletter.controller";
 
 
 router.post("/check_email", validateEmailParams, userCheckEmailController ); // user check email
@@ -113,8 +114,11 @@ router.get("/ensentialProduct", validateEnssntialProoudtParams, checkUserRole, g
 router.post("/ensentialProduct_add_cart", validateEnssntialCarttParams, checkUserRole, addEssentialProductToCartController ); // add product to cart
 router.post("/ensentialProduct_cart_increase", validateEnssntialcartIDtParams, checkUserRole, increaseEssentialProductToCartController ); // increase product in cart
 router.post("/ensentialProduct_cart_decrease", validateEnssntialcartIDtParams, checkUserRole, decreaseEssentialProductToCartController ); // decrease product in cart
-router.post("/ensentialProduct_cart_list", checkUserRole, getEssentialProductInCartController ); // get user cart list
-router.get("/checkout_enssential_product", checkUserRole, userCheckOutEssentialPRoductController ); // get user cart list
+router.get("/ensentialProduct_cart_list", checkUserRole, getEssentialProductInCartController ); // get user cart list
+router.post("/checkout_enssential_product", checkUserRole, userCheckOutEssentialPRoductController ); // user checkout cart list
+
+router.post("/subcribe_for_newsletter", validateEmailParams, subcribForNewsletterController ); // user subcribe for newsletter
+router.get("/frquence_ask_ans", frequenceAskQuestionController ); // user subcribe for newsletter
 
 
 export default router;

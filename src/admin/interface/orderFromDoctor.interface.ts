@@ -3,12 +3,7 @@ import { IDoctorReg, IPatientReg } from "../../doctor/interface/reg_interface";
 
 
 interface Medication {
-    meidcationId: string;
-    name: string;
-    form: string;
-    strength: string;
-    quantity: string;
-    price: string;
+    medication: any;
     orderQuantity: number;
     dosage: string;
     frequency: number;

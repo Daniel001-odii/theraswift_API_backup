@@ -70,12 +70,7 @@ export const userCheckOutController = async (
             totalCost = totalCost + (cart.quantityrquired * parseInt(medication.price))
             
             const medicationObt = {
-                meidcationId: medication._id,
-                name: medication.name,
-                form: medication.form,
-                dosage: medication.strength,
-                quantity: medication.quantity,
-                price: medication.price.toString(),
+                medication: medication,
                 orderQuantity: cart.quantityrquired.toString(),
                 refill: cart.refill,
             }
@@ -123,7 +118,11 @@ export const userCheckOutController = async (
             deliveredStatus: 'not delivered'
         })
 
-        await order.save();
+
+        const me = await order.save();
+
+        console.log(1)
+        console.log(me)
 
         userExist.refererCredit = refererCredit - totalCost;
         userExist.reference = "referer credit"
@@ -131,6 +130,9 @@ export const userCheckOutController = async (
 
         return res.status(200).json({
             message: "payment successfully using referer credit",
+            url: "",
+            reference: "",
+            orderId: ""
         })
     }
 
@@ -215,12 +217,13 @@ export const userCheckOutController = async (
       message: "payment successfully initialize", 
       url: data.data.authorization_url,
       reference: data.data.reference,
-      orderId: savedOrdered._id
+      //orderId: savedOrdered._id
     })
     
     
   } catch (err: any) {
     // signup error
+    console.log("error", err)
     res.status(500).json({ message: err.message });
   }
 

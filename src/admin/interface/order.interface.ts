@@ -3,12 +3,7 @@ import { IUserReg } from "../../user/interface/reg.interface";
 
 
 interface Medication {
-    meidcationId: string;
-    name: string;
-    form: string;
-    dosage: string;
-    quantity: string;
-    price: string;
+    medication: any;
     orderQuantity: number;
     refill: string;
 }

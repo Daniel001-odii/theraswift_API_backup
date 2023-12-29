@@ -57,12 +57,7 @@ export const doctorSendPatientOderOutOFPocketController = async (
             totalCost = totalCost + parseInt(medication.price)
 
             const medicationObt = {
-                meidcationId: medication._id,
-                name: medication.name,
-                form: medication.form,
-                strength: medication.strength,
-                quantity: medication.quantity,
-                price: medication.price.toString(),
+                medication,
                 orderQuantity: 1,
                 dosage: precription.dosage,
                 frequency: precription.frequency,
@@ -170,12 +165,7 @@ export const doctorSendPatientOderHmoController = async (
             totalCost = totalCost + parseInt(medication.price)
 
             const medicationObt = {
-                meidcationId: medication._id,
-                name: medication.name,
-                form: medication.form,
-                strength: medication.strength,
-                quantity: medication.quantity,
-                price: medication.price.toString(),
+                medication,
                 orderQuantity: 1,
                 dosage: precription.dosage,
                 frequency: precription.frequency,
@@ -292,7 +282,6 @@ export const doctorgetPatientOderPaid = async (
             return res.status(400).json({ errors: errors.array() });
         }
         
-
         const paidgOder = await PatientOrderFromDoctor.find({clinicCode: doctor.clinicCode, status: "paid"}).populate('patientId', 'firstName surname email phoneNumber gender dateOFBirth address').sort({createdAt: -1});
 
         return res.status(200).json({

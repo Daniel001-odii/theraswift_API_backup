@@ -5,7 +5,6 @@ const UserSchema = new Schema(
     {
       userId: {
         type: String,
-        required: true,
         unique: true,
       },
       email: {
@@ -42,7 +41,6 @@ const UserSchema = new Schema(
       },
       refererCode: {
         type: String,
-        required: true,
         unique: true,
       },
       refererCredit: {
@@ -56,11 +54,9 @@ const UserSchema = new Schema(
       operatingLocation: {
         type: String,
         enum: ["Lagos", "Ogun"],
-        required: true,
       },
       address: {
         type: String,
-        required: true,
       },
       createdAt: {
         type: Date,

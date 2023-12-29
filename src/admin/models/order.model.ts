@@ -3,12 +3,7 @@ import { MedicationDocument, EssentialDocument, IOrder } from "../interface/orde
 
 
 const medicationSchema = new Schema<MedicationDocument>({
-    meidcationId: String,
-    name: String,
-    form: String,
-    dosage: String,
-    quantity: String,
-    price: String,
+    medication: Schema.Types.Mixed,
     orderQuantity: Number,
     refill: String
 });

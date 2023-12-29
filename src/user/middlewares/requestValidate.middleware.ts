@@ -122,6 +122,9 @@ export const validateAddressParams = [
   body("streetNO").notEmpty(),
   body("LGA").notEmpty(),
   body("DeliveryInstruction").notEmpty(),
+  body("doorMan")
+    .isIn([true, false])
+    .withMessage("doorMan must be either true or false"),
 ];
 
 

@@ -77,19 +77,7 @@ export const userAddMedicationController = async (
 
     return res.status(200).json({
       message: "medication added succefully",
-      medication:{
-        firstName: userExist.firstName,
-        medicationId: medication._id,
-        userMedicationID: saveUserMedication._id,
-        name: medication.name,
-        medInfo: medication.medInfo,
-        price: medication.price,
-        form: medication.form,
-        dosage: medication.strength,
-        quantity: medication.quantity,
-        medicationImage: medication.medicationImage,
-        prescriptionRequired: medication.prescriptionRequired,
-      }
+      medication: medication
     })
   
 
@@ -149,19 +137,7 @@ export const userRemoveMedicationController = async (
 
     return res.status(200).json({
       message: "medication removed successfiily",
-      removedMedication:{
-        firstName: userExist.firstName,
-        id: medication?._id,
-        name: medication?.name,
-        medInfo: medication?.medInfo,
-        form: medication?.form,
-        price: medication?.price,
-        strength: medication?.strength,
-        quantity: medication?.quantity,
-        medicationImage: medication?.medicationImage,
-        prescriptionRequired: medication?.prescriptionRequired,
-    
-      }
+      removedMedication: deletedmedication
     })
     
   } catch (err: any) {
@@ -194,13 +170,16 @@ export const userSearchMedicationController = async (
     const columnName = 'name';
     // const { columnName } = req.params;
     // const { query } = req.query;
-
+  
     const searchQuery = {
       $or: [
         { name: { $regex: medicationName, $options: 'i' } }, // Perform a case-insensitive search
         // Add more fields as needed for your search
       ],
     };
+    console.log(medicationName)
+
+    console.log("era", searchQuery)
 
     const aggregationPipeline = [
       { $match: searchQuery }, // Match documents based on the search query
@@ -320,7 +299,7 @@ export const userSearchMedicationNameFormDosageController = async (
       name, 
       form,
       dosage
-    } = req.body;
+    } = req.query;
     
     // Check for validation errors
     const errors = validationResult(req);
@@ -329,7 +308,7 @@ export const userSearchMedicationNameFormDosageController = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const medications =  await MedicationModel.find({name, form, strength: dosage});
+    const medications =  await MedicationModel.find({name, form, quantity: dosage});
     return res.status(200).json({
       medications
     })
@@ -375,14 +354,7 @@ export const userGetMedicationController = async (
       const medObj = {
         medicationId: medication?._id,
         userMedicationId: userMedication._id,
-        name: medication?.name,
-        ingridient: medication?.ingredient,
-        form: medication?.form,
-        dosage: medication?.strength,
-        quantity: medication?.quantity,
-        price: medication?.price,
-        prescriptionRequired: medication?.prescriptionRequired,
-        medicationImage: medication?.medicationImage,
+        medication
         
       }
 
@@ -605,14 +577,7 @@ export const userMedicatonRequiredPrescriptionController = async (
         const presObj = {
           medicationId: medication._id,
           userMedicationId: userMedication._id,
-          nema: medication.name,
-          ingridient: medication.ingredient,
-          form: medication.form,
-          dosage: medication.strength,
-          quanty: medication.quantity,
-          price: medication.price,
-          medicationImage: medication.medicationImage,
-          medInfo: medication.medInfo
+          medication
         }
           prescriptionId.push(presObj);
       }

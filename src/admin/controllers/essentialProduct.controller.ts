@@ -36,6 +36,12 @@ export const adminAddEssentialProductController = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
+    const categoryDb = await EssentialCategoryModel.findOne({_id: categoryId.toString()})
+
+    if (!categoryDb) {
+      return res.status(401).json({ message: "category do not exist" });
+    }
+
     if (!file) {
         return res.status(401).json({ message: "provide product image." });
     }else{
@@ -46,7 +52,6 @@ export const adminAddEssentialProductController = async (
       //medicationImg = uploadToS3(file);
     }
 
-    const categoryDb = await EssentialCategoryModel.findOne({_id: categoryId})
     
     const essentialProduct = new EssentialProductModel({
       categoryId,
@@ -194,6 +199,13 @@ export const editEssentialProductController = async (
       return res.status(401).json({ message: "product do not exist" });
     }
 
+    const categoryDb = await EssentialCategoryModel.findOne({_id: categoryId})
+
+    
+    if (!categoryDb) {
+      return res.status(401).json({ message: "category do not exist" });
+    }
+
     if (!file) {
       medicationImg = product.medicationImage
     }else{
@@ -202,12 +214,6 @@ export const editEssentialProductController = async (
       medicationImg = result?.Location!;
     }
 
-    const categoryDb = await EssentialCategoryModel.findOne({_id: categoryId})
-
-    
-    if (!categoryDb) {
-      return res.status(401).json({ message: "category do not exist" });
-    }
 
     const updatedProduct = await EssentialProductModel.findOneAndUpdate({_id: productId}, {
       categoryId,

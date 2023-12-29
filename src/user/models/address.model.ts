@@ -23,6 +23,10 @@ const AddressSchema = new Schema(
         type: String,
         required: true,
       },
+      doorMan: {
+        type: Boolean,
+        default: false
+      },
       createdAt: {
         type: Date,
         default: Date.now,

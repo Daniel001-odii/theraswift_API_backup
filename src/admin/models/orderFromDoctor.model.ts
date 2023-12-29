@@ -3,12 +3,7 @@ import { MedicationDocument, IOrder } from "../interface/orderFromDoctor.interfa
 
 
 const medicationSchema = new Schema<MedicationDocument>({
-    meidcationId: String,
-    name: String,
-    form: String,
-    strength: String,
-    quantity: String,
-    price: String,
+    medication: Schema.Types.Mixed,
     orderQuantity: Number,
     dosage: String,
     frequency: Number,

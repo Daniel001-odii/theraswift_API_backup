@@ -1,19 +1,13 @@
 import { Schema, model } from "mongoose";
-import { IChat } from "../interface/chat.interface";
+import { IFrequenceAsk } from "../interface/frequenceAskQuestion.interface";
 
-const ChatSchema = new Schema(
+const FrequenceAskSchema = new Schema(
     {
-      sender: {
+      question: {
         type: String,
-        
       },
-      reciever: {
+      answer: {
         type: String,
-        
-      },
-      message: {
-        type: String,
-        
       },
       createdAt: {
         type: Date,
@@ -23,13 +17,13 @@ const ChatSchema = new Schema(
         type: Date,
         default: Date.now,
       },
-
+    
     },
     {
       timestamps: true,
     }
   );
   
-  const ChatModel = model<IChat>("UserChat", ChatSchema);
+  const FrequenceAskModel = model<IFrequenceAsk>("FrequenceAsk", FrequenceAskSchema);
   
-  export default ChatModel;
+  export default FrequenceAskModel;

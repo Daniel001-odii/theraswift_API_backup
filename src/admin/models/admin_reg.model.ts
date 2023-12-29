@@ -13,6 +13,37 @@ const AdminSchema = new Schema(
         type: String,
         required: true,
       },
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+      dateOFBirth: {
+        type: String,
+        required: true,
+      },
+      phoneNumber: {
+        type: Number,
+        required: true,
+        unique: true,
+      },
+      gender: {
+        type: String,
+        enum: ["male", "female"],
+        required: true,
+      },
+      practiseCode: {
+        type: String,
+        default: ""
+      },
+      topAdmin: {
+        type: String,
+        enum: ["yes", "no"],
+        default: "no"
+      },
       createdAt: {
         type: Date,
         default: Date.now,
@@ -21,8 +52,17 @@ const AdminSchema = new Schema(
         type: Date,
         default: Date.now,
       },
-      
       passwordOtp: {
+        otp: String,
+        createdTime: Date,
+        verified: Boolean,
+      },
+      emailOtp: {
+        otp: String,
+        createdTime: Date,
+        verified: Boolean,
+      },
+      phoneNumberOtp: {
         otp: String,
         createdTime: Date,
         verified: Boolean,

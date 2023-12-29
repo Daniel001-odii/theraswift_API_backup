@@ -9,9 +9,6 @@ const MedicationSchema = new Schema(
       price: {
         type: String,
       },
-      strength: {
-        type: String,
-      },
       quantity: {
         type: String,
       },
@@ -28,9 +25,26 @@ const MedicationSchema = new Schema(
       ingredient: {
         type: String,
       },
-      medInfo: {
+      quantityForUser: {
         type: String,
-        default: "",
+      },
+      inventoryQuantity: {
+        type: String,
+      },
+      expiredDate: {
+        type: String,
+      },
+      category: {
+        type: String,
+      },
+      medInfo: {
+        overView: String,
+        howToUse: String,
+        sideEffect: String,
+        storage: String,
+        drugInteraction: String,
+        overdose: String,
+        more: String,
       },
       createdAt: {
         type: Date,
