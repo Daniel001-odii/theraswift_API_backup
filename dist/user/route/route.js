@@ -12,6 +12,12 @@ const medication_controller_1 = require("../controllers/medication.controller");
 const upload_utility_1 = require("../../utils/upload.utility");
 const cart_controlller_1 = require("../controllers/cart.controlller");
 const checkOut_controller_1 = require("../controllers/checkOut.controller");
+const essentialProduct_category_1 = require("../controllers/essentialProduct.category");
+const essentialProductCart_controller_1 = require("../controllers/essentialProductCart.controller");
+const checkOutEssential_Controller_1 = require("../controllers/checkOutEssential.Controller");
+const newletter_controller_1 = require("../controllers/newletter.controller");
+router.post("/check_email", requestValidate_middleware_1.validateEmailParams, regLogin_controller_1.userCheckEmailController); // user check email
+router.post("/check_delivery_state", requestValidate_middleware_1.validateDeliveryStateParams, regLogin_controller_1.userCheckStateController); // user check email
 router.post("/user_signup", requestValidate_middleware_1.validateSignupParams, regLogin_controller_1.userSignUpController); // user signup
 router.post("/user_send_email", requestValidate_middleware_1.validateEmailParams, emailVerification_controller_1.userSendEmailController); // user send email
 router.post("/user_resend_email", requestValidate_middleware_1.validateEmailParams, emailVerification_controller_1.userSendEmailController); // user resend email
@@ -54,4 +60,13 @@ router.post("/checkout/verification", requestValidate_middleware_1.validateUserC
 router.get("/pending_order", roleChecker_middleware_1.checkUserRole, checkOut_controller_1.userGetPendingOrderController); // pending order
 router.get("/not_delevered_order", roleChecker_middleware_1.checkUserRole, checkOut_controller_1.userGetNotDeliveredOrderController); // not delivered order
 router.get("/delivered_order", roleChecker_middleware_1.checkUserRole, checkOut_controller_1.userGetDeliveredOrderController); //  delivered order
+router.get("/ensentialCategory", roleChecker_middleware_1.checkUserRole, essentialProduct_category_1.getPageEssentialCategoryController); // list enssentail categories
+router.get("/ensentialProduct", requestValidate_middleware_1.validateEnssntialProoudtParams, roleChecker_middleware_1.checkUserRole, essentialProduct_category_1.getEssentialProductBycategoryController); // list enssentail product unde categories
+router.post("/ensentialProduct_add_cart", requestValidate_middleware_1.validateEnssntialCarttParams, roleChecker_middleware_1.checkUserRole, essentialProductCart_controller_1.addEssentialProductToCartController); // add product to cart
+router.post("/ensentialProduct_cart_increase", requestValidate_middleware_1.validateEnssntialcartIDtParams, roleChecker_middleware_1.checkUserRole, essentialProductCart_controller_1.increaseEssentialProductToCartController); // increase product in cart
+router.post("/ensentialProduct_cart_decrease", requestValidate_middleware_1.validateEnssntialcartIDtParams, roleChecker_middleware_1.checkUserRole, essentialProductCart_controller_1.decreaseEssentialProductToCartController); // decrease product in cart
+router.get("/ensentialProduct_cart_list", roleChecker_middleware_1.checkUserRole, essentialProductCart_controller_1.getEssentialProductInCartController); // get user cart list
+router.post("/checkout_enssential_product", roleChecker_middleware_1.checkUserRole, checkOutEssential_Controller_1.userCheckOutEssentialPRoductController); // user checkout cart list
+router.post("/subcribe_for_newsletter", requestValidate_middleware_1.validateEmailParams, newletter_controller_1.subcribForNewsletterController); // user subcribe for newsletter
+router.get("/frquence_ask_ans", newletter_controller_1.frequenceAskQuestionController); // user subcribe for newsletter
 exports.default = router;

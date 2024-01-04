@@ -1,14 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const ChatSchema = new mongoose_1.Schema({
-    sender: {
+const FrequenceAskSchema = new mongoose_1.Schema({
+    question: {
         type: String,
     },
-    reciever: {
-        type: String,
-    },
-    message: {
+    answer: {
         type: String,
     },
     createdAt: {
@@ -22,5 +19,5 @@ const ChatSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-const ChatModel = (0, mongoose_1.model)("UserChat", ChatSchema);
-exports.default = ChatModel;
+const FrequenceAskModel = (0, mongoose_1.model)("FrequenceAsk", FrequenceAskSchema);
+exports.default = FrequenceAskModel;

@@ -52,12 +52,7 @@ const doctorSendPatientOderOutOFPocketController = (req, res) => __awaiter(void 
             }
             totalCost = totalCost + parseInt(medication.price);
             const medicationObt = {
-                meidcationId: medication._id,
-                name: medication.name,
-                form: medication.form,
-                strength: medication.strength,
-                quantity: medication.quantity,
-                price: medication.price.toString(),
+                medication,
                 orderQuantity: 1,
                 dosage: precription.dosage,
                 frequency: precription.frequency,
@@ -130,12 +125,7 @@ const doctorSendPatientOderHmoController = (req, res) => __awaiter(void 0, void 
             }
             totalCost = totalCost + parseInt(medication.price);
             const medicationObt = {
-                meidcationId: medication._id,
-                name: medication.name,
-                form: medication.form,
-                strength: medication.strength,
-                quantity: medication.quantity,
-                price: medication.price.toString(),
+                medication,
                 orderQuantity: 1,
                 dosage: precription.dosage,
                 frequency: precription.frequency,

@@ -8,9 +8,6 @@ const MedicationSchema = new mongoose_1.Schema({
     price: {
         type: String,
     },
-    strength: {
-        type: String,
-    },
     quantity: {
         type: String,
     },
@@ -27,9 +24,26 @@ const MedicationSchema = new mongoose_1.Schema({
     ingredient: {
         type: String,
     },
-    medInfo: {
+    quantityForUser: {
         type: String,
-        default: "",
+    },
+    inventoryQuantity: {
+        type: String,
+    },
+    expiredDate: {
+        type: String,
+    },
+    category: {
+        type: String,
+    },
+    medInfo: {
+        overView: String,
+        howToUse: String,
+        sideEffect: String,
+        storage: String,
+        drugInteraction: String,
+        overdose: String,
+        more: String,
     },
     createdAt: {
         type: Date,

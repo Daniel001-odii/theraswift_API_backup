@@ -4,7 +4,6 @@ const mongoose_1 = require("mongoose");
 const UserSchema = new mongoose_1.Schema({
     userId: {
         type: String,
-        required: true,
         unique: true,
     },
     email: {
@@ -41,7 +40,6 @@ const UserSchema = new mongoose_1.Schema({
     },
     refererCode: {
         type: String,
-        required: true,
         unique: true,
     },
     refererCredit: {
@@ -55,7 +53,9 @@ const UserSchema = new mongoose_1.Schema({
     operatingLocation: {
         type: String,
         enum: ["Lagos", "Ogun"],
-        required: true,
+    },
+    address: {
+        type: String,
     },
     createdAt: {
         type: Date,

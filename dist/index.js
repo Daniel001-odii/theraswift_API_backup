@@ -81,7 +81,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 }))();
 // Router middleware
 //app.use("/", routes);
-app.use("/", router.get("/hello", (req, res) => {
+app.use("/", router.get("/", (req, res) => {
     res.json("Hello");
 }));
 app.use("/doctor", routes_1.default);

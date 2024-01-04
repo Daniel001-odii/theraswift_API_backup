@@ -2,14 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const medicationSchema = new mongoose_1.Schema({
-    meidcationId: String,
+    medication: mongoose_1.Schema.Types.Mixed,
+    orderQuantity: Number,
+    refill: String
+});
+const EnsentailSchema = new mongoose_1.Schema({
+    productId: String,
     name: String,
-    form: String,
-    dosage: String,
     quantity: String,
     price: String,
     orderQuantity: Number,
-    refill: String
+    refill: String,
 });
 const OrderSchema = new mongoose_1.Schema({
     userId: {
@@ -36,6 +39,7 @@ const OrderSchema = new mongoose_1.Schema({
         type: String,
     },
     medications: [medicationSchema],
+    ensential: [EnsentailSchema],
     deliveryDate: {
         type: String,
     },

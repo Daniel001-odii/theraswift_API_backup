@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userGetHmoController = exports.userAddHmoController = exports.userGetAddressController = exports.userAddAddressController = exports.userGetMemberController = exports.userRegistMemberController = exports.userdetailController = exports.userMobileNumberSignInController = exports.userEmailSignInController = exports.userSignUpController = void 0;
+exports.userGetHmoController = exports.userAddHmoController = exports.userGetAddressController = exports.userAddAddressController = exports.userGetMemberController = exports.userRegistMemberController = exports.userdetailController = exports.userMobileNumberSignInController = exports.userEmailSignInController = exports.userSignUpController = exports.userCheckStateController = exports.userCheckEmailController = void 0;
 const express_validator_1 = require("express-validator");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -24,10 +24,56 @@ const address_model_1 = __importDefault(require("../models/address.model"));
 const hmo_model_1 = __importDefault(require("../models/hmo.model"));
 const aws3_utility_1 = require("../../utils/aws3.utility");
 const uuid_1 = require("uuid");
+//user check email/////////////
+const userCheckEmailController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, } = req.body;
+        // Check for validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        // try find user with the same email
+        const userEmailExists = yield userReg_model_1.default.findOne({ email });
+        // check if user exists
+        if (!userEmailExists) {
+            return res
+                .status(401)
+                .json({ message: "Email do not exists" });
+        }
+        res.json({
+            message: "Email already exist",
+        });
+    }
+    catch (err) {
+        // signup error
+        res.status(500).json({ message: err.message });
+    }
+});
+exports.userCheckEmailController = userCheckEmailController;
+//user check state/////////////
+const userCheckStateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { address, state } = req.body;
+        // Check for validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        res.json({
+            message: "deliver location successfully saved",
+        });
+    }
+    catch (err) {
+        // signup error
+        res.status(500).json({ message: err.message });
+    }
+});
+exports.userCheckStateController = userCheckStateController;
 //user signup /////////////
 const userSignUpController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, password, firstName, dateOfBirth, lastName, mobileNumber, gender, refererCode, operatingLocation, } = req.body;
+        const { email, password, firstName, dateOfBirth, lastName, mobileNumber, gender, refererCode, operatingLocation, address, } = req.body;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -76,7 +122,8 @@ const userSignUpController = (req, res) => __awaiter(void 0, void 0, void 0, fun
             gender: gender,
             refererCode: newUserRefererCode,
             refererCredit: 500,
-            operatingLocation: operatingLocation
+            operatingLocation: operatingLocation,
+            address
         });
         let userSaved = yield user.save();
         res.json({
@@ -90,7 +137,9 @@ const userSignUpController = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 gender: userSaved.gender,
                 mobileNumber: userSaved.mobileNumber,
                 refererCode: userSaved.refererCode,
-                refererCredit: userSaved.refererCredit
+                refererCredit: userSaved.refererCredit,
+                address: userSaved.address,
+                state: userSaved.operatingLocation
             },
         });
     }
@@ -297,7 +346,7 @@ exports.userGetMemberController = userGetMemberController;
 //user Add new addresss /////////////
 const userAddAddressController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { streetAddress, streetNO, LGA, DeliveryInstruction, } = req.body;
+        const { streetAddress, streetNO, LGA, DeliveryInstruction, doorMan } = req.body;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -317,7 +366,8 @@ const userAddAddressController = (req, res) => __awaiter(void 0, void 0, void 0,
             streetAddress: streetAddress,
             streetNO: streetNO,
             LGA: LGA,
-            DeliveryInstruction: DeliveryInstruction
+            DeliveryInstruction: DeliveryInstruction,
+            doorMan
         });
         const savedAddress = yield newAddress.save();
         res.json({

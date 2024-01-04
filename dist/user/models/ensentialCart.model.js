@@ -1,30 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const AddressSchema = new mongoose_1.Schema({
+const EnsentialCartSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.Schema.Types.ObjectId, ref: 'UserReg',
         required: true,
     },
-    streetAddress: {
-        type: String,
+    productId: {
+        type: mongoose_1.Schema.Types.ObjectId, ref: 'EssentialProduct',
         required: true,
     },
-    streetNO: {
-        type: String,
+    quantityrquired: {
+        type: Number,
         required: true,
     },
-    LGA: {
+    refill: {
         type: String,
-        required: true,
-    },
-    DeliveryInstruction: {
-        type: String,
-        required: true,
-    },
-    doorMan: {
-        type: Boolean,
-        default: false
+        default: "no",
     },
     createdAt: {
         type: Date,
@@ -37,5 +29,5 @@ const AddressSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-const UserAddressModel = (0, mongoose_1.model)("UserAddress", AddressSchema);
-exports.default = UserAddressModel;
+const EnsentialCartModel = (0, mongoose_1.model)("EnsentialCart", EnsentialCartSchema);
+exports.default = EnsentialCartModel;

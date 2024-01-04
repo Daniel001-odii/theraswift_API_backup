@@ -14,7 +14,9 @@ const rolechecke_middleware_1 = require("../middleware/rolechecke.middleware");
 const medication_image_middleware_1 = __importDefault(require("../middleware/medication_image.middleware"));
 const patientOder_controller_1 = require("../controllers/patientOder.controller");
 const patientHmo_controller_1 = require("../controllers/patientHmo.controller");
-router.get("/testGet", (req, res) => { res.json('return get'); });
+router.post("/test", router.get("/", (req, res) => {
+    res.json("Hello");
+})); // doctor signup
 router.post("/doctor_signup", reg_login_validate_1.validateDoctorSignupParams, reg_login_controller_1.doctorSignUpController); // doctor signup
 router.post("/doctor_signin", reg_login_validate_1.validateDoctorSigninParams, reg_login_controller_1.doctorSignInController); // doctor login
 router.post("/doctor_forgot_password", reg_login_validate_1.validateEmail, forgot_password_controller_1.doctorForgotPassworController); // doctor forgot password

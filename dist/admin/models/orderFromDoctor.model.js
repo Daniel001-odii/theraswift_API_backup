@@ -2,12 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const medicationSchema = new mongoose_1.Schema({
-    meidcationId: String,
-    name: String,
-    form: String,
-    strength: String,
-    quantity: String,
-    price: String,
+    medication: mongoose_1.Schema.Types.Mixed,
     orderQuantity: Number,
     dosage: String,
     frequency: Number,

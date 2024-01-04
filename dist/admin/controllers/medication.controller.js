@@ -25,12 +25,15 @@ const adminAddMedicationController = (req, res) => __awaiter(void 0, void 0, voi
         // const fileName = file?.filename;
         // const filePath = file?.path;
         let medicationImg;
-        const { name, price, strength, quantity, prescriptionRequired, form, ingredient, medInfo } = req.body;
+        const { name, price, quantity, prescriptionRequired, form, ingredient, quantityForUser, inventoryQuantity, expiredDate, category, medInfo } = req.body;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        console.log("meidinfo", medInfo);
+        const jsonMedInfo = JSON.parse(medInfo);
+        console.log("json", jsonMedInfo);
         if (!file) {
             medicationImg = '';
         }
@@ -41,35 +44,26 @@ const adminAddMedicationController = (req, res) => __awaiter(void 0, void 0, voi
             console.log(result);
             //medicationImg = uploadToS3(file);
         }
-        console.log(medicationImg);
         const medication = new medication_model_1.default({
             name,
-            price: price,
-            strength: strength,
-            quantity: quantity,
-            medicationImage: medicationImg,
+            price,
+            quantity,
             prescriptionRequired,
+            form,
             ingredient,
-            medInfo: medInfo,
-            form: form
+            quantityForUser,
+            inventoryQuantity,
+            expiredDate,
+            category,
+            medInfo: jsonMedInfo,
+            medicationImage: medicationImg,
         });
         const savedMedication = yield medication.save();
         // const domainName = req.hostname;
         // medicationImg = `${domainName}/public/uploads/${fileName}`;
         return res.status(200).json({
             message: "medication added successfuuy",
-            medication: {
-                id: savedMedication._id,
-                name: savedMedication.name,
-                price: savedMedication.price,
-                strength: savedMedication.strength,
-                quantity: savedMedication.quantity,
-                medicationImage: medicationImg,
-                prescriptionRequired: savedMedication.prescriptionRequired,
-                forms: savedMedication.form,
-                ingredient: savedMedication.ingredient,
-                medInfo: savedMedication.medInfo
-            }
+            medication: savedMedication
         });
     }
     catch (err) {
@@ -82,7 +76,7 @@ exports.adminAddMedicationController = adminAddMedicationController;
 const adminEditMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // let medicationImg;
-        const { medicationId, name, price, strength, quantity, prescriptionRequired, form, ingredient, medInfo, } = req.body;
+        const { medicationId, name, price, quantity, prescriptionRequired, form, ingredient, quantityForUser, inventoryQuantity, expiredDate, category, medInfo, } = req.body;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -90,12 +84,15 @@ const adminEditMedicationController = (req, res) => __awaiter(void 0, void 0, vo
         }
         const updatedMedication = yield medication_model_1.default.findOneAndUpdate({ _id: medicationId }, {
             name,
-            price: price,
-            strength: strength,
-            quantity: quantity,
+            price,
+            quantity,
             prescriptionRequired,
-            form: form,
+            form,
             ingredient,
+            quantityForUser,
+            inventoryQuantity,
+            expiredDate,
+            category,
             medInfo
         }, { new: true });
         if (!updatedMedication) {
@@ -106,18 +103,7 @@ const adminEditMedicationController = (req, res) => __awaiter(void 0, void 0, vo
         // medicationImg = `${domainName}/public/uploads/${updatedMedication.medicationImage}`;
         return res.status(200).json({
             message: "medication updated successfuuy",
-            medication: {
-                id: updatedMedication._id,
-                name: updatedMedication.name,
-                prices: updatedMedication.price,
-                strengths: updatedMedication.strength,
-                quantities: updatedMedication.quantity,
-                medicationImage: updatedMedication.medicationImage,
-                prescriptionRequired: updatedMedication.prescriptionRequired,
-                forms: updatedMedication.form,
-                ingredient: updatedMedication.ingredient,
-                medInfo: updatedMedication.medInfo
-            }
+            medication: updatedMedication
         });
     }
     catch (err) {
@@ -145,18 +131,7 @@ const adminDeleteMedicationController = (req, res) => __awaiter(void 0, void 0, 
         // medicationImg = `${domainName}/public/uploads/${deletedMedication.medicationImage}`;
         return res.status(200).json({
             message: "medication deleted successfuuy",
-            deletedMedication: {
-                id: deletedMedication._id,
-                name: deletedMedication.name,
-                price: deletedMedication.price,
-                strength: deletedMedication.strength,
-                quantity: deletedMedication.quantity,
-                medicationImage: deletedMedication.medicationImage,
-                prescriptionRequired: deletedMedication.prescriptionRequired,
-                forms: deletedMedication.form,
-                ingridient: deletedMedication.ingredient,
-                medInfo: deletedMedication.medInfo
-            }
+            deletedMedication: deletedMedication
         });
     }
     catch (err) {
@@ -200,7 +175,7 @@ exports.getsingleMedicationController = getsingleMedicationController;
 const getSpecificNumbereMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { howMany } = req.body;
-        const limit = howMany || 10; // You can set a default limit or accept it as a query parameter
+        const limit = howMany || 50; // You can set a default limit or accept it as a query parameter
         const Medications = yield medication_model_1.default.find().limit(Number(limit));
         return res.status(200).json({
             message: "success",
@@ -216,9 +191,9 @@ exports.getSpecificNumbereMedicationController = getSpecificNumbereMedicationCon
 //get spage of medication medications /////////////
 const getPageMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { howMany } = req.body;
+        const {} = req.body;
         const page = parseInt(req.body.page) || 1; // Page number, default to 1
-        const limit = parseInt(req.body.limit) || 10; // Documents per page, default to 10
+        const limit = parseInt(req.body.limit) || 50; // Documents per page, default to 10
         const skip = (page - 1) * limit; // Calculate how many documents to skip
         const totalMedications = yield medication_model_1.default.countDocuments(); // Get the total number of documents
         const medications = yield medication_model_1.default.find()
@@ -240,7 +215,7 @@ exports.getPageMedicationController = getPageMedicationController;
 //get total medication medications /////////////
 const getTotalMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { howMany } = req.body;
+        const {} = req.body;
         const totalMedications = yield medication_model_1.default.countDocuments(); // Get the total number of documents
         return res.status(200).json({
             message: "success",

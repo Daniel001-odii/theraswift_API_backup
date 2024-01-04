@@ -69,19 +69,7 @@ const userAddMedicationController = (req, res) => __awaiter(void 0, void 0, void
         const saveUserMedication = yield userMedication.save();
         return res.status(200).json({
             message: "medication added succefully",
-            medication: {
-                firstName: userExist.firstName,
-                medicationId: medication._id,
-                userMedicationID: saveUserMedication._id,
-                name: medication.name,
-                medInfo: medication.medInfo,
-                price: medication.price,
-                form: medication.form,
-                dosage: medication.strength,
-                quantity: medication.quantity,
-                medicationImage: medication.medicationImage,
-                prescriptionRequired: medication.prescriptionRequired,
-            }
+            medication: medication
         });
     }
     catch (err) {
@@ -119,18 +107,7 @@ const userRemoveMedicationController = (req, res) => __awaiter(void 0, void 0, v
         const medication = yield medication_model_2.default.findOne({ _id: deletedmedication.medicationId });
         return res.status(200).json({
             message: "medication removed successfiily",
-            removedMedication: {
-                firstName: userExist.firstName,
-                id: medication === null || medication === void 0 ? void 0 : medication._id,
-                name: medication === null || medication === void 0 ? void 0 : medication.name,
-                medInfo: medication === null || medication === void 0 ? void 0 : medication.medInfo,
-                form: medication === null || medication === void 0 ? void 0 : medication.form,
-                price: medication === null || medication === void 0 ? void 0 : medication.price,
-                strength: medication === null || medication === void 0 ? void 0 : medication.strength,
-                quantity: medication === null || medication === void 0 ? void 0 : medication.quantity,
-                medicationImage: medication === null || medication === void 0 ? void 0 : medication.medicationImage,
-                prescriptionRequired: medication === null || medication === void 0 ? void 0 : medication.prescriptionRequired,
-            }
+            removedMedication: deletedmedication
         });
     }
     catch (err) {
@@ -142,7 +119,7 @@ exports.userRemoveMedicationController = userRemoveMedicationController;
 //user searching for  medication /////////////
 const userSearchMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { medicationName } = req.body;
+        const { medicationName } = req.query;
         // const medication = await MedicationModel.find({
         //   name: { $regex: medicationName, $options: 'i' }, // Case-insensitive search
         // });
@@ -158,6 +135,8 @@ const userSearchMedicationController = (req, res) => __awaiter(void 0, void 0, v
                 // Add more fields as needed for your search
             ],
         };
+        console.log(medicationName);
+        console.log("era", searchQuery);
         const aggregationPipeline = [
             { $match: searchQuery },
             {
@@ -192,7 +171,7 @@ exports.userSearchMedicationController = userSearchMedicationController;
 //user searching for  medication by name /////////////
 const userSearchMedicationNameController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name } = req.body;
+        const { name } = req.query;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -212,7 +191,7 @@ exports.userSearchMedicationNameController = userSearchMedicationNameController;
 //user searching for  medication by name and form /////////////
 const userSearchMedicationNameFormController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, form } = req.body;
+        const { name, form } = req.query;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -232,13 +211,13 @@ exports.userSearchMedicationNameFormController = userSearchMedicationNameFormCon
 //user searching for  medication by name, form and dosage /////////////
 const userSearchMedicationNameFormDosageController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, form, dosage } = req.body;
+        const { name, form, dosage } = req.query;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        const medications = yield medication_model_2.default.find({ name, form, strength: dosage });
+        const medications = yield medication_model_2.default.find({ name, form, quantity: dosage });
         return res.status(200).json({
             medications
         });
@@ -268,14 +247,7 @@ const userGetMedicationController = (req, res) => __awaiter(void 0, void 0, void
             const medObj = {
                 medicationId: medication === null || medication === void 0 ? void 0 : medication._id,
                 userMedicationId: userMedication._id,
-                name: medication === null || medication === void 0 ? void 0 : medication.name,
-                ingridient: medication === null || medication === void 0 ? void 0 : medication.ingredient,
-                form: medication === null || medication === void 0 ? void 0 : medication.form,
-                dosage: medication === null || medication === void 0 ? void 0 : medication.strength,
-                quantity: medication === null || medication === void 0 ? void 0 : medication.quantity,
-                price: medication === null || medication === void 0 ? void 0 : medication.price,
-                prescriptionRequired: medication === null || medication === void 0 ? void 0 : medication.prescriptionRequired,
-                medicationImage: medication === null || medication === void 0 ? void 0 : medication.medicationImage,
+                medication
             };
             medications.push(medObj);
         }
@@ -424,14 +396,7 @@ const userMedicatonRequiredPrescriptionController = (req, res) => __awaiter(void
                 const presObj = {
                     medicationId: medication._id,
                     userMedicationId: userMedication._id,
-                    nema: medication.name,
-                    ingridient: medication.ingredient,
-                    form: medication.form,
-                    dosage: medication.strength,
-                    quanty: medication.quantity,
-                    price: medication.price,
-                    medicationImage: medication.medicationImage,
-                    medInfo: medication.medInfo
+                    medication
                 };
                 prescriptionId.push(presObj);
             }

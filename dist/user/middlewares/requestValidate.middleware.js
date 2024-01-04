@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateAddressParams = exports.validatefamilymemberParams = exports.validateUserCheckOutVerificationParams = exports.validateUserCheckOutParams = exports.validateUserCartParams = exports.validateSearchMedicationByNameFRomDosageParams = exports.validateSearchMedicationByNameFRomParams = exports.validateSearchMedicationByNameParams = exports.validateUserAddMedicationParams = exports.validateAddMedicationParams = exports.validatePhoneLoginParams = exports.validateEmailLoginParams = exports.validatePhoneNumberResetPasswordParams = exports.validateEmailResetPasswordParams = exports.validatePhoneNumberVerificatioParams = exports.validateEmailVerificatioParams = exports.validatePhoneNumberParams = exports.validateEmailParams = exports.validateSignupParams = void 0;
+exports.validateEnssntialcartIDtParams = exports.validateEnssntialCarttParams = exports.validateEnssntialProoudtParams = exports.validateDeliveryStateParams = exports.validateAddressParams = exports.validatefamilymemberParams = exports.validateUserCheckOutVerificationParams = exports.validateUserCheckOutParams = exports.validateUserCartParams = exports.validateSearchMedicationByNameFRomDosageParams = exports.validateSearchMedicationByNameFRomParams = exports.validateSearchMedicationByNameParams = exports.validateUserAddMedicationParams = exports.validateAddMedicationParams = exports.validatePhoneLoginParams = exports.validateEmailLoginParams = exports.validatePhoneNumberResetPasswordParams = exports.validateEmailResetPasswordParams = exports.validatePhoneNumberVerificatioParams = exports.validateEmailVerificatioParams = exports.validatePhoneNumberParams = exports.validateEmailParams = exports.validateSignupParams = void 0;
 const express_validator_1 = require("express-validator");
 exports.validateSignupParams = [
     (0, express_validator_1.body)("email").isEmail(),
@@ -21,6 +21,7 @@ exports.validateSignupParams = [
     (0, express_validator_1.body)("operatingLocation")
         .isIn(["Lagos", "Ogun"])
         .withMessage("operating location must be either Lagos or Ogun"),
+    (0, express_validator_1.body)("address").notEmpty(),
 ];
 exports.validateEmailParams = [
     (0, express_validator_1.body)("email").isEmail(),
@@ -61,16 +62,16 @@ exports.validateUserAddMedicationParams = [
     (0, express_validator_1.body)("medicationId").notEmpty(),
 ];
 exports.validateSearchMedicationByNameParams = [
-    (0, express_validator_1.body)("name").notEmpty(),
+    (0, express_validator_1.query)("name").notEmpty(),
 ];
 exports.validateSearchMedicationByNameFRomParams = [
-    (0, express_validator_1.body)("name").notEmpty(),
-    (0, express_validator_1.body)("form").notEmpty(),
+    (0, express_validator_1.query)("name").notEmpty(),
+    (0, express_validator_1.query)("form").notEmpty(),
 ];
 exports.validateSearchMedicationByNameFRomDosageParams = [
-    (0, express_validator_1.body)("name").notEmpty(),
-    (0, express_validator_1.body)("form").notEmpty(),
-    (0, express_validator_1.body)("dosage").notEmpty(),
+    (0, express_validator_1.query)("name").notEmpty(),
+    (0, express_validator_1.query)("form").notEmpty(),
+    (0, express_validator_1.query)("dosage").notEmpty(),
 ];
 exports.validateUserCartParams = [
     (0, express_validator_1.body)("cartId").notEmpty(),
@@ -101,4 +102,22 @@ exports.validateAddressParams = [
     (0, express_validator_1.body)("streetNO").notEmpty(),
     (0, express_validator_1.body)("LGA").notEmpty(),
     (0, express_validator_1.body)("DeliveryInstruction").notEmpty(),
+    (0, express_validator_1.body)("doorMan")
+        .isIn([true, false])
+        .withMessage("doorMan must be either true or false"),
+];
+exports.validateDeliveryStateParams = [
+    (0, express_validator_1.body)("address").notEmpty(),
+    (0, express_validator_1.body)("state")
+        .isIn(["Lagos", "Ogun"])
+        .withMessage("delivery state available are Lagos and Ogun"),
+];
+exports.validateEnssntialProoudtParams = [
+    (0, express_validator_1.query)("categoryId").notEmpty(),
+];
+exports.validateEnssntialCarttParams = [
+    (0, express_validator_1.body)("productId").notEmpty(),
+];
+exports.validateEnssntialcartIDtParams = [
+    (0, express_validator_1.body)("enssentialCartId").notEmpty(),
 ];
