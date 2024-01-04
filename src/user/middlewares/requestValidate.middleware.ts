@@ -136,7 +136,7 @@ export const validateDeliveryStateParams = [
 ];
 
 export const validateEnssntialProoudtParams = [
-  body("categoryId").notEmpty(),
+  query("categoryId").notEmpty(),
 ];
 
 export const validateEnssntialCarttParams = [

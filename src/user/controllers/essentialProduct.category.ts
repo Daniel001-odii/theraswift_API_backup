@@ -23,8 +23,8 @@ export const getPageEssentialCategoryController = async (
         return res.status(400).json({ errors: errors.array() });
         }
 
-        const page = parseInt(req.body.page) || 1; // Page number, default to 1
-        const limit = parseInt(req.body.limit) || 50; // Documents per page, default to 10
+        const page = parseInt(req.query.page) || 1; // Page number, default to 1
+        const limit = parseInt(req.query.limit) || 50; // Documents per page, default to 10
 
         const skip = (page - 1) * limit; // Calculate how many documents to skip
 
@@ -61,7 +61,7 @@ export const getEssentialProductBycategoryController = async (
         categoryId,
         page,
         limit
-        } = req.body;
+        } = req.query;
 
         // Check for validation errors
         const errors = validationResult(req);
