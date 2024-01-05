@@ -110,7 +110,7 @@ router.get("/delivered_order", checkUserRole, userGetDeliveredOrderController );
 
 
 router.get("/ensentialCategory", checkUserRole, getPageEssentialCategoryController ); // list enssentail categories
-router.get("/ensentialProduct", validateEnssntialProoudtParams, checkUserRole, getEssentialProductBycategoryController ); // list enssentail product unde categories
+router.get("/ensentialProduct", checkUserRole, getEssentialProductBycategoryController ); // list enssentail product unde categories
 router.post("/ensentialProduct_add_cart", validateEnssntialCarttParams, checkUserRole, addEssentialProductToCartController ); // add product to cart
 router.post("/ensentialProduct_cart_increase", validateEnssntialcartIDtParams, checkUserRole, increaseEssentialProductToCartController ); // increase product in cart
 router.post("/ensentialProduct_cart_decrease", validateEnssntialcartIDtParams, checkUserRole, decreaseEssentialProductToCartController ); // decrease product in cart
