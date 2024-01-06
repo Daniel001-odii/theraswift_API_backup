@@ -24,7 +24,8 @@ import {
     validateDeliveryStateParams,
     validateEnssntialProoudtParams,
     validateEnssntialCarttParams,
-    validateEnssntialcartIDtParams
+    validateEnssntialcartIDtParams,
+    validateGetMedicationByIdParams
 } from "../middlewares/requestValidate.middleware";
 import { 
     userAddAddressController,
@@ -42,6 +43,9 @@ import {
     userAddMedicationThroughImageController, 
     userAddPrescriptionImageController, 
     userGetMedicationController,   
+    userGetPopualarMedicationController,   
+    userGethMedicationByIdController,   
+    userGethMedicationController,   
     userMedicatonRequiredPrescriptionController,   
     userPrescriptionStatusController,   
     userRemoveMedicationController, 
@@ -83,6 +87,9 @@ router.post("/add_hmo", upload.single('hmoImg'), checkUserRole, userAddHmoContro
 router.get("/hmo_detail", checkUserRole, userGetHmoController ); // get hmo detail
 
 
+router.get("/get_meidcatiom", userGethMedicationController ); // get medication
+router.get("/get_medication_by_id", validateGetMedicationByIdParams,  userGethMedicationByIdController ); // get medication by Id
+router.get("/get_popular_medication", userGetPopualarMedicationController ); // get popular medicatiom
 router.post("/add_medication", validateUserAddMedicationParams, checkUserRole,   userAddMedicationController ); // user add medication
 router.post("/remove_medication", validateAddMedicationParams, checkUserRole, userRemoveMedicationController ); // user remove medication
 router.get("/seach_medication",  userSearchMedicationController ); // user search for medication
@@ -110,7 +117,7 @@ router.get("/delivered_order", checkUserRole, userGetDeliveredOrderController );
 
 
 router.get("/ensentialCategory", checkUserRole, getPageEssentialCategoryController ); // list enssentail categories
-router.get("/ensentialProduct", validateEnssntialProoudtParams, checkUserRole, getEssentialProductBycategoryController ); // list enssentail product unde categories
+router.get("/ensentialProduct", checkUserRole, getEssentialProductBycategoryController ); // list enssentail product unde categories
 router.post("/ensentialProduct_add_cart", validateEnssntialCarttParams, checkUserRole, addEssentialProductToCartController ); // add product to cart
 router.post("/ensentialProduct_cart_increase", validateEnssntialcartIDtParams, checkUserRole, increaseEssentialProductToCartController ); // increase product in cart
 router.post("/ensentialProduct_cart_decrease", validateEnssntialcartIDtParams, checkUserRole, decreaseEssentialProductToCartController ); // decrease product in cart

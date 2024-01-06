@@ -60,7 +60,8 @@ export const getEssentialProductBycategoryController = async (
         let {
         categoryId,
         page,
-        limit
+        limit,
+        name,
         } = req.query;
 
         // Check for validation errors
@@ -77,9 +78,19 @@ export const getEssentialProductBycategoryController = async (
 
         const totalProduct = await EssentialProductModel.countDocuments({categoryId}); // Get the total number of documents
 
-        const products = await EssentialProductModel.find({categoryId}).sort({createdAt: -1})
+        let products;
+
+        if (!categoryId) {
+            products = await EssentialProductModel.find({name: { $regex: new RegExp(name, 'i') }}).sort({createdAt: -1})
         .skip(skip)
         .limit(limit);
+        } else {
+
+            products = await EssentialProductModel.find({categoryId, name: { $regex: new RegExp(name, 'i') }}).sort({createdAt: -1})
+        .skip(skip)
+        .limit(limit);
+            
+        }
 
         return res.status(200).json({
         products,
