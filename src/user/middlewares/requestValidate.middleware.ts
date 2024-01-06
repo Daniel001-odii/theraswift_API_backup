@@ -77,6 +77,10 @@ export const validateSearchMedicationByNameParams = [
   query("name").notEmpty(),
 ];
 
+export const validateGetMedicationByIdParams = [
+  query("meidcationId").notEmpty(),
+];
+
 export const validateSearchMedicationByNameFRomParams = [
   query("name").notEmpty(),
   query("form").notEmpty(),

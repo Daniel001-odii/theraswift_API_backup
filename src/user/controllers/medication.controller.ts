@@ -675,3 +675,111 @@ export const userAddMedicationThroughImageController = async (
 }
 
 
+//user get medication   /////////////
+export const userGethMedicationController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+      
+    } = req.query;
+    
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const page = parseInt(req.body.page) || 1; // Page number, default to 1
+    const limit = parseInt(req.body.limit) || 50; // Documents per page, default to 10
+
+    const skip = (page - 1) * limit; // Calculate how many documents to skip
+
+    const totalmedication = await MedicationModel.countDocuments(); // Get the total number of documents
+
+
+    const medications =  await MedicationModel.find().skip(skip).limit(limit);
+    return res.status(200).json({
+      medications,
+      totalmedication,
+      currentPage: page,
+      totalPages: Math.ceil(totalmedication / limit),
+    })
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+
+//user medication by Id  /////////////
+export const userGethMedicationByIdController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+      meidcationId
+    } = req.query;
+    
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const medication =  await MedicationModel.findOne({_id: meidcationId});
+
+    if (!medication) {
+      return res
+          .status(401)
+          .json({ message: "invalid medication Id" });
+    }
+
+    return res.status(200).json({
+      medication
+    })
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+
+//bet popular medication /////////////
+export const userGetPopualarMedicationController = async (
+  req: any,
+  res: Response,
+) => {
+
+  try {
+    const {
+      
+    } = req.query;
+    
+    // Check for validation errors
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const popularMedication =  await MedicationModel.find().limit(8);
+    return res.status(200).json({
+      popularMedication
+    })
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
+  }
+
+}
+
+
