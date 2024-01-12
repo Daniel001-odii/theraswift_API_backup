@@ -4,6 +4,7 @@ import UserModel from "../models/userReg.model";
 import UserMedicationModel from "../models/medication.model";
 import MedicationModel from "../../admin/models/medication.model"
 import CartModel from "../models/cart.model";
+import EssentialProductModel from "../../admin/models/essentialProduct.model";
 
 //user add medication  to cart/////////////
 export const userAddMedicationToCartController = async (
@@ -56,7 +57,8 @@ export const userAddMedicationToCartController = async (
         userId,
         medicationId: userMedication.medicationId,
         userMedicationId: userMedicationId,
-        quantityrquired: 1
+        quantityrquired: 1,
+        type: "med"
     })
 
     await cart.save();
@@ -283,27 +285,38 @@ try {
 
   let overallCost = 0;
 
+  let product: any;
+
   for (let i = 0; i < cartList.length; i++) {
     const cart = cartList[i];
 
-    const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId});
-    const medication = await MedicationModel.findOne({_id: cart.medicationId});
+    if (cart.type == "med") {
+      const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId});
+      const medication = await MedicationModel.findOne({_id: cart.medicationId});
 
-    const price: any = medication?.price
+      if (!userMedication || !medication) {
+        continue;
+      }
+      const cost = cart.quantityrquired * parseFloat(medication.price);
+      overallCost = overallCost + cost;
+      product = medication
+    }else{
+      const essentialProduct = await EssentialProductModel.findOne({_id: cart.productId})
+      if (!essentialProduct) {
+        continue;
+      }
+      const cost = cart.quantityrquired * parseFloat(essentialProduct.price);
+      overallCost = overallCost + cost;
+      product = essentialProduct
+    }
+
 
     const cartObj = {
-      cartId: cart._id,
-      medicationId: cart.medicationId,
-      userMedicationId: cart.userMedicationId,
-      medication,
-      quantityrquired: cart.quantityrquired,
-      totalCost: cart.quantityrquired * parseInt(price),
-      refill: cart.refill,
+      cart,
+      product
     }
     
     cartLists.push(cartObj);
-    const cost = cart.quantityrquired * parseInt(price);
-    overallCost = overallCost + cost;
   }
 
   return res.status(200).json({

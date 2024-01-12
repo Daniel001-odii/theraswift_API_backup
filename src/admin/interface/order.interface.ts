@@ -9,10 +9,7 @@ interface Medication {
 }
 
 interface EssentialProduct {
-  productId: string;
-  name: string;
-  quantity: string;
-  price: string;
+  product: any
   orderQuantity: number;
   refill: string;
 }

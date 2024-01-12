@@ -10,6 +10,9 @@ const DoctorWalletSchema = new Schema(
       doctorId:{
         type: Schema.Types.ObjectId, ref: 'DoctorReg'
       },
+      clinicCode: {
+        type: String,
+      },
       createdAt: {
         type: Date,
         default: Date.now,

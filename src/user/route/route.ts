@@ -119,10 +119,10 @@ router.get("/delivered_order", checkUserRole, userGetDeliveredOrderController );
 router.get("/ensentialCategory", checkUserRole, getPageEssentialCategoryController ); // list enssentail categories
 router.get("/ensentialProduct", checkUserRole, getEssentialProductBycategoryController ); // list enssentail product unde categories
 router.post("/ensentialProduct_add_cart", validateEnssntialCarttParams, checkUserRole, addEssentialProductToCartController ); // add product to cart
-router.post("/ensentialProduct_cart_increase", validateEnssntialcartIDtParams, checkUserRole, increaseEssentialProductToCartController ); // increase product in cart
-router.post("/ensentialProduct_cart_decrease", validateEnssntialcartIDtParams, checkUserRole, decreaseEssentialProductToCartController ); // decrease product in cart
-router.get("/ensentialProduct_cart_list", checkUserRole, getEssentialProductInCartController ); // get user cart list
-router.post("/checkout_enssential_product", checkUserRole, userCheckOutEssentialPRoductController ); // user checkout cart list
+// router.post("/ensentialProduct_cart_increase", validateEnssntialcartIDtParams, checkUserRole, increaseEssentialProductToCartController ); // increase product in cart
+// router.post("/ensentialProduct_cart_decrease", validateEnssntialcartIDtParams, checkUserRole, decreaseEssentialProductToCartController ); // decrease product in cart
+// router.get("/ensentialProduct_cart_list", checkUserRole, getEssentialProductInCartController ); // get user cart list
+// router.post("/checkout_enssential_product", checkUserRole, userCheckOutEssentialPRoductController ); // user checkout cart list
 
 router.post("/subcribe_for_newsletter", validateEmailParams, subcribForNewsletterController ); // user subcribe for newsletter
 router.get("/frquence_ask_ans", frequenceAskQuestionController ); // user subcribe for newsletter

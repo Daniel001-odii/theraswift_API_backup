@@ -8,12 +8,13 @@ const CartSchema = new Schema(
         required: true,
       },
       medicationId: {
-        type: Schema.Types.ObjectId, ref: 'Medication',
-        required: true,
+        type: String,
       },
       userMedicationId: {
-        type: Schema.Types.ObjectId, ref: 'UserMedication',
-        required: true,
+        type: String,    
+      },
+      productId: {
+        type: String,
       },
       quantityrquired: {
         type: Number,
@@ -22,6 +23,11 @@ const CartSchema = new Schema(
       refill: {
         type: String,
         default: "no",
+      },
+      type: {
+        type: String,
+        enum: ["med", "ess"],
+        required: true,
       },
       createdAt: {
         type: Date,

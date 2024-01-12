@@ -9,10 +9,7 @@ const medicationSchema = new Schema<MedicationDocument>({
 });
 
 const EnsentailSchema = new Schema<EssentialDocument>({
-  productId: String,
-  name: String,
-  quantity: String,
-  price: String,
+  product: Schema.Types.Mixed,
   orderQuantity: Number,
   refill: String,
 });
@@ -79,6 +76,6 @@ const OrderSchema = new Schema(
     }
   );
   
-  const OrderModel = model<IOrder>("Order", OrderSchema);
+  const OrderModel = model<IOrder>("OrderReg", OrderSchema);
   
   export default OrderModel;

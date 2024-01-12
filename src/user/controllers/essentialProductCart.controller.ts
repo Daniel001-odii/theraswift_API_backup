@@ -4,6 +4,7 @@ import EssentialProductModel from "../../admin/models/essentialProduct.model";
 import EssentialCategoryModel from "../../admin/models/essentialCategori.model";
 import UserModel from "../models/userReg.model";
 import EssentialCart from "../models/ensentialCart.model";
+import CartModel from "../models/cart.model";
 
 
 // add esential product to cart /////////////
@@ -37,7 +38,7 @@ export const addEssentialProductToCartController = async (
             .json({ message: "invalid credential" });
         }
 
-        const checkCart = await EssentialCart.findOne({userId, productId});
+        const checkCart = await CartModel.findOne({userId, productId});
 
         if (checkCart) {
             checkCart.quantityrquired = checkCart.quantityrquired + 1;
@@ -49,10 +50,11 @@ export const addEssentialProductToCartController = async (
 
         }else{
 
-            const newCart = new EssentialCart({
+            const newCart = new CartModel({
                 userId,
                 productId,
-                quantityrquired: 1
+                quantityrquired: 1,
+                type: "ess"  
             });
 
             await newCart.save();

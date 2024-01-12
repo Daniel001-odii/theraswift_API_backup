@@ -11,7 +11,11 @@ import {
     validateDrugPrescription,
     validatePatientidperson,
     validatePatientPrescriptionidperson,
-    validatePatientOderHmoperson
+    validatePatientOderHmoperson,
+    validateSearchMedByName,
+    validateSearchMedByNameForm,
+    validateSearchMedByNameFormDosage,
+    validateDeletePatientprescription
 } from "../validation/reg_login_validate";
 import { 
     doctorSignUpController, 
@@ -27,6 +31,7 @@ import {
     doctorResetPassworController
 } from "../controllers/forgot_password.controller";
 import {
+    doctorDeletePatientPrescriptioController,
     doctorRemovepatientPrescriptionController,
      patientPrescriptionController,
      patientPrescriptionDeliveredDetailController,
@@ -37,6 +42,7 @@ import { checkDoctorRole } from "../middleware/rolechecke.middleware";
 import  upload  from "../middleware/medication_image.middleware";
 import { doctorSendPatientOderHmoController, doctorSendPatientOderOutOFPocketController, doctorgetPatientOderPaid, doctorgetPatientOderPending, doctorgetPatientOderdelieverd } from "../controllers/patientOder.controller";
 import { doctorgetPatientHmoApproved, doctorgetPatientHmoPending, doctorgetPatientHmodenied } from "../controllers/patientHmo.controller";
+import { doctorSearchMedicationNameController, doctorSearchMedicationNameFormController, doctorSearchMedicationNameFormDosageController } from "../controllers/medication.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -50,11 +56,18 @@ router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworC
 
 router.post("/register_patient", checkDoctorRole, upload, validatePatientRegParams,  doctorRegisterPatient); // doctor register his patient
 router.get("/all_registered_patient",  checkDoctorRole, doctorGetAllRegisteredPatient); // doctor get all his patient
-router.post("/single_registered_patient", validatePatientid,  checkDoctorRole, doctorGetSingleRegisteredPatient); // doctor get single patient
+router.get("/single_registered_patient", validatePatientid,  checkDoctorRole, doctorGetSingleRegisteredPatient); // doctor get single patient
+
+router.get("/seach_medication_name", validateSearchMedByName,  doctorSearchMedicationNameController ); // doctor search for medication by name
+router.get("/seach_medication_name_form", validateSearchMedByNameForm, doctorSearchMedicationNameFormController ); // doctor search for medication by name and form
+router.get("/seach_medication_name_form_dosage", validateSearchMedByNameFormDosage, doctorSearchMedicationNameFormDosageController ); // doctor search for medication by name, form and dosage
 
 
 router.post("/patient_prescription",  validateDrugPrescription,  checkDoctorRole, patientPrescriptionController); // doctor prescribe drug for patient
 router.post("/patient_prescription_detail",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDetailController); // doctor get  patient prescription
+router.post("/delete_patient_prescription",  validateDeletePatientprescription,  checkDoctorRole, doctorDeletePatientPrescriptioController); // doctor delete  patient prescription
+
+
 router.post("/patient_prescription_detail_delivered",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDeliveredDetailController); // doctor get  patient prescription that wass delivered
 router.post("/patient_prescription_detail_not_delivered",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDetailNOTDeliveredController); // doctor get  patient prescription that was not delivered
 router.post("/remove_patient_prescription",  validatePatientPrescriptionidperson,  checkDoctorRole, doctorRemovepatientPrescriptionController); // doctor remove medication from patient prescription

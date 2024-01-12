@@ -62,7 +62,7 @@ export const patientPrescriptionController = async (
         const patientPrescriptionSaved = await patientPrescription.save();
 
         return res.status(200).json({
-            message: `precription succefully added for ${patientExists.firstName}`,
+            message: `precription successfully added for ${patientExists.firstName}`,
             patient:{
                 id: patientExists._id,
                 email: patientExists.email,
@@ -114,34 +114,84 @@ export const patientPrescriptionDetailController = async (
         }
         
         // check if patient exist
-        const patientExists = await PatientModel.findOne({ _id: patientId });
+        const patientExists = await PatientModel.findOne({ _id: patientId }).select("-password");
         if (!patientExists) {
             return res
             .status(401)
             .json({ message: "patient does not exist" });
         }
 
-        const patientPrescriptionDetail = await PatientPrescriptionModel.find({patientId: patientId}).populate('medicationId', 'name price strength quantity medicationImage prescriptionRequired form ingredient medInfo').sort({createdAt: -1});
+        const patientPrescriptionDetails = await PatientPrescriptionModel.find({patientId: patientId}).sort({createdAt: -1});
+
+        let patientMedications = [];
+
+        for (let i = 0; i < patientPrescriptionDetails.length; i++) {
+            const patientPrescriptionDetail = patientPrescriptionDetails[i];
+            const medication = await MedicationModel.findOne({_id: patientPrescriptionDetail.medicationId})
+            
+            const obj = {
+                patientPrescriptionDetail,
+                medication
+            }
+
+            patientMedications.push(obj)
+        }
 
 
         return res.status(200).json({
-            message: `precription succefully added for ${patientExists.firstName}`,
-            patient:{
-                id: patientExists._id,
-                email: patientExists.email,
-                firstName: patientExists.firstName,
-                surname: patientExists.surname,
-                phoneNumber: patientExists.phoneNumber,
-                gender: patientExists.gender,
-                address: patientExists.address,
-                dateOFBirth: patientExists.dateOFBirth,
-                doctorId: patientExists.doctorId,
-            
-            },
-            prescription:{
-                patientPrescriptionDetail
-            }
+            patient: patientExists,
+            patientMedications
 
+        })
+      
+    } catch (err: any) {
+        // signup error
+        res.status(500).json({ message: err.message });
+
+        
+    }
+}
+
+
+
+// doctor delete patient medication 
+export const doctorDeletePatientPrescriptioController = async (
+    req: any,
+    res: Response
+) => {
+    try {
+        const doctor = req.doctor;
+
+        const {
+            prescriptionId,
+            patientId,
+        } = req.body;
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
+        // check if patient exist
+        const patientExists = await PatientModel.findOne({ _id: patientId }).select("-password");
+        if (!patientExists) {
+            return res
+            .status(401)
+            .json({ message: "patient does not exist" });
+        }
+
+       const deletePrescription = await PatientPrescriptionModel.findOneAndDelete({_id: prescriptionId, patientId}, {new: true})
+
+       if (!deletePrescription) {
+        return res
+        .status(401)
+        .json({ message: "invalid prescription ID" });
+       }
+
+
+        return res.status(200).json({
+            message: `prescription deleted successfully`,
         })
       
     } catch (err: any) {

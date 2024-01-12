@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 export const validateDoctorSignupParams = [
   body("email").isEmail(),
@@ -6,6 +6,7 @@ export const validateDoctorSignupParams = [
   body("lastName").notEmpty(),
   body("password").notEmpty(),
   body("title").notEmpty(),
+  body("clinicCode").notEmpty(),
   body("organization")
     .isIn(["clinic", "hospital", "HMO"])
     .withMessage("Oganization must be either clinic, hospital or HMO"),
@@ -35,6 +36,11 @@ export const validatePatientidperson = [
   body("patientId").notEmpty(),
 ];
 
+export const validateDeletePatientprescription = [
+  body("patientId").notEmpty(),
+  body("prescriptionId").notEmpty(),
+];
+
 export const validateEmail = [
   body("email").isEmail(),
 ];
@@ -43,6 +49,21 @@ export const validateResetPassword = [
   body("email").isEmail(),
   body("otp").notEmpty(),
   body("password").notEmpty(),
+];
+
+export const validateSearchMedByName = [
+  query("name").notEmpty(),
+];
+
+export const validateSearchMedByNameForm = [
+  query("name").notEmpty(),
+  query("form").notEmpty(),
+];
+
+export const validateSearchMedByNameFormDosage = [
+  query("name").notEmpty(),
+  query("form").notEmpty(),
+  query("dosage").notEmpty(),
 ];
 
 export const validateDrugPrescription = [

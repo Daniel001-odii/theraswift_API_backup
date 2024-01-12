@@ -10,6 +10,7 @@ export interface IDoctorReg extends Document {
   title: string;
   organization: string;
   clinicCode: string,
+  superDoctor: boolean;
   createdAt: Date;
   updatedAt: Date;
   // verified: boolean; 

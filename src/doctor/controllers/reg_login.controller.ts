@@ -47,9 +47,20 @@ export const doctorSignUpController = async (
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10); 
 
-    let doctorClinicCode = '';
-    if (clinicCode != '') {
-      doctorClinicCode = clinicCode
+    let doctorClinicCode = clinicCode;
+    let superDoctor = false
+    if (!clinicCode || clinicCode != '') {
+      doctorClinicCode = ''
+      superDoctor = true
+
+    } else{
+      const checkClinicCode = await DoctotModel.find({clinicCode: clinicCode});
+
+      if (checkClinicCode.length < 1) {
+        return res
+        .status(401)
+        .json({ message: "incorrect clinic code" });
+      }
     }
 
     // Save user to MongoDB
@@ -60,17 +71,21 @@ export const doctorSignUpController = async (
       password: hashedPassword,
       title,
       organization,
-      clinicCode: doctorClinicCode
+      clinicCode: doctorClinicCode,
+      superDoctor
     });
     let doctorSaved = await doctor.save();
 
-    // //create doctor wallet Account
-    // const doctorWallet = new DoctorWalletModel({
-    //   amount: 0,
-    //   doctorId: doctorSaved._id
-    // })
+    if (superDoctor) {
+      //create doctor wallet Account
+      const doctorWallet = new DoctorWalletModel({
+        amount: 0,
+        doctorId: doctorSaved._id
+      })
 
-    // await doctorWallet.save();
+      await doctorWallet.save();
+      
+    }
 
 
     res.json({

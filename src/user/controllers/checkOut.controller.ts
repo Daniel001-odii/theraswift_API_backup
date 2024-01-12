@@ -6,6 +6,7 @@ import MedicationModel from "../../admin/models/medication.model";
 import OrderModel from "../../admin/models/order.model";
 import CartModel from "../models/cart.model";
 import fetch from "node-fetch";
+import EssentialProductModel from "../../admin/models/essentialProduct.model";
 
 //user checkout /////////////
 export const userCheckOutController = async (
@@ -22,8 +23,6 @@ export const userCheckOutController = async (
         gender,
         address,
     } = req.body;
-
-    const file = req.file;
 
     // Check for validation errors
     const errors = validationResult(req);
@@ -56,35 +55,63 @@ export const userCheckOutController = async (
 
     let totalCost = 0;
     let medArray = [];
+    let essentialProductarray = [];
     for (let i = 0; i < carts.length; i++) {
         const cart = carts[i];
 
-        const medication = await MedicationModel.findOne({_id: cart.medicationId});
-        const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId})
-        if (medication && userMedication) {
-            
-            if (medication.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {  
-                continue;
-            }
-
-            totalCost = totalCost + (cart.quantityrquired * parseInt(medication.price))
-            
-            const medicationObt = {
-                medication: medication,
-                orderQuantity: cart.quantityrquired.toString(),
-                refill: cart.refill,
-            }
-
-            medArray.push(medicationObt);
-        }
+        if (cart.type == "med") {
         
+          const medication = await MedicationModel.findOne({_id: cart.medicationId});
+          const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId})
+          
+          console.log(5)
+
+          if (medication && userMedication) {
+              
+              if (medication.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {  
+                  continue;
+              }
+
+              totalCost = totalCost + (cart.quantityrquired * parseFloat(medication.price))
+              
+              const medicationObt = {
+                medication: medication,
+                orderQuantity: cart.quantityrquired,
+                refill: cart.refill,
+              }
+
+              medArray.push(medicationObt);
+          }
+
+        }else{
+
+          const essentialProdut = await EssentialProductModel.findOne({_id: cart.productId})
+
+          if (!essentialProdut) {
+            continue;
+          }
+
+          totalCost = totalCost + (cart.quantityrquired * parseFloat(essentialProdut.price))
+              
+          const productObt = {
+            product: essentialProdut,
+            orderQuantity: cart.quantityrquired,
+            refill: cart.refill,
+          }
+
+          essentialProductarray.push(productObt);
+
+        }
+     
     }
 
-    if (medArray.length < 1) {
+    if (medArray.length < 1 && essentialProductarray.length < 1) {
         return res
         .status(401)
         .json({ message: "all your medication required prescripstion" });
     }
+
+    console.log(10)
 
     if (refererCredit >= totalCost) {
 
@@ -92,14 +119,14 @@ export const userCheckOutController = async (
 
       // Extract day, month, year, and time components
       const day = currentDate.getDate(); // Day of the month (1-31)
-      const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
-      const year = currentDate.getFullYear(); // Full year (e.g., 2023)
-      const hours = currentDate.getHours(); // Hours (0-23)
-      const minutes = currentDate.getMinutes(); // Minutes (0-59)
-      const seconds = currentDate.getSeconds(); // Seconds (0-59)
+      // const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
+      // const year = currentDate.getFullYear(); // Full year (e.g., 2023)
+      // const hours = currentDate.getHours(); // Hours (0-23)
+      // const minutes = currentDate.getMinutes(); // Minutes (0-59)
+      // const seconds = currentDate.getSeconds(); // Seconds (0-59)
 
-      // Format the components as a string
-      const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+      // // Format the components as a string
+      // const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         
         const order = new OrderModel({
             userId,
@@ -110,18 +137,18 @@ export const userCheckOutController = async (
             address,
             paymentId: "referer credit",
             medications: medArray,
+            ensential: essentialProductarray,
             deliveryDate: deliveryDate,
             refererBunousUsed: totalCost.toString(),
             totalAmount: totalCost.toString(),
             amountPaid: '0',
-            paymentDate: formattedDate,
-            deliveredStatus: 'not delivered'
-        })
+            paymentDate: day,
+            deliveredStatus: 'not delivered',
 
+        })
 
         const me = await order.save();
 
-        console.log(1)
         console.log(me)
 
         userExist.refererCredit = refererCredit - totalCost;
@@ -181,14 +208,14 @@ export const userCheckOutController = async (
 
     // Extract day, month, year, and time components
     const day = currentDate.getDate(); // Day of the month (1-31)
-    const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
-    const year = currentDate.getFullYear(); // Full year (e.g., 2023)
-    const hours = currentDate.getHours(); // Hours (0-23)
-    const minutes = currentDate.getMinutes(); // Minutes (0-59)
-    const seconds = currentDate.getSeconds(); // Seconds (0-59)
+    // const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
+    // const year = currentDate.getFullYear(); // Full year (e.g., 2023)
+    // const hours = currentDate.getHours(); // Hours (0-23)
+    // const minutes = currentDate.getMinutes(); // Minutes (0-59)
+    // const seconds = currentDate.getSeconds(); // Seconds (0-59)
 
-    // Format the components as a string
-    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+    // // Format the components as a string
+    // const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       
       const order = new OrderModel({
           userId,
@@ -199,11 +226,12 @@ export const userCheckOutController = async (
           address,
           paymentId: data.data.reference,
           medications: medArray,
+          ensential: essentialProductarray,
           deliveryDate: deliveryDate,
           refererBunousUsed: refCre,
           totalAmount: totalCost.toString(),
           amountPaid: amount,
-          paymentDate: formattedDate,
+          paymentDate: day,
           deliveredStatus: 'pending'
       })
 
@@ -219,7 +247,7 @@ export const userCheckOutController = async (
       reference: data.data.reference,
       //orderId: savedOrdered._id
     })
-    
+
     
   } catch (err: any) {
     // signup error

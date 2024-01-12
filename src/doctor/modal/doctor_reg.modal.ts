@@ -34,6 +34,9 @@ const DoctorSchema = new Schema(
         type: String,
         default: '',
       },
+      superDoctor: {
+        type: Boolean
+      },
       createdAt: {
         type: Date,
         default: Date.now,
