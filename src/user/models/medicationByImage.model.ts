@@ -12,6 +12,11 @@ const PatientMedicationImageSchema = new Schema(
         type: String,
         default: "",
       },
+      enter: {
+        type: String,
+        enum: ["yes", "no"],
+        default: "no",
+      },
       createdAt: {
         type: Date,
         default: Date.now,

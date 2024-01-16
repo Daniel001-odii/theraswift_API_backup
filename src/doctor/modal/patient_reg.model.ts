@@ -45,6 +45,10 @@ const PatientSchema = new Schema(
       doctorId:{
         type: Schema.Types.ObjectId, ref: 'DoctorReg'
       },
+      clinicCode: {
+        type: String,
+        required: true,
+      },
       createdAt: {
         type: Date,
         default: Date.now,

@@ -36,6 +36,7 @@ export interface IPatientReg extends Document {
   medicalRecord: string;
   hmo: string;
   doctorId: IDoctorReg['_id'];
+  clinicCode: string;
   createdAt: Date;
   updatedAt: Date;
 }

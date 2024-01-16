@@ -224,12 +224,12 @@ export const doctorRegisterPatient = async (
       medicalRecord: medicationImg,
       doctorId: doctor._id,
       hmo: patientHmo,
+      clinicCode: doctor.clinicCode
     });
     let patientSaved = await patient.save();
     
 
     return res.status(200).json({
-      message: "Login successful",
       patient:{
         id: patientSaved._id,
         email: patientSaved.email,

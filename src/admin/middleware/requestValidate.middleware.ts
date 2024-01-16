@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 export const validateSignupParams = [
   body("email").isEmail(),
@@ -121,6 +121,24 @@ export const validatFrequenceAskParams = [
   body("answer").notEmpty(),
 ];
 
+
+
+//////////////////////
+/// Doctor //////////
+/////////////////
+
+export const validatDoctorIdParams = [
+  query("doctorId").notEmpty(),
+];
+
+export const validatPatientUnderDoctorIdParams = [
+  query("clinicCode").notEmpty(),
+];
+
+export const validatSinglePatientUnderDoctorIdParams = [
+  query("clinicCode").notEmpty(),
+  query("patientId").notEmpty(),
+];
 
 
 

@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
 import { 
+    validatDoctorIdParams,
     validatEssentialCategoryParams,
     validatEssentialProuctIdParams,
     validatFrequenceAskParams,
+    validatPatientUnderDoctorIdParams,
+    validatSinglePatientUnderDoctorIdParams,
     validateAdminSigninParams,
     validateAdminSigninPhonNumberParams,
     validateEmail,
@@ -39,6 +42,7 @@ import { createEssentialCategoryController, getAllEssentialCategoryController, g
 import { adminAddEssentialProductController, deleteEssentialProductController, editEssentialProductController, getPageEssentialProductController, searchEssentialProductByNameController } from "../controllers/essentialProduct.controller";
 import { adminEmailVerificationController, adminPhoneNumberVerificationController, adminSendEmailController, adminSendPhoneNumberController } from "../controllers/emailPhoneNumberVerification";
 import { adminFrequenceAskController, adminNewsletterSubcriberController } from "../controllers/frequencAskAndNewsletter.controller";
+import { adminGetDoctor, adminGetPatientUnderDoctor, adminGetSingleDoctorOder, adminGetSinglePatientUnderDoctorOder } from "../controllers/doctorDetail.controller";
 
 
 router.post("/admin_signup", validateSignupParams, adminSignUpController); // admin signup
@@ -101,6 +105,14 @@ router.get("/get_newsletters",  checkAdminRole, adminNewsletterSubcriberControll
 router.get("/doctor_order_pending", checkAdminRole, adminGetPendingDoctorOder); // get order from doctor that is pending
 router.get("/doctor_order_paid", checkAdminRole, adminGetPaidDoctorOder); // get order from doctor that is paid
 router.get("/doctor_order_delivered", checkAdminRole, adminGetDeliverdDoctorOder); // get order from doctor that is delived
+
+
+
+router.get("/doctor_detail", checkAdminRole, adminGetDoctor); // get doctor detail
+router.get("/doctor_single_detail", validatDoctorIdParams, checkAdminRole, adminGetSingleDoctorOder); // get single doctor detail
+router.get("/patient_doctor_detail", validatPatientUnderDoctorIdParams, checkAdminRole, adminGetPatientUnderDoctor); // get patient under doctor detail
+router.get("/patient_doctor_single_detail", validatSinglePatientUnderDoctorIdParams, checkAdminRole, adminGetSinglePatientUnderDoctorOder); // get single patient doctor detail
+
 
 
 export default router;
