@@ -36,6 +36,10 @@ export const validatePatientidperson = [
   body("patientId").notEmpty(),
 ];
 
+export const validatePatientidQueryperson = [
+  query("patientId").notEmpty(),
+];
+
 export const validateDeletePatientprescription = [
   body("patientId").notEmpty(),
   body("prescriptionId").notEmpty(),

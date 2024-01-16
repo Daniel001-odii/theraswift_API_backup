@@ -15,7 +15,8 @@ import {
     validateSearchMedByName,
     validateSearchMedByNameForm,
     validateSearchMedByNameFormDosage,
-    validateDeletePatientprescription
+    validateDeletePatientprescription,
+    validatePatientidQueryperson
 } from "../validation/reg_login_validate";
 import { 
     doctorSignUpController, 
@@ -43,6 +44,7 @@ import  upload  from "../middleware/medication_image.middleware";
 import { doctorSendPatientOderHmoController, doctorSendPatientOderOutOFPocketController, doctorgetPatientOderPaid, doctorgetPatientOderPending, doctorgetPatientOderdelieverd } from "../controllers/patientOder.controller";
 import { doctorgetPatientHmoApproved, doctorgetPatientHmoPending, doctorgetPatientHmodenied } from "../controllers/patientHmo.controller";
 import { doctorSearchMedicationNameController, doctorSearchMedicationNameFormController, doctorSearchMedicationNameFormDosageController } from "../controllers/medication.controller";
+import { getpatientPriscriptionDeliverdeController, getpatientPriscriptionPendindController, getpatientPriscriptionProgressController, patientOderHmoController, patientOderOutPocketController } from "../controllers/patientMedicationOrder.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -67,6 +69,12 @@ router.post("/patient_prescription",  validateDrugPrescription,  checkDoctorRole
 router.post("/patient_prescription_detail",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDetailController); // doctor get  patient prescription
 router.post("/delete_patient_prescription",  validateDeletePatientprescription,  checkDoctorRole, doctorDeletePatientPrescriptioController); // doctor delete  patient prescription
 
+
+router.post("/patient_order_with_hmo",  validatePatientidperson,  checkDoctorRole, patientOderHmoController); // order with hmo
+router.post("/patient_order_with_outpocket",  validatePatientidperson,  checkDoctorRole, patientOderOutPocketController); // order out of pocket
+router.get("/get_patient_order_pending",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionPendindController); // get patient order that is pending
+router.get("/get_patient_order_progress",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionProgressController); // get patient order that is progress
+router.get("/get_patient_order_delivered",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionDeliverdeController); // get patient ordr that is deliverde
 
 router.post("/patient_prescription_detail_delivered",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDeliveredDetailController); // doctor get  patient prescription that wass delivered
 router.post("/patient_prescription_detail_not_delivered",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDetailNOTDeliveredController); // doctor get  patient prescription that was not delivered
