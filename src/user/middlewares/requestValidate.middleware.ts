@@ -104,7 +104,14 @@ export const validateUserCheckOutParams = [
   body("address").notEmpty(),
   body("lastName").notEmpty(),
   body("gender")
-  .isIn(["male", "female"])
+  .isIn(["male", "female"]),
+  body("others").isArray().custom((value: any[]) => {
+    // Check if the 'others' field is an array
+    if (!Array.isArray(value)) {
+      throw new Error('Invalid format for the "others" field.');
+    }
+    return true;
+  }),
 ];
 
 export const validateUserCheckOutVerificationParams = [

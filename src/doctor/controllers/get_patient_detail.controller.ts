@@ -13,7 +13,7 @@ export const doctorGetAllRegisteredPatient = async (
 ) => {
     try {
        const doctor = req.doctor;
-       const doctorPatients = await PatientModel.find({doctorId: doctor._id});
+       const doctorPatients = await PatientModel.find({clinicCode: doctor.clinicCode});
 
        return res.status(200).json({
         message: "success",
@@ -45,7 +45,7 @@ export const doctorGetSingleRegisteredPatient = async (
           return res.status(400).json({ errors: errors.array() });
         }
        const doctor = req.doctor;
-       const doctorPatient = await PatientModel.findOne({ _id: id, doctorId: doctor._id});
+       const doctorPatient = await PatientModel.findOne({ _id: id, clinicCode: doctor.clinicCode});
 
        return res.status(200).json({
         message: "success",

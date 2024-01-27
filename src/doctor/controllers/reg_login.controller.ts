@@ -49,14 +49,15 @@ export const doctorSignUpController = async (
 
     let doctorClinicCode = clinicCode;
     let superDoctor = false
+    
     if (!clinicCode || clinicCode != '') {
       doctorClinicCode = ''
       superDoctor = true
 
     } else{
-      const checkClinicCode = await DoctotModel.find({clinicCode: clinicCode});
+      const checkClinicCode = await DoctotModel.findOne({clinicCode: clinicCode, superDoctor: true});
 
-      if (checkClinicCode.length < 1) {
+      if (!checkClinicCode) {
         return res
         .status(401)
         .json({ message: "incorrect clinic code" });
@@ -139,6 +140,14 @@ export const doctorSignInController = async (
     const isPasswordMatch = await bcrypt.compare(password, doctor.password);
     if (!isPasswordMatch) {
       return res.status(401).json({ message: "incorrect credential." });
+    }
+
+    if (!doctor.emailOtp.verified) {
+      return res.status(401).json({ message: "email not verified." });
+    }
+
+    if (doctor.clinicCode == '') {
+      return res.status(401).json({ message: "you don't have clinic code." });
     }
 
     // generate access token

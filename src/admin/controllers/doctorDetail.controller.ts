@@ -2,7 +2,7 @@ import { validationResult } from "express-validator";
 import { Request, Response } from "express";
 import PatientModel from "../../doctor/modal/patient_reg.model";
 import DoctorModel from "../../doctor/modal/doctor_reg.modal";
-
+import { sendEmail } from "../../utils/send_email_utility";
 
 // admin get doctor detail 
 export const adminGetDoctor = async (
@@ -152,6 +152,72 @@ export const adminGetSinglePatientUnderDoctorOder = async (
 
         return res.status(200).json({
             patient
+        })
+    } catch (err: any) {
+        // signup error
+        res.status(500).json({ message: err.message });
+        
+    }
+}
+
+
+
+// admin give doctor clinic Code 
+export const adminGiveDoctorClinicCode = async (
+    req: any,
+    res: Response
+) => {
+    try {
+        let {
+            email
+        } = req.body
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
+        const doctor = await DoctorModel.findOne({email})
+
+        if (!doctor) {
+            return res
+            .status(401)
+            .json({ message: "incorrect email" });
+        }
+
+        if (!doctor.superDoctor) {
+            return res
+            .status(401)
+            .json({ message: "this email is not for super admin" });
+        }
+
+        if (doctor.clinicCode !== '') {
+            return res
+            .status(401)
+            .json({ message: "clinic code already exist" });
+        }
+
+        const date = new Date()
+
+        const numberString = Math.abs(date.getTime()).toString();
+
+        const clinicCode = numberString.slice(-6);
+
+        doctor.clinicCode = clinicCode
+        await doctor.save()
+
+        let emailData = {
+            emailTo: email,
+            subject: "Theraswift clinic code",
+            otp: clinicCode,
+            firstName: doctor.firstName,
+        };
+
+        sendEmail(emailData);
+
+        return res.status(200).json({
+            message: "clinic code sent to your email"
         })
     } catch (err: any) {
         // signup error

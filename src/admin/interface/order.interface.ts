@@ -35,6 +35,10 @@ export interface IOrder extends Document {
   amountPaid: string;
   paymentDate: string;
   deliveredStatus: string;
+  others: Array<{
+    key: string;
+    value: string;
+  }>;
   createdAt: Date;
   updatedAt: Date;
 }

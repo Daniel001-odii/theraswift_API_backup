@@ -16,7 +16,9 @@ import {
     validateSearchMedByNameForm,
     validateSearchMedByNameFormDosage,
     validateDeletePatientprescription,
-    validatePatientidQueryperson
+    validatePatientidQueryperson,
+    validateDoctorSendEmailParams,
+    validateDoctorVerifiedEmailParams
 } from "../validation/reg_login_validate";
 import { 
     doctorSignUpController, 
@@ -45,12 +47,16 @@ import { doctorSendPatientOderHmoController, doctorSendPatientOderOutOFPocketCon
 import { doctorgetPatientHmoApproved, doctorgetPatientHmoPending, doctorgetPatientHmodenied } from "../controllers/patientHmo.controller";
 import { doctorSearchMedicationNameController, doctorSearchMedicationNameFormController, doctorSearchMedicationNameFormDosageController } from "../controllers/medication.controller";
 import { getpatientPriscriptionDeliverdeController, getpatientPriscriptionPendindController, getpatientPriscriptionProgressController, patientOderHmoController, patientOderOutPocketController } from "../controllers/patientMedicationOrder.controller";
+import { doctorEmailVerificationController, doctorSendEmailController } from "../controllers/emailVerification.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
     res.json("Hello");
   }));  // doctor signup
+
 router.post("/doctor_signup", validateDoctorSignupParams, doctorSignUpController);  // doctor signup
+router.post("/doctor_send_email", validateDoctorSendEmailParams, doctorSendEmailController);  // doctor send email
+router.post("/doctor_verified_email", validateDoctorVerifiedEmailParams, doctorEmailVerificationController);  // doctor verified email
 router.post("/doctor_signin", validateDoctorSigninParams, doctorSignInController); // doctor login
 router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworController); // doctor forgot password
 router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password
@@ -66,7 +72,7 @@ router.get("/seach_medication_name_form_dosage", validateSearchMedByNameFormDosa
 
 
 router.post("/patient_prescription",  validateDrugPrescription,  checkDoctorRole, patientPrescriptionController); // doctor prescribe drug for patient
-router.post("/patient_prescription_detail",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDetailController); // doctor get  patient prescription
+router.get("/patient_prescription_detail",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDetailController); // doctor get  patient prescription
 router.post("/delete_patient_prescription",  validateDeletePatientprescription,  checkDoctorRole, doctorDeletePatientPrescriptioController); // doctor delete  patient prescription
 
 
@@ -76,6 +82,9 @@ router.get("/get_patient_order_pending",  validatePatientidQueryperson,  checkDo
 router.get("/get_patient_order_progress",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionProgressController); // get patient order that is progress
 router.get("/get_patient_order_delivered",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionDeliverdeController); // get patient ordr that is deliverde
 
+
+
+//// over coded
 router.post("/patient_prescription_detail_delivered",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDeliveredDetailController); // doctor get  patient prescription that wass delivered
 router.post("/patient_prescription_detail_not_delivered",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDetailNOTDeliveredController); // doctor get  patient prescription that was not delivered
 router.post("/remove_patient_prescription",  validatePatientPrescriptionidperson,  checkDoctorRole, doctorRemovepatientPrescriptionController); // doctor remove medication from patient prescription

@@ -61,6 +61,12 @@ const OrderSchema = new Schema(
         type: String,
         enum: ["delivered", "pending", "not delivered"],
       },
+      others: [
+        {
+          key: String,
+          value: String,
+        },
+      ],
       createdAt: {
         type: Date,
         default: Date.now,

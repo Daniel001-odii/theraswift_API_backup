@@ -140,6 +140,15 @@ export const validatSinglePatientUnderDoctorIdParams = [
   query("patientId").notEmpty(),
 ];
 
+export const validateDoctorEmailParams = [
+  body("email").notEmpty(),
+  
+];
+
+export const validatHmoIdParams = [
+  query("hmoId").notEmpty(),
+];
+
 
 
 

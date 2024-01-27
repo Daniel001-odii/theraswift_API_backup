@@ -22,6 +22,7 @@ export const userCheckOutController = async (
         dateOfBirth,
         gender,
         address,
+        others,
     } = req.body;
 
     // Check for validation errors
@@ -129,22 +130,22 @@ export const userCheckOutController = async (
       // const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         
         const order = new OrderModel({
-            userId,
-            firstName,
-            lastName,
-            dateOfBirth,
-            gender,
-            address,
-            paymentId: "referer credit",
-            medications: medArray,
-            ensential: essentialProductarray,
-            deliveryDate: deliveryDate,
-            refererBunousUsed: totalCost.toString(),
-            totalAmount: totalCost.toString(),
-            amountPaid: '0',
-            paymentDate: day,
-            deliveredStatus: 'not delivered',
-
+          userId,
+          firstName,
+          lastName,
+          dateOfBirth,
+          gender,
+          address,
+          paymentId: "referer credit",
+          medications: medArray,
+          ensential: essentialProductarray,
+          deliveryDate: deliveryDate,
+          refererBunousUsed: totalCost.toString(),
+          totalAmount: totalCost.toString(),
+          amountPaid: '0',
+          paymentDate: day,
+          deliveredStatus: 'not delivered',
+          others
         })
 
         const me = await order.save();
@@ -218,21 +219,22 @@ export const userCheckOutController = async (
     // const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       
       const order = new OrderModel({
-          userId,
-          firstName,
-          lastName,
-          dateOfBirth,
-          gender,
-          address,
-          paymentId: data.data.reference,
-          medications: medArray,
-          ensential: essentialProductarray,
-          deliveryDate: deliveryDate,
-          refererBunousUsed: refCre,
-          totalAmount: totalCost.toString(),
-          amountPaid: amount,
-          paymentDate: day,
-          deliveredStatus: 'pending'
+        userId,
+        firstName,
+        lastName,
+        dateOfBirth,
+        gender,
+        address,
+        paymentId: data.data.reference,
+        medications: medArray,
+        ensential: essentialProductarray,
+        deliveryDate: deliveryDate,
+        refererBunousUsed: refCre,
+        totalAmount: totalCost.toString(),
+        amountPaid: amount,
+        paymentDate: day,
+        deliveredStatus: 'pending',
+        others
       })
 
       const savedOrdered = await order.save();

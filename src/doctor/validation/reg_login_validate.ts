@@ -6,10 +6,18 @@ export const validateDoctorSignupParams = [
   body("lastName").notEmpty(),
   body("password").notEmpty(),
   body("title").notEmpty(),
-  body("clinicCode").notEmpty(),
+  //body("clinicCode").notEmpty(),
   body("organization")
     .isIn(["clinic", "hospital", "HMO"])
     .withMessage("Oganization must be either clinic, hospital or HMO"),
+];
+export const validateDoctorSendEmailParams = [
+  body("email").isEmail(),
+];
+
+export const validateDoctorVerifiedEmailParams = [
+  body("email").isEmail(),
+  body("otp").notEmpty(),
 ];
 
 export const validateDoctorSigninParams = [

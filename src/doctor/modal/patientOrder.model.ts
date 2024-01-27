@@ -9,6 +9,10 @@ const PatientOrderSchema = new Schema(
       patientId:{
         type: Schema.Types.ObjectId, ref: 'PatientReg'
       },
+      hmoId: {
+        type: String,
+        default: "",
+      },
       clinicCode: {
         type: String,
       },
