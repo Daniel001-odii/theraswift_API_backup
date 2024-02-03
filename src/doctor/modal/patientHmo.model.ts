@@ -27,10 +27,6 @@ const PatientHmoSchema = new Schema(
         type: String,
         required: true,
       },
-      medicalCode: {
-        type: String,
-        required: true,
-      },
       medicalRecord: {
         type: String,
         required: true,
@@ -40,21 +36,19 @@ const PatientHmoSchema = new Schema(
         enum: ["pending", "approved", "denied"],
         required: true,
       },
-      doctorId:{
-        type: Schema.Types.ObjectId, ref: 'DoctorReg'
-      },
       patientId:{
         type: Schema.Types.ObjectId, ref: 'PatientReg'
       },
-      hmoID:{
-        type: Schema.Types.ObjectId, ref: 'DoctorReg'
-      },
-      clinicCode: {
+      doctorClinicCode: {
         type: String,
         required: true,
       },
-      orderId: {
-        type: Schema.Types.ObjectId, ref: 'OrderFromDoctor'
+      icdCode: {
+        type: String,
+        required: true,
+      },
+      hmoClinicCode: {
+        type: String,
       },
       createdAt: {
         type: Date,

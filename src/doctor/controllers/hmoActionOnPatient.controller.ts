@@ -1,14 +1,15 @@
 import { validationResult } from "express-validator";
 import { Request, Response} from "express";
-import PatientHmo from "../modal/patientHmo.model";
+import PatientPrescriptionModel from "../modal/patientPrescription.model";
 import PatientModel from "../modal/patient_reg.model";
-import { uploadToS3 } from "../../utils/aws3.utility";
-import { v4 as uuidv4 } from "uuid";
-import DoctorModel from "..//modal/doctor_reg.modal";
+import MedicationModel from "../../admin/models/medication.model";
+import DoctorModel from "../modal/doctor_reg.modal";
+import PatientOrderFromDoctor from "../../admin/models/orderFromDoctor.model";
+import PatientHmo from "../modal/patientHmo.model";
 
 
-// doctor sent patient to hmo
-export const doctorSentPatientToHmoController = async (
+// hmo get patient sent to him
+export const hmoGetPatientSentToHimController = async (
     req: any,
     res: Response
 ) => {
@@ -16,15 +17,61 @@ export const doctorSentPatientToHmoController = async (
         const doctor = req.doctor;
         const doctorId = doctor._id;
 
-        const {
-            patientId,
-            EnroleNumber,
-            icdCode,
-            hmoClinicCode
+        let {
+            page,
+            limit
+        } = req.query;
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const doctorExist = await DoctorModel.findOne({_id: doctorId});
+
+        if (!doctorExist) {
+            return res
+            .status(401)
+            .json({ message: "incorrect doctor ID" });
+        }
+
+        page = page || 1; // Page number, default to 1
+        limit = limit || 50; // Documents per page, default to 10
+
+        const skip = (page - 1) * limit; //
+
+        const patientHmo = await PatientHmo.find({hmoClinicCode: doctorExist.clinicCode, status: "pending"})
+        .sort({createdAt: -1})
+        .skip(skip)
+        .limit(limit); 
+
+        return res.status(200).json({
+            patientHmo
+        })
+
+    } catch (err: any) {
+        // signup error
+        res.status(500).json({ message: err.message });
+        
+    }
+}
+
+
+// hmo get patient aprove or denied to him
+export const hmoApproveOrDeniedPatientController = async (
+    req: any,
+    res: Response
+) => {
+    try {
+        const doctor = req.doctor;
+        const doctorId = doctor._id;
+
+        let {
+           hmoID,
+           status
         } = req.body;
 
-        const file = req.file;
-
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -38,49 +85,21 @@ export const doctorSentPatientToHmoController = async (
             .status(401)
             .json({ message: "incorrect doctor ID" });
         }
-        
-        // check if patient exist
-        const patientExists = await PatientModel.findOne({ _id: patientId });
 
-        if (!patientExists) {
+        const patientHmo = await PatientHmo.findOne({_id: hmoID, hmoClinicCode: doctorExist.clinicCode, status: "pending"})
+        
+        if (!patientHmo) {
             return res
             .status(401)
-            .json({ message: "patient does not exist" });
+            .json({ message: "incorrect hmo ID" });
         }
 
-        let medicalRecord;
+        patientHmo.status = status;
 
-        if (!file) {
-            return res
-            .status(401)
-            .json({ message: "provide medical record" });
-          }else{
-            const filename = uuidv4();
-            const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
-            medicalRecord = result?.Location!;
-            console.log(result);
-            //medicationImg = uploadToS3(file);
-          }
-
-          const newPatientHmo = new PatientHmo({
-            firstName: patientExists.firstName,
-            surname: patientExists.surname,
-            phoneNumber: patientExists.phoneNumber,
-            EnroleNumber: EnroleNumber,
-            email: patientExists.email,
-            address: patientExists.address,
-            medicalRecord: medicalRecord,
-            status: 'pending',
-            patientId: patientId,
-            doctorClinicCode: doctorExist.clinicCode,
-            icdCode: icdCode,
-            hmoClinicCode: hmoClinicCode,
-          })
-
-          await newPatientHmo.save();
+        await patientHmo.save()
 
         return res.status(200).json({
-            message: "patient data successfully sent to Hmo",
+            message: "action successfully taken"
         })
 
     } catch (err: any) {
@@ -91,8 +110,9 @@ export const doctorSentPatientToHmoController = async (
 }
 
 
-// doctor get patient hmo that is pending
-export const doctorGetPatientHmoPendingController = async (
+
+// hmo get patient he approve
+export const hmoGetPatientHeApproveController = async (
     req: any,
     res: Response
 ) => {
@@ -124,13 +144,13 @@ export const doctorGetPatientHmoPendingController = async (
 
         const skip = (page - 1) * limit; //
 
-        const pendingPatientHmo = await PatientHmo.find({doctorClinicCode: doctorExist.clinicCode, status: "pending"})
+        const patientHmo = await PatientHmo.find({hmoClinicCode: doctorExist.clinicCode, status: "approved"})
         .sort({createdAt: -1})
         .skip(skip)
         .limit(limit); 
 
         return res.status(200).json({
-            pendingPatientHmo
+            patientHmo
         })
 
     } catch (err: any) {
@@ -141,8 +161,8 @@ export const doctorGetPatientHmoPendingController = async (
 }
 
 
-// doctor get patient hmo that is approve
-export const doctorGetPatientHmoApproveController = async (
+// hmo get patient he denied
+export const hmoGetPatientHeDeniedController = async (
     req: any,
     res: Response
 ) => {
@@ -174,13 +194,13 @@ export const doctorGetPatientHmoApproveController = async (
 
         const skip = (page - 1) * limit; //
 
-        const approvePatientHmo = await PatientHmo.find({doctorClinicCode: doctorExist.clinicCode, status: "approved"})
+        const patientHmo = await PatientHmo.find({hmoClinicCode: doctorExist.clinicCode, status: "denied"})
         .sort({createdAt: -1})
         .skip(skip)
         .limit(limit); 
 
         return res.status(200).json({
-            approvePatientHmo
+            patientHmo
         })
 
     } catch (err: any) {
@@ -189,57 +209,6 @@ export const doctorGetPatientHmoApproveController = async (
         
     }
 }
-
-
-// doctor get patient hmo that is denied
-export const doctorGetPatientHmoDeniedController = async (
-    req: any,
-    res: Response
-) => {
-    try {
-        const doctor = req.doctor;
-        const doctorId = doctor._id;
-
-        let {
-            page,
-            limit
-        } = req.query;
-
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        const doctorExist = await DoctorModel.findOne({_id: doctorId});
-
-        if (!doctorExist) {
-            return res
-            .status(401)
-            .json({ message: "incorrect doctor ID" });
-        }
-
-        page = page || 1; // Page number, default to 1
-        limit = limit || 50; // Documents per page, default to 10
-
-        const skip = (page - 1) * limit; //
-
-        const deniedPatientHmo = await PatientHmo.find({doctorClinicCode: doctorExist.clinicCode, status: "denied"})
-        .sort({createdAt: -1})
-        .skip(skip)
-        .limit(limit); 
-
-        return res.status(200).json({
-            deniedPatientHmo
-        })
-
-    } catch (err: any) {
-        // signup error
-        res.status(500).json({ message: err.message });
-        
-    }
-}
-
 
 
 

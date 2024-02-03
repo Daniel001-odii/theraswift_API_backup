@@ -12,14 +12,12 @@ export interface IPatientHmo extends Document {
     EnroleNumber: number;
     email: string;
     address: string;
-    medicalCode: string;
     medicalRecord: string;
     status: string;
-    doctorId: IDoctorReg['_id'];
     patientId: IPatientReg['_id']
-    hmoID: IDoctorReg['_id'];
-    clinicCode: string;
-    orderId: IOrder['_id'];
+    doctorClinicCode: string;
+    icdCode: string;
+    hmoClinicCode: string;
     createdAt: Date;
     updatedAt: Date;
   }

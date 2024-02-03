@@ -30,13 +30,13 @@ const csrfProtection = csrf({ cookie: true });
 
 const server = http.createServer(app);
 
-// const io = new Server(server, {
-//   cors: {
-//     origin: "*",
-//   },
-// });
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
 
-const io = new Server(server);
+// const io = new Server(server);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

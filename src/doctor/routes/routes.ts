@@ -18,7 +18,8 @@ import {
     validateDeletePatientprescription,
     validatePatientidQueryperson,
     validateDoctorSendEmailParams,
-    validateDoctorVerifiedEmailParams
+    validateDoctorVerifiedEmailParams,
+    validateHmoActionOnPatientSignupParams
 } from "../validation/reg_login_validate";
 import { 
     doctorSignUpController, 
@@ -35,19 +36,16 @@ import {
 } from "../controllers/forgot_password.controller";
 import {
     doctorDeletePatientPrescriptioController,
-    doctorRemovepatientPrescriptionController,
-     patientPrescriptionController,
-     patientPrescriptionDeliveredDetailController,
+     patientPrescriptionController, 
      patientPrescriptionDetailController,
-     patientPrescriptionDetailNOTDeliveredController
     } from "../controllers/patientPrescription.controller";
 import { checkDoctorRole } from "../middleware/rolechecke.middleware";
 import  upload  from "../middleware/medication_image.middleware";
-import { doctorSendPatientOderHmoController, doctorSendPatientOderOutOFPocketController, doctorgetPatientOderPaid, doctorgetPatientOderPending, doctorgetPatientOderdelieverd } from "../controllers/patientOder.controller";
-import { doctorgetPatientHmoApproved, doctorgetPatientHmoPending, doctorgetPatientHmodenied } from "../controllers/patientHmo.controller";
 import { doctorSearchMedicationNameController, doctorSearchMedicationNameFormController, doctorSearchMedicationNameFormDosageController } from "../controllers/medication.controller";
 import { getpatientPriscriptionDeliverdeController, getpatientPriscriptionPendindController, getpatientPriscriptionProgressController, patientOderHmoController, patientOderOutPocketController } from "../controllers/patientMedicationOrder.controller";
 import { doctorEmailVerificationController, doctorSendEmailController } from "../controllers/emailVerification.controller";
+import { doctorGetPatientHmoApproveController, doctorGetPatientHmoDeniedController, doctorGetPatientHmoPendingController, doctorSentPatientToHmoController } from "../controllers/patientHmo.controller";
+import { hmoApproveOrDeniedPatientController, hmoGetPatientHeApproveController, hmoGetPatientHeDeniedController, hmoGetPatientSentToHimController } from "../controllers/hmoActionOnPatient.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -83,20 +81,17 @@ router.get("/get_patient_order_progress",  validatePatientidQueryperson,  checkD
 router.get("/get_patient_order_delivered",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionDeliverdeController); // get patient ordr that is deliverde
 
 
+router.post("/sent_pateint_to_hmo",  checkDoctorRole, doctorSentPatientToHmoController); // doctor sent pateint detail to hmo
+router.get("/get_patient_hmo_pendig",  checkDoctorRole, doctorGetPatientHmoPendingController); // doctor get patient pending
+router.get("/get_patient_hmo_approve",  checkDoctorRole, doctorGetPatientHmoApproveController); // doctor get patient approve
+router.get("/get_patient_hmo_denied",  checkDoctorRole, doctorGetPatientHmoDeniedController); // doctor get patient denied
 
-//// over coded
-router.post("/patient_prescription_detail_delivered",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDeliveredDetailController); // doctor get  patient prescription that wass delivered
-router.post("/patient_prescription_detail_not_delivered",  validatePatientidperson,  checkDoctorRole, patientPrescriptionDetailNOTDeliveredController); // doctor get  patient prescription that was not delivered
-router.post("/remove_patient_prescription",  validatePatientPrescriptionidperson,  checkDoctorRole, doctorRemovepatientPrescriptionController); // doctor remove medication from patient prescription
 
-router.post("/patient_order_out_of_pocket",  validatePatientidperson,  checkDoctorRole, doctorSendPatientOderOutOFPocketController); // doctor send patient order out of pocket
-router.post("/patient_order_hmo",  validatePatientOderHmoperson,  checkDoctorRole, doctorSendPatientOderHmoController); // doctor send patient order hmo
-router.get("/patient_order_pending",  checkDoctorRole, doctorgetPatientOderPending); // doctor get patient order pending
-router.get("/patient_order_paid",  checkDoctorRole, doctorgetPatientOderPaid); // doctor get patient order paid
-router.get("/patient_order_delieverd",  checkDoctorRole, doctorgetPatientOderdelieverd); // doctor get patient order delivered
-router.get("/patient_hmo_pending",  checkDoctorRole, doctorgetPatientHmoPending); // doctor get patient hmo pending
-router.get("/patient_hmo_approved",  checkDoctorRole, doctorgetPatientHmoApproved); // doctor get patient hmo approved
-router.get("/patient_hmo_denied",  checkDoctorRole, doctorgetPatientHmodenied); // doctor get patient hmo denied
+// hmo action
+router.get("/hmo_get_patient_sent_to_him",  checkDoctorRole, hmoGetPatientSentToHimController); // hmo get patient sent to him
+router.post("/hmo_aprove_denied_patient", validateHmoActionOnPatientSignupParams, checkDoctorRole, hmoApproveOrDeniedPatientController); // hmo approve or denied patient
+router.get("/hmo_get_approve_patient",  checkDoctorRole, hmoGetPatientHeApproveController); // hmo get patient he approve
+router.get("/hmo_get_denied_patient",  checkDoctorRole, hmoGetPatientHeDeniedController); // hmo get patient he denied
 
 
 

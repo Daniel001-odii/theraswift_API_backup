@@ -11,6 +11,7 @@ export const validateDoctorSignupParams = [
     .isIn(["clinic", "hospital", "HMO"])
     .withMessage("Oganization must be either clinic, hospital or HMO"),
 ];
+
 export const validateDoctorSendEmailParams = [
   body("email").isEmail(),
 ];
@@ -102,4 +103,12 @@ export const validatePatientOderHmoperson = [
   body("medicalCode").notEmpty(),
   body("medicalRecord").notEmpty(),
   body("hmoID").notEmpty(),
+];
+
+
+export const validateHmoActionOnPatientSignupParams = [ 
+  body("hmoID").notEmpty(),
+  body("status")
+    .isIn(["approved", "denied"])
+    .withMessage("status must be approved or denied"),
 ];
