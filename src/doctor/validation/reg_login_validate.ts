@@ -112,3 +112,13 @@ export const validateHmoActionOnPatientSignupParams = [
     .isIn(["approved", "denied"])
     .withMessage("status must be approved or denied"),
 ];
+
+export const validateHmoGetPatientOrderParams = [ 
+  query("patientId").notEmpty(),
+];
+
+export const validateHmoTakeActionOnPatientOrderParams = [ 
+  body("patientId").notEmpty(),
+  body("orderId").notEmpty(),
+  body("amount").notEmpty(),
+];

@@ -19,7 +19,9 @@ import {
     validatePatientidQueryperson,
     validateDoctorSendEmailParams,
     validateDoctorVerifiedEmailParams,
-    validateHmoActionOnPatientSignupParams
+    validateHmoActionOnPatientSignupParams,
+    validateHmoGetPatientOrderParams,
+    validateHmoTakeActionOnPatientOrderParams
 } from "../validation/reg_login_validate";
 import { 
     doctorSignUpController, 
@@ -46,6 +48,7 @@ import { getpatientPriscriptionDeliverdeController, getpatientPriscriptionPendin
 import { doctorEmailVerificationController, doctorSendEmailController } from "../controllers/emailVerification.controller";
 import { doctorGetPatientHmoApproveController, doctorGetPatientHmoDeniedController, doctorGetPatientHmoPendingController, doctorSentPatientToHmoController } from "../controllers/patientHmo.controller";
 import { hmoApproveOrDeniedPatientController, hmoGetPatientHeApproveController, hmoGetPatientHeDeniedController, hmoGetPatientSentToHimController } from "../controllers/hmoActionOnPatient.controller";
+import { hmoGetPatientOrdeHeTakeActionController, hmoGetPatientOrderSentToHimController, hmoTakeActionOnOrderSentToHimController } from "../controllers/hmoOrderAction.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -80,18 +83,22 @@ router.get("/get_patient_order_pending",  validatePatientidQueryperson,  checkDo
 router.get("/get_patient_order_progress",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionProgressController); // get patient order that is progress
 router.get("/get_patient_order_delivered",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionDeliverdeController); // get patient ordr that is deliverde
 
-
+// not doc
 router.post("/sent_pateint_to_hmo",  checkDoctorRole, doctorSentPatientToHmoController); // doctor sent pateint detail to hmo
 router.get("/get_patient_hmo_pendig",  checkDoctorRole, doctorGetPatientHmoPendingController); // doctor get patient pending
 router.get("/get_patient_hmo_approve",  checkDoctorRole, doctorGetPatientHmoApproveController); // doctor get patient approve
 router.get("/get_patient_hmo_denied",  checkDoctorRole, doctorGetPatientHmoDeniedController); // doctor get patient denied
-
 
 // hmo action
 router.get("/hmo_get_patient_sent_to_him",  checkDoctorRole, hmoGetPatientSentToHimController); // hmo get patient sent to him
 router.post("/hmo_aprove_denied_patient", validateHmoActionOnPatientSignupParams, checkDoctorRole, hmoApproveOrDeniedPatientController); // hmo approve or denied patient
 router.get("/hmo_get_approve_patient",  checkDoctorRole, hmoGetPatientHeApproveController); // hmo get patient he approve
 router.get("/hmo_get_denied_patient",  checkDoctorRole, hmoGetPatientHeDeniedController); // hmo get patient he denied
+
+//hmo order action 
+router.get("/hmo_get_patient_order_sent_to_him", validateHmoGetPatientOrderParams, checkDoctorRole, hmoGetPatientOrderSentToHimController); // hmo get patient order sent to him
+router.post("/hmo_take_action_on_order", validateHmoTakeActionOnPatientOrderParams, checkDoctorRole, hmoTakeActionOnOrderSentToHimController); // hmo take action on patient order
+router.get("/hmo_get_patient_order_action_taken_on", validateHmoGetPatientOrderParams, checkDoctorRole, hmoGetPatientOrdeHeTakeActionController); // hmo get patient order he take action on
 
 
 

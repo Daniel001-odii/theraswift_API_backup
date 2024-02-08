@@ -8,6 +8,8 @@ import {
     validatHmoIdParams,
     validatPatientUnderDoctorIdParams,
     validatSinglePatientUnderDoctorIdParams,
+    validateAdminGettOrderToHmoParams,
+    validateAdminSentOrderToHmoParams,
     validateAdminSigninParams,
     validateAdminSigninPhonNumberParams,
     validateDoctorEmailParams,
@@ -39,7 +41,7 @@ import imgae from "../middleware/image.middleware";
 import { upload } from "../../utils/upload.utility";
 import { getAllUsersController, getPageUserDeatilController, getsingleUserController } from "../controllers/userDetail.controller";
 import { DeliveredOrderController, getAllOrderDeliveredController, getAllOrderNotDeliveredController, getPageOrderDeliveredController, getPageOrderNotDeliveredController, getPageOrderNotpendingController, getSingleOrderDeliveredController, getSingleOrderNotDeliveredController } from "../controllers/order.controller";
-import { adminGetDeliverdDoctorOder, adminGetPaidDoctorOder, adminGetPendingDoctorOder } from "../controllers/orderFromDoctor.controller";
+//import { adminGetDeliverdDoctorOder, adminGetPaidDoctorOder, adminGetPendingDoctorOder } from "../controllers/orderFromDoctor.controller";
 import { createEssentialCategoryController, getAllEssentialCategoryController, getPageEssentialCategoryController } from "../controllers/essentialCategory.controller";
 import { adminAddEssentialProductController, deleteEssentialProductController, editEssentialProductController, getPageEssentialProductController, searchEssentialProductByNameController } from "../controllers/essentialProduct.controller";
 import { adminEmailVerificationController, adminPhoneNumberVerificationController, adminSendEmailController, adminSendPhoneNumberController } from "../controllers/emailPhoneNumberVerification";
@@ -47,6 +49,7 @@ import { adminFrequenceAskController, adminNewsletterSubcriberController } from 
 import { adminGetDoctor, adminGetPatientUnderDoctor, adminGetSingleDoctorOder, adminGetSinglePatientUnderDoctorOder, adminGiveDoctorClinicCode } from "../controllers/doctorDetail.controller";
 import { adminGetDoctorDeliveredPatientOrder, adminGetDoctorPatientProgressOrder, adminGetDoctorPendingPatientOrder, adminGetDoctorSingleDeliveredPatientOrder, adminGetDoctorSinglePendingPatientOrder, adminGetDoctorSingleProgressPatientOrder } from "../controllers/doctorPatientPrescription.controller";
 import { adminGetHmo, adminGetSingleHmo } from "../controllers/hmoDetail.controller";
+import { adminGetPatientOrderSentToHmo, adminSendingPatientOrderToHmo } from "../controllers/sendOrderToHmo.controller";
 
 
 router.post("/admin_signup", validateSignupParams, adminSignUpController); // admin signup
@@ -106,10 +109,9 @@ router.get("/get_newsletters",  checkAdminRole, adminNewsletterSubcriberControll
 /////////////////////////////////
 //////// doctor ///////////////
 /////////////////////////////
-router.get("/doctor_order_pending", checkAdminRole, adminGetPendingDoctorOder); // get order from doctor that is pending
-router.get("/doctor_order_paid", checkAdminRole, adminGetPaidDoctorOder); // get order from doctor that is paid
-router.get("/doctor_order_delivered", checkAdminRole, adminGetDeliverdDoctorOder); // get order from doctor that is delived
-
+// router.get("/doctor_order_pending", checkAdminRole, adminGetPendingDoctorOder); // get order from doctor that is pending
+// router.get("/doctor_order_paid", checkAdminRole, adminGetPaidDoctorOder); // get order from doctor that is paid
+// router.get("/doctor_order_delivered", checkAdminRole, adminGetDeliverdDoctorOder); // get order from doctor that is delived
 
 
 router.get("/doctor_detail", checkAdminRole, adminGetDoctor); // get doctor detail
@@ -119,6 +121,7 @@ router.get("/patient_doctor_single_detail", validatSinglePatientUnderDoctorIdPar
 
 router.post("/generate_clinic_code", validateDoctorEmailParams, checkAdminRole, adminGiveDoctorClinicCode); // admin generate clinic code for doctor
 
+// not doc
 router.get("/patient_pending_order_under_doctor", validatPatientUnderDoctorIdParams, checkAdminRole, adminGetDoctorPendingPatientOrder); // get patient pending order under doctor
 router.get("/single_patient_pending_order_under_doctor", validatSinglePatientUnderDoctorIdParams, checkAdminRole, adminGetDoctorSinglePendingPatientOrder); // get single patient pending order under doctor
 router.get("/patient_progress_order_under_doctor", validatPatientUnderDoctorIdParams, checkAdminRole, adminGetDoctorPatientProgressOrder); // get patient progress order under doctor
@@ -128,6 +131,9 @@ router.get("/single_patient_delivered_order_under_doctor", validatSinglePatientU
 
 router.get("/hmo_detail", checkAdminRole, adminGetHmo); // get hmo detail
 router.get("/hmo_single_detail", validatHmoIdParams, checkAdminRole, adminGetSingleHmo); // get single hmo detail
+
+router.post("/admin_sent_order_to_hmo", validateAdminSentOrderToHmoParams, checkAdminRole, adminSendingPatientOrderToHmo); // admin sent patient order to hmo
+router.get("/admin_get_order_sent_to_hmo", validateAdminGettOrderToHmoParams, checkAdminRole, adminGetPatientOrderSentToHmo); // admin get patient order sent to hmo
 
 
 
