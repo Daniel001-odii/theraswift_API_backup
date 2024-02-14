@@ -121,7 +121,6 @@ router.get("/patient_doctor_single_detail", validatSinglePatientUnderDoctorIdPar
 
 router.post("/generate_clinic_code", validateDoctorEmailParams, checkAdminRole, adminGiveDoctorClinicCode); // admin generate clinic code for doctor
 
-// not doc
 router.get("/patient_pending_order_under_doctor", validatPatientUnderDoctorIdParams, checkAdminRole, adminGetDoctorPendingPatientOrder); // get patient pending order under doctor
 router.get("/single_patient_pending_order_under_doctor", validatSinglePatientUnderDoctorIdParams, checkAdminRole, adminGetDoctorSinglePendingPatientOrder); // get single patient pending order under doctor
 router.get("/patient_progress_order_under_doctor", validatPatientUnderDoctorIdParams, checkAdminRole, adminGetDoctorPatientProgressOrder); // get patient progress order under doctor

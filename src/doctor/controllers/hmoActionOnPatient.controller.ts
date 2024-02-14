@@ -36,6 +36,12 @@ export const hmoGetPatientSentToHimController = async (
             .json({ message: "incorrect doctor ID" });
         }
 
+        if (doctorExist.organization != 'HMO') {
+            return res
+            .status(401)
+            .json({ message: "hmo role" });
+        }
+
         page = page || 1; // Page number, default to 1
         limit = limit || 50; // Documents per page, default to 10
 
@@ -84,6 +90,13 @@ export const hmoApproveOrDeniedPatientController = async (
             return res
             .status(401)
             .json({ message: "incorrect doctor ID" });
+        }
+
+
+        if (doctorExist.organization != 'HMO') {
+            return res
+            .status(401)
+            .json({ message: "hmo role" });
         }
 
         const patientHmo = await PatientHmo.findOne({_id: hmoID, hmoClinicCode: doctorExist.clinicCode, status: "pending"})
@@ -139,6 +152,13 @@ export const hmoGetPatientHeApproveController = async (
             .json({ message: "incorrect doctor ID" });
         }
 
+
+        if (doctorExist.organization != 'HMO') {
+            return res
+            .status(401)
+            .json({ message: "hmo role" });
+        }
+
         page = page || 1; // Page number, default to 1
         limit = limit || 50; // Documents per page, default to 10
 
@@ -187,6 +207,13 @@ export const hmoGetPatientHeDeniedController = async (
             return res
             .status(401)
             .json({ message: "incorrect doctor ID" });
+        }
+
+
+        if (doctorExist.organization != 'HMO') {
+            return res
+            .status(401)
+            .json({ message: "hmo role" });
         }
 
         page = page || 1; // Page number, default to 1

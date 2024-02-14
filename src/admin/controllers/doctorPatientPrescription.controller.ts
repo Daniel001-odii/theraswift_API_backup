@@ -256,7 +256,7 @@ export const adminGetDoctorSingleProgressPatientOrder = async (
         if (pendingOrders.length < 1) {
             return res
             .status(401)
-            .json({ message: "no pending order for this patient" });
+            .json({ message: "no progress order for this patient" });
         }
 
         let PendingOrder = []
@@ -402,7 +402,7 @@ export const adminGetDoctorSingleDeliveredPatientOrder = async (
         if (pendingOrders.length < 1) {
             return res
             .status(401)
-            .json({ message: "no pending order for this patient" });
+            .json({ message: "no delivered order for this patient" });
         }
 
         let PendingOrder = []

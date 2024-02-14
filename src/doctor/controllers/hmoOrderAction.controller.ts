@@ -14,6 +14,7 @@ export const hmoGetPatientOrderSentToHimController = async (
 ) => {
     try {
         const doctor = req.doctor;
+        const doctorId = doctor._id;
 
         const {
             patientId,
@@ -23,6 +24,20 @@ export const hmoGetPatientOrderSentToHimController = async (
 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
+        }
+
+        const doctorExist = await DoctorModel.findOne({_id: doctorId});
+
+        if (!doctorExist) {
+            return res
+            .status(401)
+            .json({ message: "incorrect doctor ID" });
+        }
+
+        if (doctorExist.organization != 'HMO') {
+            return res
+            .status(401)
+            .json({ message: "hmo role" });
         }
         
         // check if patient exist
@@ -77,6 +92,7 @@ export const hmoTakeActionOnOrderSentToHimController = async (
     try {
 
         const doctor = req.doctor;
+        const doctorId = doctor._id;
 
         const {
             patientId,
@@ -88,6 +104,20 @@ export const hmoTakeActionOnOrderSentToHimController = async (
 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
+        }
+
+        const doctorExist = await DoctorModel.findOne({_id: doctorId});
+
+        if (!doctorExist) {
+            return res
+            .status(401)
+            .json({ message: "incorrect doctor ID" });
+        }
+
+        if (doctorExist.organization != 'HMO') {
+            return res
+            .status(401)
+            .json({ message: "hmo role" });
         }
         
         // check if patient exist
@@ -154,6 +184,7 @@ export const hmoGetPatientOrdeHeTakeActionController = async (
 ) => {
     try {
         const doctor = req.doctor;
+        const doctorId = doctor._id;
 
         const {
             patientId,
@@ -163,6 +194,20 @@ export const hmoGetPatientOrdeHeTakeActionController = async (
 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
+        }
+
+        const doctorExist = await DoctorModel.findOne({_id: doctorId});
+
+        if (!doctorExist) {
+            return res
+            .status(401)
+            .json({ message: "incorrect doctor ID" });
+        }
+
+        if (doctorExist.organization != 'HMO') {
+            return res
+            .status(401)
+            .json({ message: "hmo role" });
         }
         
         // check if patient exist

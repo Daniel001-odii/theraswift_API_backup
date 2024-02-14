@@ -42,7 +42,7 @@ import {
      patientPrescriptionDetailController,
     } from "../controllers/patientPrescription.controller";
 import { checkDoctorRole } from "../middleware/rolechecke.middleware";
-import  upload  from "../middleware/medication_image.middleware";
+import { upload } from "../../utils/upload.utility";
 import { doctorSearchMedicationNameController, doctorSearchMedicationNameFormController, doctorSearchMedicationNameFormDosageController } from "../controllers/medication.controller";
 import { getpatientPriscriptionDeliverdeController, getpatientPriscriptionPendindController, getpatientPriscriptionProgressController, patientOderHmoController, patientOderOutPocketController } from "../controllers/patientMedicationOrder.controller";
 import { doctorEmailVerificationController, doctorSendEmailController } from "../controllers/emailVerification.controller";
@@ -63,7 +63,7 @@ router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworControl
 router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password
 
 
-router.post("/register_patient", checkDoctorRole, upload, validatePatientRegParams,  doctorRegisterPatient); // doctor register his patient
+router.post("/register_patient", checkDoctorRole, validatePatientRegParams,  doctorRegisterPatient); // doctor register his patient
 router.get("/all_registered_patient",  checkDoctorRole, doctorGetAllRegisteredPatient); // doctor get all his patient
 router.get("/single_registered_patient", validatePatientid,  checkDoctorRole, doctorGetSingleRegisteredPatient); // doctor get single patient
 
@@ -83,8 +83,7 @@ router.get("/get_patient_order_pending",  validatePatientidQueryperson,  checkDo
 router.get("/get_patient_order_progress",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionProgressController); // get patient order that is progress
 router.get("/get_patient_order_delivered",  validatePatientidQueryperson,  checkDoctorRole, getpatientPriscriptionDeliverdeController); // get patient ordr that is deliverde
 
-// not doc
-router.post("/sent_pateint_to_hmo",  checkDoctorRole, doctorSentPatientToHmoController); // doctor sent pateint detail to hmo
+router.post("/sent_pateint_to_hmo", upload.single('medImg'),  checkDoctorRole, doctorSentPatientToHmoController); // doctor sent pateint detail to hmo
 router.get("/get_patient_hmo_pendig",  checkDoctorRole, doctorGetPatientHmoPendingController); // doctor get patient pending
 router.get("/get_patient_hmo_approve",  checkDoctorRole, doctorGetPatientHmoApproveController); // doctor get patient approve
 router.get("/get_patient_hmo_denied",  checkDoctorRole, doctorGetPatientHmoDeniedController); // doctor get patient denied
@@ -95,6 +94,7 @@ router.post("/hmo_aprove_denied_patient", validateHmoActionOnPatientSignupParams
 router.get("/hmo_get_approve_patient",  checkDoctorRole, hmoGetPatientHeApproveController); // hmo get patient he approve
 router.get("/hmo_get_denied_patient",  checkDoctorRole, hmoGetPatientHeDeniedController); // hmo get patient he denied
 
+// not doc
 //hmo order action 
 router.get("/hmo_get_patient_order_sent_to_him", validateHmoGetPatientOrderParams, checkDoctorRole, hmoGetPatientOrderSentToHimController); // hmo get patient order sent to him
 router.post("/hmo_take_action_on_order", validateHmoTakeActionOnPatientOrderParams, checkDoctorRole, hmoTakeActionOnOrderSentToHimController); // hmo take action on patient order
