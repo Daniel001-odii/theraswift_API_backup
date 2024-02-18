@@ -92,7 +92,6 @@ export const hmoApproveOrDeniedPatientController = async (
             .json({ message: "incorrect doctor ID" });
         }
 
-
         if (doctorExist.organization != 'HMO') {
             return res
             .status(401)

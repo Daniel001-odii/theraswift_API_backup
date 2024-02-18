@@ -19,8 +19,7 @@ export const createEssentialCategoryController = async (
 
     // Access the uploaded file details
     const file = req.file;
-    // const fileName = file?.filename;
-    // const filePath = file?.path;
+  
     let medicationImg;
 
     // Check for validation errors
