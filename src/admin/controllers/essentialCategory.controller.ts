@@ -35,6 +35,7 @@ export const createEssentialCategoryController = async (
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
       medicationImg = result?.Location!;
+      console.log(medicationImg)
       
     }
 

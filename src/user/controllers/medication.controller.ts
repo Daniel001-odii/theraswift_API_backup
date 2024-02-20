@@ -242,7 +242,7 @@ export const userSearchMedicationNameController = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const medications =  await MedicationModel.find({name: { $regex: name, $options: 'i' }});
+    const medications =  await MedicationModel.findOne({name: { $regex: name, $options: 'i' }});
     return res.status(200).json({
       medications
     })
