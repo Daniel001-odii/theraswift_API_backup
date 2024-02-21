@@ -771,7 +771,13 @@ export const userGetPopualarMedicationController = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const popularMedication =  await MedicationModel.find().limit(8);
+    //const popularMedication =  await MedicationModel.find().limit(8);
+    //const popularMedication =  await MedicationModel.distinct('name');
+    const popularMedication = await MedicationModel.aggregate([
+      { $group: { _id: '$name', doc: { $first: '$$ROOT' } } },
+      { $replaceRoot: { newRoot: '$doc' } },
+      { $limit: 8 }
+    ]);
     return res.status(200).json({
       popularMedication
     })
