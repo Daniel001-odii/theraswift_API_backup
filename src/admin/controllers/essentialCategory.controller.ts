@@ -78,7 +78,7 @@ export const getAllEssentialCategoryController = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const categories = await EssentialCategoryModel.find()
+    const categories = await EssentialCategoryModel.find().sort({name: 1})
 
     return res.status(200).json({
       categories
@@ -118,7 +118,7 @@ export const getPageEssentialCategoryController = async (
 
     const totalCategories = await EssentialCategoryModel.countDocuments(); // Get the total number of documents
 
-    const categories = await EssentialCategoryModel.find().sort({createdAt: -1})
+    const categories = await EssentialCategoryModel.find().sort({name: 1})
     .skip(skip)
     .limit(limit);
 
