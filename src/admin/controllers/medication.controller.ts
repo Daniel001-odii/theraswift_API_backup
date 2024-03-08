@@ -44,7 +44,8 @@ export const adminAddMedicationController = async (
     console.log("json", jsonMedInfo)
 
     if (!file) {
-      medicationImg = '';
+      return res.status(401)
+    .json({ message: "provide medicationImg" });
     }else{
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);

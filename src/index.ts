@@ -22,6 +22,8 @@ import doctorRoute from "./doctor/routes/routes";
 import adminRoute from "./admin/route/route";
 //user route
 import userRoute from "./user/route/route";
+// driver route
+import driverRoute from "./driver/route/route";
 const router = express.Router();
 
 const app = express();
@@ -89,9 +91,11 @@ app.use(
     res.json("Hello");
   })
 );
+
 app.use("/doctor", doctorRoute);
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
+app.use("/driver", driverRoute);
 
 // Handle socket connections
 chatSocketConfigUser(io);
