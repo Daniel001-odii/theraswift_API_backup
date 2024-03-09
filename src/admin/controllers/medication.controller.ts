@@ -32,20 +32,17 @@ export const adminAddMedicationController = async (
     } = req.body;
 
     // Check for validation errors
-    const errors = validationResult(req);
+    // const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    console.log("meidinfo", medInfo);
-
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
+    
     const jsonMedInfo = JSON.parse(medInfo);
-    console.log("json", jsonMedInfo)
 
     if (!file) {
       return res.status(401)
-    .json({ message: "provide medicationImg" });
+      .json({ message: "provide medicationImg" });
     }else{
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
@@ -54,8 +51,6 @@ export const adminAddMedicationController = async (
       //medicationImg = uploadToS3(file);
     }
 
-   
-    
     const medication = new MedicationModel({
       name,
       price,

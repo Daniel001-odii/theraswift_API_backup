@@ -1,4 +1,5 @@
-import { body, query } from "express-validator";
+import { body, query, validationResult } from "express-validator";
+import { Request, Response, NextFunction } from "express";
 
 export const validateSignupParams = [
   body("email").isEmail(),
@@ -73,13 +74,17 @@ export const validateResetPasswordByPhoneNumber = [
 
 export const validateMedicationParams = [
   body("name").notEmpty(),
-  body("manufacturer").notEmpty(),
-  body("price").notEmpty(),
-  body("strength").notEmpty(),
+  body("price").isNumeric(),
   body("quantity").notEmpty(),
+  body("form").notEmpty(),
   body("prescriptionRequired")
-    .isIn([true, false])
-    .withMessage("prescriptionRequired must be either true or false"),
+    .isIn(['required', 'not required', 'neccessary'])
+    .withMessage("prescriptionRequired must be either required, not required or neccessary"),
+  body("ingredient").notEmpty(),
+  body("quantityForUser").isNumeric(),
+  body("inventoryQuantity").notEmpty(),
+  body("expiredDate").notEmpty(),
+  body("category").notEmpty(),
   body("medInfo").notEmpty(),
 ];
 
@@ -156,6 +161,16 @@ export const validateAdminSentOrderToHmoParams = [
 export const validateAdminGettOrderToHmoParams = [
   query("patientId").notEmpty(),
 ];
+
+
+export const validateFormData = (req: Request, res: Response, next: NextFunction) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  next();
+};
+
 
 
 

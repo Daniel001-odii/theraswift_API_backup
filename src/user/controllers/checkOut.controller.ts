@@ -64,8 +64,6 @@ export const userCheckOutController = async (
         
           const medication = await MedicationModel.findOne({_id: cart.medicationId});
           const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId})
-          
-          console.log(5)
 
           if (medication && userMedication) {
               
@@ -112,8 +110,6 @@ export const userCheckOutController = async (
         .json({ message: "all your medication required prescripstion" });
     }
 
-    console.log(10)
-
     if (refererCredit >= totalCost) {
 
       const currentDate = new Date();
@@ -149,8 +145,6 @@ export const userCheckOutController = async (
         })
 
         const me = await order.save();
-
-        console.log(me)
 
         userExist.refererCredit = refererCredit - totalCost;
         userExist.reference = "referer credit"
@@ -195,7 +189,8 @@ export const userCheckOutController = async (
         amount: amount * 100, // Amount in kobo (e.g., 10000 kobo = ₦100)
         email: userExist.email,
         reference: milliseconds,
-        metadata
+        metadata,
+        callback_url: "https://www.youtube.com/watch?v=ZCuixMPJomU"
       }),
     });
 
@@ -269,7 +264,7 @@ export const userCheckOutPaymentVerificationController = async (
   try {
     const {
       reference,
-      orderId,
+      // orderId,
     } = req.body;
 
     const paystackSecretKey = 'sk_test_b27336978f0f77d84915d7e883b0f756f6d150e7';
@@ -282,7 +277,6 @@ export const userCheckOutPaymentVerificationController = async (
     });
 
     const data = await response.json();
-    console.log(data);
 
     if (!data.status) {
       return res
@@ -316,7 +310,7 @@ export const userCheckOutPaymentVerificationController = async (
       .json({ message: "invalid user" });  
     }
 
-    const order = await OrderModel.findOneAndUpdate({_id: orderId, paymentId: reference, userId: userId, deliveredStatus: "pending"}, {deliveredStatus: "not delivered"}, {new: true});
+    const order = await OrderModel.findOneAndUpdate({ paymentId: reference, userId: userId, deliveredStatus: "pending"}, {deliveredStatus: "not delivered"}, {new: true});
 
     if (!order) {
       return res

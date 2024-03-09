@@ -14,8 +14,10 @@ import {
     validateAdminSigninPhonNumberParams,
     validateDoctorEmailParams,
     validateEmail,
+    validateFormData,
     validateMedicationDeleteParams,
     validateMedicationEditParams,
+    validateMedicationParams,
     validateOrderParams,
     validatePhonNumber,
     validateResetPassword,
@@ -65,7 +67,7 @@ router.post("/admin_forgot_password_by_phone_number", validatePhonNumber, adminM
 router.post("/admin_reset_password_by_phone_number", validateResetPasswordByPhoneNumber, adminMobileResetPasswordController); // admin reset password by phone number
 
 
-router.post("/admin_add_medication", checkAdminRole, upload.single('medicationImg'), adminAddMedicationController); // admin add medication to databas
+router.post("/admin_add_medication", checkAdminRole, upload.single('medicationImg'), validateMedicationParams, validateFormData, adminAddMedicationController); // admin add medication to databas
 router.post("/admin_edit_medication", validateMedicationEditParams, checkAdminRole,   adminEditMedicationController); // admin add medication to databas
 router.post("/admin_delete_medication", validateMedicationDeleteParams, checkAdminRole,  adminDeleteMedicationController); // admin add medication to databas
 router.get("/admin_all_medication",  getAllMedicationController); // get all medication
