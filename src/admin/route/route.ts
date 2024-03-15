@@ -68,7 +68,7 @@ router.post("/admin_reset_password_by_phone_number", validateResetPasswordByPhon
 
 
 router.post("/admin_add_medication", checkAdminRole, upload.single('medicationImg'), validateMedicationParams, validateFormData, adminAddMedicationController); // admin add medication to databas
-router.post("/admin_edit_medication", validateMedicationEditParams, checkAdminRole,   adminEditMedicationController); // admin add medication to databas
+router.post("/admin_edit_medication", checkAdminRole, upload.single('medicationImg'), validateMedicationEditParams, validateFormData, adminEditMedicationController); // admin add medication to databas
 router.post("/admin_delete_medication", validateMedicationDeleteParams, checkAdminRole,  adminDeleteMedicationController); // admin add medication to databas
 router.get("/admin_all_medication",  getAllMedicationController); // get all medication
 router.post("/admin_single_medication", validateMedicationDeleteParams, getsingleMedicationController); // get single medication

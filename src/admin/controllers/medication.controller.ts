@@ -31,13 +31,6 @@ export const adminAddMedicationController = async (
       medInfo
     } = req.body;
 
-    // Check for validation errors
-    // const errors = validationResult(req);
-
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
-    
     const jsonMedInfo = JSON.parse(medInfo);
 
     if (!file) {
@@ -68,9 +61,6 @@ export const adminAddMedicationController = async (
 
     const savedMedication = await medication.save();
 
-    // const domainName = req.hostname;
-    // medicationImg = `${domainName}/public/uploads/${fileName}`;
-
     return res.status(200).json({
       message: "medication added successfuuy",
       medication: savedMedication
@@ -92,8 +82,6 @@ export const adminEditMedicationController = async (
 ) => {
 
   try {
-    // let medicationImg;
-
     const {
       medicationId,
       name,
@@ -109,40 +97,58 @@ export const adminEditMedicationController = async (
       medInfo,
     } = req.body;
 
-    // Check for validation errors
-    const errors = validationResult(req);
+    const file = req.file;
+  
+    let medicationImg;
 
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+    const medication = await MedicationModel.findOne({_id: medicationId})
+
+    if (!medication) {
+      return res.status(401)
+      .json({ message: "invalid medication ID" });
     }
 
-    
-   const updatedMedication = await MedicationModel.findOneAndUpdate(
-    {_id: medicationId}, 
-    {
-      name,
-      price,
-      quantity,
-      prescriptionRequired,
-      form,
-      ingredient,
-      quantityForUser,
-      inventoryQuantity,
-      expiredDate,
-      category,
-      medInfo
-    },
-    {new: true}
-   );
+    if (!file) {
+      if (!medication.medicationImage || medication.medicationImage == '') {
+        return res.status(401)
+        .json({ message: "provide medicationImg" });
+      } else {
+        medicationImg = medication.medicationImage
+      }
+      
+    }else{
+      const filename = uuidv4();
+      const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
+      medicationImg = result?.Location!;
+      console.log(result);
+      //medicationImg = uploadToS3(file);
+    }
 
-   if (!updatedMedication) {
-    return res.status(401)
-    .json({ message: "medication not available" });
-   }
+    const jsonMedInfo = JSON.parse(medInfo);
 
-    
-    // const domainName = req.hostname;
-    // medicationImg = `${domainName}/public/uploads/${updatedMedication.medicationImage}`;
+    const updatedMedication = await MedicationModel.findOneAndUpdate(
+      {_id: medicationId}, 
+      {
+        name,
+        price,
+        quantity,
+        prescriptionRequired,
+        form,
+        ingredient,
+        quantityForUser,
+        inventoryQuantity,
+        expiredDate,
+        category,
+        medInfo: jsonMedInfo,
+        medicationImage: medicationImg, 
+      },
+      {new: true}
+    );
+
+    if (!updatedMedication) {
+      return res.status(401)
+      .json({ message: "medication not available" });
+    }
 
     return res.status(200).json({
       message: "medication updated successfuuy",
