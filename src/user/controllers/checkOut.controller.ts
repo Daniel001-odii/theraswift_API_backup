@@ -67,9 +67,9 @@ export const userCheckOutController = async (
 
           if (medication && userMedication) {
               
-              if (medication.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {  
-                  continue;
-              }
+              // if (medication.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {  
+              //     continue;
+              // }
 
               totalCost = totalCost + (cart.quantityrquired * parseFloat(medication.price))
               
@@ -104,11 +104,11 @@ export const userCheckOutController = async (
      
     }
 
-    if (medArray.length < 1 && essentialProductarray.length < 1) {
-        return res
-        .status(401)
-        .json({ message: "all your medication required prescripstion" });
-    }
+    // if (medArray.length < 1 && essentialProductarray.length < 1) {
+    //     return res
+    //     .status(401)
+    //     .json({ message: "all your medication required prescripstion" });
+    // }
 
     if (refererCredit >= totalCost) {
 
@@ -139,7 +139,7 @@ export const userCheckOutController = async (
           refererBunousUsed: totalCost.toString(),
           totalAmount: totalCost.toString(),
           amountPaid: '0',
-          paymentDate: day,
+          paymentDate: currentDate,
           deliveredStatus: 'not delivered',
           others
         })
@@ -175,7 +175,7 @@ export const userCheckOutController = async (
       totalAmount: totalCost,
     }
 
-    const paystackSecretKey = 'sk_test_b27336978f0f77d84915d7e883b0f756f6d150e7';
+    const paystackSecretKey = process.env.PAYSTACK_KEY;
     const currentDate = new Date();
     const milliseconds = currentDate.getMilliseconds();
 
@@ -190,7 +190,7 @@ export const userCheckOutController = async (
         email: userExist.email,
         reference: milliseconds,
         metadata,
-        callback_url: "https://www.youtube.com/watch?v=ZCuixMPJomU"
+        //callback_url: "https://www.youtube.com/watch?v=ZCuixMPJomU"
       }),
     });
 
@@ -267,7 +267,7 @@ export const userCheckOutPaymentVerificationController = async (
       // orderId,
     } = req.body;
 
-    const paystackSecretKey = 'sk_test_b27336978f0f77d84915d7e883b0f756f6d150e7';
+    const paystackSecretKey = process.env.PAYSTACK_KEY;
 
     const response = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
       method: 'GET',
@@ -437,3 +437,8 @@ export const userGetDeliveredOrderController = async (
   }
 
 }
+
+const currentDate = new Date()
+const day = currentDate.getDate(); 
+
+console.log('day', currentDate)
