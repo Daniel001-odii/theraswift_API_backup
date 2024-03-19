@@ -40,8 +40,6 @@ export const adminAddMedicationController = async (
       const filename = uuidv4();
       const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
       medicationImg = result?.Location!;
-      console.log(result);
-      //medicationImg = uploadToS3(file);
     }
 
     const medication = new MedicationModel({

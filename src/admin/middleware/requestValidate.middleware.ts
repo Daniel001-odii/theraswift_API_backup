@@ -81,7 +81,7 @@ export const validateMedicationParams = [
     .isIn(['required', 'not required', 'neccessary'])
     .withMessage("prescriptionRequired must be either required, not required or neccessary"),
   body("ingredient").notEmpty(),
-  body("quantityForUser").isNumeric(),
+  body("quantityForUser").notEmpty(),
   body("inventoryQuantity").notEmpty(),
   body("expiredDate").notEmpty(),
   body("category").notEmpty(),
@@ -98,7 +98,7 @@ export const validateMedicationEditParams = [
     .isIn(['required', 'not required', 'neccessary'])
     .withMessage("prescriptionRequired must be either required, not required or neccessary"),
   body("ingredient").notEmpty(),
-  body("quantityForUser").isNumeric(),
+  body("quantityForUser").notEmpty(),
   body("inventoryQuantity").notEmpty(),
   body("expiredDate").notEmpty(),
   body("category").notEmpty(),
