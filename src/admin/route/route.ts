@@ -19,6 +19,7 @@ import {
     validateMedicationEditParams,
     validateMedicationParams,
     validateOrderParams,
+    validateOrderPostParams,
     validatePhonNumber,
     validateResetPassword,
     validateResetPasswordByPhoneNumber,
@@ -89,7 +90,7 @@ router.get("/all_order_deliver", checkAdminRole, getAllOrderDeliveredController)
 router.get("/page_order_deliver", checkAdminRole, getPageOrderDeliveredController); // get page order delivered
 router.get("/single_order_deliver", validateOrderParams, checkAdminRole, getSingleOrderDeliveredController); // get single oder delivered
 router.get("/pending order", checkAdminRole, getPageOrderNotpendingController); // get pending order
-router.post("/delivered_order", validateOrderParams, checkAdminRole, DeliveredOrderController); //  delivered order
+router.post("/delivered_order", validateOrderPostParams, checkAdminRole, DeliveredOrderController); //  delivered order
 
 //essential
 router.post("/create_category", checkAdminRole, upload.single('categoryImg'), createEssentialCategoryController); //  create essential category

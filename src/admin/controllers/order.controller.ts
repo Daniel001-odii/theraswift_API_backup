@@ -120,7 +120,7 @@ export const getSingleOrderNotDeliveredController = async (
   try {
     const {
         orderId
-    } = req.body;
+    } = req.query;
 
     // Check for validation errors
     const errors = validationResult(req);
@@ -273,7 +273,7 @@ export const getSingleOrderDeliveredController = async (
   try {
     const {
         orderId
-    } = req.body;
+    } = req.query;
     // Check for validation errors
     const errors = validationResult(req);
   

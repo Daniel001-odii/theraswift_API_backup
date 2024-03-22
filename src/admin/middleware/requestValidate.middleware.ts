@@ -110,10 +110,14 @@ export const validateMedicationDeleteParams = [
 ];
 
 export const validateUserParams = [
-  body("userId").notEmpty(),
+  query("userId").notEmpty(),
 ];
 
 export const validateOrderParams = [
+  query("orderId").notEmpty(),
+];
+
+export const validateOrderPostParams = [
   body("orderId").notEmpty(),
 ];
 

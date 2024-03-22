@@ -112,7 +112,7 @@ export const getsingleUserController = async (
   try {
     const {
       userId, 
-    } = req.body;
+    } = req.query;
 
     // Check for validation errors
     const errors = validationResult(req);
