@@ -342,7 +342,7 @@ export const userRefillStatusCartController = async (
 try {
   const {
       cartId,
-  } = req.body;
+  } = req.query;
 
   // Check for validation errors
   const errors = validationResult(req);

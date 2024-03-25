@@ -149,7 +149,7 @@ export const adminSignInController = async (
           email: admin.email,
         },
         process.env.JWT_ADMIN_SECRET_KEY!,
-        { expiresIn: "24h" }
+        //{ expiresIn: "24h" }
       );
   
       // return access token
@@ -217,7 +217,7 @@ try {
       mobileNumber: admin.phoneNumber,
     },
     process.env.JWT_User_SECRET_KEY!,
-    { expiresIn: "24h" }
+    //{ expiresIn: "24h" }
   );
 
   // return access token

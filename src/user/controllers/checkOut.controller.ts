@@ -113,17 +113,9 @@ export const userCheckOutController = async (
     if (refererCredit >= totalCost) {
 
       const currentDate = new Date();
-
-      // Extract day, month, year, and time components
-      const day = currentDate.getDate(); // Day of the month (1-31)
-      // const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
-      // const year = currentDate.getFullYear(); // Full year (e.g., 2023)
-      // const hours = currentDate.getHours(); // Hours (0-23)
-      // const minutes = currentDate.getMinutes(); // Minutes (0-59)
-      // const seconds = currentDate.getSeconds(); // Seconds (0-59)
-
-      // // Format the components as a string
-      // const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+     
+      const milliseconds = currentDate.getMilliseconds();
+      let orderId = milliseconds.toString().substring(milliseconds.toString().length - 5);
         
         const order = new OrderModel({
           userId,
@@ -141,6 +133,7 @@ export const userCheckOutController = async (
           amountPaid: '0',
           paymentDate: currentDate,
           deliveredStatus: 'not delivered',
+          orderId,
           others
         })
 
@@ -149,6 +142,15 @@ export const userCheckOutController = async (
         userExist.refererCredit = refererCredit - totalCost;
         userExist.reference = "referer credit"
         await userExist.save();
+
+        for (let i = 0; i < carts.length; i++) {
+          const cart = carts[i];
+
+         const deletedCart = await CartModel.findOneAndDelete({_id: cart._id, userId: userId}, {new: true});
+
+         if (!deletedCart) continue
+          
+        }
 
         return res.status(200).json({
             message: "payment successfully using referer credit",
@@ -202,41 +204,43 @@ export const userCheckOutController = async (
         .json({ message: "unable to initailize payment" });
     }
 
-    // Extract day, month, year, and time components
-    const day = currentDate.getDate(); // Day of the month (1-31)
-    // const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
-    // const year = currentDate.getFullYear(); // Full year (e.g., 2023)
-    // const hours = currentDate.getHours(); // Hours (0-23)
-    // const minutes = currentDate.getMinutes(); // Minutes (0-59)
-    // const seconds = currentDate.getSeconds(); // Seconds (0-59)
-
-    // // Format the components as a string
-    // const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+    let orderId = milliseconds.toString().substring(milliseconds.toString().length - 5);
       
-      const order = new OrderModel({
-        userId,
-        firstName,
-        lastName,
-        dateOfBirth,
-        gender,
-        address,
-        paymentId: data.data.reference,
-        medications: medArray,
-        ensential: essentialProductarray,
-        deliveryDate: deliveryDate,
-        refererBunousUsed: refCre,
-        totalAmount: totalCost.toString(),
-        amountPaid: amount,
-        paymentDate: day,
-        deliveredStatus: 'pending',
-        others
-      })
+    const order = new OrderModel({
+      userId,
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+      address,
+      paymentId: data.data.reference,
+      medications: medArray,
+      ensential: essentialProductarray,
+      deliveryDate: deliveryDate,
+      refererBunousUsed: refCre,
+      totalAmount: totalCost.toString(),
+      amountPaid: amount,
+      paymentDate: day,
+      deliveredStatus: 'pending',
+      orderId,
+      others
+    })
 
-      const savedOrdered = await order.save();
+    const savedOrdered = await order.save();
 
-      userExist.refererCredit = 0;
-      userExist.reference = data.data.reference
-      await userExist.save();
+    userExist.refererCredit = 0;
+    userExist.reference = data.data.reference
+    await userExist.save();
+
+    for (let i = 0; i < carts.length; i++) {
+      const cart = carts[i];
+
+     const deletedCart = await CartModel.findOneAndDelete({_id: cart._id, userId: userId}, {new: true});
+
+     if (!deletedCart) continue
+      
+    }
+
 
     return res.status(200).json({
       message: "payment successfully initialize", 

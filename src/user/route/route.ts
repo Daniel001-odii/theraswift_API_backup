@@ -25,7 +25,8 @@ import {
     validateEnssntialProoudtParams,
     validateEnssntialCarttParams,
     validateEnssntialcartIDtParams,
-    validateGetMedicationByIdParams
+    validateGetMedicationByIdParams,
+    validateUserCartQueryParams
 } from "../middlewares/requestValidate.middleware";
 import { 
     userAddAddressController,
@@ -107,7 +108,7 @@ router.post("/increase_from_cart", validateUserCartParams, checkUserRole,   user
 router.post("/decrease_from_cart", validateUserCartParams, checkUserRole, userDecreaseMedicationToCartController ); // user decrease medication in cart list
 router.post("/remove_from_cart", validateUserCartParams, checkUserRole,   userRemoveMedicationToCartController ); // user remove medication from cart list
 router.get("/user_cart", checkUserRole, userCartListController ); // user get all cart list
-router.get("/cart_refill_status", validateUserCartParams, checkUserRole,   userRefillStatusCartController ); // change medication refill in cart
+router.get("/cart_refill_status", validateUserCartQueryParams, checkUserRole,   userRefillStatusCartController ); // change medication refill in cart
 
 router.post("/checkout", validateUserCheckOutParams, checkUserRole, userCheckOutController ); //  user checkout
 router.post("/checkout/verification", validateUserCheckOutVerificationParams, checkUserRole, userCheckOutPaymentVerificationController ); //  user checkout

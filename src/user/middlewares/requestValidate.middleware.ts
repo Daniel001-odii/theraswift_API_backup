@@ -97,6 +97,10 @@ export const validateUserCartParams = [
   body("cartId").notEmpty(),
 ];
 
+export const validateUserCartQueryParams = [
+  query("cartId").notEmpty(),
+];
+
 export const validateUserCheckOutParams = [
   body("deliveryDate").notEmpty(),
   body("firstName").notEmpty(),

@@ -61,6 +61,10 @@ const OrderSchema = new Schema(
         type: String,
         enum: ["delivered", "pending", "not delivered"],
       },
+      orderId:{
+        type: String,
+        default: ''
+      },
       others: [
         {
           key: String,

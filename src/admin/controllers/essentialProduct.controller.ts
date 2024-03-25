@@ -158,6 +158,43 @@ export const searchEssentialProductByNameController = async (
     res.status(500).json({ message: err.message });
   }
 }
+
+
+//admin get single Product/////////////
+export const getSingleEssentialProductByNameController = async (
+  req: any,
+  res: Response,
+) => {
+
+try {
+
+  const {
+    productId
+  } = req.query;
+
+  // Check for validation errors
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const product = await EssentialProductModel.findOne({_id: productId})
+
+  if (!product) {
+    return res.status(401).json({ message: "product do not exist" });
+  }
+
+  return res.status(200).json({
+    product,
+  })
+
+      
+} catch (err: any) {
+  // signup error
+  res.status(500).json({ message: err.message });
+}
+}
   
   
 

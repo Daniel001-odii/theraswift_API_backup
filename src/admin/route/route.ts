@@ -4,6 +4,7 @@ import {
     validatDoctorIdParams,
     validatEssentialCategoryParams,
     validatEssentialProuctIdParams,
+    validatEssentialProuctIdQueryarams,
     validatFrequenceAskParams,
     validatHmoIdParams,
     validatPatientUnderDoctorIdParams,
@@ -12,6 +13,7 @@ import {
     validateAdminSentOrderToHmoParams,
     validateAdminSigninParams,
     validateAdminSigninPhonNumberParams,
+    validateCategoryIDParams,
     validateDoctorEmailParams,
     validateEmail,
     validateFormData,
@@ -45,8 +47,8 @@ import { upload } from "../../utils/upload.utility";
 import { getAllUsersController, getPageUserDeatilController, getsingleUserController } from "../controllers/userDetail.controller";
 import { DeliveredOrderController, getAllOrderDeliveredController, getAllOrderNotDeliveredController, getPageOrderDeliveredController, getPageOrderNotDeliveredController, getPageOrderNotpendingController, getSingleOrderDeliveredController, getSingleOrderNotDeliveredController } from "../controllers/order.controller";
 //import { adminGetDeliverdDoctorOder, adminGetPaidDoctorOder, adminGetPendingDoctorOder } from "../controllers/orderFromDoctor.controller";
-import { createEssentialCategoryController, getAllEssentialCategoryController, getPageEssentialCategoryController } from "../controllers/essentialCategory.controller";
-import { adminAddEssentialProductController, deleteEssentialProductController, editEssentialProductController, getPageEssentialProductController, searchEssentialProductByNameController } from "../controllers/essentialProduct.controller";
+import { createEssentialCategoryController, deleteEssentialCategoryController, getAllEssentialCategoryController, getPageEssentialCategoryController } from "../controllers/essentialCategory.controller";
+import { adminAddEssentialProductController, deleteEssentialProductController, editEssentialProductController, getPageEssentialProductController, getSingleEssentialProductByNameController, searchEssentialProductByNameController } from "../controllers/essentialProduct.controller";
 import { adminEmailVerificationController, adminPhoneNumberVerificationController, adminSendEmailController, adminSendPhoneNumberController } from "../controllers/emailPhoneNumberVerification";
 import { adminFrequenceAskController, adminNewsletterSubcriberController } from "../controllers/frequencAskAndNewsletter.controller";
 import { adminGetDoctor, adminGetPatientUnderDoctor, adminGetSingleDoctorOder, adminGetSinglePatientUnderDoctorOder, adminGiveDoctorClinicCode } from "../controllers/doctorDetail.controller";
@@ -96,11 +98,13 @@ router.post("/delivered_order", validateOrderPostParams, checkAdminRole, Deliver
 router.post("/create_category", checkAdminRole, upload.single('categoryImg'), createEssentialCategoryController); //  create essential category
 router.get("/get_category", checkAdminRole, getAllEssentialCategoryController); // get essential category
 router.get("/get_page_category", checkAdminRole, getPageEssentialCategoryController); // get essential category
+router.post("/delete_category", checkAdminRole, validateCategoryIDParams, deleteEssentialCategoryController); // delete category
 router.post("/create_product",  checkAdminRole, upload.single('productImg'), adminAddEssentialProductController); // create essential product
 router.get("/get_product",  checkAdminRole, getPageEssentialProductController); // get essential page product
 router.get("/search_product_name",  checkAdminRole, searchEssentialProductByNameController); // get essential product by name
-router.post("/edit_product",  checkAdminRole, upload.single('productImg'),  editEssentialProductController); // get essential product by name
-router.post("/delete_product", validatEssentialProuctIdParams,  checkAdminRole, deleteEssentialProductController); // get essential product by name
+router.get("/get_single_product",  checkAdminRole, validatEssentialProuctIdQueryarams, getSingleEssentialProductByNameController); // get single essential product by name
+router.post("/edit_product",  checkAdminRole, upload.single('productImg'),  editEssentialProductController); // edit essential Product
+router.post("/delete_product", validatEssentialProuctIdParams,  checkAdminRole, deleteEssentialProductController); //delete essential product
 
 
 router.post("/frequence_ask", validatFrequenceAskParams,  checkAdminRole, adminFrequenceAskController); // add question and answe

@@ -125,8 +125,16 @@ export const validatEssentialCategoryParams = [
   body("name").notEmpty(),
 ];
 
+export const validateCategoryIDParams = [
+  body("categoryId").notEmpty(),
+];
+
 export const validatEssentialProuctIdParams = [
   body("productId").notEmpty(),
+];
+
+export const validatEssentialProuctIdQueryarams = [
+  query("productId").notEmpty(),
 ];
 
 export const validatFrequenceAskParams = [

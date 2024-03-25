@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import { Request, Response } from "express";
 import EssentialCategoryModel from "../models/essentialCategori.model";
+import EssentialProductModel from "../models/essentialProduct.model";
 import { uploadToS3 } from "../../utils/aws3.utility";
 import { v4 as uuidv4 } from "uuid";
 
@@ -47,7 +48,7 @@ export const createEssentialCategoryController = async (
 
     
     return res.status(200).json({
-      message: "category created succefully ",
+      message: "category created successfully ",
       category: savedEssentialCategory
     })
   
@@ -133,5 +134,48 @@ export const getPageEssentialCategoryController = async (
     // signup error
     res.status(500).json({ message: err.message });
   }
+}
+
+
+//admin delete essential category /////////////
+export const deleteEssentialCategoryController = async (
+  req: any,
+  res: Response,
+) => {
+
+try {
+
+  const {
+    categoryId,
+  } = req.body;
+  
+  // Check for validation errors
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const checkCategory = await EssentialCategoryModel.findOne({_id: categoryId})
+  if (!checkCategory) {
+    return res.status(401).json({ message: "invalid category ID." });
+  }
+
+  const checkProducts = await EssentialProductModel.find({categoryId: checkCategory._id})
+  if (checkProducts.length > 0) {
+    return res.status(401).json({ message: "delete all product under this category first." });
+  }
+
+  const deleteProduct = await EssentialCategoryModel.findOneAndDelete({_id: categoryId}, {new: true})
+
+  return res.status(200).json({
+    message: "category deleted successfully ",
+  })
+
+    
+} catch (err: any) {
+  // signup error
+  res.status(500).json({ message: err.message });
+}
 }
 
