@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import { Request, Response } from "express";
 import UserModel from "../../user/models/userReg.model";
+import UsermedicationModel from "../../user/models/medication.model";
 
 
 //get all users /////////////
@@ -123,6 +124,12 @@ export const getsingleUserController = async (
 
     const user = await UserModel.findOne({_id: userId});
 
+    if (!user) {
+      return res.status(401).json({ message: "user not found" });
+    }
+
+    const usermedication = await UsermedicationModel.find({userId}).populate('medicationId')
+
     const userObj = {
       id: user?._id,
       userId: user?.userId,
@@ -140,7 +147,7 @@ export const getsingleUserController = async (
 
     return res.status(200).json({
         message: "success",
-        user: userObj
+        user: {profile: userObj, usermedication}
     })
 
   } catch (err: any) {
