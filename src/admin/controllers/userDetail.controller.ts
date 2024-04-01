@@ -16,6 +16,8 @@ export const getAllUsersController = async (
    for (let i = 0; i < users.length; i++) {
     const user = users[i];
 
+    const usermedication = await UsermedicationModel.find({userId: user._id}).populate('medicationId')
+
     const userObj = {
       id: user._id,
       userId: user.userId,
@@ -28,7 +30,8 @@ export const getAllUsersController = async (
       refererCode: user.refererCode,
       refererCredit: user.refererCredit,
       reference: user.reference,
-      operatingLocation: user.operatingLocation
+      operatingLocation: user.operatingLocation,
+      usermedication
     }
 
     userArry.push(userObj);
@@ -71,6 +74,7 @@ export const getPageUserDeatilController = async (
       let userArry = [];
       for (let i = 0; i < users.length; i++) {
         const user = users[i];
+        const usermedication = await UsermedicationModel.find({userId: user._id}).populate('medicationId')
 
         const userObj = {
           id: user._id,
@@ -84,7 +88,8 @@ export const getPageUserDeatilController = async (
           refererCode: user.refererCode,
           refererCredit: user.refererCredit,
           reference: user.reference,
-          operatingLocation: user.operatingLocation
+          operatingLocation: user.operatingLocation,
+          usermedication
         }
 
         userArry.push(userObj);
