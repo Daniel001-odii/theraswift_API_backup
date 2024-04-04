@@ -55,14 +55,14 @@ export const adminAddEssentialProductController = async (
     
     const essentialProduct = new EssentialProductModel({
       categoryId,
-      name,
-      price: price,
-      uses,
-      quantity: quantity,
+      name: name.trim(),
+      price: price.trim(),
+      uses: uses.trim(),
+      quantity: quantity.trim(),
       medicationImage: medicationImg,
-      ingredient,
-      inventoryQauntity,
-      expiryDate,
+      ingredient: ingredient.trim(),
+      inventoryQauntity: inventoryQauntity.trim(),
+      expiryDate: expiryDate.trim(),
       category: categoryDb?.name
     })
 
@@ -254,14 +254,14 @@ export const editEssentialProductController = async (
 
     const updatedProduct = await EssentialProductModel.findOneAndUpdate({_id: productId}, {
       categoryId,
-      name,
-      price: price,
-      uses,
-      quantity: quantity,
+      name: name.trim(),
+      price: price.trim(),
+      uses: uses.trim(),
+      quantity: quantity.trim(),
       medicationImage: medicationImg,
-      ingredient,
-      inventoryQauntity,
-      expiryDate,
+      ingredient: ingredient.trim(),
+      inventoryQauntity: ingredient.trim(),
+      expiryDate: ingredient.trim(),
       category: categoryDb?.name  
     }, {new: true})
 

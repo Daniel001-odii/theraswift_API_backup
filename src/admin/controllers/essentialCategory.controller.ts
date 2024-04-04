@@ -40,7 +40,7 @@ export const createEssentialCategoryController = async (
     }
 
     const essentialCategory = new EssentialCategoryModel({
-        name,
+        name: name.trim(),
         img: medicationImg
     })
 
