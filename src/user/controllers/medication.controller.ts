@@ -6,6 +6,8 @@ import MedicationModel from "../../admin/models/medication.model";
 import { uploadToS3 } from "../../utils/aws3.utility";
 import { v4 as uuidv4 } from "uuid";
 import PatientMedicationByImage from "../models/medicationByImage.model";
+import { Document, Schema } from "mongoose";
+import { IMedication } from "../../admin/interface/medication.interface";
 
 //user add medication /////////////
 export const userAddMedicationController = async (
@@ -240,8 +242,19 @@ export const userSearchMedicationNameController = async (
     }
 
     const medications =  await MedicationModel.find({name: { $regex: name, $options: 'i' }});
+
+    const uniqueProducts: (Document<unknown, {}, IMedication> & IMedication & Required<{ _id: Schema.Types.ObjectId; }>)[] = [];
+    const seenCombination = new Set();
+    medications.forEach(medication => {
+      const combination = `${medication.form}`;
+      if (!seenCombination.has(combination)) {
+        uniqueProducts.push(medication);
+        seenCombination.add(combination);
+      }
+    });
+
     return res.status(200).json({
-      medications
+      medications: uniqueProducts
     })
   } catch (err: any) {
     // signup error
@@ -273,8 +286,18 @@ export const userSearchMedicationNameFormController = async (
     }
 
     const medications =  await MedicationModel.find({name, form});
+
+    const uniqueProducts: (Document<unknown, {}, IMedication> & IMedication & Required<{ _id: Schema.Types.ObjectId; }>)[] = [];
+    const seenCombination = new Set();
+    medications.forEach(medication => {
+      const combination = `${medication.quantity}`;
+      if (!seenCombination.has(combination)) {
+        uniqueProducts.push(medication);
+        seenCombination.add(combination);
+      }
+    });
     return res.status(200).json({
-      medications
+      medications: uniqueProducts
     })
   } catch (err: any) {
     // signup error
