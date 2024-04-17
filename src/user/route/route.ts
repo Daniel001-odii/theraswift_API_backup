@@ -26,7 +26,9 @@ import {
     validateEnssntialCarttParams,
     validateEnssntialcartIDtParams,
     validateGetMedicationByIdParams,
-    validateUserCartQueryParams
+    validateUserCartQueryParams,
+    validateUserCheckOutDirectParams,
+    validateRemovedMedicationParams
 } from "../middlewares/requestValidate.middleware";
 import { 
     userAddAddressController,
@@ -57,7 +59,7 @@ import {
 } from "../controllers/medication.controller";
 import { upload } from "../../utils/upload.utility";
 import { userAddMedicationToCartController, userCartListController, userDecreaseMedicationToCartController, userIncreaseMedicationToCartController, userRefillStatusCartController, userRemoveMedicationToCartController } from "../controllers/cart.controlller";
-import { userCheckOutController, userCheckOutPaymentVerificationController, userGetDeliveredOrderController, userGetNotDeliveredOrderController, userGetPendingOrderController } from "../controllers/checkOut.controller";
+import { userCheckOutController, userCheckOutFromAvailableMedController, userCheckOutPaymentVerificationController, userGetDeliveredOrderController, userGetNotDeliveredOrderController, userGetPendingOrderController } from "../controllers/checkOut.controller";
 import { getEssentialProductBycategoryController, getPageEssentialCategoryController } from "../controllers/essentialProduct.category";
 import { addEssentialProductToCartController, decreaseEssentialProductToCartController, getEssentialProductInCartController, increaseEssentialProductToCartController } from "../controllers/essentialProductCart.controller";
 import { userCheckOutEssentialPRoductController } from "../controllers/checkOutEssential.Controller";
@@ -92,7 +94,7 @@ router.get("/get_meidcatiom", userGethMedicationController ); // get medication
 router.get("/get_medication_by_id", validateGetMedicationByIdParams,  userGethMedicationByIdController ); // get medication by Id
 router.get("/get_popular_medication", userGetPopualarMedicationController ); // get popular medicatiom
 router.post("/add_medication", validateUserAddMedicationParams, checkUserRole,   userAddMedicationController ); // user add medication
-router.post("/remove_medication", validateAddMedicationParams, checkUserRole, userRemoveMedicationController ); // user remove medication
+router.post("/remove_medication", validateRemovedMedicationParams, checkUserRole, userRemoveMedicationController ); // user remove medication
 router.get("/seach_medication",  userSearchMedicationController ); // user search for medication
 router.get("/seach_medication_name", validateSearchMedicationByNameParams,  userSearchMedicationNameController ); // user search for medication by name
 router.get("/seach_medication_name_form", validateSearchMedicationByNameFRomParams, userSearchMedicationNameFormController ); // user search for medication by name and form
@@ -111,6 +113,7 @@ router.get("/user_cart", checkUserRole, userCartListController ); // user get al
 router.get("/cart_refill_status", validateUserCartQueryParams, checkUserRole,   userRefillStatusCartController ); // change medication refill in cart
 
 router.post("/checkout", validateUserCheckOutParams, checkUserRole, userCheckOutController ); //  user checkout
+router.post("/direct_checkout", validateUserCheckOutDirectParams, checkUserRole, userCheckOutFromAvailableMedController ); //  user checkout direct
 router.post("/checkout/verification", validateUserCheckOutVerificationParams, checkUserRole, userCheckOutPaymentVerificationController ); //  user checkout
 router.get("/pending_order", checkUserRole, userGetPendingOrderController ); // pending order
 router.get("/not_delevered_order", checkUserRole, userGetNotDeliveredOrderController ); // not delivered order

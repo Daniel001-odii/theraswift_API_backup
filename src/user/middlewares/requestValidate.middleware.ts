@@ -67,6 +67,11 @@ export const validateAddMedicationParams = [
   body("userMedicationId").notEmpty(),
 ];
 
+export const validateRemovedMedicationParams = [
+  body("userMedicationId").notEmpty(),
+  body("reason").notEmpty(),
+];
+
 
 export const validateUserAddMedicationParams = [
   body("medicationId").notEmpty(),
@@ -116,6 +121,26 @@ export const validateUserCheckOutParams = [
     }
     return true;
   }),
+];
+
+export const validateUserCheckOutDirectParams = [
+  body("deliveryDate").notEmpty(),
+  body("firstName").notEmpty(),
+  body("dateOfBirth").notEmpty(),
+  body("address").notEmpty(),
+  body("lastName").notEmpty(),
+  body("gender")
+  .isIn(["male", "female"]),
+  body("others").isArray().custom((value: any[]) => {
+    // Check if the 'others' field is an array
+    if (!Array.isArray(value)) {
+      throw new Error('Invalid format for the "others" field.');
+    }
+    return true;
+  }),
+  body("medicationId").notEmpty(),
+  body("type")
+  .isIn(["med", "ess"]),
 ];
 
 export const validateUserCheckOutVerificationParams = [

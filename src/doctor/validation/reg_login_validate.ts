@@ -7,6 +7,9 @@ export const validateDoctorSignupParams = [
   body("password").notEmpty(),
   body("title").notEmpty(),
   //body("clinicCode").notEmpty(),
+  body("addresss").notEmpty(),
+  body("speciality").notEmpty(),
+  body("regNumber").notEmpty(),
   body("organization")
     .isIn(["clinic", "hospital", "HMO"])
     .withMessage("Oganization must be either clinic, hospital or HMO"),

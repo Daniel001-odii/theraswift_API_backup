@@ -37,6 +37,18 @@ const DoctorSchema = new Schema(
       superDoctor: {
         type: Boolean
       },
+      addresss: {
+        type: String,
+        required: true,
+      },
+      speciality: {
+        type: String,
+        required: true,
+      },
+      regNumber: {
+        type: String,
+        required: true,
+      },
       createdAt: {
         type: Date,
         default: Date.now,

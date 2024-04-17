@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import PatientMedicationByImage from "../models/medicationByImage.model";
 import { Document, Schema } from "mongoose";
 import { IMedication } from "../../admin/interface/medication.interface";
+import RemoveMedicationModel from "../models/removeMedication.model";
 
 //user add medication /////////////
 export const userAddMedicationController = async (
@@ -100,7 +101,8 @@ export const userRemoveMedicationController = async (
 
   try {
     const {
-      userMedicationId
+      userMedicationId,
+      reason
     } = req.body;
 
     // Check for validation errors
@@ -113,18 +115,6 @@ export const userRemoveMedicationController = async (
     const user = req.user;
     const userId = user.id
 
-    console.log(userId)
-
-    // check if the medication is in database
-    const deletedmedication  = await UserMedicationModel.findOneAndDelete({_id: userMedicationId}, {new: true});
-
-
-    if (!deletedmedication ) {
-      return res
-        .status(401)
-        .json({ message: "invalid medication" });
-    }
-
     //get user info from databas
     const userExist = await UserModel.findOne({_id: userId});
 
@@ -134,9 +124,25 @@ export const userRemoveMedicationController = async (
         .json({ message: "invalid credential" });
     }
 
-    const medication = await MedicationModel.findOne({_id: deletedmedication.medicationId});
-    
 
+    // check if the medication is in database
+    const deletedmedication  = await UserMedicationModel.findOneAndDelete({_id: userMedicationId}, {new: true});
+
+    if (!deletedmedication ) {
+      return res
+        .status(401)
+        .json({ message: "invalid medication" });
+    }
+
+    // add reason for deleting medication
+    const newDeletedMedication = new RemoveMedicationModel({
+      userId,
+      medicationId: deletedmedication.medicationId,
+      reason
+    })
+
+    await newDeletedMedication.save()
+    
     return res.status(200).json({
       message: "medication removed successfiily",
       removedMedication: deletedmedication
@@ -203,6 +209,7 @@ export const userSearchMedicationController = async (
       const obj = {
         name: element._id,
         ingridient: bd?.ingredient,
+        id: bd?._id
       };
 
       output.push(obj)

@@ -26,6 +26,9 @@ export const doctorSignUpController = async (
       title,
       organization,
       clinicCode,
+      addresss,
+      speciality,
+      regNumber,
     } = req.body;
     // Check for validation errors
     const errors = validationResult(req);
@@ -50,7 +53,7 @@ export const doctorSignUpController = async (
     let doctorClinicCode = clinicCode;
     let superDoctor = false
     
-    if (!clinicCode || clinicCode != '') {
+    if (!clinicCode || clinicCode == '') {
       doctorClinicCode = ''
       superDoctor = true
 
@@ -73,7 +76,10 @@ export const doctorSignUpController = async (
       title,
       organization,
       clinicCode: doctorClinicCode,
-      superDoctor
+      superDoctor,
+      addresss,
+      speciality,
+      regNumber
     });
     let doctorSaved = await doctor.save();
 
@@ -97,7 +103,10 @@ export const doctorSignUpController = async (
         lastName: doctorSaved.lastName,
         email: doctorSaved.email,
         organization: doctorSaved.organization,
-        title: doctorSaved.title
+        title: doctorSaved.title,
+        address: doctorSaved.addresss,
+        speciality: doctorSaved.speciality,
+        regNumber: doctorSaved.regNumber
       }
     });
   } catch (err: any) {
