@@ -248,7 +248,14 @@ export const userSearchMedicationNameController = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const medications =  await MedicationModel.find({name: { $regex: name, $options: 'i' }});
+    console.log('name', name)
+
+    // const medications =  await MedicationModel.find({name: { $regex: name, $options: 'i' }});
+
+    const medications =  await MedicationModel.find({name: name});
+
+
+    console.log('medication', medications)
 
     const uniqueProducts: (Document<unknown, {}, IMedication> & IMedication & Required<{ _id: Schema.Types.ObjectId; }>)[] = [];
     const seenCombination = new Set();
