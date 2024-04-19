@@ -36,16 +36,36 @@ export const userAddMedicationToCartController = async (
         .json({ message: "invalid credential" });
     }
 
+    let madicationAvailable = false
+    let medicationId = ''
+    let patientMedicationId = ''
+
     //get user medication
     const userMedication = await UserMedicationModel.findOne({_id: userMedicationId});
 
-    if (!userMedication) {
-        return res
-        .status(401)
-        .json({ message: "invalid user medication" });
+    if (userMedication) {
+      madicationAvailable = true
+      medicationId = JSON.stringify(userMedication.medicationId)
+      patientMedicationId = userMedicationId
+
     }
 
-    const cartExist = await CartModel.findOne({userId: userId, userMedicationId: userMedicationId});
+    //get  medication
+    const medication = await MedicationModel.findOne({_id: userMedicationId});
+    if (medication) {
+      madicationAvailable = true
+      medicationId = userMedicationId
+      patientMedicationId = 'not in medication'
+
+    }
+
+    if (!madicationAvailable) {
+      return res
+        .status(401)
+        .json({ message: "invalid user medication or medication not found" });
+    }
+
+    const cartExist = await CartModel.findOne({userId: userId, medicationId: medicationId});
 
     if (cartExist) {
         return res
@@ -55,8 +75,8 @@ export const userAddMedicationToCartController = async (
 
     const cart = new CartModel({
         userId,
-        medicationId: userMedication.medicationId,
-        userMedicationId: userMedicationId,
+        medicationId: medicationId,
+        userMedicationId: patientMedicationId,
         quantityrquired: 1,
         type: "med"
     })

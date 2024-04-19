@@ -63,9 +63,9 @@ export const userCheckOutController = async (
         if (cart.type == "med") {
         
           const medication = await MedicationModel.findOne({_id: cart.medicationId});
-          const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId})
+          // const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId})
 
-          if (medication && userMedication) {
+          if (medication) {
               
               // if (medication.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {  
               //     continue;
