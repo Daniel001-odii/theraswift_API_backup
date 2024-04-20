@@ -311,10 +311,10 @@ try {
     const cart = cartList[i];
 
     if (cart.type == "med") {
-      const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId});
+      // const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId});
       const medication = await MedicationModel.findOne({_id: cart.medicationId});
 
-      if (!userMedication || !medication) {
+      if (!medication) {
         continue;
       }
       const cost = cart.quantityrquired * parseFloat(medication.price);
