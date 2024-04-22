@@ -81,10 +81,11 @@ export const userAddMedicationToCartController = async (
         type: "med"
     })
 
-    await cart.save();
+    const saveCart = await cart.save();
 
     return res.status(200).json({
         message: "medication added to cart succefully",
+        data: saveCart
     })
   
 
