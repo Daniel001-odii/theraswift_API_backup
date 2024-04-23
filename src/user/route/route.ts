@@ -58,7 +58,7 @@ import {
     userSearchMedicationNameFormDosageController
 } from "../controllers/medication.controller";
 import { upload } from "../../utils/upload.utility";
-import { userAddMedicationToCartController, userCartListController, userDecreaseMedicationToCartController, userIncreaseMedicationToCartController, userRefillStatusCartController, userRemoveMedicationToCartController } from "../controllers/cart.controlller";
+import { userAddMedicationToCartController, userCartListController, userClearCartlistController, userDecreaseMedicationToCartController, userIncreaseMedicationToCartController, userRefillStatusCartController, userRemoveMedicationToCartController } from "../controllers/cart.controlller";
 import { userCheckOutController, userCheckOutFromAvailableMedController, userCheckOutPaymentVerificationController, userGetDeliveredOrderController, userGetNotDeliveredOrderController, userGetPendingOrderController } from "../controllers/checkOut.controller";
 import { getEssentialProductBycategoryController, getPageEssentialCategoryController } from "../controllers/essentialProduct.category";
 import { addEssentialProductToCartController, decreaseEssentialProductToCartController, getEssentialProductInCartController, increaseEssentialProductToCartController } from "../controllers/essentialProductCart.controller";
@@ -108,9 +108,10 @@ router.post("/add_medication_by_img", upload.single('prescription'),  checkUserR
 router.post("/add_to_cart", validateAddMedicationParams, checkUserRole,   userAddMedicationToCartController ); // user add medication to cartlist
 router.post("/increase_from_cart", validateUserCartParams, checkUserRole,   userIncreaseMedicationToCartController ); // user increase medication from cart list
 router.post("/decrease_from_cart", validateUserCartParams, checkUserRole, userDecreaseMedicationToCartController ); // user decrease medication in cart list
-router.post("/remove_from_cart", validateUserCartParams, checkUserRole,   userRemoveMedicationToCartController ); // user remove medication from cart list
+router.post("/remove_from_cart", validateUserCartParams, checkUserRole, userRemoveMedicationToCartController ); // user remove medication from cart list
 router.get("/user_cart", checkUserRole, userCartListController ); // user get all cart list
 router.get("/cart_refill_status", validateUserCartQueryParams, checkUserRole,   userRefillStatusCartController ); // change medication refill in cart
+router.post("/clear_cart", checkUserRole, userClearCartlistController ); // user clear cart list
 
 router.post("/checkout", validateUserCheckOutParams, checkUserRole, userCheckOutController ); //  user checkout
 router.post("/direct_checkout", validateUserCheckOutDirectParams, checkUserRole, userCheckOutFromAvailableMedController ); //  user checkout direct

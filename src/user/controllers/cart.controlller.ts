@@ -299,6 +299,7 @@ try {
       .json({ message: "invalid credential" });
   }
 
+  console.log(1)
 
   const cartList = await CartModel.find({userId});
 
@@ -308,27 +309,41 @@ try {
 
   let product: any;
 
+  console.log(2)
+
   for (let i = 0; i < cartList.length; i++) {
     const cart = cartList[i];
+    console.log(3)
 
     if (cart.type == "med") {
       // const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId});
+      console.log(14)
       const medication = await MedicationModel.findOne({_id: cart.medicationId});
-
+      console.log(4)
       if (!medication) {
         continue;
       }
       const cost = cart.quantityrquired * parseFloat(medication.price);
       overallCost = overallCost + cost;
+
+      console.log(5)
       product = medication
-    }else{
+    }else if (cart.type == "ess"){
+      console.log(6)
       const essentialProduct = await EssentialProductModel.findOne({_id: cart.productId})
+
+      console.log(7)
       if (!essentialProduct) {
         continue;
       }
+
+      console.log(8)
       const cost = cart.quantityrquired * parseFloat(essentialProduct.price);
       overallCost = overallCost + cost;
       product = essentialProduct
+      console.log(9)
+    }else{
+      continue
     }
 
 
@@ -336,9 +351,13 @@ try {
       cart,
       product
     }
+
+    console.log(10)
     
     cartLists.push(cartObj);
   }
+
+  console.log(11)
 
   return res.status(200).json({
       cartLists,
@@ -403,6 +422,52 @@ try {
   return res.status(200).json({
       message: "medication refill status change succefully",
   })
+
+} catch (err: any) {
+  // signup error
+  res.status(500).json({ message: err.message });
+}
+
+}
+
+//user clear cart listn/////////////
+export const userClearCartlistController = async (
+  req: any,
+  res: Response,
+) => {
+
+try {
+  const {
+      
+  } = req.body;
+
+  // Check for validation errors
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const user = req.user;
+  const userId = user.id
+
+  //get user info from databas
+  const userExist = await UserModel.findOne({_id: userId});
+
+  if (!userExist) {
+    return res
+      .status(401)
+      .json({ message: "invalid credential" });
+  }
+
+
+  //const deletedCart = await CartModel.findOneAndDelete({_id: cartId, userId: userId}, {new: true});
+  const clearCart = await CartModel.deleteMany({userId: { $in:  userId}})
+
+  return res.status(200).json({
+      message: "cart list cleared successfully",
+  })
+
 
 } catch (err: any) {
   // signup error
