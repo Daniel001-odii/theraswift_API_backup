@@ -8,13 +8,13 @@ const CartSchema = new Schema(
         required: true,
       },
       medicationId: {
-        type: String,
+        type: Schema.Types.ObjectId, ref: 'Medication',
       },
       userMedicationId: {
         type: String,    
       },
       productId: {
-        type: String,
+        type: Schema.Types.ObjectId, ref: 'EssentialProduct',
       },
       quantityrquired: {
         type: Number,

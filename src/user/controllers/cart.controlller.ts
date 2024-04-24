@@ -37,25 +37,31 @@ export const userAddMedicationToCartController = async (
     }
 
     let madicationAvailable = false
-    let medicationId = ''
+    let medicationId: any  = ''
     let patientMedicationId = ''
+
+    console.log(1)
 
     //get user medication
     const userMedication = await UserMedicationModel.findOne({_id: userMedicationId});
 
+    console.log(2)
     if (userMedication) {
       madicationAvailable = true
-      medicationId = JSON.stringify(userMedication.medicationId)
+      medicationId = userMedication.medicationId
       patientMedicationId = userMedicationId
+      console.log(3)
 
     }
 
     //get  medication
     const medication = await MedicationModel.findOne({_id: userMedicationId});
+    console.log(4)
     if (medication) {
       madicationAvailable = true
       medicationId = userMedicationId
       patientMedicationId = 'not in medication'
+      console.log(5)
 
     }
 
@@ -65,14 +71,18 @@ export const userAddMedicationToCartController = async (
         .json({ message: "invalid user medication or medication not found" });
     }
 
+    console.log(6)
+
     const cartExist = await CartModel.findOne({userId: userId, medicationId: medicationId});
 
+    console.log(7)
     if (cartExist) {
         return res
         .status(401)
         .json({ message: "medication already in cart list" });
     }
 
+    console.log(9)
     const cart = new CartModel({
         userId,
         medicationId: medicationId,
@@ -80,8 +90,10 @@ export const userAddMedicationToCartController = async (
         quantityrquired: 1,
         type: "med"
     })
+    console.log(10)
 
     const saveCart = await cart.save();
+    console.log(11)
 
     return res.status(200).json({
         message: "medication added to cart succefully",
