@@ -39,8 +39,16 @@ const DoctorSchema = new Schema(
         type: String,
         default: '',
       },
+      requestClinicCode: {
+        type: String,
+        enum: ["request", "given"],
+      },
+      verifyClinicCode: {
+        type: Boolean,
+      },
       superDoctor: {
-        type: Boolean
+        type: Boolean,
+        default: false,
       },
       addresss: {
         type: String,

@@ -10,7 +10,9 @@ export interface IDoctorReg extends Document {
   password: string;
   title: string;
   organization: string;
+  requestClinicCode: string,
   clinicCode: string,
+  verifyClinicCode: boolean,
   superDoctor: boolean;
   addresss: string;
   speciality: string;

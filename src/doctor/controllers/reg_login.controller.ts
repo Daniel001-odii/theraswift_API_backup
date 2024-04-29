@@ -58,10 +58,12 @@ export const doctorSignUpController = async (
 
     let doctorClinicCode = clinicCode;
     let superDoctor = false
+    let verifyClinicCode = true
     
-    if (!clinicCode || clinicCode == '') {
+    if (!clinicCode || clinicCode == '' ) {
       doctorClinicCode = ''
       superDoctor = true
+      verifyClinicCode = false
 
     } else{
       const checkClinicCode = await DoctotModel.findOne({clinicCode: clinicCode, superDoctor: true});
@@ -83,6 +85,7 @@ export const doctorSignUpController = async (
       title,
       organization,
       clinicCode: doctorClinicCode,
+      verifyClinicCode: verifyClinicCode,
       superDoctor,
       addresss,
       speciality,
@@ -123,7 +126,7 @@ export const doctorSignUpController = async (
 }
 
 
-//doctor signIn /////////////
+//doctor signIn with email/////////////
 export const doctorSignInController = async (
   req: Request,
   res: Response,
@@ -163,6 +166,10 @@ export const doctorSignInController = async (
 
     if (doctor.clinicCode == '') {
       return res.status(401).json({ message: "you don't have clinic code." });
+    }
+
+    if (!doctor.verifyClinicCode) {
+      return res.status(401).json({ message: "clinic code not yet verified." });
     }
 
     // generate access token
@@ -235,7 +242,9 @@ try {
     return res.status(401).json({ message: "you don't have clinic code." });
   }
 
-
+  if (!doctor.verifyClinicCode) {
+    return res.status(401).json({ message: "clinic code not yet verified." });
+  }
 
   // generate access token
   const accessToken = jwt.sign(

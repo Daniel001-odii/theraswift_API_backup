@@ -165,6 +165,10 @@ export const validateDoctorEmailParams = [
   body("email").notEmpty(), 
 ];
 
+export const validateDoctorPhoneNumberParams = [
+  body("mobileNumber").notEmpty(), 
+];
+
 export const validatHmoIdParams = [
   query("hmoId").notEmpty(),
 ];
