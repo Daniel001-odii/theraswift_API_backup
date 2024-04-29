@@ -21,12 +21,18 @@ import {
     validateDoctorVerifiedEmailParams,
     validateHmoActionOnPatientSignupParams,
     validateHmoGetPatientOrderParams,
-    validateHmoTakeActionOnPatientOrderParams
+    validateHmoTakeActionOnPatientOrderParams,
+    validateDoctorSendPhoneNumberParams,
+    validateDoctorVerifiedPhoneNumberParams,
+    validateDoctorSigninPhoneNumberParams,
+    validatePhonNumber,
+    validateResetPasswordByPhoneNumber
 } from "../validation/reg_login_validate";
 import { 
     doctorSignUpController, 
     doctorSignInController,
-    doctorRegisterPatient
+    doctorRegisterPatient,
+    doctorMobileNumberSignInController
 } from "../controllers/reg_login.controller";
 import { 
     doctorGetAllRegisteredPatient,
@@ -34,6 +40,8 @@ import {
 } from "../controllers/get_patient_detail.controller";
 import { 
     doctorForgotPassworController,
+    doctorMobileForgotPasswordController,
+    doctorMobileResetPasswordController,
     doctorResetPassworController
 } from "../controllers/forgot_password.controller";
 import {
@@ -45,7 +53,7 @@ import { checkDoctorRole } from "../middleware/rolechecke.middleware";
 import { upload } from "../../utils/upload.utility";
 import { doctorSearchMedicationNameController, doctorSearchMedicationNameFormController, doctorSearchMedicationNameFormDosageController } from "../controllers/medication.controller";
 import { getpatientPriscriptionDeliverdeController, getpatientPriscriptionPendindController, getpatientPriscriptionProgressController, patientOderHmoController, patientOderOutPocketController } from "../controllers/patientMedicationOrder.controller";
-import { doctorEmailVerificationController, doctorSendEmailController } from "../controllers/emailVerification.controller";
+import { doctorEmailVerificationController, doctorPhoneNumberVerificationController, doctorSendEmailController, doctorSendPhoneNumberController } from "../controllers/emailVerification.controller";
 import { doctorGetPatientHmoApproveController, doctorGetPatientHmoDeniedController, doctorGetPatientHmoPendingController, doctorSentPatientToHmoController } from "../controllers/patientHmo.controller";
 import { hmoApproveOrDeniedPatientController, hmoGetPatientHeApproveController, hmoGetPatientHeDeniedController, hmoGetPatientSentToHimController } from "../controllers/hmoActionOnPatient.controller";
 import { hmoGetPatientOrdeHeTakeActionController, hmoGetPatientOrderSentToHimController, hmoTakeActionOnOrderSentToHimController } from "../controllers/hmoOrderAction.controller";
@@ -58,9 +66,14 @@ router.post("/test", router.get("/", (req:any, res:any) => {
 router.post("/doctor_signup", validateDoctorSignupParams, doctorSignUpController);  // doctor signup
 router.post("/doctor_send_email", validateDoctorSendEmailParams, doctorSendEmailController);  // doctor send email
 router.post("/doctor_verified_email", validateDoctorVerifiedEmailParams, doctorEmailVerificationController);  // doctor verified email
-router.post("/doctor_signin", validateDoctorSigninParams, doctorSignInController); // doctor login
-router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworController); // doctor forgot password
-router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password
+router.post("/doctor_send_phone_number", validateDoctorSendPhoneNumberParams, doctorSendPhoneNumberController);  // doctor send phone number
+router.post("/doctor_verified_phone_number", validateDoctorVerifiedPhoneNumberParams, doctorPhoneNumberVerificationController);  // doctor verified phone number
+router.post("/doctor_signin", validateDoctorSigninParams, doctorSignInController); // doctor login with email
+router.post("/doctor_signin_phone_number", validateDoctorSigninPhoneNumberParams, doctorMobileNumberSignInController); // doctor login with password
+router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworController); // doctor forgot password by email
+router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password by email
+router.post("/doctor_forgot_password_by_phone_number", validatePhonNumber, doctorMobileForgotPasswordController); // doctor forgot password by phone number
+router.post("/doctor_reset_password_by_phone_number", validateResetPasswordByPhoneNumber, doctorMobileResetPasswordController); // doctor reset password by phone number
 
 
 router.post("/register_patient", checkDoctorRole, validatePatientRegParams,  doctorRegisterPatient); // doctor register his patient

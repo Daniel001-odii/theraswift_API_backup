@@ -17,6 +17,11 @@ const DoctorSchema = new Schema(
         unique: true,
         lowercase: true,
       },
+      phoneNumber: {
+        type: String,
+        required: true,
+        unique: true,
+      },
       password: {
         type: String,
         required: true,
@@ -59,6 +64,11 @@ const DoctorSchema = new Schema(
       },
       
       emailOtp: {
+        otp: String,
+        createdTime: Date,
+        verified: Boolean,
+      },
+      phoneNumberOtp: {
         otp: String,
         createdTime: Date,
         verified: Boolean,

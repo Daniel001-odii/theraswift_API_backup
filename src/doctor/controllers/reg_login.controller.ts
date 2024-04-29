@@ -7,6 +7,7 @@ import PatientModel from "../modal/patient_reg.model";
 import DoctorWalletModel from "../modal/doctorWallet.model";
 import { uploadToS3 } from "../../utils/aws3.utility";
 import { v4 as uuidv4 } from "uuid";
+import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
 
 
 //doctor signup /////////////
@@ -20,6 +21,7 @@ export const doctorSignUpController = async (
   try {
     const {
       email,
+      phoneNumber,
       firstName,
       lastName,
       password,
@@ -37,14 +39,18 @@ export const doctorSignUpController = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
+    // format mobile number to international format
+    let phonenumber = modifiedPhoneNumber(phoneNumber);
+    
     // try find user with the same email
     const doctorEmailExists = await DoctotModel.findOne({ email });
+    const doctorNumberExists = await DoctotModel.findOne({ phoneNumber: phonenumber });
 
     // check if doctor exists
-    if (doctorEmailExists) {
+    if (doctorEmailExists || doctorNumberExists) {
       return res
         .status(401)
-        .json({ message: "Email  exists already" });
+        .json({ message: "Email or Mobile Number exists already" });
     }
 
     // Hash password
@@ -72,6 +78,7 @@ export const doctorSignUpController = async (
       email,
       firstName,
       lastName,
+      phoneNumber: phonenumber,
       password: hashedPassword,
       title,
       organization,
@@ -117,7 +124,6 @@ export const doctorSignUpController = async (
 
 
 //doctor signIn /////////////
-
 export const doctorSignInController = async (
   req: Request,
   res: Response,
@@ -167,7 +173,7 @@ export const doctorSignInController = async (
         clinicCode: doctor.clinicCode
       },
       process.env.JWT_SECRET_KEY!,
-      { expiresIn: "24h" }
+      // { expiresIn: "24h" }
     );
 
     // return access token
@@ -181,6 +187,79 @@ export const doctorSignInController = async (
     // signup error
     res.status(500).json({ message: err.message });
   }
+}
+
+
+//doctor signin  with mobile number/////////////
+export const doctorMobileNumberSignInController = async (
+  req: Request,
+  res: Response,
+) => {
+
+try {
+  const {
+    mobileNumber,
+    password,
+  } = req.body;
+  // Check for validation errors
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // format mobile number to international format
+  let phonenumber = modifiedPhoneNumber(mobileNumber);
+
+  // try find user with the same email
+  const doctor = await DoctotModel.findOne({ phoneNumber: phonenumber});
+
+   // check if user exists
+   if (!doctor) {
+    return res
+      .status(401)
+      .json({ message: "invalid credential" });
+  }
+
+  // compare password with hashed password in database
+  const isPasswordMatch = await bcrypt.compare(password, doctor.password);
+  if (!isPasswordMatch) {
+    return res.status(401).json({ message: "incorrect credential." });
+  }
+
+  if (!doctor.phoneNumberOtp.verified) {
+    return res.status(401).json({ message: "mobile number not verified." });
+  }
+
+  if (doctor.clinicCode == '') {
+    return res.status(401).json({ message: "you don't have clinic code." });
+  }
+
+
+
+  // generate access token
+  const accessToken = jwt.sign(
+    { 
+      _id: doctor?._id,
+      email: doctor.email,
+      clinicCode: doctor.clinicCode
+    },
+    process.env.JWT_SECRET_KEY!,
+    // { expiresIn: "24h" }
+  );
+
+  // return access token
+  res.json({
+    message: "Login successful",
+    Token: accessToken
+  });
+
+
+} catch (err: any) {
+  // signup error
+  res.status(500).json({ message: err.message });
+}
+
 }
 
 

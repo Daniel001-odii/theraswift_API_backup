@@ -6,6 +6,7 @@ export interface IDoctorReg extends Document {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   password: string;
   title: string;
   organization: string;
@@ -18,6 +19,11 @@ export interface IDoctorReg extends Document {
   updatedAt: Date;
   // verified: boolean; 
   emailOtp: {
+    otp: string;
+    createdTime: Date;
+    verified: boolean;
+  };
+  phoneNumberOtp: {
     otp: string;
     createdTime: Date;
     verified: boolean;

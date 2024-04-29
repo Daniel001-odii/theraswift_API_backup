@@ -6,6 +6,7 @@ export const validateDoctorSignupParams = [
   body("lastName").notEmpty(),
   body("password").notEmpty(),
   body("title").notEmpty(),
+  body("phoneNumber").notEmpty(),
   //body("clinicCode").notEmpty(),
   body("addresss").notEmpty(),
   body("speciality").notEmpty(),
@@ -19,13 +20,27 @@ export const validateDoctorSendEmailParams = [
   body("email").isEmail(),
 ];
 
+export const validateDoctorSendPhoneNumberParams = [
+  body("mobileNumber").notEmpty(),
+];
+
 export const validateDoctorVerifiedEmailParams = [
   body("email").isEmail(),
   body("otp").notEmpty(),
 ];
 
+export const validateDoctorVerifiedPhoneNumberParams = [
+  body("mobileNumber").notEmpty(),
+  body("otp").notEmpty(),
+];
+
 export const validateDoctorSigninParams = [
   body("email").isEmail(),
+  body("password").notEmpty(),
+];
+
+export const validateDoctorSigninPhoneNumberParams = [
+  body("mobileNumber").notEmpty(),
   body("password").notEmpty(),
 ];
 
@@ -61,8 +76,18 @@ export const validateEmail = [
   body("email").isEmail(),
 ];
 
+export const validatePhonNumber = [
+  body("mobileNumber").notEmpty(),
+];
+
 export const validateResetPassword = [
   body("email").isEmail(),
+  body("otp").notEmpty(),
+  body("password").notEmpty(),
+];
+
+export const validateResetPasswordByPhoneNumber = [
+  body("mobileNumber").notEmpty(),
   body("otp").notEmpty(),
   body("password").notEmpty(),
 ];
