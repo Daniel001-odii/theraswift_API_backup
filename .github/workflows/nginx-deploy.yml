@@ -33,6 +33,7 @@ jobs:
               sudo mv dist /var/www/api &&  echo  MOVED BUILT CODE 
               sudo mv node_modules /var/www/api/dist &&  echo MOVED DEPENDENCIES 
               sudo cp serverconf/default.conf /etc/nginx/conf.d/api.conf && echo Copied Server Conf
+              sudo cp serverconf/default.conf /etc/nginx/sites-available/api && echo Copied Server Conf
               cd /var/www/api/dist 
               npm start 
               exit
