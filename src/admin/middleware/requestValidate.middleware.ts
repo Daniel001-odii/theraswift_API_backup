@@ -182,6 +182,10 @@ export const validateAdminGettOrderToHmoParams = [
   query("patientId").notEmpty(),
 ];
 
+export const validatepatientIdParams = [
+  body("patientId").notEmpty(),
+];
+
 
 export const validateFormData = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);

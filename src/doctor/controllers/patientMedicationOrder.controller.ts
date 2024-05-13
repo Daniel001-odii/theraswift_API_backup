@@ -51,6 +51,7 @@ export const patientOderHmoController = async (
             const patientOrder =  new PatientOrderModel({
                 patientPrescriptionId: patientPrescription._id,
                 patientId: patientId,
+                medicationId: medication._id,
                 clinicCode: patientPrescription.clinicCode,
                 patientPayment: parseFloat(medication.price),
                 hmoPayment: 0,
@@ -121,6 +122,7 @@ export const patientOderOutPocketController = async (
             const patientOrder =  new PatientOrderModel({
                 patientPrescriptionId: patientPrescription._id,
                 patientId: patientId,
+                medicationId: medication._id,
                 clinicCode: patientPrescription.clinicCode,
                 patientPayment: parseFloat(medication.price),
                 hmoPayment: 0,

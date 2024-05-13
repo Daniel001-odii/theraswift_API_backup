@@ -31,7 +31,8 @@ import {
     validateSignupParams,
     validateUserParams,
     validateVerifyEmailEmailigninParams,
-    validateVerifyPhoneNumbweParams
+    validateVerifyPhoneNumbweParams,
+    validatepatientIdParams
 } from "../middleware/requestValidate.middleware";
 
 import { adminMobileNumberSignInController, adminSignInController, adminSignUpController } from "../controllers/regLogin.controller";
@@ -56,6 +57,7 @@ import { adminGetDoctor, adminGetDoctorRequestClinicCode, adminGetPatientUnderDo
 import { adminGetDoctorDeliveredPatientOrder, adminGetDoctorPatientProgressOrder, adminGetDoctorPendingPatientOrder, adminGetDoctorSingleDeliveredPatientOrder, adminGetDoctorSinglePendingPatientOrder, adminGetDoctorSingleProgressPatientOrder } from "../controllers/doctorPatientPrescription.controller";
 import { adminGetHmo, adminGetSingleHmo } from "../controllers/hmoDetail.controller";
 import { adminGetPatientOrderSentToHmo, adminSendingPatientOrderToHmo } from "../controllers/sendOrderToHmo.controller";
+import { adminSendingPatientOrderToEmail, adminSendingPatientOrderToSms } from "../controllers/awaitingMedication.controller";
 
 
 router.post("/admin_signup", validateSignupParams, adminSignUpController); // admin signup
@@ -111,7 +113,8 @@ router.post("/delete_product", validatEssentialProuctIdParams,  checkAdminRole, 
 router.post("/frequence_ask", validatFrequenceAskParams,  checkAdminRole, adminFrequenceAskController); // add question and answe
 router.get("/get_newsletters",  checkAdminRole, adminNewsletterSubcriberController); // get newslw=etter subscriber
 
-
+router.post("/email/link", validatepatientIdParams,  checkAdminRole, adminSendingPatientOrderToEmail); // send link through email
+router.post("/sms/link", validatepatientIdParams,   checkAdminRole, adminSendingPatientOrderToSms); // send link through sms
 
 
 /////////////////////////////////

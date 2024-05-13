@@ -6,6 +6,7 @@ export interface IPatientOrder extends Document {
     _id: ObjectId;
     patientPrescriptionId: IPatientPrescription['_id'];
     patientId: IPatientReg['_id'];
+    medicationId: ObjectId;
     hmoClinicCode: string;
     clinicCode: string;
     patientPayment: number;
