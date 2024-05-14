@@ -314,6 +314,9 @@ export const doctorRegisterPatient = async (
     const doctor = req.doctor;
     let patientHmo = '';
 
+    // format mobile number to international format
+    let phonenumber = modifiedPhoneNumber(phoneNumber);
+
     if (hmo != '') {
       patientHmo = hmo;
     }
@@ -323,7 +326,7 @@ export const doctorRegisterPatient = async (
       email,
       firstName,
       surname,
-      phoneNumber,
+      phoneNumber: phonenumber,
       gender,
       address,
       dateOFBirth,

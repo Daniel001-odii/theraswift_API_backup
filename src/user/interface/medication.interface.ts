@@ -8,6 +8,8 @@ export interface IUserMedication extends Document {
   medicationId: IMedication['_id'];
   prescriptionStatus: boolean;
   prescriptionImage: string;
+  doctor: ObjectId;
+  clinicCode: string;
   createdAt: Date;
   updatedAt: Date;
   

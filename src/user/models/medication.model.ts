@@ -20,6 +20,14 @@ const UserMedicationSchema = new Schema(
         type: String,
         default: "",
       },
+      doctor: {
+        type: Schema.Types.ObjectId,
+        default: null,
+      },
+      clinicCode: {
+        type: String,
+        default: "",
+      },
       createdAt: {
         type: Date,
         default: Date.now,

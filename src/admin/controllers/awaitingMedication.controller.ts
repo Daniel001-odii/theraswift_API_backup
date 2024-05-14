@@ -11,6 +11,8 @@ import { htmlMailLinkTemplate } from "../../templates/admin/sendLinkTemlate";
 import { SINGIN_LINK, SINGUP_LINK } from "../../utils/otpGenerator";
 import { sendSms } from "../../utils/sendSms.utility";
 import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
+import UserModel from "../../user/models/userReg.model";
+import UserMedicationModel from "../../user/models/medication.model";
 
 
 // admin send order to patient through email
@@ -46,34 +48,78 @@ export const adminSendingPatientOrderToEmail = async (
             .json({ message: "no order for this patient" });
         }
 
-        let count = 0
+        const checkUser = await UserModel.findOne({email: patient.email})
 
-        for (let i = 0; i < orders.length; i++) {
-            const order = orders[i];
+        if (checkUser?.emailOtp.verified) {
+
+            let count = 0
+
+            for (let i = 0; i < orders.length; i++) {
+                const order = orders[i];
+                
+                const singleOrder = await PatientOrderModel.findOne({_id: order._id})
+                if (!singleOrder) continue
+
+                const medication = await MedicationModel.findOne({_id: singleOrder.medicationId})
+                if (!medication) continue
+
+                singleOrder.status = "delivered"
+                await singleOrder.save()
+
+               //if medication those not exist
+                const userMedication = new UserMedicationModel({
+                    userId: checkUser._id,
+                    medicationId: medication._id,
+                    prescriptionStatus: false,
+                    doctor: patient.doctorId,
+                    clinicCode: patient.clinicCode
+                })
+  
+                const saveUserMedication = await userMedication.save();
+
+                count++;
+
+            }
+
+            if (count < 1) {
+                return res
+                .status(401)
+                .json({ message: "no order for this patient" });
+            }
             
-            const singleOrder = await PatientOrderModel.findOne({_id: order._id})
-            if (!singleOrder) continue
+        }else{
 
-            const medication = await MedicationModel.findOne({_id: singleOrder.medicationId})
-            if (!medication) continue
+            let count = 0
 
-            singleOrder.status = "delivered"
-            await singleOrder.save()
+            for (let i = 0; i < orders.length; i++) {
+                const order = orders[i];
+                
+                const singleOrder = await PatientOrderModel.findOne({_id: order._id})
+                if (!singleOrder) continue
 
-            const newAwaitingMed = new AwaitingMedicationModel({
-                patientId,
-                medicationId: medication._id,
-                email: patient.email
-            })
-            await newAwaitingMed.save()
+                const medication = await MedicationModel.findOne({_id: singleOrder.medicationId})
+                if (!medication) continue
 
-            count++;
-        }
+                singleOrder.status = "delivered"
+                await singleOrder.save()
 
-        if (count < 1) {
-            return res
-            .status(401)
-            .json({ message: "no order for this patient" });
+                const newAwaitingMed = new AwaitingMedicationModel({
+                    patientId,
+                    medicationId: medication._id,
+                    email: patient.email,
+                    phoneNumber: patient.phoneNumber
+                })
+                await newAwaitingMed.save()
+
+                count++;
+            }
+
+            if (count < 1) {
+                return res
+                .status(401)
+                .json({ message: "no order for this patient" });
+            }
+
         }
 
         const html = htmlMailLinkTemplate(patient.firstName, SINGUP_LINK)
@@ -131,34 +177,76 @@ export const adminSendingPatientOrderToSms  = async (
             .json({ message: "no order for this patient" });
         }
 
-        let count = 0
+        const checkUser = await UserModel.findOne({mobileNumber: patient.phoneNumber})
 
-        for (let i = 0; i < orders.length; i++) {
-            const order = orders[i];
+        if (checkUser?.phoneNumberOtp.verified) {
+
+            let count = 0
+
+            for (let i = 0; i < orders.length; i++) {
+                const order = orders[i];
+                
+                const singleOrder = await PatientOrderModel.findOne({_id: order._id})
+                if (!singleOrder) continue
+
+                const medication = await MedicationModel.findOne({_id: singleOrder.medicationId})
+                if (!medication) continue
+
+                singleOrder.status = "delivered"
+                await singleOrder.save()
+
+               //if medication those not exist
+                const userMedication = new UserMedicationModel({
+                    userId: checkUser._id,
+                    medicationId: medication._id,
+                    prescriptionStatus: false,
+                    doctor: patient.doctorId,
+                    clinicCode: patient.clinicCode
+                })
+  
+                const saveUserMedication = await userMedication.save();
+
+                count++;
+
+            }
+
+            if (count < 1) {
+                return res
+                .status(401)
+                .json({ message: "no order for this patient" });
+            }
             
-            const singleOrder = await PatientOrderModel.findOne({_id: order._id})
-            if (!singleOrder) continue
+        }else{
+            let count = 0
 
-            const medication = await MedicationModel.findOne({_id: singleOrder.medicationId})
-            if (!medication) continue
+            for (let i = 0; i < orders.length; i++) {
+                const order = orders[i];
+                
+                const singleOrder = await PatientOrderModel.findOne({_id: order._id})
+                if (!singleOrder) continue
 
-            singleOrder.status = "delivered"
-            await singleOrder.save()
+                const medication = await MedicationModel.findOne({_id: singleOrder.medicationId})
+                if (!medication) continue
 
-            const newAwaitingMed = new AwaitingMedicationModel({
-                patientId,
-                medicationId: medication._id,
-                email: patient.email
-            })
-            await newAwaitingMed.save()
+                singleOrder.status = "delivered"
+                await singleOrder.save()
 
-            count++;
-        }
+                const newAwaitingMed = new AwaitingMedicationModel({
+                    patientId,
+                    medicationId: medication._id,
+                    email: patient.email,
+                    phoneNumber: patient.phoneNumber
+                })
+                await newAwaitingMed.save()
 
-        if (count < 1) {
-            return res
-            .status(401)
-            .json({ message: "no order for this patient" });
+                count++;
+            }
+
+            if (count < 1) {
+                return res
+                .status(401)
+                .json({ message: "no order for this patient" });
+            }
         }
 
         let sms = `Hi ${patient.firstName}, we just recieved your prescription from ${doctor?.firstName} copy link below on browser to schedule your free delivery ${SINGUP_LINK}  ${SINGIN_LINK}`;

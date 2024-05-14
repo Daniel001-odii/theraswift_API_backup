@@ -64,6 +64,7 @@ import { getEssentialProductBycategoryController, getPageEssentialCategoryContro
 import { addEssentialProductToCartController, decreaseEssentialProductToCartController, getEssentialProductInCartController, increaseEssentialProductToCartController } from "../controllers/essentialProductCart.controller";
 import { userCheckOutEssentialPRoductController } from "../controllers/checkOutEssential.Controller";
 import { frequenceAskQuestionController, subcribForNewsletterController } from "../controllers/newletter.controller";
+import { userDeleteDataController } from "../controllers/removeData.controller";
 
 
 router.post("/check_email", validateEmailParams, userCheckEmailController ); // user check email
@@ -131,6 +132,9 @@ router.post("/ensentialProduct_add_cart", validateEnssntialCarttParams, checkUse
 
 router.post("/subcribe_for_newsletter", validateEmailParams, subcribForNewsletterController ); // user subcribe for newsletter
 router.get("/frquence_ask_ans", frequenceAskQuestionController ); // user subcribe for newsletter
+
+//delete data
+router.delete("/delete", checkUserRole, userDeleteDataController ); //  user delete data from database
 
 
 export default router;

@@ -11,6 +11,10 @@ const AwaitingMedicationSchema = new Schema(
         type: String,
         required: true,
       },
+      phoneNumber: {
+        type: String,
+        required: true,
+      },
       medicationId: {
         type: Schema.Types.ObjectId,
         required: true,

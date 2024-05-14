@@ -4,6 +4,11 @@ import UserModel from "../models/userReg.model";
 import { generateOTP, OTP_EXPIRY_TIME } from "../../utils/otpGenerator";
 import { sendSms } from "../../utils/sendSms.utility";
 import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
+import PatientModel from "../../doctor/modal/patient_reg.model";
+import AwaitingMedicationModel from "../../admin/models/awaitingMedication.model";
+import UserMedicationModel from "../models/medication.model";
+import MedicationModel from "../../admin/models/medication.model";
+
 
 //user send email /////////////
 export const userSendPhoneNumberController = async (
@@ -115,6 +120,39 @@ export const userPhoneNumberVerificationController = async (
         user.phoneNumberOtp.verified = true;
 
         await user.save();
+
+        const checkAwaitingMeds = await AwaitingMedicationModel.find({phoneNumber: phonenumber})
+
+        if (checkAwaitingMeds.length > 0) {
+          for (let i = 0; i < checkAwaitingMeds.length; i++) {
+
+            const checkAwaitingMed = checkAwaitingMeds[i];
+
+            const medication = await MedicationModel.findOne({_id: checkAwaitingMed.medicationId});
+            if (!medication) continue
+
+            const patient = await PatientModel.findOne({_id: checkAwaitingMed.patientId});
+            if (!patient) continue
+
+
+            //if medication those not exist
+            const userMedication = new UserMedicationModel({
+              userId: user._id,
+              medicationId: medication._id,
+              prescriptionStatus: false,
+              doctor: patient.doctorId,
+              clinicCode: patient.clinicCode
+            })
+
+            const saveUserMedication = await userMedication.save();
+
+             // check if the medication is in database
+            const deleteAwaitMed = await AwaitingMedicationModel.findOneAndDelete({_id: checkAwaitingMed._id}, {new: true});
+            if (!deleteAwaitMed ) continue
+            
+          }
+          
+        }
 
         return res.json({ message: "mobile number verified successfully" });
     
