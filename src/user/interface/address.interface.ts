@@ -9,6 +9,8 @@ export interface IAddress extends Document {
   LGA: string;
   DeliveryInstruction: string;
   doorMan: boolean;
+  handDeliver: boolean;
+  state: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -27,6 +27,14 @@ const AddressSchema = new Schema(
         type: Boolean,
         default: false
       },
+      handDeliver: {
+        type: Boolean,
+        default: false
+      },
+      state: {
+        type: String,
+        required: true,
+      },
       createdAt: {
         type: Date,
         default: Date.now,

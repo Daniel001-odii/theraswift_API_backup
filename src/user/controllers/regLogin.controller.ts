@@ -499,7 +499,9 @@ export const userAddAddressController = async (
       streetNO,
       LGA,
       DeliveryInstruction,
-      doorMan
+      doorMan,
+      handDeliver,
+      state
     } = req.body;
     // Check for validation errors
     const errors = validationResult(req);
@@ -527,7 +529,9 @@ export const userAddAddressController = async (
     streetNO: streetNO,
     LGA: LGA,
     DeliveryInstruction: DeliveryInstruction,
-    doorMan
+    doorMan,
+    handDeliver,
+    state
    });
 
    const savedAddress = await newAddress.save()
