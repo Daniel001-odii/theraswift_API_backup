@@ -335,7 +335,7 @@ try {
       if (!medication) {
         continue;
       }
-      const cost = cart.quantityrquired * parseFloat(medication.price);
+      const cost = cart.quantityrquired * medication.price;
       overallCost = overallCost + cost;
 
       console.log(5)

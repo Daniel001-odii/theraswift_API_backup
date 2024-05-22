@@ -71,7 +71,7 @@ export const userCheckOutController = async (
               //     continue;
               // }
 
-              totalCost = totalCost + (cart.quantityrquired * parseFloat(medication.price))
+              totalCost = totalCost + (cart.quantityrquired * medication.price)
               
               const medicationObt = {
                 medication: medication,
@@ -129,8 +129,8 @@ export const userCheckOutController = async (
           ensential: essentialProductarray,
           deliveryDate: deliveryDate,
           refererBunousUsed: totalCost.toString(),
-          totalAmount: totalCost.toString(),
-          amountPaid: '0',
+          totalAmount: totalCost,
+          amountPaid: 0,
           paymentDate: currentDate,
           deliveredStatus: 'not delivered',
           orderId,
@@ -218,7 +218,7 @@ export const userCheckOutController = async (
       ensential: essentialProductarray,
       deliveryDate: deliveryDate,
       refererBunousUsed: refCre,
-      totalAmount: totalCost.toString(),
+      totalAmount: totalCost,
       amountPaid: amount,
       paymentDate: currentDate,
       deliveredStatus: 'pending',
@@ -497,7 +497,7 @@ try {
           .json({ message: "can not find this medication" });
     }
 
-    totalCost = totalCost + parseFloat(medication.price)
+    totalCost = totalCost + medication.price
     
     const medicationObt = {
       medication: medication,
@@ -550,8 +550,8 @@ try {
         ensential: essentialProductarray,
         deliveryDate: deliveryDate,
         refererBunousUsed: totalCost.toString(),
-        totalAmount: totalCost.toString(),
-        amountPaid: '0',
+        totalAmount: totalCost,
+        amountPaid: 0,
         paymentDate: currentDate,
         deliveredStatus: 'not delivered',
         orderId,
@@ -630,7 +630,7 @@ try {
     ensential: essentialProductarray,
     deliveryDate: deliveryDate,
     refererBunousUsed: refCre,
-    totalAmount: totalCost.toString(),
+    totalAmount: totalCost,
     amountPaid: amount,
     paymentDate: currentDate,
     deliveredStatus: 'pending',

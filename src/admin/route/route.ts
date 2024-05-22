@@ -58,6 +58,7 @@ import { adminGetDoctorDeliveredPatientOrder, adminGetDoctorPatientProgressOrder
 import { adminGetHmo, adminGetSingleHmo } from "../controllers/hmoDetail.controller";
 import { adminGetPatientOrderSentToHmo, adminSendingPatientOrderToHmo } from "../controllers/sendOrderToHmo.controller";
 import { adminSendingPatientOrderToEmail, adminSendingPatientOrderToSms } from "../controllers/awaitingMedication.controller";
+import { dashboardController, expiredMedicationController } from "../controllers/dashBoard.controller";
 
 
 router.post("/admin_signup", validateSignupParams, adminSignUpController); // admin signup
@@ -71,6 +72,10 @@ router.post("/admin_forgot_password", validateEmail, adminForgotPassworControlle
 router.post("/admin_reset_password", validateResetPassword, adminResetPassworController); // admin reset password by email
 router.post("/admin_forgot_password_by_phone_number", validatePhonNumber, adminMobileForgotPasswordController); // admin forgot password by phone number
 router.post("/admin_reset_password_by_phone_number", validateResetPasswordByPhoneNumber, adminMobileResetPasswordController); // admin reset password by phone number
+
+router.get("/dashboard", checkAdminRole, dashboardController); // dash board
+router.get("/expired_medication", checkAdminRole, expiredMedicationController); // get expired medication
+
 
 
 router.post("/admin_add_medication", checkAdminRole, upload.single('medicationImg'), validateMedicationParams, validateFormData, adminAddMedicationController); // admin add medication to databas

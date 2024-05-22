@@ -83,7 +83,7 @@ export const validateMedicationParams = [
   body("ingredient").notEmpty(),
   body("quantityForUser").notEmpty(),
   body("inventoryQuantity").notEmpty(),
-  body("expiredDate").notEmpty(),
+  body("expiredDate").isDate(),
   body("category").notEmpty(),
   body("medInfo").notEmpty(),
 ];

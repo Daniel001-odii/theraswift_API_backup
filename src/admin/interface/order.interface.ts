@@ -31,8 +31,8 @@ export interface IOrder extends Document {
   ensential?: EssentialDocument[];
   deliveryDate: string;
   refererBunousUsed: string;
-  totalAmount: string;
-  amountPaid: string;
+  totalAmount: number;
+  amountPaid: number;
   paymentDate: string;
   deliveredStatus: string;
   orderId: string;

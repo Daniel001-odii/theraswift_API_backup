@@ -7,7 +7,7 @@ const MedicationSchema = new Schema(
         type: String,
       },
       price: {
-        type: String,
+        type: Number,
       },
       quantity: {
         type: String,
@@ -32,7 +32,7 @@ const MedicationSchema = new Schema(
         type: String,
       },
       expiredDate: {
-        type: String,
+        type: Date,
       },
       category: {
         type: String,

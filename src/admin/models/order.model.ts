@@ -49,10 +49,10 @@ const OrderSchema = new Schema(
         type: String,
       },
       totalAmount: {
-        type: String,
+        type: Number,
       },
       amountPaid: {
-        type: String,
+        type: Number,
       },
       paymentDate:{
         type: String,
