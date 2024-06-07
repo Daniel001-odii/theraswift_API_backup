@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import UserModel from "../models/userReg.model";
 
 //user delete data/////////////
-export const userDeleteDataController = async (
+export const userDeleteMyAccountController = async (
     req: any,
     res: Response,
 ) => {
@@ -27,11 +27,11 @@ export const userDeleteDataController = async (
     if (!deleteUser) {
       return res
         .status(401)
-        .json({ message: "unable to delete data" });
+        .json({ message: "unable to delete accout" });
     }
     
     return res.status(200).json({
-      message: "data deleted succefully",
+      message: "account deleted succefully",
     })
   
 

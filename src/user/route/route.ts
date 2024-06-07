@@ -62,9 +62,9 @@ import { userAddMedicationToCartController, userCartListController, userClearCar
 import { userCheckOutController, userCheckOutFromAvailableMedController, userCheckOutPaymentVerificationController, userGetDeliveredOrderController, userGetNotDeliveredOrderController, userGetPendingOrderController } from "../controllers/checkOut.controller";
 import { getEssentialProductBycategoryController, getPageEssentialCategoryController } from "../controllers/essentialProduct.category";
 import { addEssentialProductToCartController, decreaseEssentialProductToCartController, getEssentialProductInCartController, increaseEssentialProductToCartController } from "../controllers/essentialProductCart.controller";
-import { userCheckOutEssentialPRoductController } from "../controllers/checkOutEssential.Controller";
+// import { userCheckOutEssentialPRoductController } from "../controllers/checkOutEssential.Controller";
 import { frequenceAskQuestionController, subcribForNewsletterController } from "../controllers/newletter.controller";
-import { userDeleteDataController } from "../controllers/removeData.controller";
+import { userDeleteMyAccountController } from "../controllers/userDeleteMyAccount.controller";
 
 
 router.post("/check_email", validateEmailParams, userCheckEmailController ); // user check email
@@ -133,8 +133,8 @@ router.post("/ensentialProduct_add_cart", validateEnssntialCarttParams, checkUse
 router.post("/subcribe_for_newsletter", validateEmailParams, subcribForNewsletterController ); // user subcribe for newsletter
 router.get("/frquence_ask_ans", frequenceAskQuestionController ); // user subcribe for newsletter
 
-//delete data
-router.delete("/delete", checkUserRole, userDeleteDataController ); //  user delete data from database
+//delete user acccount
+router.delete("/delete_my_account", checkUserRole, userDeleteMyAccountController); //  user delete data from database
 
 
 export default router;

@@ -16,6 +16,10 @@ export const validateDoctorSignupParams = [
     .withMessage("Oganization must be either clinic, hospital or HMO"),
 ];
 
+export const validateGetDoctorParams = [
+  body("doctorId").notEmpty(),
+];
+
 export const validateDoctorSendEmailParams = [
   body("email").isEmail(),
 ];

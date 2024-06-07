@@ -26,14 +26,16 @@ import {
     validateDoctorVerifiedPhoneNumberParams,
     validateDoctorSigninPhoneNumberParams,
     validatePhonNumber,
-    validateResetPasswordByPhoneNumber
+    validateResetPasswordByPhoneNumber,
+    validateGetDoctorParams
 } from "../validation/reg_login_validate";
 import { 
     doctorSignUpController, 
     doctorSignInController,
     doctorRegisterPatient,
-    doctorMobileNumberSignInController
+    doctorMobileNumberSignInController,
 } from "../controllers/reg_login.controller";
+import {getDoctorInfoController} from "../controllers/getDoctorInfo.controller"
 import { 
     doctorGetAllRegisteredPatient,
     doctorGetSingleRegisteredPatient
@@ -58,6 +60,7 @@ import { doctorGetPatientHmoApproveController, doctorGetPatientHmoDeniedControll
 import { hmoApproveOrDeniedPatientController, hmoGetPatientHeApproveController, hmoGetPatientHeDeniedController, hmoGetPatientSentToHimController } from "../controllers/hmoActionOnPatient.controller";
 import { hmoGetPatientOrdeHeTakeActionController, hmoGetPatientOrderSentToHimController, hmoTakeActionOnOrderSentToHimController } from "../controllers/hmoOrderAction.controller";
 import { doctorRequestCodeByEmailController, doctorRequestCodeByPhoneNumberController } from "../controllers/request_clinic_code.controller";
+import { verifyToken } from "../../user/middlewares/verifyToken";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -75,6 +78,9 @@ router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworControl
 router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password by email
 router.post("/doctor_forgot_password_by_phone_number", validatePhonNumber, doctorMobileForgotPasswordController); // doctor forgot password by phone number
 router.post("/doctor_reset_password_by_phone_number", validateResetPasswordByPhoneNumber, doctorMobileResetPasswordController); // doctor reset password by phone number
+router.get("/get_doctor_info",
+// verifyToken,
+validateGetDoctorParams, getDoctorInfoController)
 
 router.post("/request_clinic_code_by_email", validateEmail, doctorRequestCodeByEmailController); // doctor request clinic code by email
 router.post("/request_clinic_code_by_phone", validatePhonNumber, doctorRequestCodeByPhoneNumberController); // doctor request clinic code by phone number
