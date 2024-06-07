@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import UserModel from "../models/userReg.model";
 
 interface JwtPayload {
     email: string;
@@ -12,7 +11,7 @@ interface CustomRequest extends Request {
     user: any;
 }
 
-export const checkUserRole = async (
+export const verifyToken = async (
     req: CustomRequest,
     res: Response,
     next: NextFunction
@@ -29,23 +28,7 @@ export const checkUserRole = async (
 
   try {
     // Verify JWT and extract payload
-    const payload = jwt.verify(token, secret!) as unknown as JwtPayload;
-   
-    // Check if email and mobile are in the MongoDB and belong to an admin role
-    const user = await UserModel.findOne({
-      email: payload.email
-    });
-
-    if (!user) {
-      return res
-        .status(403)
-        .json({ message: "Access denied. user role required." });
-    }
-
-    // Add the payload to the request object for later use
-    req.user = payload;
-    
-    // Call the next middleware function
+    jwt.verify(token, secret!) as unknown as JwtPayload;
     next();
   } catch (err) {
     console.error(err);
