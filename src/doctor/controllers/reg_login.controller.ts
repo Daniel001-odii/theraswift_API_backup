@@ -186,6 +186,7 @@ export const doctorSignInController = async (
     // return access token
     res.json({
       message: "Login successful",
+      doctor,
       Token: accessToken
     });
 
