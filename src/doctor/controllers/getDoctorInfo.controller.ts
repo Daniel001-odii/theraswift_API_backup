@@ -1,51 +1,47 @@
-// getDoctorInfoController
 import { validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import DoctorModel from "../modal/doctor_reg.modal";
 
-
 export const getDoctorInfoController = async (
-    req: Request,
-    res: Response,
-  ) => {
-  
-    try {
-        const {
-          doctorId
-        } = req.body;
-        
-        // Check for validation errors
-        const errors = validationResult(req);
+  req: Request,
+  res: Response,
+) => {
+  try {
+    const {
+      doctorId
+    } = req.query; // Changed from req.body to req.query
     
-        if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
-        }
+    // Check for validation errors
+    const errors = validationResult(req);
   
-        // try find user with the same phone number
-        const doctor = await DoctorModel.findById(doctorId);
-    
-         // check if user exists
-        if (!doctor) {
-          return res
-            .status(404)
-            .json({ message: "doctor not found" });
-        }
-  
-      return res.status(200).json({
-        _id: doctor?._id,
-        firstName: doctor?.firstName,
-        lastName: doctor?.lastName,
-        email: doctor?.email,
-        organization: doctor?.organization,
-        title: doctor?.title,
-        addresss: doctor?.addresss,
-        speciality: doctor?.speciality,
-        regNumber: doctor?.regNumber
-      });
-    
-      } catch (err: any) {
-        // signup error
-        res.status(500).json({ message: err.message });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
     }
-    
+  
+    // try find user with the same phone number
+    const doctor = await DoctorModel.findById(doctorId)
+  
+    // check if user exists
+    if (!doctor) {
+      return res
+        .status(404)
+        .json({ message: "Doctor not found" })
+    }
+  
+    return res.status(200).json({
+      _id: doctor?._id,
+      firstName: doctor?.firstName,
+      lastName: doctor?.lastName,
+      email: doctor?.email,
+      organization: doctor?.organization,
+      title: doctor?.title,
+      address: doctor?.address,
+      speciality: doctor?.speciality,
+      regNumber: doctor?.regNumber
+    })
+  
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message })
   }
+}
