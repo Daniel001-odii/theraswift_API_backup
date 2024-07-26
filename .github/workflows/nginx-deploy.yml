@@ -23,8 +23,8 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
- 
-            # Now we have got the access of EC2 and we will start the deploy .
+          ssh -o StrictHostKeyChecking=no -i private_key ahmeddapo0110@34.31.3.176  ' 
+              # Now we have got the access of EC2 and we will start the deploy .
               rm -rf /home/ahmeddapo0110/repos/theraswift_backend_two 
               cd /home/ahmeddapo0110/repos/
               gh repo clone Theraswift-Technology/theraswift_backend_two
@@ -37,9 +37,11 @@ jobs:
               sudo mkdir -p /var/www/api/dist &&  echo  MADE DIST DIRECTORY 
               sudo mv dist /var/www/api &&  echo  MOVED BUILT CODE 
               sudo mv node_modules /var/www/api/dist &&  echo MOVED DEPENDENCIES 
+              sudo cp package.json /var/www/api/dist &&  echo COPIED PACKAGE.JSON
+              sudo cp ecosystem.config.js /var/www/api/dist &&  echo COPIED ecosystem.config
               sudo cp serverconf/default.conf /etc/nginx/conf.d/api.conf && echo Copied Server Conf
               sudo cp serverconf/default.conf /etc/nginx/sites-available/api && echo Copied Server Conf
               cd /var/www/api/dist 
               npm start 
               exit
-              '
+              ' 
