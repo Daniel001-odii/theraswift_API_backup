@@ -27,7 +27,8 @@ jobs:
             # Now we have got the access of EC2 and we will start the deploy .
               rm -rf /home/ahmeddapo0110/repos/theraswift_backend_two 
               cd /home/ahmeddapo0110/repos/
-              gh repo clone Theraswift-Technology/theraswift_backend_two 
+              gh repo clone Theraswift-Technology/theraswift_backend_two
+              cd theraswift_backend_two
               git checkout main && echo UPDATED CODEBASE 
               node -v
               npm i && echo INSTALLED DEPENDENCIES 
