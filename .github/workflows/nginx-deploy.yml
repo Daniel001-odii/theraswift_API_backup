@@ -26,8 +26,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
  
             # Now we have got the access of EC2 and we will start the deploy .
-              rm -rf /home/${VM_USER_NAME}/repos/theraswift_backend_two 
-              cd /home/${VM_USER_NAME}/repos/
+              rm -rf /home/$VM_USER_NAME/repos/theraswift_backend_two 
+              cd /home/$VM_USER_NAME/repos/
               gh repo clone Theraswift-Technology/theraswift_backend_two 
               git checkout main && echo UPDATED CODEBASE 
               node -v
