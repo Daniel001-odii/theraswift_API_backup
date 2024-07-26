@@ -19,15 +19,14 @@ jobs:
           HOSTNAME: ${{secrets.SSH_HOST_GCP}}
           # USER_NAME: ${{secrets.SSH_USER}} 
           USER_NAME: ${{secrets.SSH_USER_GCP}} 
-          VM_USER_NAME: ahmeddapo0110
 
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
  
             # Now we have got the access of EC2 and we will start the deploy .
-              rm -rf /home/$VM_USER_NAME/repos/theraswift_backend_two 
-              cd /home/$VM_USER_NAME/repos/
+              rm -rf /home/ahmeddapo0110/repos/theraswift_backend_two 
+              cd /home/ahmeddapo0110/repos/
               gh repo clone Theraswift-Technology/theraswift_backend_two 
               git checkout main && echo UPDATED CODEBASE 
               node -v
