@@ -4,3 +4,4 @@ npm-debug.log
 .env
 
 # /dist
+private_key
