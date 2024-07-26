@@ -17,7 +17,7 @@ export const validateDoctorSignupParams = [
 ];
 
 export const validateGetDoctorParams = [
-  query("doctorId").notEmpty(),
+  query("doctorId").notEmpty().withMessage("Doctor ID is required"),
 ];
 
 export const validateDoctorSendEmailParams = [
