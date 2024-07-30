@@ -40,9 +40,11 @@ jobs:
               sudo cp package.json /var/www/api.theraswift.io/dist &&  echo COPIED PACKAGE.JSON
               sudo cp ecosystem.config.js /var/www/api.theraswift.io/dist &&  echo COPIED ecosystem.config
               # sudo cp serverconf/default.conf /etc/nginx/conf.d/api.theraswift.io.conf && echo Copied Server Conf
-              sudo cp serverconf/default.conf /etc/nginx/sites-available/theraswift.io && echo Copied Server Conf
+              sudo cp serverconf/default.conf /etc/nginx/sites-available/api.theraswift.io && echo Copied Server Conf
               sudo ln -fs /etc/nginx/sites-available/api.theraswift.io /etc/nginx/sites-enabled/ && echo Linked Server Conf
               cd /var/www/api.theraswift.io/dist 
               npm start 
+              sudo nginx -t
+              sudo systemctl restart nginx
               exit
               ' 
