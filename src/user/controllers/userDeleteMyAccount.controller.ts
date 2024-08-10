@@ -9,6 +9,8 @@ import { generateOTP } from "../../utils/otpGenerator";
 
 import { sendAccountDeleteEmail } from "../../utils/send_email_utility";
 
+import { OTP_EXPIRY_TIME } from "../../utils/otpGenerator";
+
 //user delete data/////////////
 export const userDeleteMyAccountController = async (
     req: any,
@@ -70,7 +72,7 @@ export const sendDeleteOTP = async (req: Request, res: Response) => {
       user.emailOtp = {
           otp,
           createdTime,
-          verified: false,
+          verified: true,
       };
       await user.save();
 
@@ -87,5 +89,39 @@ export const sendDeleteOTP = async (req: Request, res: Response) => {
 
   }catch(error: any){
       res.status(500).json({ message: error.message });
+  }
+};
+
+// user provides same OTP sent to email...
+// OTP is compared with one saved in DB
+// delete account if matched
+// delete user account using provided OTP from email...
+export const deleteAccountWithOTP = async (req: Request,  res: Response) => {
+  try{
+    const { otp } = req.body;
+
+    // get user with the requested OTP...
+    const user = await UserModel.findOne({ "emailOtp.otp":otp });
+    if(!user){
+      return res.status(400).json({ message: "invalid OTP provided, no user account found"});
+    };
+
+    // check if otp is still valid...[1 hour timeframe]
+    const {createdTime, verified} = user.emailOtp
+
+    const timeDiff = new Date().getTime() - createdTime.getTime();
+
+    if (!verified || timeDiff > OTP_EXPIRY_TIME || otp !== user.emailOtp.otp) {
+        return res
+        .status(401)
+        .json({ message: "unable to reset password" });
+    };
+
+    // soft delete user account...
+    user.isDeleted = true;
+    await user.save();
+    res.status(200).json({ message:  "user account deleted successfully."});
+  }catch(error: any){
+    console.log("error deleting user account with OTP: ", error);
   }
 }
