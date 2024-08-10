@@ -81,6 +81,11 @@ const UserSchema = new Schema(
         createdTime: Date,
         verified: Boolean,
       },
+
+      // added for user account soft delete feature..
+      isDeleted: {
+        type: Boolean,
+      },
     
     },
     {

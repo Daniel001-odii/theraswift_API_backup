@@ -6,6 +6,7 @@ import { generateOTP, OTP_EXPIRY_TIME } from "../../utils/otpGenerator";
 import { sendSms } from "../../utils/sendSms.utility";
 import { sendEmail } from "../../utils/send_email_utility";
 import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
+import { request } from "http";
 
 //user forgot password through email /////////////
 export const userEmailForgotPasswordController = async (
@@ -240,3 +241,4 @@ export const userMobileResetPasswordController = async (
     }
     
 }
+

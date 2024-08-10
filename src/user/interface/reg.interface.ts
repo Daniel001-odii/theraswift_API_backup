@@ -30,6 +30,7 @@ export interface IUserReg extends Document {
     createdTime: Date;
     verified: boolean;
   };
+  isDeleted: Boolean;
 }
 
 export interface ICode extends Document {

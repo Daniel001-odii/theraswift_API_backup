@@ -16,6 +16,9 @@ const essentialProduct_category_1 = require("../controllers/essentialProduct.cat
 const essentialProductCart_controller_1 = require("../controllers/essentialProductCart.controller");
 const checkOutEssential_Controller_1 = require("../controllers/checkOutEssential.Controller");
 const newletter_controller_1 = require("../controllers/newletter.controller");
+
+const deleteAccountController = require("../controllers/deleteAccount.controller");
+
 router.post("/check_email", requestValidate_middleware_1.validateEmailParams, regLogin_controller_1.userCheckEmailController); // user check email
 router.post("/check_delivery_state", requestValidate_middleware_1.validateDeliveryStateParams, regLogin_controller_1.userCheckStateController); // user check email
 router.post("/user_signup", requestValidate_middleware_1.validateSignupParams, regLogin_controller_1.userSignUpController); // user signup
@@ -69,4 +72,8 @@ router.get("/ensentialProduct_cart_list", roleChecker_middleware_1.checkUserRole
 router.post("/checkout_enssential_product", roleChecker_middleware_1.checkUserRole, checkOutEssential_Controller_1.userCheckOutEssentialPRoductController); // user checkout cart list
 router.post("/subcribe_for_newsletter", requestValidate_middleware_1.validateEmailParams, newletter_controller_1.subcribForNewsletterController); // user subcribe for newsletter
 router.get("/frquence_ask_ans", newletter_controller_1.frequenceAskQuestionController); // user subcribe for newsletter
+
+router.post("/account-delete/email", requestValidate_middleware_1.validateEmailVerificatioParams, deleteAccountController.sendDeletionOTP);
+
 exports.default = router;
+

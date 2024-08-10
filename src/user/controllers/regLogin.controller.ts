@@ -83,7 +83,7 @@ export const userCheckStateController = async (
 
 }
 
-
+"email"
 
 //user signup /////////////
 export const userSignUpController = async (
