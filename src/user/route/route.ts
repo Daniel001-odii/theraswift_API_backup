@@ -67,6 +67,10 @@ import { frequenceAskQuestionController, subcribForNewsletterController } from "
 import { userDeleteMyAccountController } from "../controllers/userDeleteMyAccount.controller";
 
 
+// Daniels code here.....
+import { sendDeleteOTP } from "../controllers/userDeleteMyAccount.controller";
+
+
 router.post("/check_email", validateEmailParams, userCheckEmailController ); // user check email
 router.post("/check_delivery_state", validateDeliveryStateParams, userCheckStateController ); // user check email
 router.post("/user_signup", validateSignupParams, userSignUpController ); // user signup
@@ -136,5 +140,6 @@ router.get("/frquence_ask_ans", frequenceAskQuestionController ); // user subcri
 //delete user acccount
 router.delete("/delete_my_account", checkUserRole, userDeleteMyAccountController); //  user delete data from database
 
+router.post("/account/delete_request",  sendDeleteOTP);
 
 export default router;

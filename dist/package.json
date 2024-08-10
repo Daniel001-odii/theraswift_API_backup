@@ -9,7 +9,7 @@
     "js-dev": "nodemon dist/index.ts",
     "build": "rm -rf ./dist && tsc && npm run copy-files",
     "copy-files": "npx copyfiles .env dist/ package.json dist/ package-lock.json dist/ ecosystem.config.js dist/",
-    "start": "pm2 reload ecosystem.config.js && pm2 list", 
+    "start": "pm2 reload ecosystem.config.js && pm2 list",
     "build-start": "npm run build && npm start"
   },
   "engines": {
@@ -38,6 +38,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",
     "otp-generator": "^4.0.1",
+    "package.json": "^2.0.1",
     "socket.io": "^4.6.1",
     "uuid": "^9.0.0"
   },

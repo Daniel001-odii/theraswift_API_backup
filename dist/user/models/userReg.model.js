@@ -85,3 +85,4 @@ const UserSchema = new mongoose_1.Schema({
 });
 const UserModel = (0, mongoose_1.model)("UserReg", UserSchema);
 exports.default = UserModel;
+
