@@ -19,18 +19,25 @@ jobs:
           HOSTNAME: ${{secrets.SSH_HOST_GCP}}
           # USER_NAME: ${{secrets.SSH_USER}} 
           USER_NAME: ${{secrets.SSH_USER_GCP}} 
+          CURRENT_COMMIT: ${{github.sha}}
 
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           # ssh -o StrictHostKeyChecking=no -i private_key ahmeddapo0110@theraswift.io  ' 
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@theraswift.io '
-              # Now we have got the access of EC2 and we will start the deploy .
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@theraswift.io <<EOF
+          export CURRENT_COMMIT=$CURRENT_COMMIT
+              # Now we have got the access of EC2 and we will start the deployment.
               # rm -rf /home/ahmeddapo0110/repos/theraswift_backend_two 
               cd /home/ahmeddapo0110/repos/
               # gh repo clone Theraswift-Technology/theraswift_backend_two
               cd theraswift_backend_two
               git checkout main && echo Checked out CODEBASE 
-              git pull --force main && echo UPDATED CODEBASE 
+              git pull --force main && echo UPDATED CODEBASE
+              echo "latest ref"
+              git rev-parse HEAD 
+              git checkout ${CURRENT_COMMIT} && echo "checked out current commit $CURRENT_COMMIT"
+              echo "current ref"
+              git rev-parse HEAD
               node -v
               npm i && echo INSTALLED DEPENDENCIES 
               npm run build && echo BUILT CODE 
@@ -49,4 +56,4 @@ jobs:
               sudo nginx -t
               sudo systemctl restart nginx
               exit
-              ' 
+              EOF 
