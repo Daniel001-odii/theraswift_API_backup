@@ -32,7 +32,7 @@ jobs:
               # gh repo clone Theraswift-Technology/theraswift_backend_two
               cd theraswift_backend_two
               git checkout main && echo Checked out CODEBASE 
-              git pull --force main && echo UPDATED CODEBASE
+              git fetch && echo UPDATED CODEBASE
               echo "latest ref"
               git rev-parse HEAD 
               git checkout ${CURRENT_COMMIT} && echo "checked out current commit $CURRENT_COMMIT"
