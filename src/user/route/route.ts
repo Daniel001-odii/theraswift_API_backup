@@ -38,7 +38,7 @@ import {
      userEmailSignInController,
      userGetAddressController, userGetHmoController, userGetMemberController, userMobileNumberSignInController, userRegistMemberController, userSignUpController, userdetailController } from "../controllers/regLogin.controller";
 import { userSendEmailController, userEmailVerificationController } from "../controllers/emailVerification.controller";
-import { userPhoneNumberVerificationController, userSendPhoneNumberController } from "../controllers/phoneNumberVerification.controller";
+import { userPhoneNumberVerificationController,  } from "../controllers/phoneNumberVerification.controller";
 import { userEmailForgotPasswordController, userEmailResetPasswordController, userMobileForgotPasswordController, userMobileResetPasswordController } from "../controllers/forgotResetPassword.controller";
 import { checkUserRole } from "../middlewares/roleChecker.middleware";
 import { 
@@ -70,6 +70,12 @@ import { userDeleteMyAccountController } from "../controllers/userDeleteMyAccoun
 // Daniels code here.....
 import { sendDeleteOTP } from "../controllers/userDeleteMyAccount.controller";
 import { deleteAccountWithOTP } from "../controllers/userDeleteMyAccount.controller";
+
+import { userSendPhoneNumberController } from "../controllers/phoneNumberVerification.controller";
+
+import { editUserprofile } from "../controllers/userProfile.controller";
+
+
 
 router.post("/check_email", validateEmailParams, userCheckEmailController ); // user check email
 router.post("/check_delivery_state", validateDeliveryStateParams, userCheckStateController ); // user check email
@@ -140,7 +146,11 @@ router.get("/frquence_ask_ans", frequenceAskQuestionController ); // user subcri
 //delete user acccount
 router.delete("/delete_my_account", checkUserRole, userDeleteMyAccountController); //  user delete data from database
 
-router.post("/account/delete_request",  sendDeleteOTP);
-router.post("/account/delete_confirm", deleteAccountWithOTP);
+router.post("/account/delete_request", checkUserRole,  sendDeleteOTP);
+router.post("/account/delete_confirm", checkUserRole,  deleteAccountWithOTP);
+
+
+// editing user profile [NEW ENDPOINTS]
+router.patch("/account/profile_edit", checkUserRole, editUserprofile);
 
 export default router;

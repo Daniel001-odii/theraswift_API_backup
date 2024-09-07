@@ -20,6 +20,7 @@ const medication_model_1 = __importDefault(require("../../admin/models/medicatio
 const doctor_reg_modal_1 = __importDefault(require("..//modal/doctor_reg.modal"));
 const orderFromDoctor_model_1 = __importDefault(require("../../admin/models/orderFromDoctor.model"));
 const patientHmo_model_1 = __importDefault(require("../modal/patientHmo.model"));
+
 // doctor sending patint medication order for out of pocket
 const doctorSendPatientOderOutOFPocketController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -77,7 +78,7 @@ const doctorSendPatientOderOutOFPocketController = (req, res) => __awaiter(void 
         });
         const saveOder = yield order.save();
         return res.status(200).json({
-            message: "oder successfully sent to pharmacy",
+            message: "order successfully sent to pharmacy",
         });
     }
     catch (err) {
@@ -86,6 +87,7 @@ const doctorSendPatientOderOutOFPocketController = (req, res) => __awaiter(void 
     }
 });
 exports.doctorSendPatientOderOutOFPocketController = doctorSendPatientOderOutOFPocketController;
+
 // doctor sending patint medication order for HMO
 const doctorSendPatientOderHmoController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -167,7 +169,7 @@ const doctorSendPatientOderHmoController = (req, res) => __awaiter(void 0, void 
         });
         const savePatientHmo = yield patientHMO.save();
         return res.status(200).json({
-            message: "oder successfully sent to pharmacy",
+            message: "order successfully sent to pharmacy",
         });
     }
     catch (err) {
@@ -176,6 +178,7 @@ const doctorSendPatientOderHmoController = (req, res) => __awaiter(void 0, void 
     }
 });
 exports.doctorSendPatientOderHmoController = doctorSendPatientOderHmoController;
+
 // doctor doctor get patient pending order
 const doctorgetPatientOderPending = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -196,6 +199,8 @@ const doctorgetPatientOderPending = (req, res) => __awaiter(void 0, void 0, void
     }
 });
 exports.doctorgetPatientOderPending = doctorgetPatientOderPending;
+
+
 // doctor get patient paid order
 const doctorgetPatientOderPaid = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -216,6 +221,8 @@ const doctorgetPatientOderPaid = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.doctorgetPatientOderPaid = doctorgetPatientOderPaid;
+
+
 // doctor get patient delieverd order
 const doctorgetPatientOderdelieverd = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

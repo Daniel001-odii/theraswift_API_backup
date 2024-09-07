@@ -13,6 +13,18 @@ const DoctorWalletSchema = new Schema(
       clinicCode: {
         type: String,
       },
+
+      transactions: [{
+        transaction_type: {
+          type: String,
+          enum: ["fund", "withdrawal"],
+        },
+        transaction_date: {
+          type: Date,
+          default: Date.now(),
+        }
+      }],
+      
       createdAt: {
         type: Date,
         default: Date.now,

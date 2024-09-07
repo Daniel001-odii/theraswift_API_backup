@@ -19,9 +19,9 @@ export const sendSms = ({to,sms}:SendSms)=>{
     body: JSON.stringify(data),
   };
     
-  fetch("https://api.ng.termii.com/api/sms/send", options)
+  fetch("https://v3.api.termii.com/api/sms/send", options)
   .then((response) => {
-    // console.log("sent message ", response.body);
+    console.log("response from sent message ", response);
   })
   .catch((error) => {
     console.error(error);
