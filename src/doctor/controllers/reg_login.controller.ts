@@ -11,7 +11,6 @@ import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
 
 
 //doctor signup /////////////
-
 export const doctorSignUpController = async (
     req: Request,
     res: Response,

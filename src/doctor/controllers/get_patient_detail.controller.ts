@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import PatientModel from "../modal/patient_reg.model";
 
 
+
 //doctor get all registered patient /////////////
 
 export const doctorGetAllRegisteredPatient = async (

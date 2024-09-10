@@ -85,7 +85,7 @@ export const sendDeleteOTP = async (req: Request, res: Response) => {
       };
     
       sendAccountDeleteEmail(emailData);
-      return res.status(200).json({ message: "OTP sent successfully to your email." });
+      return res.status(200).json({ message: `OTP sent successfully to your email ${email}` });
 
   }catch(error: any){
       res.status(500).json({ message: error.message });
