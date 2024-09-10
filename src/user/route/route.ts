@@ -146,8 +146,8 @@ router.get("/frquence_ask_ans", frequenceAskQuestionController ); // user subcri
 //delete user acccount
 router.delete("/delete_my_account", checkUserRole, userDeleteMyAccountController); //  user delete data from database
 
-router.post("/account/delete_request", checkUserRole,  sendDeleteOTP);
-router.post("/account/delete_confirm", checkUserRole,  deleteAccountWithOTP);
+router.post("/account/delete_request",  sendDeleteOTP);
+router.post("/account/delete_confirm",  deleteAccountWithOTP);
 
 
 // editing user profile [NEW ENDPOINTS]

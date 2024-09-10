@@ -103,7 +103,7 @@ export const deleteAccountWithOTP = async (req: Request,  res: Response) => {
     // get user with the requested OTP...
     const user = await UserModel.findOne({ "emailOtp.otp":otp });
     if(!user){
-      return res.status(400).json({ message: "invalid OTP provided, no user account found"});
+      return res.status(400).json({ message: "invalid OTP provided, please try again"});
     };
 
     // check if otp is still valid...[1 hour timeframe]
