@@ -80,6 +80,12 @@ app.use(
     res.json("Hello");
   })
 );
+app.use(
+  "/hello",
+  express.Router().get("/", (req, res) => {
+    res.json("Hello");
+  })
+);
 
 app.use("/doctor", doctorRoute);
 app.use("/admin", adminRoute);
