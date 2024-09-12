@@ -67,15 +67,17 @@ import { frequenceAskQuestionController, subcribForNewsletterController } from "
 import { userDeleteMyAccountController } from "../controllers/userDeleteMyAccount.controller";
 
 
-// Daniels code here.....
+// Daniels code here...
 import { sendDeleteOTP } from "../controllers/userDeleteMyAccount.controller";
 import { deleteAccountWithOTP } from "../controllers/userDeleteMyAccount.controller";
-
 import { userSendPhoneNumberController } from "../controllers/phoneNumberVerification.controller";
-
 import { editUserprofile } from "../controllers/userProfile.controller";
-
-
+// FOR CHATS AND MESSAGING...
+import { createChatRoom } from "../controllers/chat.controller";
+import { getChatRooms } from "../controllers/chat.controller";
+import { getChatsInRoom } from "../controllers/chat.controller";
+import { sendChatToRoom } from "../controllers/chat.controller";
+import { create } from "domain";
 
 router.post("/check_email", validateEmailParams, userCheckEmailController ); // user check email
 router.post("/check_delivery_state", validateDeliveryStateParams, userCheckStateController ); // user check email
@@ -145,12 +147,12 @@ router.get("/frquence_ask_ans", frequenceAskQuestionController ); // user subcri
 
 //delete user acccount
 router.delete("/delete_my_account", checkUserRole, userDeleteMyAccountController); //  user delete data from database
-
 router.post("/account/delete_request",  sendDeleteOTP);
 router.post("/account/delete_confirm",  deleteAccountWithOTP);
 
-
-// editing user profile [NEW ENDPOINTS]
+//editing user profile [NEW ENDPOINTS]
 router.patch("/account/profile_edit", checkUserRole, editUserprofile);
+
+
 
 export default router;

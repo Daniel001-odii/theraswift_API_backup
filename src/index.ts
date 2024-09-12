@@ -19,19 +19,22 @@ import userRoute from "./user/route/route";
 import driverRoute from "./driver/route/route";
 import chatSocketConfigUser from "./user/socket/socket";
 
+// intialize sockets for chat system..
+import { initializeSocket } from "./utils/chatSocket";
+
 dotenv.config(); // Load environment variables at the very beginning
 
 const app = express();
 
 const csrfProtection = csrf({ cookie: true });
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 
-const io = new Server(server, {
+/* const io = new Server(server, {
   cors: {
     origin: "*",
   },
-});
+}); */
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -93,7 +96,9 @@ app.use("/user", userRoute);
 app.use("/driver", driverRoute);
 
 // Handle socket connections
-chatSocketConfigUser(io);
+// chatSocketConfigUser(io);
+// updated by Daniel...
+const server = initializeSocket(app);
 
 // App initialized port
 const port = process.env.PORT || 3000;

@@ -61,6 +61,15 @@ import { adminSendingPatientOrderToEmail, adminSendingPatientOrderToSms } from "
 import { dashboardController, expiredMedicationController } from "../controllers/dashBoard.controller";
 
 
+// FOR CHATS AND MESSAGING...
+import { createChatRoom } from "../controllers/chat.controller";
+import { getChatRooms } from "../controllers/chat.controller";
+import { getChatsInRoom } from "../controllers/chat.controller";
+import { sendChatToRoom } from "../controllers/chat.controller";
+
+
+
+
 router.post("/admin_signup", validateSignupParams, adminSignUpController); // admin signup
 router.post("/admin_send_email", validateSendEmailigninParams, adminSendEmailController); // admin send emai
 router.post("/admin_Verify_email", validateVerifyEmailEmailigninParams, adminEmailVerificationController); // admin verified email
@@ -154,9 +163,11 @@ router.get("/admin_get_order_sent_to_hmo", validateAdminGettOrderToHmoParams, ch
 
 
 
-
-
-
+// chats and messaging...
+router.post("/chat_rooms/new", checkAdminRole, createChatRoom);
+router.get("/chat_rooms", checkAdminRole, getChatRooms);
+router.get("/chat_rooms/:room_id/chats", checkAdminRole, getChatsInRoom);
+router.post("/chat_rooms/:room_id/new_message", checkAdminRole, sendChatToRoom);
 
 
 export default router;

@@ -236,6 +236,10 @@ try {
   return res.status(401).json({ message: "email not verified." });
  }
 
+ if(user.isDeleted) {
+  return res.status(401).json({ message: "user account is deleted"})
+ }
+
  
   // generate access token
   const accessToken = jwt.sign(
@@ -292,7 +296,12 @@ try {
     return res
       .status(401)
       .json({ message: "invalid credential" });
-  }
+  };
+
+  if(user.isDeleted) {
+    return res.status(401).json({ message: "user account is deleted"})
+   }
+  
 
  // compare password with hashed password in database
  const isPasswordMatch = await bcrypt.compare(password, user.password);

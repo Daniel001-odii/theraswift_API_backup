@@ -34,6 +34,6 @@ const ChatSchema = new Schema(
     }
   );
   
-  const ChatModel = model<IChat>("UserChat", ChatSchema);
+  const ChatModel = model<IChat>("AdminChat", ChatSchema);
   
   export default ChatModel;

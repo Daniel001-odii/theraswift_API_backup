@@ -106,6 +106,10 @@ export const deleteAccountWithOTP = async (req: Request,  res: Response) => {
       return res.status(400).json({ message: "invalid OTP provided, please try again"});
     };
 
+    if(user.isDeleted) {
+      return res.status(401).json({ message: "user account is deleted"})
+     }
+
     // check if otp is still valid...[1 hour timeframe]
     const {createdTime, verified} = user.emailOtp
 
@@ -114,7 +118,7 @@ export const deleteAccountWithOTP = async (req: Request,  res: Response) => {
     if (!verified || timeDiff > OTP_EXPIRY_TIME || otp !== user.emailOtp.otp) {
         return res
         .status(401)
-        .json({ message: "unable to reset password" });
+        .json({ message: "unable to delete account" });
     };
 
     // soft delete user account...
