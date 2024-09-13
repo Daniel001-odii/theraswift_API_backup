@@ -49,7 +49,9 @@ export const createChatRoom = async (req:any, res:Response) => {
 export const getChatRooms = async (req:any, res:Response) => {
     try{
         // const user_id = req.params.user_id;
-        const user_id = req.user.id
+        const user_id = req.admin.id
+
+        console.log("from request: ", req.admin)
         // const user = req.user;
         // console.log("user in request payload: ", user.email)
         if(!user_id){
