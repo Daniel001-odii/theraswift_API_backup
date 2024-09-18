@@ -30,7 +30,7 @@ export interface IDoctorReg extends Document {
     createdTime: Date;
     verified: boolean;
   };
-  verification: {
+  clinicVerification: {
     isVerified: Boolean;
     date: Date;
   },

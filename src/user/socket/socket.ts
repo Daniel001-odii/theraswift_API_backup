@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import Chat from "../models/chat.model";
+import Chat from "../models/chat.modelOld";
 import User from '../models/userReg.model';
 import Admin from "../../admin/models/admin_reg.model"
 

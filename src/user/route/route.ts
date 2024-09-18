@@ -153,6 +153,12 @@ router.post("/account/delete_confirm",  deleteAccountWithOTP);
 //editing user profile [NEW ENDPOINTS]
 router.patch("/account/profile_edit", checkUserRole, editUserprofile);
 
+// chats and messaging...
+router.post("/chat_rooms/new", checkUserRole, createChatRoom);
+router.get("/chat_rooms", checkUserRole, getChatRooms);
+router.get("/chat_rooms/:room_id/chats", checkUserRole, getChatsInRoom);
+router.post("/chat_rooms/:room_id/new_message", checkUserRole, sendChatToRoom);
+
 
 
 export default router;

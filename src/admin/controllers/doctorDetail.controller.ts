@@ -248,7 +248,7 @@ export const adminGiveDoctorClinicCode = async (
 
         // const clinicCode = numberString.slice(-6);
 
-        doctor.verifyClinicCode = true
+        doctor.clinicVerification.isVerified = true
         doctor.requestClinicCode = 'given'
         await doctor.save()
 
@@ -317,7 +317,7 @@ export const adminGiveDoctorClinicCodebyPhoneNumber = async (
 
         // const clinicCode = numberString.slice(-6);
 
-        doctor.verifyClinicCode = true
+        doctor.clinicVerification.isVerified = true
         doctor.requestClinicCode = 'given'
         await doctor.save()
 

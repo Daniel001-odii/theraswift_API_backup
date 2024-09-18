@@ -22,6 +22,6 @@ const roomSchema = new mongoose.Schema({
   
 }, {timestamps: true});
 
-const chatRoom = mongoose.model('chatRoom', roomSchema);
+const chatRoom = mongoose.model('userChatRoom', roomSchema);
 
 export default chatRoom

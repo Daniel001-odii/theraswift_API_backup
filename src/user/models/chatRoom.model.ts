@@ -12,10 +12,10 @@ const roomSchema = new mongoose.Schema({
     ref: 'AdminReg',
     required: [true, "pharmacy Id is required is required to create room"]
   },
-  doctor: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'DoctorReg',
-    required: [true, "doctor Id is required is required to create room"]
+    ref: 'UserReg',
+    required: [true, "user Id is required is required to create room"]
   },
   unread_messages: {
     type: Number, 

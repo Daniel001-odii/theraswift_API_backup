@@ -93,11 +93,11 @@ export const verifyDoctorById = async (req:any, res:Response) =>{
         return res.status(404).json({ message: "doctor not found!"})
       };
 
-      if(doctor.verification.isVerified){
-        return res.status(200).json({ message: `doctor already verified`, date: doctor.verification.date})
+      if(doctor.clinicVerification.isVerified){
+        return res.status(200).json({ message: `doctor already verified`, date: doctor.clinicVerification.date})
       }
 
-      doctor.verification.isVerified = true;
+      doctor.clinicVerification.isVerified = true;
       await doctor.save();
 
       

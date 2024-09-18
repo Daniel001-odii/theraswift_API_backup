@@ -19,12 +19,21 @@ const ChatSchema = new Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'chatRoom',
       },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      updatedAt: {
+        type: Date,
+        default: Date.now,
+      },
+
     },
     {
       timestamps: true,
     }
   );
   
-  const ChatModel = model<IChat>("AdminChat", ChatSchema);
+  const ChatModel = model<IChat>("UserChat", ChatSchema);
   
   export default ChatModel;

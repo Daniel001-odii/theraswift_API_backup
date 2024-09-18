@@ -57,12 +57,15 @@ export const doctorSignUpController = async (
 
     let doctorClinicCode = clinicCode;
     let superDoctor = false
-    let verifyClinicCode = true
+    let clinicVerification = {
+      isVerified: false,
+    };
+    clinicVerification.isVerified = true
     
     if (!clinicCode || clinicCode == '' ) {
       doctorClinicCode = ''
       superDoctor = true
-      verifyClinicCode = false
+      clinicVerification.isVerified = false
 
     } else{
       const checkClinicCode = await DoctotModel.findOne({clinicCode: clinicCode, superDoctor: true});
@@ -84,7 +87,7 @@ export const doctorSignUpController = async (
       title,
       organization,
       clinicCode: doctorClinicCode,
-      verifyClinicCode: verifyClinicCode,
+      clinicVerification,
       superDoctor,
       addresss,
       speciality,
@@ -167,7 +170,7 @@ export const doctorSignInController = async (
       return res.status(401).json({ message: "you don't have clinic code." });
     }
 
-    if (!doctor.verifyClinicCode) {
+    if (!doctor.clinicVerification.isVerified) {
       return res.status(401).json({ message: "clinic code not yet verified." });
     }
 
@@ -242,7 +245,7 @@ try {
     return res.status(401).json({ message: "you don't have clinic code." });
   }
 
-  if (!doctor.verifyClinicCode) {
+  if (!doctor.clinicVerification.isVerified) {
     return res.status(401).json({ message: "clinic code not yet verified." });
   }
 
