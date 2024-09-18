@@ -62,6 +62,7 @@ import { hmoGetPatientOrdeHeTakeActionController, hmoGetPatientOrderSentToHimCon
 import { doctorRequestCodeByEmailController, doctorRequestCodeByPhoneNumberController } from "../controllers/request_clinic_code.controller";
 import { verifyToken } from "../../user/middlewares/verifyToken";
 import { getPharmacyRequestsForDoctor } from "../../admin/controllers/pharmacyRequests.controller";
+import { replyPharmacyRequestById } from "../controllers/pharmacyRequests.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -127,5 +128,8 @@ router.get("/hmo_get_patient_order_action_taken_on", validateHmoGetPatientOrderP
 
 // get all pharm requests for doctor...
 router.get("/pharmacy_requests", checkDoctorRole, getPharmacyRequestsForDoctor);
+// reply to a pharmacy request or add to reply thread...
+router.post("/pharmacy_requests/:request_id/reply", checkDoctorRole, replyPharmacyRequestById)
+
 
 export default router;

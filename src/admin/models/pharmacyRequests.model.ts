@@ -29,6 +29,14 @@ const RequestSchema = new mongoose.Schema({
         ref: 'DoctorReg',
         required: true,
     },
+    replies: [{
+        user: String,
+        text: String,
+        time: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
     status: {
         type: String,
         enum: ["approved", 'declined'],

@@ -1,5 +1,5 @@
-import pharmacyRequestModel from '../models/pharmacyRequests.model';
-import AdminModel from '../models/admin_reg.model';
+import pharmacyRequestModel from '../../admin/models/pharmacyRequests.model';
+// import AdminModel from '../models/admin_reg.model';
 import UserModel from '../../user/models/userReg.model';
 import DoctotModel from '../../doctor/modal/doctor_reg.modal';
 import { Request, Response } from 'express'
@@ -91,7 +91,20 @@ export const replyPharmacyRequestById = async (req: any, res: Response) => {
             return res.status(404).json({ message: "pharmacy request not found"})
         }
 
-        pharm_request.replies.push(user, text);
+        if(!user){
+            return res.status(400).json({ message: "please provide user arguments for reply"})
+        }
+        if(!text){
+            return res.status(400).json({ message: "please provide text argument for rpely"})
+        }
+
+        // const time = Date.now();
+
+        pharm_request.replies.push({
+            user,
+            text,
+            time: new Date(),
+        });
         await pharm_request.save();
 
         if(pharm_request.replies.length <= 1){
@@ -101,6 +114,7 @@ export const replyPharmacyRequestById = async (req: any, res: Response) => {
         }
 
     }catch(error){
+        console.log("error addig reply: ", error);
         res.status(500).json({ message: "internal server error"});
     }
 }
