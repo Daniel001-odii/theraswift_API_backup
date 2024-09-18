@@ -86,7 +86,14 @@ const DoctorSchema = new Schema(
       },
       passwordChangeStatus: {
         type: Boolean
+      },
+     verification: {
+      isVerified: Boolean,
+      date: {
+        type: Date,
+        default: Date.now,
       }
+     }
     
     },
     {

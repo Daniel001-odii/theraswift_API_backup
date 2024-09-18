@@ -58,7 +58,7 @@ import { adminGetDoctorDeliveredPatientOrder, adminGetDoctorPatientProgressOrder
 import { adminGetHmo, adminGetSingleHmo } from "../controllers/hmoDetail.controller";
 import { adminGetPatientOrderSentToHmo, adminSendingPatientOrderToHmo } from "../controllers/sendOrderToHmo.controller";
 import { adminSendingPatientOrderToEmail, adminSendingPatientOrderToSms } from "../controllers/awaitingMedication.controller";
-import { dashboardController, expiredMedicationController } from "../controllers/dashBoard.controller";
+import { dashboardController, expiredMedicationController, verifyDoctorById } from "../controllers/dashBoard.controller";
 
 
 // FOR CHATS AND MESSAGING...
@@ -175,5 +175,6 @@ router.post("/chat_rooms/:room_id/new_message", checkAdminRole, sendChatToRoom);
 router.get("/requests", checkAdminRole, getAllSentRequest);
 router.post("/requests/:doctor_id/:user_id/new", checkAdminRole, sendPharmacyRequest);
 
-
+// doctor verification...
+router.post("/:doctor_id/verify", checkAdminRole, verifyDoctorById);
 export default router;

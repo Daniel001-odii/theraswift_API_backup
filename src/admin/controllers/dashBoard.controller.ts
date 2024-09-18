@@ -78,3 +78,34 @@ export const expiredMedicationController = async (
     res.status(500).json({ message: err.message });
   }
 }
+
+
+// verify doctors by their ID...
+export const verifyDoctorById = async (req:any, res:Response) =>{
+  try{
+      const doctor_id = req.params.doctor_id;
+      if(!doctor_id){
+        return res.status(400).json({ message: "please provide a valid doctor Id in request param"})
+      }
+      const doctor = await DoctorModel.findById(doctor_id);
+
+      if(!doctor){
+        return res.status(404).json({ message: "doctor not found!"})
+      };
+
+      if(doctor.verification.isVerified){
+        return res.status(200).json({ message: `doctor already verified`, date: doctor.verification.date})
+      }
+
+      doctor.verification.isVerified = true;
+      await doctor.save();
+
+      
+
+      res.status(201).json({ message: "doctor verified successfully!"})
+
+
+  }catch(error:any){
+    res.status(500).json({ message: error.message });
+  }
+}

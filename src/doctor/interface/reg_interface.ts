@@ -30,6 +30,10 @@ export interface IDoctorReg extends Document {
     createdTime: Date;
     verified: boolean;
   };
+  verification: {
+    isVerified: Boolean;
+    date: Date;
+  },
   passwordToken: number;
   passwordChangeStatus: boolean;
 }
