@@ -63,6 +63,7 @@ import { doctorRequestCodeByEmailController, doctorRequestCodeByPhoneNumberContr
 import { verifyToken } from "../../user/middlewares/verifyToken";
 import { getPharmacyRequestsForDoctor } from "../../admin/controllers/pharmacyRequests.controller";
 import { replyPharmacyRequestById } from "../controllers/pharmacyRequests.controller";
+import { editDoctorProfile } from "../controllers/doctorProfileEdit.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -131,5 +132,7 @@ router.get("/pharmacy_requests", checkDoctorRole, getPharmacyRequestsForDoctor);
 // reply to a pharmacy request or add to reply thread...
 router.post("/pharmacy_requests/:request_id/reply", checkDoctorRole, replyPharmacyRequestById)
 
+// edit doctor profile...
+router.patch("/profile_edit", checkDoctorRole, editDoctorProfile);
 
 export default router;

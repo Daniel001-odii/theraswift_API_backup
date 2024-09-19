@@ -39,8 +39,8 @@ const RequestSchema = new mongoose.Schema({
     }],
     status: {
         type: String,
-        enum: ["approved", 'declined'],
-        default: "approved",
+        enum: ["resolved", 'unresolved'],
+        default: "unresolved",
     },
    
 }, { timestamps: true });
