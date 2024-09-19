@@ -369,12 +369,17 @@ export const doctorRegisterPatient = async (
 
 
 
+
 // Decode Auth Token
 export const getDetailsThroughDecodedToken = async (req: any, res: Response, next: NextFunction) => {
   try {
 
-    const doctor = req.doctor;
-    
+    const doctorEmail = req.doctor.email;
+
+    const doctor = await DoctotModel.findOne({
+      email: doctorEmail
+    })
+
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" })
     }
@@ -393,7 +398,6 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
       }
     })
   } catch (err: any) {
-    console.log(err)
     return res.status(500).json({ message: "Server error" })
   }
-};
+}
