@@ -66,7 +66,7 @@ import { createChatRoom } from "../controllers/chat.controller";
 import { getChatRooms } from "../controllers/chat.controller";
 import { getChatsInRoom } from "../controllers/chat.controller";
 import { sendChatToRoom } from "../controllers/chat.controller";
-import { getAllSentRequest, sendPharmacyRequest } from "../controllers/pharmacyRequests.controller";
+import { getAllSentRequest, markPharmacyRequestAsSolved, sendPharmacyRequest } from "../controllers/pharmacyRequests.controller";
 
 
 
@@ -174,7 +174,14 @@ router.post("/chat_rooms/:room_id/new_message", checkAdminRole, sendChatToRoom);
 // Pharmacy requests creation and retrieval
 router.get("/requests", checkAdminRole, getAllSentRequest);
 router.post("/requests/:doctor_id/:user_id/new", checkAdminRole, sendPharmacyRequest);
+// mark pharmacy request as solved...
+router.post("/requests/:request_id/solved", checkAdminRole, markPharmacyRequestAsSolved);
 
 // doctor verification...
 router.post("/:doctor_id/verify", checkAdminRole, verifyDoctorById);
+
+
+
+
+
 export default router;

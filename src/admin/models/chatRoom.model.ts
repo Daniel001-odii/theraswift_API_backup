@@ -15,6 +15,11 @@ const roomSchema = new mongoose.Schema({
     ref: 'DoctorReg',
     required: [true, "doctor Id is required is required to create room"]
   },
+  /* user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserReg',
+    required: [true, "user Id is required is required to create room"]
+  }, */
   unread_messages: {
     type: Number, 
     default: 0
@@ -22,6 +27,6 @@ const roomSchema = new mongoose.Schema({
   
 }, {timestamps: true});
 
-const chatRoom = mongoose.model('userChatRoom', roomSchema);
+const chatRoom = mongoose.model('ChatRoom', roomSchema);
 
 export default chatRoom

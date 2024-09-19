@@ -22,7 +22,7 @@ export const createChatRoom = async (req:any, res:Response) => {
       }
 
       if(!pharm_id){
-        return res.status(400).json({ error: 'a pharm id is required' });
+        return res.status(400).json({ error: 'a pharmacy id is required' });
       }
 
       // Check if the room already exists
@@ -68,7 +68,7 @@ export const getChatRooms = async (req:any, res:Response) => {
 
 
 // GET MESSAGES IN A PARTICULAR ROOM >>>
-export const getChatsInRoom = async (req:any, res:Response) => {
+export const getChatMessagesInRoom = async (req:any, res:Response) => {
     try {
       const room_id = req.params.room_id;
       const messages = await ChatModel.find({ room: room_id });

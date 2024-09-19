@@ -78,6 +78,8 @@ export const getPharmacyRequestsForDoctor = async (req: any, res: Response) => {
     }
 }
 
+
+// reply a sent requst...
 export const replyPharmacyRequestById = async (req: any, res: Response) => {
     try{
         const request_id = req.params.request_id;
@@ -102,5 +104,28 @@ export const replyPharmacyRequestById = async (req: any, res: Response) => {
 
     }catch(error){
         res.status(500).json({ message: "internal server error"});
+    }
+}
+
+
+// mark a request as resolved after clarification from doctor...
+export const markPharmacyRequestAsSolved = async(req: any, res: Response) => {
+    try{
+        const request_id:string = req.params.request_id;
+        if(!request_id){
+            return res.status(400).json({ message: "pharmacy request ID missing in URL params"});
+        }
+
+        const pharmacy_request = await pharmacyRequestModel.findById(request_id);
+        if(!pharmacy_request){
+            return res.status(404).json({ message: "the requested pharmacy request was not found"});
+        }
+
+        pharmacy_request.status = "resolved"
+        await pharmacy_request.save();
+
+        res.status(200).json({ message: "request marked as resolved successfully!"})
+    }catch(error){
+        res.status(500).json({ message: "could not mark request as solved"})
     }
 }

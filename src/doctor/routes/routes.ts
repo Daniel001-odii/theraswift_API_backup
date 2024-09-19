@@ -64,6 +64,7 @@ import { verifyToken } from "../../user/middlewares/verifyToken";
 import { getPharmacyRequestsForDoctor } from "../../admin/controllers/pharmacyRequests.controller";
 import { replyPharmacyRequestById } from "../controllers/pharmacyRequests.controller";
 import { editDoctorProfile } from "../controllers/doctorProfileEdit.controller";
+import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "../controllers/chat.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -131,8 +132,16 @@ router.get("/hmo_get_patient_order_action_taken_on", validateHmoGetPatientOrderP
 router.get("/pharmacy_requests", checkDoctorRole, getPharmacyRequestsForDoctor);
 // reply to a pharmacy request or add to reply thread...
 router.post("/pharmacy_requests/:request_id/reply", checkDoctorRole, replyPharmacyRequestById)
-
 // edit doctor profile...
 router.patch("/profile_edit", checkDoctorRole, editDoctorProfile);
+
+
+// Chats and Messaging...
+// create new chat room btw practice & admin docs...
+router.post("/chat_rooms/new", checkDoctorRole, createChatRoom);
+router.get("/chat_rooms", checkDoctorRole, getChatRooms);
+router.get("/chat_rooms/:room_id/", checkDoctorRole, getChatsInRoom);
+router.post("/chat_rooms/:room_id/new_message", checkDoctorRole, sendChatToRoom);
+
 
 export default router;

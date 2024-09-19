@@ -1,4 +1,3 @@
-import { userMedicatonRequiredPrescriptionController } from "../controllers/medication.controller";
 
 const mongoose = require('mongoose');
 
@@ -7,15 +6,15 @@ const roomSchema = new mongoose.Schema({
     type: String,
     required: [true, "room name is required to create room"]
   },
-  pharm: {
+  adminDoctor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'AdminReg',
-    required: [true, "pharmacy Id is required is required to create room"]
+    ref: 'DoctorReg',
+    required: [true, "admin doctor Id is required is required to create room"]
   },
-  user: {
+  practiceDoctor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'UserReg',
-    required: [true, "user Id is required is required to create room"]
+    ref: 'DoctorReg',
+    required: [true, "practice doctor Id is required is required to create room"]
   },
   unread_messages: {
     type: Number, 
@@ -24,6 +23,6 @@ const roomSchema = new mongoose.Schema({
   
 }, {timestamps: true});
 
-const chatRoom = mongoose.model('PatientChatRoom', roomSchema);
+const chatRoom = mongoose.model('DoctorChatRoom', roomSchema);
 
 export default chatRoom
