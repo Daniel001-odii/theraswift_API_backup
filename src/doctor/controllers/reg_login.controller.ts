@@ -396,6 +396,8 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
         organization: doctor.organization,
         clinicCode: doctor.clinicCode,
         speciality: doctor.speciality,
+        regNumber: doctor.regNumber,
+        addresss: doctor.addresss
       }
     })
   } catch (err: any) {
