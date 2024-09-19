@@ -35,7 +35,7 @@ export const getDoctorInfoController = async (
       email: doctor?.email,
       organization: doctor?.organization,
       title: doctor?.title,
-      // address: doctor?.address,
+      addresss: doctor?.addresss,
       speciality: doctor?.speciality,
       regNumber: doctor?.regNumber
     })
