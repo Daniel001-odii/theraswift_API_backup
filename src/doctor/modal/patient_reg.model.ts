@@ -39,8 +39,16 @@ const PatientSchema = new Schema(
         default: '',
       },
       hmo: {
-        type: String,
-        default: '',
+        upload: {
+          front: { type: String, default: '' },
+          back: { type: String, default: '' },
+        },
+        inputtedDetails: {
+          hmoEmployer: { type: String, default: '' },
+          plan: { type: String, default: '' },
+          regNumber: { type: String, default: '' },
+          beneficiaries: { type: [String], default: [] },
+        },
       },
       doctorId:{
         type: Schema.Types.ObjectId, ref: 'DoctorReg'
@@ -62,8 +70,8 @@ const PatientSchema = new Schema(
     {
       timestamps: true,
     }
-  );
+  )
   
-  const PatientModel = model<IPatientReg>("PatientReg", PatientSchema);
-  
-  export default PatientModel;
+const PatientModel = model<IPatientReg>("PatientReg", PatientSchema)
+
+export default PatientModel;
