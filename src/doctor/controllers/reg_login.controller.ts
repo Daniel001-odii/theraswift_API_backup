@@ -385,7 +385,7 @@ export const getDoctorDetails = async (req: Request, res: Response, next: NextFu
       return res.status(401).json({ message: "Invalid token" })
     }
 
-    // Find the doctor by decoded _id
+
     const doctor = await DoctotModel.findById(decoded._id).select('firstName lastName email phoneNumber title organization clinicCode speciality')
 
     if (!doctor) {
