@@ -78,12 +78,12 @@ router.post("/doctor_verified_email", validateDoctorVerifiedEmailParams, doctorE
 router.post("/doctor_send_phone_number", validateDoctorSendPhoneNumberParams, doctorSendPhoneNumberController);  // doctor send phone number
 router.post("/doctor_verified_phone_number", validateDoctorVerifiedPhoneNumberParams, doctorPhoneNumberVerificationController);  // doctor verified phone number
 router.post("/doctor_signin", validateDoctorSigninParams, doctorSignInController); // doctor login with email
-router.post("/doctor_decode_token", checkDoctorRole, getDetailsThroughDecodedToken); // get doctor details through token
 router.post("/doctor_signin_phone_number", validateDoctorSigninPhoneNumberParams, doctorMobileNumberSignInController); // doctor login with password
 router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworController); // doctor forgot password by email
 router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password by email
 router.post("/doctor_forgot_password_by_phone_number", validatePhonNumber, doctorMobileForgotPasswordController); // doctor forgot password by phone number
 router.post("/doctor_reset_password_by_phone_number", validateResetPasswordByPhoneNumber, doctorMobileResetPasswordController); // doctor reset password by phone number
+router.get("/doctor_decode_token", checkDoctorRole, getDetailsThroughDecodedToken); // get doctor details through token
 router.get("/get_doctor_info",
 // verifyToken,
 validateGetDoctorParams, getDoctorInfoController)
