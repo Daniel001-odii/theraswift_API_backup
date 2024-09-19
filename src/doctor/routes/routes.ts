@@ -34,6 +34,7 @@ import {
     doctorSignInController,
     doctorRegisterPatient,
     doctorMobileNumberSignInController,
+    getDetailsThroughDecodedToken
 } from "../controllers/reg_login.controller";
 import {getDoctorInfoController} from "../controllers/getDoctorInfo.controller"
 import { 
@@ -77,6 +78,7 @@ router.post("/doctor_verified_email", validateDoctorVerifiedEmailParams, doctorE
 router.post("/doctor_send_phone_number", validateDoctorSendPhoneNumberParams, doctorSendPhoneNumberController);  // doctor send phone number
 router.post("/doctor_verified_phone_number", validateDoctorVerifiedPhoneNumberParams, doctorPhoneNumberVerificationController);  // doctor verified phone number
 router.post("/doctor_signin", validateDoctorSigninParams, doctorSignInController); // doctor login with email
+router.post("/doctor_decode_token", checkDoctorRole, getDetailsThroughDecodedToken); // get doctor details through token
 router.post("/doctor_signin_phone_number", validateDoctorSigninPhoneNumberParams, doctorMobileNumberSignInController); // doctor login with password
 router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworController); // doctor forgot password by email
 router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password by email

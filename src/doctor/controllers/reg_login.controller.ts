@@ -370,24 +370,11 @@ export const doctorRegisterPatient = async (
 
 
 // Decode Auth Token
-export const getDoctorDetails = async (req: Request, res: Response, next: NextFunction) => {
+export const getDetailsThroughDecodedToken = async (req: any, res: Response, next: NextFunction) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1]; // Extract the token from "Bearer <token>"
 
-    if (!token) {
-      return res.status(401).json({ message: "Authorization token is missing" })
-    }
-
-    // Verify and decode the token
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET_KEY!)
-
-    if (!decoded || !decoded._id) {
-      return res.status(401).json({ message: "Invalid token" })
-    }
-
-
-    const doctor = await DoctotModel.findById(decoded._id).select('firstName lastName email phoneNumber title organization clinicCode speciality')
-
+    const doctor = req.doctor;
+    
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" })
     }
