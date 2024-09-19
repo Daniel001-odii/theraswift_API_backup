@@ -387,6 +387,7 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
     // Return only necessary details
     res.json({
       doctor: {
+        _id: doctor._id,
         firstName: doctor.firstName,
         lastName: doctor.lastName,
         email: doctor.email,
