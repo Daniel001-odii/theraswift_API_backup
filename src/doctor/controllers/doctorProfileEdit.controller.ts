@@ -16,7 +16,7 @@ export const editDoctorProfile = async(req:any, res:Response)=> {
         const doctor_id = req.doctor._id;
         const doctor:any = await DoctotModel.findById(doctor_id);
         console.log("doc ID: ", doctor_id, " doctor: ", doctor)
-        const { firstName, lastName, phoneNumber, title, organization } = req.body;
+        const { firstName, lastName, phoneNumber, title, organization, addresss } = req.body;
 
         if(firstName){
             doctor.firstName = firstName
@@ -32,6 +32,10 @@ export const editDoctorProfile = async(req:any, res:Response)=> {
         }
         if(organization){
             doctor.organization = organization
+        }
+
+        if(addresss){
+            doctor.addresss = addresss
         }
         await doctor.save();
         res.status(200).json({ message: "profile updated successfully!"})
