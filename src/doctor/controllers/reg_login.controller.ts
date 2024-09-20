@@ -364,3 +364,43 @@ export const doctorRegisterPatient = async (
     
   }
 }
+
+
+
+
+
+
+// Decode Auth Token
+export const getDetailsThroughDecodedToken = async (req: any, res: Response, next: NextFunction) => {
+  try {
+
+    const doctorEmail = req.doctor.email;
+
+    const doctor = await DoctotModel.findOne({
+      email: doctorEmail
+    })
+
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" })
+    }
+
+    // Return only necessary details
+    res.json({
+      doctor: {
+        _id: doctor._id,
+        firstName: doctor.firstName,
+        lastName: doctor.lastName,
+        email: doctor.email,
+        phoneNumber: doctor.phoneNumber,
+        title: doctor.title,
+        organization: doctor.organization,
+        clinicCode: doctor.clinicCode,
+        speciality: doctor.speciality,
+        regNumber: doctor.regNumber,
+        addresss: doctor.addresss
+      }
+    })
+  } catch (err: any) {
+    return res.status(500).json({ message: "Server error" })
+  }
+}
