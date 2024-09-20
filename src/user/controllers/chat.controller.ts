@@ -11,32 +11,33 @@ import { Request, Response } from "express";
 
 
 
-// CREATE A CHAT ROOM BETWEEN PHARM AND USER
-export const createChatRoom = async (req:any, res:Response) => {
+
+// CREATE A CHAT ROOM BETWEEN DOCTOR AND USER
+export const createChatRoomForDoctor = async (req:any, res:Response) => {
     try {
       const user_id = req.user.id;
-      const { name, pharm_id } = req.body;
+      const { name, doctor_id } = req.body;
 
       if(!name){
         return res.status(400).json({ error: 'room name is required' });
       }
 
-      if(!pharm_id){
-        return res.status(400).json({ error: 'a pharmacy id is required' });
+      if(!doctor_id){
+        return res.status(400).json({ error: 'a doctor id is required' });
       }
 
       // Check if the room already exists
-      const existingRoom = await Room.findOne({ name, user: user_id, pharm: pharm_id });
+      const existingRoom = await Room.findOne({ name, user: user_id, pharm: doctor_id });
 
       if (existingRoom) {
         return res.status(400).json({ error: 'room already exists' });
       }
 
       // Create a new room and store references to the user and employer
-      const room = new Room({ name, user: user_id, pharm: pharm_id });
+      const room = new Room({ name, user: user_id, doctor: doctor_id });
       await room.save();
 
-      res.status(201).json({ room });
+      res.status(201).json({ message: "new room created for user and doctor", room });
       console.log("new message room created");
     } catch (error) {
       res.status(500).json({ message: 'Unable to create chat room', error });
@@ -44,6 +45,73 @@ export const createChatRoom = async (req:any, res:Response) => {
     }
 };
 
+
+// CREATE A CHAT ROOM BETWEEN PHARMACY AND USER
+export const createChatRoomForPharmacy = async (req:any, res:Response) => {
+  try {
+    const user_id = req.user.id;
+    const { name, pharm_id } = req.body;
+
+    if(!name){
+      return res.status(400).json({ error: 'room name is required' });
+    }
+
+    if(!pharm_id){
+      return res.status(400).json({ error: 'a pharmacy id is required' });
+    }
+
+    // Check if the room already exists
+    const existingRoom = await Room.findOne({ name, user: user_id, pharm: pharm_id });
+
+    if (existingRoom) {
+      return res.status(400).json({ error: 'room already exists' });
+    }
+
+    // Create a new room and store references to the user and employer
+    const room = new Room({ name, user: user_id, pharm: pharm_id });
+    await room.save();
+
+    res.status(201).json({ message: "new room created for user and pharmacy", room });
+    console.log("new message room created");
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to create chat room', error });
+    console.log("error creating rooom: ", error);
+  }
+};
+
+
+/* export const createChatRoom = async (req:any, res:Response) => {
+  try {
+    const user_id = req.user.id;
+    const { name, pharm_id } = req.body;
+
+    if(!name){
+      return res.status(400).json({ error: 'room name is required' });
+    }
+
+    if(!pharm_id){
+      return res.status(400).json({ error: 'a pharmacy id is required' });
+    }
+
+    // Check if the room already exists
+    const existingRoom = await Room.findOne({ name, user: user_id, pharm: pharm_id });
+
+    if (existingRoom) {
+      return res.status(400).json({ error: 'room already exists' });
+    }
+
+    // Create a new room and store references to the user and employer
+    const room = new Room({ name, user: user_id, pharm: pharm_id });
+    await room.save();
+
+    res.status(201).json({ room });
+    console.log("new message room created");
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to create chat room', error });
+    console.log("error creating rooom: ", error);
+  }
+};
+ */
 
 // GET ALL CHATS ROOMS FOR A USER >>>
 export const getChatRooms = async (req:any, res:Response) => {
@@ -54,10 +122,10 @@ export const getChatRooms = async (req:any, res:Response) => {
     
         // const pharm = await AdminModel.findById(user_id);
         const rooms = await ChatRoomModel.find({ user: user_id }).populate({
-            path: "pharm",
-            select: "firstName lastName email phoneNumber"
+            path: "doctor",
+            select: "firstName lastName email"
         });
-        res.status(200).json({ rooms })
+        res.status(200).json({ rooms });
         
         
     }catch(error){

@@ -10,7 +10,10 @@ const roomSchema = new mongoose.Schema({
   pharm: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'AdminReg',
-    required: [true, "pharmacy Id is required is required to create room"]
+  },
+  doctor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'DoctorReg',
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,

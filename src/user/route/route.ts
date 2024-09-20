@@ -73,7 +73,7 @@ import { deleteAccountWithOTP } from "../controllers/userDeleteMyAccount.control
 import { userSendPhoneNumberController } from "../controllers/phoneNumberVerification.controller";
 import { editUserprofile } from "../controllers/userProfile.controller";
 // FOR CHATS AND MESSAGING...
-import { createChatRoom, getChatMessagesInRoom } from "../controllers/chat.controller";
+import { createChatRoomForDoctor, createChatRoomForPharmacy, getChatMessagesInRoom } from "../controllers/chat.controller";
 import { getChatRooms } from "../controllers/chat.controller";
 import { sendChatToRoom } from "../controllers/chat.controller";
 import { create } from "domain";
@@ -153,7 +153,8 @@ router.post("/account/delete_confirm",  deleteAccountWithOTP);
 router.patch("/account/profile_edit", checkUserRole, editUserprofile);
 
 // chats and messaging...
-router.post("/chat_rooms/new", checkUserRole, createChatRoom);
+router.post("/chat_rooms/doctor/new", checkUserRole, createChatRoomForDoctor);
+router.post("/chat_rooms/pharmacy/new", checkUserRole, createChatRoomForPharmacy);
 router.get("/chat_rooms", checkUserRole, getChatRooms);
 router.get("/chat_rooms/:room_id/chats", checkUserRole, getChatMessagesInRoom);
 router.post("/chat_rooms/:room_id/new_message", checkUserRole, sendChatToRoom);
