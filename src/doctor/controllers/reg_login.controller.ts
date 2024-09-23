@@ -379,7 +379,7 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
     const doctor = await DoctotModel.findOne({
       email: doctorEmail
     })
-
+    
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" })
     }
