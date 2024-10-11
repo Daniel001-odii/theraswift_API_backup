@@ -1,0 +1,15 @@
+
+when patience needs a medication it can be prescibed through the app by the doctor..
+it comes in form of a link such that once a patience clicks it he sees the prescribed medication from the doctor..
+
+wallets..
+doctor payment is based on percentage..
+after the medications have been delivered a certain percentage is removed from the total amount (5%) sent to the doctors (after theyve sent in their bank details) withdrawals too can be made.
+
+
+Inventory...
+putting a medication in store or stock..
+check patience that is supposed to take the medication
+check patience taking meds and substract (the ones from the inventory) it from total left...
+out of stock...
+in stock...

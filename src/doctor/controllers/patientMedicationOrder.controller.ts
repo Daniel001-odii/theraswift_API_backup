@@ -7,6 +7,7 @@ import DoctorModel from "..//modal/doctor_reg.modal";
 import PatientOrderModel from "../modal/patientOrder.model";
 
 
+
 // doctor send patient prescription for hmo
 export const patientOderHmoController = async (
     req: any,
@@ -338,6 +339,69 @@ export const getpatientPriscriptionDeliverdeController = async (
         // signup error
         res.status(500).json({ message: err.message });
         
+    }
+};
+
+
+export const prescribeMedicationForUser = async (req: any, res: Response) => {
+    try{
+        const user_id = req.params.user_id;
+
+        const {
+            name, 
+            price, 
+            quantity, 
+            medicationImage, 
+            prescriptionRequired, 
+            form,
+            ingredient,
+            quantityForUser,
+            inventoryQuantity,
+            expiredDate,
+            category,
+            medInfo
+        } = req.body;
+
+        const new_medication = await new MedicationModel({
+            name, 
+            price, 
+            quantity, 
+            medicationImage, 
+            prescriptionRequired, 
+            form,
+            ingredient,
+            quantityForUser,
+            inventoryQuantity,
+            expiredDate,
+            category,
+            medInfo
+        });
+
+        await new_medication.save();
+
+        res.status(201).json({ message: "new medication created for user"})
+    }catch(error){
+        res.status(500).json({ error: "error prescribing medication"});
+    }
+}
+
+export const getAllPatientPrecriptionAsLinks = async (req: any, res: Response) => {
+    try{
+        const user = req.user;
+        const patientId = req._id;
+
+        const precriptions = await PatientPrescriptionModel.find({ patientId });
+        let formattedPrescription:any = [];
+
+
+        precriptions.forEach((unit)=>{
+            formattedPrescription.push(`precription_link/${patientId}/${unit}`);
+        });
+
+        res.status(201).json({ message: "checkout links success", formattedPrescription });
+
+    }catch(error){
+        res.status(500).json({ message: "error generating medication links for medications?"})
     }
 }
 

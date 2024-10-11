@@ -8,6 +8,8 @@ import CartModel from "../models/cart.model";
 import fetch from "node-fetch";
 import EssentialProductModel from "../../admin/models/essentialProduct.model";
 
+
+
 //user checkout /////////////
 export const userCheckOutController = async (
     req: any,
@@ -368,8 +370,6 @@ export const userGetPendingOrderController = async (
   }
 
 }
-
-
 
 //user not delivered order /////////////
 export const userGetNotDeliveredOrderController = async (

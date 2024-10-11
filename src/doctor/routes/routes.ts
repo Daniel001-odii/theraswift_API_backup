@@ -67,6 +67,8 @@ import { replyPharmacyRequestById } from "../controllers/pharmacyRequests.contro
 import { editDoctorProfile } from "../controllers/doctorProfileEdit.controller";
 import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "../controllers/chat.controller";
 
+import { followSuperDoctor, getPrescribersFollowingList } from '../controllers/doctor.general.controller';
+
 
 router.post("/test", router.get("/", (req:any, res:any) => {
     res.json("Hello");
@@ -144,6 +146,11 @@ router.post("/chat_rooms/new", checkDoctorRole, createChatRoom);
 router.get("/chat_rooms", checkDoctorRole, getChatRooms);
 router.get("/chat_rooms/:room_id/", checkDoctorRole, getChatsInRoom);
 router.post("/chat_rooms/:room_id/new_message", checkDoctorRole, sendChatToRoom);
+
+// following and unfollowing a precriber...
+router.post("/follow_doctor", checkDoctorRole, followSuperDoctor);
+// get lists of following...
+router.get("/following_list/all", checkDoctorRole, getPrescribersFollowingList);
 
 
 export default router;

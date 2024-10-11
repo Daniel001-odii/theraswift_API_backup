@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IDoctorReg } from "../interface/reg_interface";
+import mongoose from "mongoose";
 
 const DoctorSchema = new Schema(
     {
@@ -93,7 +94,24 @@ const DoctorSchema = new Schema(
         type: Date,
         default: Date.now,
       }
-     }
+     },
+
+    //  followers and following...
+     followers: [{
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'DoctorReg',
+        },
+        name: String,
+     }],
+
+     following: [{
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DoctorReg',
+      },
+      name: String,
+    }],
     
     },
     {
