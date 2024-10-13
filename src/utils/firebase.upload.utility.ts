@@ -6,7 +6,7 @@ export const uploadHMOImages = async (file:any) => {
         const remote_file_path = `HMO_images/${file.originalFilename}`;
 
         await bucket.upload(file_path, { destination: remote_file_path });
-        const options = {
+        const options:any = {
             action: 'read',
             expires: '01-01-2100'
         };
@@ -18,4 +18,5 @@ export const uploadHMOImages = async (file:any) => {
     }catch(error:any){
         return { success: false, error: error.message };
     }
-}
+};
+
