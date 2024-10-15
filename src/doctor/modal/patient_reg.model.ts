@@ -39,6 +39,7 @@ const PatientSchema = new Schema(
         default: '',
       },
       hmo: {
+        is_upload: Boolean,
         upload: {
           front: { type: String, default: '' },
           back: { type: String, default: '' },

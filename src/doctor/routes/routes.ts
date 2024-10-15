@@ -34,8 +34,11 @@ import {
     doctorSignInController,
     doctorRegisterPatient,
     doctorMobileNumberSignInController,
-    getDetailsThroughDecodedToken
+    getDetailsThroughDecodedToken,
+    uploadHMOImagesToFirebase
 } from "../controllers/reg_login.controller";
+
+
 import {getDoctorInfoController} from "../controllers/getDoctorInfo.controller"
 import { 
     doctorGetAllRegisteredPatient,
@@ -152,5 +155,8 @@ router.post("/follow_doctor", checkDoctorRole, followSuperDoctor);
 // get lists of following...
 router.get("/following_list/all", checkDoctorRole, getPrescribersFollowingList);
 
+
+// upload HMO image on patient registration...
+router.post("/patient/HMO_image/upload", checkDoctorRole, uploadHMOImagesToFirebase);
 
 export default router;

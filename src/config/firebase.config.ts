@@ -1,5 +1,8 @@
-import * as admin from 'firebase-admin'
+// import * as admin from 'firebase-admin'
+import dotenv from 'dotenv';
+dotenv.config();
 
+import admin from 'firebase-admin'
 
 interface FirebaseConfig {
     projectId: string;
