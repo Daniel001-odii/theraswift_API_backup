@@ -28,6 +28,18 @@ const UserMedicationSchema = new Schema(
         type: String,
         default: "",
       },
+      /* 
+        new fields for more details...
+      */
+     last_filled_date:{
+      type: Date,
+      default: Date.now()
+     },
+     refills_left: {
+      type: Number,
+      default: 0
+     },
+
       createdAt: {
         type: Date,
         default: Date.now,
