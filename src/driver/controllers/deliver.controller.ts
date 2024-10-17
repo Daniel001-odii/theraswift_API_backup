@@ -9,6 +9,12 @@ import { startDeliveryTripHtmlTemplate } from "../../templates/email/startDelive
 import { sendEmail } from "../../utils/sendEmailGeneral";
 import { uploadToS3 } from "../../utils/aws3.utility";
 import { v4 as uuidv4 } from "uuid";
+import MedicationModel from "../../admin/models/medication.model";
+
+import MedicationDeliveryModel from "../model/medication.delivery.model";
+import DoctotModel from "../../doctor/modal/doctor_reg.modal";
+import DoctorWalletModel from "../../doctor/modal/doctorWallet.model";
+
 
 // initiate delivery of new product
 export const initateDeliveryGoodsController = async (
@@ -300,7 +306,7 @@ export const contactlessDeliveryGoodsController = async (
         await deliveryGoods.save()
 
         return res.status(200).json({
-            message: "item delivered  successfully, wating for comfirmation from customer"
+            message: "item delivered  successfully, waiting for comfirmation from customer"
         })
 
     } catch (err: any) {
@@ -343,5 +349,128 @@ export const customercomfirmDeliveryGoodsController = async (
     } catch (err: any) {
         res.status(500).json({ message: err.message });
         
+    }
+};
+
+
+// this controller is the final stage of the medication deluvery to the patient
+// and marks the medication as delivered for that particular patient
+export const initiateMedicationDeliveryToPatient = async (req:any, res:Response) => {
+    try{
+        // get riders details from request..
+        const driver = req.driver;
+        const driverId = driver.id;
+
+        // get medication details from request body...
+        const medication_id = req.params.medication_id;
+        const { amount, address } = req.body;
+
+        const medication:any = await MedicationModel.findById(medication_id);
+        if(!medication){
+            return res.status(404).json({ message: "sorry, medication not found"});
+        }
+        // const patient_id = medication.userId;
+        const patient = await UserModel.findById(medication.userId);
+        if(!patient){
+            return res.status(404).json({ message: "sorry, patient for the medication was not found"});
+        }
+
+        // get doctor from medication...
+        const doctor_id = medication.doctor;
+        const doctor = await DoctotModel.findById(doctor_id);
+        if(!doctor){
+            return res.status(404).json({ message: "couldnt find the prescriber doctor"});
+        }
+
+
+        // set delivery status as intiatated...
+        const delivery_status = "initiate";
+
+        // create a new delivery pobject and stor on the database..
+        const newDelivery = new MedicationDeliveryModel({
+            patient: patient._id,
+            medicationId: medication_id,
+            amount,
+            address,
+            driverId,
+            deliveredStatus: delivery_status,
+            prescriber: doctor,
+        });
+
+        await newDelivery.save();
+
+        res.status(201).json({ message: "you initiated medication delivery!", medication, patient });
+        
+
+    }catch(error){
+        res.status(500).json({ message: "error initiating delivery for medication"});
+    }
+}
+
+
+
+
+export const markMedicationAsDelivered = async (req: any, res: Response) => {
+    try{
+
+        const driver = req.driver;
+        const driverId = driver.id;
+
+        // confirm if the driver owns the delivery record..
+        const medication_delivery_id = req.params.deliver_id;
+        const medication_delivery = await MedicationDeliveryModel.findOne({_id: medication_delivery_id, driverId });
+        if(!medication_delivery){
+            return res.status(404).json({ message: "sorry no such driver or delivery record found"});
+        };
+
+        medication_delivery.deliveryStatus = 'delivered';
+        await medication_delivery.save();
+
+        res.status(200).json({ message: "delivery successfully marked as delivered, awaiting patient confirmation"});
+
+
+    }catch(error){
+        res.status(500).json({ message: "error marking medication as delivered"});
+    }
+};
+
+/* 
+this controller will finalize the medication delivery process
+and credit the prescriber (doctor) 5% from the total medication amount..
+ */ 
+export const confirmMedicationAsDelivered = async (req: any, res: Response) => {
+    try{
+
+        const medication_delivery_id = req.params.deliver_id;
+        const medication_delivery = await MedicationDeliveryModel.findOne({_id: medication_delivery_id, deliveryStatus: "delivered" });
+        if(!medication_delivery){
+            return res.status(404).json({ message: "sorry this medication has not be delivered yet"});
+        };
+
+        medication_delivery.deliveryStatus = "confirmDelivered";
+        await medication_delivery.save();
+
+        // const medication_price:Number = medication_delivery.amount;
+        
+        // doctors cut percentage is only 5% of medication price...
+        const doctor_percentage:any = Number(medication_delivery.amount) * 0.05;
+
+        const doctor_id = medication_delivery.prescriber;
+        const doctor = await DoctotModel.findById(doctor_id);
+        const doctor_wallet = await DoctorWalletModel.findOne({ doctorId: doctor_id });
+        if (!doctor_wallet) {
+            const newWallet = new DoctorWalletModel({
+              doctorId: doctor_id,
+              amount: doctor_percentage
+            });
+            await newWallet.save();
+          } else {
+            doctor_wallet.amount = doctor_wallet.amount + doctor_percentage;
+            await doctor_wallet.save();
+          }
+        res.status(200).json({ message: "medication deliverey confirmed successfully"});
+
+    }catch(error){
+        res.status(500).json({ message: "error confirming delivery..."})
     }
 }

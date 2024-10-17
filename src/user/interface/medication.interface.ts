@@ -10,6 +10,8 @@ export interface IUserMedication extends Document {
   prescriptionImage: string;
   doctor: ObjectId;
   clinicCode: string;
+  last_filled_date: Date,
+  refills_left: Date,
   createdAt: Date;
   updatedAt: Date;
   
