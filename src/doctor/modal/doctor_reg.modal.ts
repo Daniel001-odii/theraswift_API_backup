@@ -40,6 +40,49 @@ const DoctorSchema = new Schema(
         type: String,
         default: '',
       },
+      updateCompletedAccountSteps: {
+        step1: {
+          verifiedProfileDetails: {
+              type: Boolean,
+              required: true,
+              default: false
+          },
+          addedProviders: {
+            type: Boolean,
+            required: true,
+            default: false
+          }
+        },
+        step2: {
+          addedHmoInfo: {
+            type: Boolean,
+            required: true,
+            default: false
+          },
+          addedPaymentMethod: {
+            type: Boolean,
+            required: true,
+            default: false
+          },
+          addedVideoMeetingLocation: {
+            type: Boolean,
+            required: true,
+            default: false
+          },
+          setupCalender: {
+            type: Boolean,
+            required: true,
+            default: false
+          }
+        },
+        step3: {
+          addedPatients: {
+            type: Boolean,
+            required: true,
+            default: false
+          }
+        }
+      },
       requestClinicCode: {
         type: String,
         enum: ["request", "given"],

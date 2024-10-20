@@ -6,6 +6,7 @@ import DoctotModel from "../modal/doctor_reg.modal";
 import PatientModel from "../modal/patient_reg.model";
 import DoctorWalletModel from "../modal/doctorWallet.model";
 import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
+import { updateCompletedAccountSteps } from "../../utils/checkCompletedAccountSteps";
 
 
 //doctor signup /////////////
@@ -374,20 +375,23 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
       return res.status(404).json({ message: "Doctor not found" })
     }
 
+    const updatedCompletedAccountSteps = await updateCompletedAccountSteps(String(doctor._id),doctor.clinicCode)
+
     // Return only necessary details
     res.json({
       doctor: {
-        _id: doctor._id,
-        firstName: doctor.firstName,
-        lastName: doctor.lastName,
-        email: doctor.email,
-        phoneNumber: doctor.phoneNumber,
-        title: doctor.title,
-        organization: doctor.organization,
-        clinicCode: doctor.clinicCode,
-        speciality: doctor.speciality,
-        regNumber: doctor.regNumber,
-        addresss: doctor.addresss
+        _id: updatedCompletedAccountSteps?._id,
+        firstName: updatedCompletedAccountSteps?.firstName,
+        lastName: updatedCompletedAccountSteps?.lastName,
+        email: updatedCompletedAccountSteps?.email,
+        phoneNumber: updatedCompletedAccountSteps?.phoneNumber,
+        title: updatedCompletedAccountSteps?.title,
+        organization: updatedCompletedAccountSteps?.organization,
+        clinicCode: updatedCompletedAccountSteps?.clinicCode,
+        speciality: updatedCompletedAccountSteps?.speciality,
+        regNumber: updatedCompletedAccountSteps?.regNumber,
+        addresss: updatedCompletedAccountSteps?.addresss,
+        completedAccountSteps: updatedCompletedAccountSteps?.completedAccountSteps
       }
     })
   } catch (err: any) {

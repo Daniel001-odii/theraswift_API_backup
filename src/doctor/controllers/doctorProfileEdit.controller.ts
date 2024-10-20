@@ -21,6 +21,9 @@ export const editDoctorProfile = async (req: any, res: Response) => {
       addresss: addresss || doctor.addresss,
     })
 
+    //Editting Profile Details Is Basically Verifying It
+    doctor.completedActionSteps.step1.verifiedProfileDetails = true;
+
     await doctor.save()
 
     res.status(200).json({ message: "Profile updated successfully!" })

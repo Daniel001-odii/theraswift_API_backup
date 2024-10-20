@@ -68,6 +68,7 @@ import { editDoctorProfile } from "../controllers/doctorProfileEdit.controller";
 import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "../controllers/chat.controller";
 
 import { followSuperDoctor, getPrescribersFollowingList } from '../controllers/doctor.general.controller';
+import { doctorVerifyProfileDetails } from "../controllers/doctorAccountSteps.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -85,6 +86,7 @@ router.post("/doctor_forgot_password", validateEmail, doctorForgotPassworControl
 router.post("/doctor_reset_password", validateResetPassword, doctorResetPassworController); // doctor reset password by email
 router.post("/doctor_forgot_password_by_phone_number", validatePhonNumber, doctorMobileForgotPasswordController); // doctor forgot password by phone number
 router.post("/doctor_reset_password_by_phone_number", validateResetPasswordByPhoneNumber, doctorMobileResetPasswordController); // doctor reset password by phone number
+router.post("/doctor_verify_profile", checkDoctorRole, doctorVerifyProfileDetails); // doctor verify profile details
 router.get("/doctor_decode_token", checkDoctorRole, getDetailsThroughDecodedToken); // get doctor details through token
 router.get("/get_doctor_info",
 // verifyToken,
