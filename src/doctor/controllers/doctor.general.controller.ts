@@ -13,10 +13,10 @@ export const followSuperDoctor = async (req: any, res: Response) => {
 
     // Find the super doctor by ID
     const doctor_model: any = await DoctotModel.findById(doctor);
-
+/* 
     if (!doctor_model || doctor_model.superDoctor !== true) {
       return res.status(400).json({ message: "Sorry, you can only follow a super doctor" });
-    }
+    } */
 
     // Find the practice doctor
     const practice_doc_model: any = await DoctotModel.findById(practice_doc_id);
