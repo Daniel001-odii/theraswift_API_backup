@@ -20,13 +20,17 @@ export const uploadHMOImages = async (file:any) => {
     }
 };
 
-export const uploadAnyFile = async (file:any) => {
-    try{
+export const uploadAnyFile = async (file: any) => {
+    try {
         const file_path = file.filepath;
-        const remote_file_path = `${file.type}/${file.originalFilename}`;
+        
+        // Extract the file extension to use as the type
+        const extension = file.originalFilename.split('.').pop(); // get the file extension
+        const remote_file_path = `${extension}/${file.originalFilename}`; // use the extension as the folder name
 
         await bucket.upload(file_path, { destination: remote_file_path });
-        const options:any = {
+        
+        const options: any = {
             action: 'read',
             expires: '01-01-2100'
         };
@@ -34,8 +38,8 @@ export const uploadAnyFile = async (file:any) => {
         const signed_url: any = await bucket.file(remote_file_path).getSignedUrl(options);
         const image_url = signed_url[0];
 
-        return { success: true, url:image_url};
-    }catch(error:any){
+        return { success: true, url: image_url };
+    } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
