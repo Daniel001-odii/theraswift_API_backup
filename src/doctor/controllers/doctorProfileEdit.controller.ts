@@ -22,7 +22,8 @@ export const editDoctorProfile = async (req: any, res: Response) => {
     })
 
     //Editting Profile Details Is Basically Verifying It
-    doctor.completedActionSteps.step1.verifiedProfileDetails = true;
+    // doctor.completedActionSteps.step1.verifiedProfileDetails = true;
+    doctor.completedAccountSteps.step1.verifiedProfileDetails = true;
 
     await doctor.save()
 

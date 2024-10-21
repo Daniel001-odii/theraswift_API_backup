@@ -40,7 +40,7 @@ const DoctorSchema = new Schema(
         type: String,
         default: '',
       },
-      updateCompletedAccountSteps: {
+      completedAccountSteps: {
         step1: {
           verifiedProfileDetails: {
               type: Boolean,

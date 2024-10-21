@@ -7,6 +7,10 @@ import PatientModel from "../modal/patient_reg.model";
 import DoctorWalletModel from "../modal/doctorWallet.model";
 import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
 
+import { updateCompletedAccountSteps } from "../../utils/checkCompletedAccountSteps";
+
+import { initializeFormidable } from "../../config/formidable.config";
+import { uploadHMOImages } from "../../utils/firebase.upload.utility";
 
 //doctor signup /////////////
 export const doctorSignUpController = async (
@@ -356,6 +360,41 @@ export const doctorRegisterPatient = async (
 }
 
 
+// upload HMO image and return upload URL...
+export const uploadHMOImagesToFirebase = async(req: any, res: Response) => {
+  try {
+    const form = initializeFormidable();
+    form.parse(req, async (err: any, fields: any, files: any) => {
+      if (err) {
+        return res.status(500).json({ message: "error uploading images", err });
+      }
+      // Extract the array of files
+      const hmoImages = files['HMO_image'];
+      if (!hmoImages || hmoImages.length === 0) {
+        return res.status(400).json({ message: "No images found" });
+      }
+      if(hmoImages.length < 2){
+        return res.status(400).json({ message: "HMO images must include both front and back"});
+      }
+      // Array to store uploaded image URLs
+      const uploadedImages: string[] = [];
+      // Loop through each file and upload it
+      for (const file of hmoImages) {
+        try {
+          const image_url = await uploadHMOImages(file); // Reuse your function for single file uploads
+          uploadedImages.push(image_url.url);
+        } catch (uploadError) {
+          return res.status(500).json({ message: "Error uploading image", error: uploadError });
+        }
+      }
+      // Send back all the uploaded image URLs
+      res.status(201).json({ image_urls: uploadedImages });
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error registering patient", error });
+    console.log("Error registering patient: ", error);
+  }
+};
 
 
 

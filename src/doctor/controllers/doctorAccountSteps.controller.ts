@@ -22,7 +22,7 @@ export const doctorVerifyProfileDetails = async (
     const doctor = await DoctotModel.findOne({ _id: req.doctor._id })
 
     if(doctor){
-        doctor.completedActionSteps.step1.verifiedProfileDetails = verifyAccountProfile;
+        doctor.completedAccountSteps.step1.verifiedProfileDetails = verifyAccountProfile;
         await doctor.save()
     }
     
