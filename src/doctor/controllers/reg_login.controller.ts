@@ -5,14 +5,7 @@ import jwt from "jsonwebtoken";
 import DoctotModel from "../modal/doctor_reg.modal";
 import PatientModel from "../modal/patient_reg.model";
 import DoctorWalletModel from "../modal/doctorWallet.model";
-import { uploadToS3 } from "../../utils/aws3.utility";
-import { v4 as uuidv4 } from "uuid";
 import { modifiedPhoneNumber } from "../../utils/mobilNumberFormatter";
-
-import { bucket } from "../../config/firebase.config";
-import { error } from "console";
-import { initializeFormidable } from "../../config/formidable.config";
-import { uploadHMOImages } from "../../utils/firebase.upload.utility";
 
 
 //doctor signup /////////////
@@ -211,87 +204,82 @@ export const doctorMobileNumberSignInController = async (
   res: Response,
 ) => {
 
-try {
-  const {
-    mobileNumber,
-    password,
-  } = req.body;
-  // Check for validation errors
-  const errors = validationResult(req);
+  try {
+    const {
+      mobileNumber,
+      password,
+    } = req.body;
+    // Check for validation errors
+    const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // format mobile number to international format
+    let phonenumber = modifiedPhoneNumber(mobileNumber);
+
+    // try find user with the same email
+    const doctor = await DoctotModel.findOne({ phoneNumber: phonenumber});
+
+    // check if user exists
+    if (!doctor) {
+      return res
+        .status(401)
+        .json({ message: "invalid credential" });
+    }
+
+    // compare password with hashed password in database
+    const isPasswordMatch = await bcrypt.compare(password, doctor.password);
+    if (!isPasswordMatch) {
+      return res.status(401).json({ message: "incorrect credential." });
+    }
+
+    if (!doctor.phoneNumberOtp.verified) {
+      return res.status(401).json({ message: "mobile number not verified." });
+    }
+
+    if (doctor.clinicCode == '') {
+      return res.status(401).json({ message: "you don't have clinic code." });
+    }
+
+    if (!doctor.clinicVerification.isVerified) {
+      return res.status(401).json({ message: "clinic code not yet verified." });
+    }
+
+    // generate access token
+    const accessToken = jwt.sign(
+      { 
+        _id: doctor?._id,
+        email: doctor.email,
+        clinicCode: doctor.clinicCode
+      },
+      process.env.JWT_SECRET_KEY!,
+      // { expiresIn: "24h" }
+    );
+
+    // return access token
+    res.json({
+      message: "Login successful",
+      Token: accessToken
+    });
+
+
+  } catch (err: any) {
+    // signup error
+    res.status(500).json({ message: err.message });
   }
-
-  // format mobile number to international format
-  let phonenumber = modifiedPhoneNumber(mobileNumber);
-
-  // try find user with the same email
-  const doctor = await DoctotModel.findOne({ phoneNumber: phonenumber});
-
-   // check if user exists
-   if (!doctor) {
-    return res
-      .status(401)
-      .json({ message: "invalid credential" });
-  }
-
-  // compare password with hashed password in database
-  const isPasswordMatch = await bcrypt.compare(password, doctor.password);
-  if (!isPasswordMatch) {
-    return res.status(401).json({ message: "incorrect credential." });
-  }
-
-  if (!doctor.phoneNumberOtp.verified) {
-    return res.status(401).json({ message: "mobile number not verified." });
-  }
-
-  if (doctor.clinicCode == '') {
-    return res.status(401).json({ message: "you don't have clinic code." });
-  }
-
-  if (!doctor.clinicVerification.isVerified) {
-    return res.status(401).json({ message: "clinic code not yet verified." });
-  }
-
-  // generate access token
-  const accessToken = jwt.sign(
-    { 
-      _id: doctor?._id,
-      email: doctor.email,
-      clinicCode: doctor.clinicCode
-    },
-    process.env.JWT_SECRET_KEY!,
-    // { expiresIn: "24h" }
-  );
-
-  // return access token
-  res.json({
-    message: "Login successful",
-    Token: accessToken
-  });
-
-
-} catch (err: any) {
-  // signup error
-  res.status(500).json({ message: err.message });
-}
 
 }
 
 
 //doctor register patient /////////////
-export const doctorRegisterPatient_old = async (
+export const doctorRegisterPatient = async (
   req: any,
   res: Response,
   next: NextFunction
 ) => {
-  
   try {
-     // Access the uploaded file details
-    const file = req.file;
-    let medicationImg;
-
     const {
       email,
       firstName,
@@ -301,40 +289,39 @@ export const doctorRegisterPatient_old = async (
       address,
       dateOFBirth,
       hmo,
+      medicalRecord
     } = req.body;
-    // Check for validation errors
-    const errors = validationResult(req);
 
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    if (!file) {
-      medicationImg = '';
-    }else{
-      const filename = uuidv4();
-      const result = await uploadToS3(req.file.buffer, `${filename}.jpg`);
-      medicationImg = result?.Location!;
-      console.log(result);
-      //medicationImg = uploadToS3(file);
+      return res.status(400).json({ errors: errors.array() })
     }
 
     const doctor = req.doctor;
-    let patientHmo = '';
 
-    // format mobile number to international format
-    let phonenumber = modifiedPhoneNumber(phoneNumber);
+    let patientHmo ={}
 
-    if (hmo != '') {
-      patientHmo = hmo;
+    if(hmo.upload && hmo.upload.front && hmo.upload.back){
+      patientHmo = {
+        upload: hmo.upload,
+        wasUploaded: true
+      }
+    }
+    else if(hmo.inputtedDetails){
+      patientHmo = {
+        inputtedDetails: hmo.inputtedDetails
+      }
     }
 
-    // Save patient to MongoDB
+    let formattedPhoneNumber = modifiedPhoneNumber(phoneNumber)
+
+    let medicationImg = medicalRecord || null;
+
     const patient = new PatientModel({
       email,
       firstName, 
       surname,
-      phoneNumber: phonenumber,
+      phoneNumber: formattedPhoneNumber,
       gender,
       address,
       dateOFBirth,
@@ -342,95 +329,33 @@ export const doctorRegisterPatient_old = async (
       doctorId: doctor._id,
       hmo: patientHmo,
       clinicCode: doctor.clinicCode
-    });
-    let patientSaved = await patient.save();
-    
+    })
+
+    let patientSaved = await patient.save()
 
     return res.status(200).json({
-      patient:{
+      patient: {
         id: patientSaved._id,
         email: patientSaved.email,
-        firstName: patient.firstName,
+        firstName: patientSaved.firstName,
         surname: patientSaved.surname,
         phoneNumber: patientSaved.phoneNumber,
         gender: patientSaved.gender,
         address: patientSaved.address,
         dateOFBirth: patientSaved.dateOFBirth,
         doctorId: patientSaved.doctorId,
-        medecalRecord: medicationImg
+        medicalRecord: medicationImg,
+        hmo: patientSaved.hmo,
+        clinicCode: patientSaved.clinicCode
       }
     })
 
-
-    
   } catch (err: any) {
-    // signup error
-    res.status(500).json({ message: err.message });
-    
+    res.status(500).json({ message: err.message })
   }
 }
 
 
-export const doctorRegisterPatient = async(req:any, res:Response) => {
-  try{
-    const form = initializeFormidable();
-    form.parse(req, async (err:any, fields:any, files:any) => {
-      if(err){
-        return res.status(500).json({ message: "error uploading images", err });
-      }
-
-      const file = files['HMO_image'][0];
-      const result = await uploadHMOImages(file);
-      res.status(201).json({ message: "HMO image uploaded successfully!"});
-    })
-  }catch(error){
-    res.status(500).json({ message: "error registering patient", error });
-    console.log("error registering patient: ", error);
-  }
-};
-
-
-
-// upload HMO image and return upload URL...
-export const uploadHMOImagesToFirebase = async(req: any, res: Response) => {
-  try {
-    const form = initializeFormidable();
-    form.parse(req, async (err: any, fields: any, files: any) => {
-      if (err) {
-        return res.status(500).json({ message: "error uploading images", err });
-      }
-
-      // Extract the array of files
-      const hmoImages = files['HMO_image'];
-      if (!hmoImages || hmoImages.length === 0) {
-        return res.status(400).json({ message: "No images found" });
-      }
-
-      if(hmoImages.length < 2){
-        return res.status(400).json({ message: "HMO images must include both front and back"});
-      }
-
-      // Array to store uploaded image URLs
-      const uploadedImages: string[] = [];
-
-      // Loop through each file and upload it
-      for (const file of hmoImages) {
-        try {
-          const image_url = await uploadHMOImages(file); // Reuse your function for single file uploads
-          uploadedImages.push(image_url.url);
-        } catch (uploadError) {
-          return res.status(500).json({ message: "Error uploading image", error: uploadError });
-        }
-      }
-
-      // Send back all the uploaded image URLs
-      res.status(201).json({ image_urls: uploadedImages });
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Error registering patient", error });
-    console.log("Error registering patient: ", error);
-  }
-};
 
 
 
@@ -449,20 +374,23 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
       return res.status(404).json({ message: "Doctor not found" })
     }
 
+    const updatedCompletedAccountSteps = await updateCompletedAccountSteps(String(doctor._id),doctor.clinicCode)
+
     // Return only necessary details
     res.json({
       doctor: {
-        _id: doctor._id,
-        firstName: doctor.firstName,
-        lastName: doctor.lastName,
-        email: doctor.email,
-        phoneNumber: doctor.phoneNumber,
-        title: doctor.title,
-        organization: doctor.organization,
-        clinicCode: doctor.clinicCode,
-        speciality: doctor.speciality,
-        regNumber: doctor.regNumber,
-        addresss: doctor.addresss
+        _id: updatedCompletedAccountSteps?._id,
+        firstName: updatedCompletedAccountSteps?.firstName,
+        lastName: updatedCompletedAccountSteps?.lastName,
+        email: updatedCompletedAccountSteps?.email,
+        phoneNumber: updatedCompletedAccountSteps?.phoneNumber,
+        title: updatedCompletedAccountSteps?.title,
+        organization: updatedCompletedAccountSteps?.organization,
+        clinicCode: updatedCompletedAccountSteps?.clinicCode,
+        speciality: updatedCompletedAccountSteps?.speciality,
+        regNumber: updatedCompletedAccountSteps?.regNumber,
+        addresss: updatedCompletedAccountSteps?.addresss,
+        completedAccountSteps: updatedCompletedAccountSteps?.completedAccountSteps
       }
     })
   } catch (err: any) {

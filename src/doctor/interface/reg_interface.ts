@@ -12,6 +12,21 @@ export interface IDoctorReg extends Document {
   organization: string;
   requestClinicCode: string,
   clinicCode: string,
+  completedAccountSteps: {
+    step1: {
+      verifiedProfileDetails: boolean;
+      addedProviders: boolean;
+    },
+    step2: {
+      addedHmoInfo: boolean;
+      addedPaymentMethod: boolean;
+      addedVideoMeetingLocation: boolean;
+      setupCalender: boolean;
+    },
+    step3: {
+      addedPatients: boolean; 
+    }
+  }
   verifyClinicCode: boolean,
   superDoctor: boolean;
   addresss: string;

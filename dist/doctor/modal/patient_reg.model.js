@@ -38,8 +38,38 @@ const PatientSchema = new mongoose_1.Schema({
         default: '',
     },
     hmo: {
-        type: String,
-        default: '',
+        upload: {
+            front: {
+                type: String,
+                required: false,
+            },
+            back: {
+                type: String,
+                required: false,
+            }
+        },
+        inputtedDetails: {
+            hmoEmployer: {
+                type: String,
+                required: false,
+            },
+            plan: {
+                type: String,
+                required: false,
+            },
+            regNumber: {
+                type: String,
+                required: false,
+            },
+            beneficiaries: {
+                type: [String],
+                required: false,
+            },
+        },
+        wasUploaded: {
+            type: Boolean,
+            default: false,
+        },
     },
     doctorId: {
         type: mongoose_1.Schema.Types.ObjectId, ref: 'DoctorReg'
