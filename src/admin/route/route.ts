@@ -67,6 +67,7 @@ import { getChatRooms } from "../controllers/chat.controller";
 import { getChatsInRoom } from "../controllers/chat.controller";
 import { sendChatToRoom } from "../controllers/chat.controller";
 import { getAllSentRequest, markPharmacyRequestAsSolved, sendPharmacyRequest } from "../controllers/pharmacyRequests.controller";
+import { uploadAnyFileToFirebase } from "../controllers/file.upload.controller";
 
 
 
@@ -180,7 +181,8 @@ router.post("/requests/:request_id/solved", checkAdminRole, markPharmacyRequestA
 // doctor verification...
 router.post("/:doctor_id/verify", checkAdminRole, verifyDoctorById);
 
-
+// controller for general file uploads....
+router.post("/files/upload", checkAdminRole, uploadAnyFileToFirebase)
 
 
 

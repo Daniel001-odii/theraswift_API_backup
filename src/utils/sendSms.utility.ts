@@ -1,6 +1,7 @@
 import { SendSms } from '../types/generalTypes';
 import fetch from "node-fetch";
 
+
 export const sendSms = ({to,sms}:SendSms)=>{
   const data = {
     to,
