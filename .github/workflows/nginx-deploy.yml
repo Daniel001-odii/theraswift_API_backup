@@ -24,7 +24,7 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           # ssh -o StrictHostKeyChecking=no -i private_key ahmeddapo0110@theraswift.io  ' 
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@theraswift.io <<EOF
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@theraswift.co <<EOF
           export CURRENT_COMMIT=$CURRENT_COMMIT
               # Now we have got the access of EC2 and we will start the deployment.
               # rm -rf /home/ahmeddapo0110/repos/theraswift_backend_two 
