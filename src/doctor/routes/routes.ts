@@ -70,7 +70,7 @@ import { replyPharmacyRequestById } from "../controllers/pharmacyRequests.contro
 import { editDoctorProfile } from "../controllers/doctorProfileEdit.controller";
 import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "../controllers/chat.controller";
 
-import { followSuperDoctor, getPrescribersFollowingList } from '../controllers/doctor.general.controller';
+import { followSuperDoctor, getDoctorsUnderPractice, getPrescribersFollowingList } from '../controllers/doctor.general.controller';
 import { doctorVerifyProfileDetails } from "../controllers/doctorAccountSteps.controller";
 
 
@@ -160,5 +160,8 @@ router.get("/following_list/all", checkDoctorRole, getPrescribersFollowingList);
 
 // upload HMO image on patient registration...
 router.post("/patient/HMO_image/upload", checkDoctorRole, uploadHMOImagesToFirebase);
+
+// get doctors under practice...
+router.get("/clinic_doctors/:clinic_code/all", checkDoctorRole, getDoctorsUnderPractice);
 
 export default router;

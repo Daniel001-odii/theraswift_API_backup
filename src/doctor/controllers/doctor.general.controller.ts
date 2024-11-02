@@ -64,3 +64,20 @@ export const getPrescribersFollowingList = async(req:any, res: Response) => {
         res.status(500).json({ message: "error getting list of prescribers being followed"})       
     }
 }
+
+
+export const getDoctorsUnderPractice = async(req:any, res: Response) => {
+  try{
+    const clinic_code = req.params.clinic_code;
+
+    const doctors = await DoctotModel.find({ clinicCode: clinic_code });
+    if(!doctors){
+      return res.status(404).json({ message: "sorry, the requested doctor was not found"});
+    }
+
+    res.status(200).json({ doctors });
+
+  }catch(error){
+    res.status(500).json({ message: "error getting practice doctors"});
+  }
+}
