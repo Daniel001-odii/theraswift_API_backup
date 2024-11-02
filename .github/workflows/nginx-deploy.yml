@@ -23,8 +23,8 @@ jobs:
 
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          # ssh -o StrictHostKeyChecking=no -i private_key ahmeddapo0110@theraswift.io  ' 
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@theraswift.io <<EOF
+          # ssh -o StrictHostKeyChecking=no -i private_key ahmeddapo0110@theraswift.co  ' 
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@theraswift.co <<EOF
           export CURRENT_COMMIT=$CURRENT_COMMIT
               # Now we have got the access of EC2 and we will start the deployment.
               # rm -rf /home/ahmeddapo0110/repos/theraswift_backend_two 
@@ -41,17 +41,17 @@ jobs:
               node -v
               npm i && echo INSTALLED DEPENDENCIES 
               npm run build && echo BUILT CODE 
-              sudo rm -rf /var/www/api.theraswift.io/dist &&  echo  REMOVED DIST DIRECTORY 
-              sudo mkdir -p /var/www/api.theraswift.io/dist &&  echo  MADE DIST DIRECTORY 
-              sudo mv dist /var/www/api.theraswift.io &&  echo  MOVED BUILT CODE 
-              sudo mv node_modules /var/www/api.theraswift.io/dist &&  echo MOVED DEPENDENCIES 
-              sudo cp package.json /var/www/api.theraswift.io/dist &&  echo COPIED PACKAGE.JSON
-              sudo cp ecosystem.config.js /var/www/api.theraswift.io/dist &&  echo COPIED ecosystem.config
-              # sudo cp serverconf/default.conf /etc/nginx/conf.d/api.theraswift.io.conf && echo Copied Server Conf
-              sudo cp serverconf/default.conf /etc/nginx/sites-available/api.theraswift.io && echo Copied Server Conf
-              sudo ln -fs /etc/nginx/sites-available/api.theraswift.io /etc/nginx/sites-enabled/ && echo Linked Server Conf
-              cd /var/www/api.theraswift.io/dist 
+              sudo rm -rf /var/www/api.theraswift.co/dist &&  echo  REMOVED DIST DIRECTORY 
+              sudo mkdir -p /var/www/api.theraswift.co/dist &&  echo  MADE DIST DIRECTORY 
+              sudo mv dist /var/www/api.theraswift.co &&  echo  MOVED BUILT CODE 
+              sudo mv node_modules /var/www/api.theraswift.co/dist &&  echo MOVED DEPENDENCIES 
+              sudo cp package.json /var/www/api.theraswift.co/dist &&  echo COPIED PACKAGE.JSON
+              sudo cp ecosystem.config.js /var/www/api.theraswift.co/dist &&  echo COPIED ecosystem.config 
+              sudo cp serverconf/default.conf /etc/nginx/sites-available/api.theraswift.co && echo Copied Server Conf
+              sudo ln -fs /etc/nginx/sites-available/api.theraswift.co /etc/nginx/sites-enabled/ && echo Linked Server Conf
+              cd /var/www/api.theraswift.co/dist 
               sudo cp ../.env ./
+              sudo npm run stop
               npm start 
               sudo nginx -t
               sudo systemctl restart nginx
