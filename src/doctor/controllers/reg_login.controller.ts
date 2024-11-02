@@ -431,7 +431,7 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
         addresss: updatedCompletedAccountSteps?.addresss,
         completedAccountSteps: updatedCompletedAccountSteps?.completedAccountSteps
       }
-    })
+    });
   } catch (err: any) {
     return res.status(500).json({ message: "Server error" })
   }

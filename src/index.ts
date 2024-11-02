@@ -55,6 +55,7 @@ app.use(
 app.use(helmet());
 
 // Database connection
+// const MONGODB_URI = "mongodb://localhost:27017/TheraSwiftLocal";
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
