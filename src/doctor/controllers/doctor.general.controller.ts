@@ -70,7 +70,11 @@ export const getDoctorsUnderPractice = async(req:any, res: Response) => {
   try{
     const clinic_code = req.params.clinic_code;
 
-    const doctors = await DoctotModel.find({ clinicCode: clinic_code });
+    const doctors = await DoctotModel.find({ 
+      clinicCode: clinic_code 
+    },
+    "firstName lastName email phoneNumber title organization clinicCode superDoctor addresss specialty regnumber"
+  );
     if(!doctors){
       return res.status(404).json({ message: "sorry, the requested doctor was not found"});
     }
