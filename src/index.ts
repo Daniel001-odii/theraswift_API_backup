@@ -56,7 +56,7 @@ app.use(helmet());
 
 // Database connection
 // const MONGODB_URI = "mongodb://localhost:27017/TheraSwiftLocal";
-const MONGODB_URI = process.env.MONGODB_ROUTE;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error('The MONGODB_URI environment variable is not set.');
