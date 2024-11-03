@@ -70,13 +70,12 @@ export const createChatRoom = async (req:any, res:Response) => {
 export const getChatRooms = async (req:any, res:Response) => {
     try{
         // const doctor_id = req.params.doctor_id;
-        const doctor_id = req.doctor.id
+        const doctor_id = req.doctor._id
 
-        console.log("from request: ", req.doctor)
+       
        
         const doctor:any = await DoctorModel.findById(doctor_id);
         // const practiceDoctor = await DoctorModel.findById(doctor_id)
-
 
         if(doctor.superDoctor){
             const rooms = await chatRoom.find({ adminDoctor: doctor_id }).populate({
