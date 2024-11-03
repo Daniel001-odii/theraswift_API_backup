@@ -182,7 +182,7 @@ router.post("/requests/:request_id/solved", checkAdminRole, markPharmacyRequestA
 router.post("/:doctor_id/verify", checkAdminRole, verifyDoctorById);
 
 // controller for general file uploads....
-router.post("/files/upload", checkAdminRole, uploadAnyFileToFirebase)
+// router.post("/files/upload", checkAdminRole, uploadAnyFileToFirebase);
 
 
 

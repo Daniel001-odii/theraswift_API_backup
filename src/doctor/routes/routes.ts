@@ -72,6 +72,7 @@ import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "..
 
 import { followSuperDoctor, getDoctorsUnderPractice, getPrescribersFollowingList } from '../controllers/doctor.general.controller';
 import { doctorVerifyProfileDetails } from "../controllers/doctorAccountSteps.controller";
+import { uploadAnyFileToFirebase } from "../../admin/controllers/file.upload.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -164,4 +165,7 @@ router.post("/patient/HMO_image/upload", checkDoctorRole, uploadHMOImagesToFireb
 // get doctors under practice...
 router.get("/clinic_doctors/:clinic_code/all", checkDoctorRole, getDoctorsUnderPractice);
 
+
+// upload files to firebase and return location url
+router.post("/files/upload", checkDoctorRole, uploadAnyFileToFirebase);
 export default router;

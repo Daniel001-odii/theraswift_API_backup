@@ -20,7 +20,7 @@ export const userCheckOutController = async (
     const {
         deliveryDate,
         firstName,
-        lastName,
+        lastName,  
         dateOfBirth,
         gender,
         address,
