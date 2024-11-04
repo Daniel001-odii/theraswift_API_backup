@@ -7,63 +7,72 @@ import AdminModel from '../../admin/models/admin_reg.model';
 import { Request, Response } from "express";
 
 
+// create chat room between two doctors or doctors and pharmacy..
+export const createChatRoom = async (req: any, res: Response) => {
+  try {
+    const doctor_id = req.doctor._id;
+    console.log("current doc: ", doctor_id);
+    const current_doctor = req.doctor;
+    const { name, secondary_doctor, pharmacy } = req.body;
 
-// CREATE A CHAT ROOM BETWEEN PRACTICE DOC AND ADMIN DOCTOR
-export const createChatRoom = async (req:any, res:Response) => {
-    try {
-      const doctor_id = req.doctor._id;
-      console.log("current doc: ", doctor_id)
-      const current_doctor = req.doctor;
-      const { name, secondary_doctor } = req.body;
-
-      if(!name){
-        return res.status(400).json({ error: 'room name is required' });
-      }
-
-      if(!secondary_doctor){
-        return res.status(400).json({ error: 'secondary doctor id is required' });
-      }
-
-      let newRoom;
-
-      // check if current doctor is super doctor...
-      if(current_doctor.superDoctor){
-        const existingRoom = await chatRoom.findOne({ name, adminDoctor: doctor_id, practiceDoctor: secondary_doctor });
-
-        if (existingRoom) {
-          return res.status(200).json({ error: 'room already exists' });
-        }
-        // ....
-        newRoom = new chatRoom({
-          name,
-          adminDoctor: doctor_id,
-          practiceDoctor: secondary_doctor,
-        });
-        await newRoom.save()
-      } else {
-        const existingRoom = await chatRoom.findOne({ name, adminDoctor: secondary_doctor, practiceDoctor: doctor_id });
-
-        if (existingRoom) {
-          return res.status(200).json({ error: 'room already exists' });
-        }
-
-        // ....
-        newRoom = new chatRoom({
-          name,
-          adminDoctor: secondary_doctor,
-          practiceDoctor: doctor_id,
-        });
-
-        await newRoom.save();
-      }
-
-      res.status(201).json({ message: "new chat room created successfully", newRoom });
-      console.log("new message room created");
-    } catch (error) {
-      res.status(500).json({ message: 'Unable to create chat room', error });
-      console.log("error creating rooom: ", error);
+    if (!name) {
+      return res.status(400).json({ error: 'Room name is required' });
     }
+
+    if (!secondary_doctor && !pharmacy) {
+      return res.status(400).json({ error: 'Either a secondary doctor or a pharmacy is required to initiate a chat room' });
+    }
+
+    let newRoom;
+
+    // Check if current doctor is a super doctor
+    if (current_doctor.superDoctor) {
+      const existingRoom = await chatRoom.findOne({
+        name,
+        doctor_1: doctor_id,
+        doctor_2: secondary_doctor || null,
+        pharmacy: pharmacy || null,
+      });
+
+      if (existingRoom) {
+        return res.status(200).json({ error: 'Room already exists' });
+      }
+
+      newRoom = new chatRoom({
+        name,
+        doctor_1: doctor_id,
+        doctor_2: secondary_doctor || null,
+        pharmacy: pharmacy || null,
+      });
+    } else {
+      const existingRoom = await chatRoom.findOne({
+        name,
+        doctor_1: secondary_doctor || null,
+        doctor_2: doctor_id,
+        pharmacy: pharmacy || null,
+      });
+
+      if (existingRoom) {
+        return res.status(200).json({ error: 'Room already exists' });
+      }
+
+      newRoom = new chatRoom({
+        name,
+        doctor_1: secondary_doctor || null,
+        doctor_2: doctor_id,
+        pharmacy: pharmacy || null,
+      });
+    }
+
+    await newRoom.save();
+    res.status(201).json({ message: "New chat room created successfully", newRoom });
+    console.log("New message room created");
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to create chat room', error });
+    console.log("Error creating room: ", error);
+  }
 };
+
 
 
 // GET ALL CHATS ROOMS FOR DOC >>>
@@ -78,16 +87,16 @@ export const getChatRooms = async (req:any, res:Response) => {
         // const practiceDoctor = await DoctorModel.findById(doctor_id)
 
         if(doctor.superDoctor){
-            const rooms = await chatRoom.find({ adminDoctor: doctor_id }).populate({
-                path: "practiceDoctor",
+            const rooms = await chatRoom.find({ doctor_1: doctor_id }).populate({
+                path: "doctor_2",
                 // select: "firstName lastName email phoneNumber title organization speciality"
-            });
+            }).populate("pharmacy");
             return res.status(200).json({ rooms })
         } else {
-          const rooms = await chatRoom.find({ practiceDoctor: doctor_id }).populate({
-              path: "adminDoctor",
+          const rooms = await chatRoom.find({ doctor_2: doctor_id }).populate({
+              path: "doctor_1",
               // select: "firstName lastName email phoneNumber title organization speciality"
-          });
+          }).populate("pharmacy");
           return res.status(200).json({ rooms })
         }
         
