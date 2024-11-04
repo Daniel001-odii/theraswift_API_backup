@@ -1,4 +1,6 @@
 import chatRoom from '../models/chatRoom.model';
+import doctorChatRoom from '../../doctor/modal/chatRoom.model';
+
 import ChatModel from '../models/chat.model';
 import { getIo } from '../../utils/chatSocket';
 import PharmModel from '../../user/models/userReg.model'
@@ -113,7 +115,7 @@ export const sendChatToRoom = async (req:any, res:Response) => {
       return res.status(400).json({ message: "please input a message text!"})
     }
 
-    const room = await chatRoom.findById(roomId);
+    const room = await chatRoom.findById(roomId) || await doctorChatRoom.findById(roomId);
     if(!room){
       return res.status(400).json({ message: "chat not sent, room not found"})
     }
@@ -122,7 +124,11 @@ export const sendChatToRoom = async (req:any, res:Response) => {
     // Create a new message
     const message = await ChatModel.create({ text, user: userId, room: roomId });
 
+    const message_sender = await AdminModel.findById(userId);
+
     room.updatedAt = today;
+    room.last_message.sender_name = `${message_sender?.firstName} ${message_sender?.lastName}`;
+    room.last_message.text = text;
     console.log("room date updated!!!")
 
     await room.save();

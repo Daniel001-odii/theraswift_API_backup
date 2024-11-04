@@ -20,5 +20,5 @@ const ChatSchema = new Schema(
     }
   );
 
-  const ChatModel  = mongoose.model('patientsChats', ChatSchema);
+  const ChatModel  = mongoose.model('doctorChats', ChatSchema);
   export default ChatModel;
