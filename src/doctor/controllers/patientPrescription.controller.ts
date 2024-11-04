@@ -103,16 +103,17 @@ export const patientPrescriptionDetailController = async (
     try {
         const doctor = req.doctor;
 
-        const {
-            patientId,
-        } = req.body;
+        const patientId = req.params.patient_id;
 
-        const errors = validationResult(req);
+        /* const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        
+         */
+        if(!patientId){
+            return res.status(400).json({ message: "please provide a valid patient_id in url params"});
+        }
         // check if patient exist
         const patientExists = await PatientModel.findOne({ _id: patientId }).select("-password");
         if (!patientExists) {
