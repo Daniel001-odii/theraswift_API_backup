@@ -155,7 +155,8 @@ export const adminSignInController = async (
       // return access token
       res.json({
         message: "Login successful",
-        Token: accessToken
+        Token: accessToken,
+        _id: admin?._id
       });
   
       
