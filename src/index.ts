@@ -17,6 +17,13 @@ import adminRoute from "./admin/route/route";
 import userRoute from "./user/route/route";
 //driver route
 import driverRoute from "./driver/route/route";
+
+/* 
+  DANNIE
+*/
+// chat & messaging route...
+import chatRoutes from "./chats/routes/routes";
+
 import chatSocketConfigUser from "./user/socket/socket";
 
 // intialize sockets for chat system..
@@ -95,6 +102,7 @@ app.use("/doctor", doctorRoute);
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
 app.use("/driver", driverRoute);
+app.use("", chatRoutes);
 
 // Handle socket connections
 // chatSocketConfigUser(io);

@@ -166,10 +166,12 @@ router.get("/admin_get_order_sent_to_hmo", validateAdminGettOrderToHmoParams, ch
 
 
 // chats and messaging...
-router.post("/chat_rooms/new", checkAdminRole, createChatRoom);
+/* router.post("/chat_rooms/new", checkAdminRole, createChatRoom);
 router.get("/chat_rooms", checkAdminRole, getChatRooms);
 router.get("/chat_rooms/:room_id/chats", checkAdminRole, getChatsInRoom);
 router.post("/chat_rooms/:room_id/new_message", checkAdminRole, sendChatToRoom);
+
+ */
 
 
 // Pharmacy requests creation and retrieval

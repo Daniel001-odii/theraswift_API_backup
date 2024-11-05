@@ -153,12 +153,12 @@ router.post("/account/delete_confirm",  deleteAccountWithOTP);
 router.patch("/account/profile_edit", checkUserRole, editUserprofile);
 
 // chats and messaging...
-router.post("/chat_rooms/doctor/new", checkUserRole, createChatRoomForDoctor);
+/* router.post("/chat_rooms/doctor/new", checkUserRole, createChatRoomForDoctor);
 router.post("/chat_rooms/pharmacy/new", checkUserRole, createChatRoomForPharmacy);
 router.get("/chat_rooms", checkUserRole, getChatRooms);
 router.get("/chat_rooms/:room_id/chats", checkUserRole, getChatMessagesInRoom);
 router.post("/chat_rooms/:room_id/new_message", checkUserRole, sendChatToRoom);
 
-
+ */
 
 export default router;

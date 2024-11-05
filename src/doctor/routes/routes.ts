@@ -148,10 +148,12 @@ router.patch("/profile_edit", checkDoctorRole, editDoctorProfile);
 
 // Chats and Messaging...
 // create new chat room btw practice & admin docs...
-router.post("/chat_rooms/new", checkDoctorRole, createChatRoom);
+/* router.post("/chat_rooms/new", checkDoctorRole, createChatRoom);
 router.get("/chat_rooms", checkDoctorRole, getChatRooms);
 router.get("/chat_rooms/:room_id/chats", checkDoctorRole, getChatsInRoom);
 router.post("/chat_rooms/:room_id/new_message", checkDoctorRole, sendChatToRoom);
+ */
+
 
 // following and unfollowing a precriber...
 router.post("/follow_doctor", checkDoctorRole, followSuperDoctor);
