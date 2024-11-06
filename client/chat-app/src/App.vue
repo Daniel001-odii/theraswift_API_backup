@@ -22,32 +22,36 @@
 
 import io from 'socket.io-client';
 import axios from 'axios'
-
+2
+// let api_root = 'http://localhost:3000';
+let api_root = 'https://theraswift-api-backup.onrender.com';
 
   export default {
     data(){
       return{
-        // socket: io("https://api.theraswift.co", { autoConnect: true}),
-        socket: io("http://localhost:3000", { autoConnect: true}),
+        // api_root: 'http://localhost:3000',
+        // api_root: 'http://localhost:3000',
+        socket: io(`${api_root}`, { autoConnect: true}),
+        // socket: io(`${api_root}`, { autoConnect: true}),
         text: '',
         messages: [],
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTA4ZGM4NjJiNGY0OTEyYTQ0OTFhZiIsImVtYWlsIjoieGVuaXRoaGVpZ2h0KzJAZ21haWwuY29tIiwiaWF0IjoxNzI2MDU0MTk4fQ.eChWz_Ctbb9Vy4GvddHVXjILfhfxgmKmsLL4rU57mDg'
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MmJjOGQyODZkMzJhN2ZiNDQ3YWUwYSIsImVtYWlsIjoieGVuaXRoaGVpZ2h0KzNAZ21haWwuY29tIiwiaWF0IjoxNzMwOTIyODg2fQ.JR-Fa2r_f1DoyOwlTzJdpU-wdq0B_iPT3ohU5jOKCYM'
         },
 
-        ROOM_ID: "67295fbaf73ae114e9a8531a",
+        ROOM_ID: "672bcb441b90aa532a5713f7",
       }
     },
 
     methods: {
       async sendMessage(){
         try{
-          const response = await axios.post(`http://localhost:3000/admin/chat_rooms/${this.ROOM_ID}/new_message`, { text:this.text }, {
+          const response = await axios.post(`${api_root}/admin/chat_rooms/${this.ROOM_ID}/new_message`, { text:this.text }, {
             headers: this.headers
           });
           this.text = '';
           // this.messages.unshift(this.text);
-          // console.log("from sent msg: ", response)
+          console.log("from sent msg: ", response)
         }catch(error){
           console.log('error sending message: ', error);
         }
