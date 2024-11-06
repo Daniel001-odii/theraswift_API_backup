@@ -9,9 +9,9 @@ export const initializeSocket = (app:any) => {
     const server = http.createServer(app);
     io = new Server(server, {
         cors: {
-            origin:"*",
+            origin: ["http://localhost:8080", "http://localhost:5173", "http://localhost:5000", "http://localhost:3000", "http://localhost:8000", "https://www.providers.theraswift.co", "https://www.theraswift.co", "https://theraswift.co"],
             methods: ["GET", "POST"],
-            // credentials: true,
+            credentials: true,
         }
     });
 
