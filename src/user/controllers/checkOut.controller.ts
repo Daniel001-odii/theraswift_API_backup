@@ -194,16 +194,18 @@ export const userCheckOutController = async (
         email: userExist.email,
         reference: milliseconds,
         metadata,
-        callback_url: "https://app.theraswift.io/checkout/verify"
+        callback_url: "https://app.theraswift.co/checkout/verify"
       }),
     });
 
     const data = await response.json();
 
-    if (!data.status) {
+    if (!data.status) { 
+      console.log("pment :", data)
       return res
         .status(401)
         .json({ message: "unable to initailize payment" });
+       
     }
 
     let orderId = milliseconds.toString().substring(milliseconds.toString().length - 5);

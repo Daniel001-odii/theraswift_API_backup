@@ -36,10 +36,10 @@ let api_root = 'https://theraswift-api-backup.onrender.com';
         text: '',
         messages: [],
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MmJjOGQyODZkMzJhN2ZiNDQ3YWUwYSIsImVtYWlsIjoieGVuaXRoaGVpZ2h0KzNAZ21haWwuY29tIiwiaWF0IjoxNzMwOTIyODg2fQ.JR-Fa2r_f1DoyOwlTzJdpU-wdq0B_iPT3ohU5jOKCYM'
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MjU2YWYwZWEwYzY5NmQ3ODI4Njk3OSIsImVtYWlsIjoieGVuaXRoaGVpZ2h0KzJAZ21haWwuY29tIiwiaWF0IjoxNzMwOTI0NjY0fQ.Ajd_8uKWh60o5CjgdEE2R-WNy2y04dpVVrPCESm_FIg'
         },
 
-        ROOM_ID: "672bcb441b90aa532a5713f7",
+        ROOM_ID: "672aa3536e5e978648d8b5e2",
       }
     },
 
@@ -55,8 +55,25 @@ let api_root = 'https://theraswift-api-backup.onrender.com';
         }catch(error){
           console.log('error sending message: ', error);
         }
+      },
+
+      // getting messages...
+      async getMessages(){
+        try{
+          // {{ROOT_URL}}/admin/chat_rooms/{{ROOM_ID}}/chats
+          const response = await axios.get(`${api_root}/admin/chat_rooms/${this.ROOM_ID}/chats`, {
+            headers: this.headers
+          });
+          this.messages = response.data.messages;
+          console.log("messges: ", response);
+        }catch(error){
+          console.log("error getting messages: ", error);
+        }
       }
     },
+
+
+ 
 
     mounted(){
       this.socket.emit('join', `${this.ROOM_ID}`);
@@ -77,6 +94,8 @@ let api_root = 'https://theraswift-api-backup.onrender.com';
       };
 
       newMessage();
+
+      this.getMessages();
     
 
      
