@@ -27,19 +27,22 @@ import axios from 'axios'
   export default {
     data(){
       return{
+        // socket: io("https://api.theraswift.co", { autoConnect: true}),
         socket: io("http://localhost:3000", { autoConnect: true}),
         text: '',
         messages: [],
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTA4ZGM4NjJiNGY0OTEyYTQ0OTFhZiIsImVtYWlsIjoieGVuaXRoaGVpZ2h0KzJAZ21haWwuY29tIiwiaWF0IjoxNzI2MDU0MTk4fQ.eChWz_Ctbb9Vy4GvddHVXjILfhfxgmKmsLL4rU57mDg'
-        }
+        },
+
+        ROOM_ID: "67295fbaf73ae114e9a8531a",
       }
     },
 
     methods: {
       async sendMessage(){
         try{
-          const response = await axios.post('http://localhost:3000/admin/chat_rooms/66e090b962b4f4912a4491b5/new_message', { text:this.text }, {
+          const response = await axios.post(`http://localhost:3000/admin/chat_rooms/${this.ROOM_ID}/new_message`, { text:this.text }, {
             headers: this.headers
           });
           this.text = '';
@@ -52,7 +55,7 @@ import axios from 'axios'
     },
 
     mounted(){
-      this.socket.emit('join', "66e090b962b4f4912a4491b5");
+      this.socket.emit('join', `${this.ROOM_ID}`);
       console.log("joined chat room successfully");
     },
 
