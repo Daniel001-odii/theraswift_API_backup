@@ -19,11 +19,11 @@ const RequestSchema = new mongoose.Schema({
         required: true,
     },
     medication: String,
-    user:{
+   /*  user:{
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'UserReg',
         required: true,
-    },
+    }, */
     doctor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DoctorReg',

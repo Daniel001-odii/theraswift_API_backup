@@ -9,22 +9,11 @@ import { request } from 'http';
 // create a pharmacy requet...
 export const sendPharmacyRequest = async (req:any, res:Response) => {
     try{
-        const { request_type, description, medication } = req.body;
-        const user_id = req.params.user_id;
+        const { request_type, description, medication, } = req.body;
         const doctor_id = req.params.doctor_id;
-
-        if(!user_id){
-            return res.status(400).json({ message: "please provide a user ID in req params"})
-        }
         if(!doctor_id){
             return res.status(400).json({ message: "please provide a doctor ID in req params"})
         }
-
-        const user = await UserModel.findById(user_id);
-        if(!user){
-            return res.status(404).json({ message: "invalid user ID provided"})
-        }
-
         const doctor = await DoctotModel.findById(doctor_id);
         if(!doctor){
             return res.status(404).json({ message: "invalid doctor Id provided"});
@@ -36,7 +25,6 @@ export const sendPharmacyRequest = async (req:any, res:Response) => {
             request_type,
             description,
             medication,
-            user: user_id,
             doctor: doctor_id
         });
 
@@ -53,7 +41,7 @@ export const sendPharmacyRequest = async (req:any, res:Response) => {
 // get all sent pharm requests for a logged i pharmacy/admin
 export const getAllSentRequest = async (req:any, res:Response) => {
     try{
-        const pharmacy_requests = await pharmacyRequestModel.find({ sender:req.admin.id });
+        const pharmacy_requests = await pharmacyRequestModel.find({ sender:req.admin.id }).populate("doctor");
 
         res.status(200).json({ pharmacy_requests });
     }catch(error){

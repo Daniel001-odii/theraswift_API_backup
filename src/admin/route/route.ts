@@ -176,7 +176,7 @@ router.post("/chat_rooms/:room_id/new_message", checkAdminRole, sendChatToRoom);
 
 // Pharmacy requests creation and retrieval
 router.get("/requests", checkAdminRole, getAllSentRequest);
-router.post("/requests/:doctor_id/:user_id/new", checkAdminRole, sendPharmacyRequest);
+router.post("/requests/:doctor_id/new", checkAdminRole, sendPharmacyRequest);
 // mark pharmacy request as solved...
 router.post("/requests/:request_id/solved", checkAdminRole, markPharmacyRequestAsSolved);
 
