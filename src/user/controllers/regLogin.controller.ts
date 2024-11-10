@@ -10,6 +10,8 @@ import UserAddressModel from "../models/address.model";
 import UserHmoModel from "../models/hmo.model";
 import { uploadToS3 } from "../../utils/aws3.utility";
 import { v4 as uuidv4 } from "uuid";
+import { generateOTP } from "../../utils/otpGenerator";
+import { sendUserAccountVerificationEmail } from "../../utils/send_email_utility";
 
 
 //user check email/////////////
@@ -169,10 +171,29 @@ export const userSignUpController = async (
       address
     });
     
+  
+
+    // SEND VERIFICATION EMAIL AT ONCE >>>
+    const otp = generateOTP();
+    const createdTime = new Date();
+    user!.emailOtp = {
+        otp,
+        createdTime,
+        verified : false
+    }
+    let emailData = {
+        emailTo: email,
+        subject: "Theraswift email verification",
+        otp,
+        firstName: user.firstName,
+    };
+    sendUserAccountVerificationEmail(emailData);
+    // //////////
+
     let userSaved = await user.save();
 
     res.json({
-      message: "Signup successful",
+      message: "Signup successful, check for verifcation code in email",
       user: {
         id: userSaved._id,
         userId: userSaved.userId,

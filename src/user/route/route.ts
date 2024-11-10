@@ -37,7 +37,7 @@ import {
      userCheckStateController,
      userEmailSignInController,
      userGetAddressController, userGetHmoController, userGetMemberController, userMobileNumberSignInController, userRegistMemberController, userSignUpController, userdetailController } from "../controllers/regLogin.controller";
-import { userSendEmailController, userEmailVerificationController } from "../controllers/emailVerification.controller";
+import { userSendEmailController, userEmailVerificationController, userVerifyEmail } from "../controllers/emailVerification.controller";
 import { userPhoneNumberVerificationController,  } from "../controllers/phoneNumberVerification.controller";
 import { userEmailForgotPasswordController, userEmailResetPasswordController, userMobileForgotPasswordController, userMobileResetPasswordController } from "../controllers/forgotResetPassword.controller";
 import { checkUserRole } from "../middlewares/roleChecker.middleware";
@@ -83,7 +83,11 @@ router.post("/check_delivery_state", validateDeliveryStateParams, userCheckState
 router.post("/user_signup", validateSignupParams, userSignUpController ); // user signup
 router.post("/user_send_email", validateEmailParams, userSendEmailController ); // user send email
 router.post("/user_resend_email", validateEmailParams, userSendEmailController ); // user resend email
+
 router.post("/user_email_verification", validateEmailVerificatioParams, userEmailVerificationController  ); // user email verification
+router.post("/user_verify_email", validateEmailVerificatioParams, userVerifyEmail);
+
+
 router.post("/user_send_number", validatePhoneNumberParams, userSendPhoneNumberController ); // user send phone number
 router.post("/user_resend_number", validatePhoneNumberParams, userSendPhoneNumberController ); // user resend phone number
 router.post("/user_number_verification", validatePhoneNumberVerificatioParams, userPhoneNumberVerificationController  ); // user phone number verification

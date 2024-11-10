@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import { htmlMailTemplate } from "../templates/sendEmailTemplate";
 import { SendEmailType } from "../doctor/types/generalTypes";
 import { accountDeleteEmailTemplate } from "../templates/accountDeleteTemp";
+import { accountVerifyTemplate } from "../templates/userAccountVerifyTemplate";
 
 let transporter: any;
 
@@ -38,6 +39,29 @@ export const sendEmail = async ({
         to: emailTo,
         subject: subject,
         html: htmlMailTemplate(otp, firstName!),
+      });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+export const sendUserAccountVerificationEmail = async ({
+    emailTo,
+    subject,
+    otp,
+    firstName,
+  }: SendEmailType) => {
+    // Init the nodemailer transporter
+    transporterInit();
+  
+    try {
+      let response = await transporter.sendMail({
+        from: "Theraswift",
+        to: emailTo,
+        subject: subject,
+        html: accountVerifyTemplate(otp, firstName!),
       });
       return response;
     } catch (error) {
