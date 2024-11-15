@@ -21,7 +21,7 @@ export const patientOderHmoController = async (
         } = req.body;
 
         const errors = validationResult(req);
-
+/* 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
@@ -68,7 +68,7 @@ export const patientOderHmoController = async (
         
         return res.status(200).json({
             message: "order successfully sent",
-        })
+        }) */
 
     } catch (err: any) {
         // signup error
@@ -93,7 +93,7 @@ export const patientOderOutPocketController = async (
 
         const errors = validationResult(req);
 
-        if (!errors.isEmpty()) {
+      /*   if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         
@@ -135,7 +135,7 @@ export const patientOderOutPocketController = async (
             await patientOrder.save();
             
         }
-
+ */
         
         return res.status(200).json({
             message: "order successfully sent",
@@ -178,7 +178,7 @@ export const getpatientPriscriptionPendindController = async (
 
         const pendnigOrders = await PatientOrderModel.find({patientId, status: "pending"});
 
-        let orderMedication = []
+       /*  let orderMedication = []
 
         for (let i = 0; i < pendnigOrders.length; i++) {
             const pendnigOrder = pendnigOrders[i];
@@ -205,7 +205,7 @@ export const getpatientPriscriptionPendindController = async (
         return res.status(200).json({
             orderMedication
         })
-
+ */
     } catch (err: any) {
         // signup error
         res.status(500).json({ message: err.message });
@@ -241,7 +241,7 @@ export const getpatientPriscriptionProgressController = async (
             .json({ message: "patient does not exist" });
         }
 
-        const pendnigOrders = await PatientOrderModel.find({patientId, status: "progress"});
+       /*  const pendnigOrders = await PatientOrderModel.find({patientId, status: "progress"});
 
         let orderMedication = []
 
@@ -269,7 +269,7 @@ export const getpatientPriscriptionProgressController = async (
         
         return res.status(200).json({
             orderMedication
-        })
+        }) */
 
     } catch (err: any) {
         // signup error
@@ -285,7 +285,7 @@ export const getpatientPriscriptionDeliverdeController = async (
     res: Response
 ) => {
     try {
-        const doctor = req.doctor;
+     /*    const doctor = req.doctor;
 
         const {
             patientId,
@@ -334,7 +334,7 @@ export const getpatientPriscriptionDeliverdeController = async (
         return res.status(200).json({
             orderMedication
         })
-
+ */
     } catch (err: any) {
         // signup error
         res.status(500).json({ message: err.message });

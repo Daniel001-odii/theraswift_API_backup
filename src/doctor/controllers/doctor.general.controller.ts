@@ -96,6 +96,9 @@ export const getPatientsMedications = async(req:any, res: Response) => {
     const doctor_id = req.doctor._id;
     const doctor = req.doctor;
     const userId = req.params.patient_id;
+    if(!userId){
+      return res.status(400).json({ message: "missing patient_id in url params"});
+    }
     const patient = await UserModel.findById(userId, {
       email: 1,
       firstName: 1,
@@ -111,21 +114,7 @@ export const getPatientsMedications = async(req:any, res: Response) => {
       createdAt: 1,
     }).populate({ path: "medicationId", select: "name" });
 
-    /* 
-      firstname & lastname
-      date of birth
-      profile image
-    */
-    /* 
-      prescribed_on
-      last_filled_date
-      refills_left
-      status
-      medication_name from medication object model []
-    */
    res.status(200).json({ medications, patient });
-   
-
   }catch(error){
     res.status(500).json({ message: "error getting patients medications"});
     console.log("error getting patients medications: ", error)

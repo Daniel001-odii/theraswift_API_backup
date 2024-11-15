@@ -51,6 +51,7 @@ import {
     doctorResetPassworController
 } from "../controllers/forgot_password.controller";
 import {
+    addMedicationToPrescription,
     doctorDeletePatientPrescriptioController,
      patientPrescriptionController, 
      patientPrescriptionDetailController,
@@ -153,6 +154,9 @@ router.get("/chat_rooms", checkDoctorRole, getChatRooms);
 router.get("/chat_rooms/:room_id/chats", checkDoctorRole, getChatsInRoom);
 router.post("/chat_rooms/:room_id/new_message", checkDoctorRole, sendChatToRoom);
  */
+
+// add medications to existing prescription...
+router.patch("/prescription/:prescription_id/add_medication", checkDoctorRole, addMedicationToPrescription);
 
 
 // following and unfollowing a precriber...

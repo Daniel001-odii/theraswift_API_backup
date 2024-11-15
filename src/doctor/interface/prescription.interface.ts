@@ -11,7 +11,8 @@ export interface IPatientPrescription extends Document {
   status: string;
   doctorId: IDoctorReg['_id'];
   patientId: IPatientReg['_id'];
-  medicationId: IMedication['_id'];
+  medications: [IMedication['_id']];
+  medicationId: IMedication['_id'],
   clinicCode: string;
   createdAt: Date;
   updatedAt: Date;

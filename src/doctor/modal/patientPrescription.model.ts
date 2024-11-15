@@ -30,9 +30,15 @@ const PatientPrescriptionSchema = new Schema(
       patientId:{
         type: Schema.Types.ObjectId, ref: 'PatientReg'
       },
-      medicationId: {
+
+      medications: [
+        {
+          type: Schema.Types.ObjectId, ref: 'Medication'
+        }
+      ],
+      /* medicationId: {
         type: Schema.Types.ObjectId, ref: 'Medication'
-      },
+      }, */
       clinicCode: {
         type: String,
         required: true,

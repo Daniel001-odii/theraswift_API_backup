@@ -54,9 +54,11 @@ export const patientPrescriptionController = async (
             status: "pending",
             doctorId: doctor._id,
             clinicCode: doctor.clinicCode,
-            medicationId: medicationId,
+            // medicationId: medicationId,
             patientId
         });
+
+        patientPrescription.medications.push(medicationId);
 
         const patientPrescriptionSaved = await patientPrescription.save();
 
@@ -80,10 +82,11 @@ export const patientPrescriptionController = async (
                 route: patientPrescriptionSaved.route,
                 duration: patientPrescriptionSaved.duration,
                 status: patientPrescriptionSaved.status, 
-                medicationId: patientPrescriptionSaved.medicationId      
+                medications: patientPrescriptionSaved.medications      
             }
 
-        })
+        });
+
 
     } catch (err: any) {
         // signup error
@@ -93,64 +96,38 @@ export const patientPrescriptionController = async (
 }
 
 
-//patient medication detail
+export const patientPrescriptionDetailController = async (req: any, res: Response) => {
+    try{}catch(error){}
+}
 
-export const patientPrescriptionDetailController = async (
-    req: any,
-    res: Response
-) => {
-    try {
-        const doctor = req.doctor;
+// add medication to patient prescription..
+export const addMedicationToPrescription = async (req: any, res: Response) => {
+    try{
+        const prescription_id = req.params.prescription_id;
 
-        const patientId = req.params.patient_id;
+        const { medication_id } = req.body;
 
-        /* const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-         */
-        if(!patientId){
-            return res.status(400).json({ message: "please provide a valid patient_id in url params"});
-        }
-        // check if patient exist
-        const patientExists = await PatientModel.findOne({ _id: patientId }).select("-password");
-        if (!patientExists) {
-            return res
-            .status(401)
-            .json({ message: "patient does not exist" });
+        if(!prescription_id){
+            return res.status(400).json({ message: "missing prescription_id on url params"});
         }
 
-        const patientPrescriptionDetails = await PatientPrescriptionModel.find({patientId: patientId}).sort({createdAt: -1});
+        const prescription = await PatientPrescriptionModel.findById(prescription_id);
+        if(!prescription){
+            return res.status(400).json({ message: "prescription does not exist!"});
+        };
 
-        let patientMedications = [];
+        prescription.medications.push(medication_id);
+        await prescription.save();
 
-        for (let i = 0; i < patientPrescriptionDetails.length; i++) {
-            const patientPrescriptionDetail = patientPrescriptionDetails[i];
-            const medication = await MedicationModel.findOne({_id: patientPrescriptionDetail.medicationId})
-            
-            const obj = {
-                patientPrescriptionDetail,
-                medication
-            }
-
-            patientMedications.push(obj)
-        }
+        res.status(201).json({ message: "new medication added to prescription successfuly!"})
 
 
-        return res.status(200).json({
-            patient: patientExists,
-            patientMedications
-
-        })
-      
-    } catch (err: any) {
-        // signup error
-        res.status(500).json({ message: err.message });
-
-        
+    }catch(error: any){
+        res.status(500).json({ message: "internal server error" });
     }
 }
+
+
 
 
 
