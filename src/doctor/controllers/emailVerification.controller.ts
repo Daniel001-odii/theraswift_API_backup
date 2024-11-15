@@ -54,6 +54,7 @@ export const doctorSendEmailController = async (
         };
 
         sendEmail(emailData);
+        // sendUserAccountVerificationEmail
 
         return res.status(200).json({ message: "OTP sent successfully to your email." });
     

@@ -29,7 +29,7 @@ const UserMedicationSchema = new Schema(
         default: "",
       },
       /* 
-        new fields for more details...
+        new fields for more details [dan_]...
       */
      last_filled_date:{
       type: Date,
@@ -38,6 +38,11 @@ const UserMedicationSchema = new Schema(
      refills_left: {
       type: Number,
       default: 0
+     },
+     status: {
+      type: String,
+      enum: ["processing order", "working wit HMO/insurance", "delivered"],
+      default: "processing order"
      },
 
       createdAt: {

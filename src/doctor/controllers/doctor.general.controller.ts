@@ -1,3 +1,6 @@
+// import MedicationModel from "../../admin/models/medication.model";
+import UserMedicationModel from "../../user/models/medication.model";
+import UserModel from "../../user/models/userReg.model";
 import DoctotModel from "../modal/doctor_reg.modal";
 import { Response, Request } from "express";
 
@@ -83,5 +86,48 @@ export const getDoctorsUnderPractice = async(req:any, res: Response) => {
 
   }catch(error){
     res.status(500).json({ message: "error getting practice doctors"});
+  }
+};
+
+
+//get patients medications...
+export const getPatientsMedications = async(req:any, res: Response) => {
+  try{
+    const doctor_id = req.doctor._id;
+    const doctor = req.doctor;
+    const userId = req.params.patient_id;
+    const patient = await UserModel.findById(userId, {
+      email: 1,
+      firstName: 1,
+      lastName: 1,
+      dateOfBirth: 1,
+      _id: 0,
+    });
+    // const medications = await MedicationModel.find().populate("medicationId");
+    const medications = await UserMedicationModel.find({ userId }, {
+      last_filled_date: 1,
+      refills_left: 1,
+      status: 1,
+      createdAt: 1,
+    }).populate({ path: "medicationId", select: "name" });
+
+    /* 
+      firstname & lastname
+      date of birth
+      profile image
+    */
+    /* 
+      prescribed_on
+      last_filled_date
+      refills_left
+      status
+      medication_name from medication object model []
+    */
+   res.status(200).json({ medications, patient });
+   
+
+  }catch(error){
+    res.status(500).json({ message: "error getting patients medications"});
+    console.log("error getting patients medications: ", error)
   }
 }

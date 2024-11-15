@@ -70,7 +70,7 @@ import { replyPharmacyRequestById } from "../controllers/pharmacyRequests.contro
 import { editDoctorProfile } from "../controllers/doctorProfileEdit.controller";
 import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "../controllers/chat.controller";
 
-import { followSuperDoctor, getDoctorsUnderPractice, getPrescribersFollowingList } from '../controllers/doctor.general.controller';
+import { followSuperDoctor, getDoctorsUnderPractice, getPatientsMedications, getPrescribersFollowingList } from '../controllers/doctor.general.controller';
 import { doctorVerifyProfileDetails } from "../controllers/doctorAccountSteps.controller";
 import { uploadAnyFileToFirebase } from "../../admin/controllers/file.upload.controller";
 
@@ -167,6 +167,11 @@ router.post("/patient/HMO_image/upload", checkDoctorRole, uploadHMOImagesToFireb
 // get doctors under practice...
 router.get("/clinic_doctors/:clinic_code/all", checkDoctorRole, getDoctorsUnderPractice);
 
+
+/* 
+    new routes... get patients medications
+*/
+router.get("/patient/:patient_id/medications", checkDoctorRole, getPatientsMedications);
 
 // upload files to firebase and return location url
 router.post("/files/upload", checkDoctorRole, uploadAnyFileToFirebase);

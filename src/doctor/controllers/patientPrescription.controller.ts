@@ -43,10 +43,9 @@ export const patientPrescriptionController = async (
             return res
             .status(401)
             .json({ message: "medication dose not exist" });
-        }
+        };
 
         // Save patient prescription  to MongoDB
-
         const patientPrescription = new PatientPrescriptionModel({
             dosage,
             frequency,

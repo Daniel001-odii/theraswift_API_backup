@@ -362,9 +362,7 @@ export const userGetMedicationController = async (
 ) => {
 
   try {
-    const {
-      
-    } = req.body;
+    const {} = req.body;
     
     // Check for validation errors
     const errors = validationResult(req);
