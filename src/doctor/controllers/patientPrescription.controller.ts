@@ -4,6 +4,7 @@ import PatientPrescriptionModel from "../modal/patientPrescription.model";
 import PatientModel from "../modal/patient_reg.model";
 import MedicationModel from "../../admin/models/medication.model";
 import DoctorModel from "..//modal/doctor_reg.modal";
+import { sendEmail } from "../../utils/sendEmailGeneral";
 
 
 // doctor prescribe medication for patient
@@ -61,6 +62,21 @@ export const patientPrescriptionController = async (
         patientPrescription.medications.push(medicationId);
 
         const patientPrescriptionSaved = await patientPrescription.save();
+
+
+        /* 
+            SEND USER AN EMAIL FOR NEW PRESCRIPTIONS
+        */
+        const email_html = "<p>new prescription from theraswift: click the link to view</p>"
+        let emailData = {
+            emailTo: patientExists.email,
+            subject: "Theraswift New Prescription",
+            html: email_html,
+          };
+        // send prescription as email to user...
+        await sendEmail(emailData);
+
+
 
         return res.status(200).json({
             message: `precription successfully added for ${patientExists.firstName}`,
