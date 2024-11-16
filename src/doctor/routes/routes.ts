@@ -177,6 +177,10 @@ router.get("/clinic_doctors/:clinic_code/all", checkDoctorRole, getDoctorsUnderP
 */
 router.get("/patient/:patient_id/medications", checkDoctorRole, getPatientsMedications);
 
+
+
+
+
 // upload files to firebase and return location url
 router.post("/files/upload", checkDoctorRole, uploadAnyFileToFirebase);
 export default router;

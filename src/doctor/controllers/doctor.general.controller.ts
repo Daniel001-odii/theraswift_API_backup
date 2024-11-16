@@ -3,6 +3,7 @@ import UserMedicationModel from "../../user/models/medication.model";
 import UserModel from "../../user/models/userReg.model";
 import DoctotModel from "../modal/doctor_reg.modal";
 import { Response, Request } from "express";
+import PatientModel from "../modal/patient_reg.model";
 
 export const followSuperDoctor = async (req: any, res: Response) => {
   try {
@@ -99,13 +100,23 @@ export const getPatientsMedications = async(req:any, res: Response) => {
     if(!userId){
       return res.status(400).json({ message: "missing patient_id in url params"});
     }
-    const patient = await UserModel.findById(userId, {
+    const patient = await PatientModel.findById(userId, {
       email: 1,
       firstName: 1,
-      lastName: 1,
-      dateOfBirth: 1,
+      surname: 1,
+      phoneNumber: 1,
+      hmo: 1,
+      dateOFBirth: 1,
       _id: 0,
     });
+
+    /* 
+      patient doesnt have a DOB property unlike the design..
+    */
+
+    if(!patient){
+      return res.status(400).json({ message: "patient not found or does not exist"})
+    }
     // const medications = await MedicationModel.find().populate("medicationId");
     const medications = await UserMedicationModel.find({ userId }, {
       last_filled_date: 1,
