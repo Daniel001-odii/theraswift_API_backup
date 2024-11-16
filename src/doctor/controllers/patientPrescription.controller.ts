@@ -64,6 +64,12 @@ export const patientPrescriptionController = async (
         const patientPrescriptionSaved = await patientPrescription.save();
 
 
+        let medication_total;
+        let medication_ = await MedicationModel.findById(patientPrescription.medications[0]);
+
+        medication_total = medication_?.price;
+
+
         /* 
             SEND USER AN EMAIL FOR NEW PRESCRIPTIONS
         */
@@ -99,7 +105,9 @@ export const patientPrescriptionController = async (
                 duration: patientPrescriptionSaved.duration,
                 status: patientPrescriptionSaved.status, 
                 medications: patientPrescriptionSaved.medications      
-            }
+            },
+
+            prescript_total: medication_total,
 
         });
 
@@ -135,7 +143,22 @@ export const addMedicationToPrescription = async (req: any, res: Response) => {
         prescription.medications.push(medication_id);
         await prescription.save();
 
-        res.status(201).json({ message: "new medication added to prescription successfuly!"})
+        const total_meds = prescription.medications;
+
+        // Fetch all medication prices concurrently
+        const medication_prices = (
+            await Promise.all(
+                total_meds.map(async (id) => {
+                    const meds = await MedicationModel.findById(id);
+                    return meds?.price;
+                })
+            )
+        ).filter((price): price is number => price !== undefined); // Remove undefined values
+        
+        // Calculate the total price
+        const total_price = medication_prices.reduce((a, b) => a + b, 0);
+
+        res.status(201).json({ message: "new medication added to prescription successfuly!", total_price: total_price })
 
 
     }catch(error: any){
