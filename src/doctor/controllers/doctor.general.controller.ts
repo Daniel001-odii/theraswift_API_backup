@@ -131,3 +131,14 @@ export const getPatientsMedications = async(req:any, res: Response) => {
     console.log("error getting patients medications: ", error)
   }
 }
+
+
+// adding a practice member (fellow smaller doctors who share similar practice code)
+export const addPracticeMember = async (req: any, res: Response) => {
+  try{
+
+  }catch(error){
+    res.status(500).json({ message: "error adding practice member"});
+    console.log("error adding practice member: ", error)
+  }
+}

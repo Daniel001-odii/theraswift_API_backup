@@ -1,0 +1,5 @@
+theraswift two remote urls
+
+main - https://github.com/Theraswift-Technology/theraswift_backend_two
+
+backup - https://github.com/Daniel001-odii/theraswift_API_backup

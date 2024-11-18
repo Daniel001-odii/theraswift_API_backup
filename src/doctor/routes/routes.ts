@@ -58,7 +58,7 @@ import {
     } from "../controllers/patientPrescription.controller";
 import { checkDoctorRole } from "../middleware/rolechecke.middleware";
 import { upload } from "../../utils/upload.utility";
-import { doctorSearchMedicationNameController, doctorSearchMedicationNameFormController, doctorSearchMedicationNameFormDosageController } from "../controllers/medication.controller";
+import { doctorGethMedicationController, doctorSearchMedicationNameController, doctorSearchMedicationNameFormController, doctorSearchMedicationNameFormDosageController } from "../controllers/medication.controller";
 import { getpatientPriscriptionDeliverdeController, getpatientPriscriptionPendindController, getpatientPriscriptionProgressController, patientOderHmoController, patientOderOutPocketController } from "../controllers/patientMedicationOrder.controller";
 import { doctorEmailVerificationController, doctorPhoneNumberVerificationController, doctorSendEmailController, doctorSendPhoneNumberController } from "../controllers/emailVerification.controller";
 import { doctorGetPatientHmoApproveController, doctorGetPatientHmoDeniedController, doctorGetPatientHmoPendingController, doctorSentPatientToHmoController } from "../controllers/patientHmo.controller";
@@ -176,6 +176,8 @@ router.get("/clinic_doctors/:clinic_code/all", checkDoctorRole, getDoctorsUnderP
     new routes... get patients medications
 */
 router.get("/patient/:patient_id/medications", checkDoctorRole, getPatientsMedications);
+
+router.get("/medications/all_medications", checkDoctorRole, doctorGethMedicationController);
 
 
 
