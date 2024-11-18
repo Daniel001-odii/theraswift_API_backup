@@ -71,7 +71,7 @@ import { replyPharmacyRequestById } from "../controllers/pharmacyRequests.contro
 import { editDoctorProfile } from "../controllers/doctorProfileEdit.controller";
 import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "../controllers/chat.controller";
 
-import { followSuperDoctor, getDoctorsUnderPractice, getPatientsMedications, getPrescribersFollowingList } from '../controllers/doctor.general.controller';
+import { addPracticeMember, followSuperDoctor, getDoctorsUnderPractice, getPatientsMedications, getPrescribersFollowingList, SetPracticeMemberPassword } from '../controllers/doctor.general.controller';
 import { doctorVerifyProfileDetails } from "../controllers/doctorAccountSteps.controller";
 import { uploadAnyFileToFirebase } from "../../admin/controllers/file.upload.controller";
 
@@ -179,8 +179,10 @@ router.get("/patient/:patient_id/medications", checkDoctorRole, getPatientsMedic
 
 router.get("/medications/all_medications", checkDoctorRole, doctorGethMedicationController);
 
-
-
+// add a practice member and send verification email...
+router.post("/members/add_new", checkDoctorRole, addPracticeMember);
+// update practice member password...
+router.patch("/members/set_password", SetPracticeMemberPassword);
 
 
 // upload files to firebase and return location url

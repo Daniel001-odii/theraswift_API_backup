@@ -4,6 +4,11 @@ import UserModel from "../../user/models/userReg.model";
 import DoctotModel from "../modal/doctor_reg.modal";
 import { Response, Request } from "express";
 import PatientModel from "../modal/patient_reg.model";
+import { sendEmail } from "../../utils/sendEmailGeneral";
+import { htmlMailTemplate } from "../../templates/sendEmailTemplate";
+import { practiceDoctorVerificationEmail } from "../../templates/doctor/onboardPracticeDoctorTemplate";
+
+import bcrypt from "bcrypt";
 
 export const followSuperDoctor = async (req: any, res: Response) => {
   try {
@@ -132,13 +137,141 @@ export const getPatientsMedications = async(req:any, res: Response) => {
   }
 }
 
+/*
+
+DOCTOR PAYLOAD REQ PAYLOAD >>
+
+{
+  "super_doctor":
+  {"_id":"66dc35914dc6642113ffaada",
+    "email":"xenithheight+1@gmail.com",
+    "clinicCode":"15935","
+    iat":1726730621
+  }
+} */
+
 
 // adding a practice member (fellow smaller doctors who share similar practice code)
 export const addPracticeMember = async (req: any, res: Response) => {
   try{
+    const super_doctor = req.doctor;
+
+    const {
+      email,
+      phoneNumber,
+      firstName,
+      lastName,
+      password,
+      title,
+      organization,
+      addresss,
+      speciality,
+      regNumber,
+    } = req.body;
+
+    // verify input from client...
+    if(!email || !phoneNumber || !firstName || !lastName || !password || !title || !organization || !addresss || !speciality || !regNumber){
+      return res.status(400).json({ message: "request body is missing a required field, please check and try again!"});
+    }
+    const existing_email = await DoctotModel.findOne({ email });
+    if(existing_email){
+      return res.status(401).json({ message: "doctor with email already exists, try another email!"});
+    }
+
+    // create new practice doctor...
+    const practice_doctor = new DoctotModel({
+      email,
+      phoneNumber,
+      firstName,
+      lastName,
+      password,
+      title,
+      organization,
+      addresss,
+      speciality,
+      regNumber
+    });
+
+    // assign the main doctors clinic code to practice doctor ...
+    practice_doctor.clinicCode = super_doctor.clinicCode;
+
+    // Set an expiration time for the emai (e.g., 1 hour)
+    const mail_expiry = Date.now() + 3600000; // 1 hour
+
+    practice_doctor.emailOtp.createdTime = new Date(mail_expiry);
+  
+    await practice_doctor.save();
+
+    /* 
+   
+    */
+
+
+    /* 
+      emailOtp: {
+      otp: String,
+      createdTime: Date,
+      }
+    */
+
+    // send email link to new practice doctor for verification/email..
+    const email_payload = {
+      emailTo: email,
+      subject: 'You\'ve been added as a practice doctor!',
+      html: practiceDoctorVerificationEmail(firstName, practice_doctor._id.toString())
+    };
+
+    await sendEmail(email_payload);
+
+
+    res.status(200).json({  message: `${firstName} ${lastName} successfully added as a practice member, password reset email sent`, practice_doctor });
 
   }catch(error){
     res.status(500).json({ message: "error adding practice member"});
     console.log("error adding practice member: ", error)
+  }
+}
+
+// setting up password for practice doctors
+export const SetPracticeMemberPassword = async(req: any, res: Response) => {
+  try{
+    // const practice_doc_id = req.params.doctor_id;
+    const { practice_doc_id, password } = req.body;
+
+   /*  if(!practice_doc_id){
+      return res.status(400).json({ message: "practice_doc_id missing in url params"})
+    }; 
+  */
+
+    if(!practice_doc_id || !password){
+      return res.status(400).json({ message: "body missing required field, please check!"})
+    }
+
+
+/*     const employer = await Employer.findOne({ 
+      'email_verification.code':  verification_code,
+      'email_verification.expiry_date': { $gt: new Date() }  
+  }); */
+
+    const practice_doctor = await DoctotModel.findOne({ _id: practice_doc_id, 'emailOtp.createdTime': { $gt: new Date() }  });
+
+    if(!practice_doctor){
+      return res.status(404).json({ message: "invalid code provided or doctor not found :(" })
+    };
+
+     // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10); 
+
+    practice_doctor.password = hashedPassword;
+    practice_doctor.clinicVerification.isVerified = true;
+    practice_doctor.emailOtp.createdTime = new Date();
+    await practice_doctor.save();
+
+    res.status(200).json({ message: "doctor verified and password updated successfully!"});
+
+
+  }catch(error){
+    res.status(500).json({ message: "error setting up password for p-member"});
+    console.log("error setting up password for p-member: ", error)
   }
 }
