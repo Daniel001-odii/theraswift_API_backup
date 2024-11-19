@@ -51,6 +51,26 @@ export interface IDoctorReg extends Document {
   },
   passwordToken: number;
   passwordChangeStatus: boolean;
+
+
+  funds_payout: {
+    account_number: string,
+    bank_code: string,
+  },
+
+  followers: [{
+    _id: {
+      type: IDoctorReg['_id'],
+    },
+    name: string,
+ }],
+
+  following: [{
+    _id: {
+      type: IDoctorReg['_id'],
+    },
+    name: string,
+  }],
 }
 
 

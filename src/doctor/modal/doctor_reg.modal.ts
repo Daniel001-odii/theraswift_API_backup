@@ -120,7 +120,7 @@ const DoctorSchema = new Schema(
         createdTime: Date,
         verified: Boolean,
       },
-      
+
       phoneNumberOtp: {
         otp: String,
         createdTime: Date,

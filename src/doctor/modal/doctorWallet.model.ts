@@ -18,12 +18,21 @@ const DoctorWalletSchema = new Schema(
         transaction_type: {
           type: String,
           enum: ["fund", "withdrawal"],
+          reference: String,
         },
         transaction_date: {
           type: Date,
           default: Date.now,
         }
       }],
+
+      
+      // bank funds...
+      funds_payout: {
+        account_number: String,
+        bank_code: String,
+        recipient_code: String,
+      },
       
       createdAt: {
         type: Date,

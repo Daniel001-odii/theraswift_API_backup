@@ -6,6 +6,11 @@ export interface IDoctorWallet extends Document {
     amount: number;
     clinicCode: string;
     doctorId: IDoctorReg['_id'];
+    funds_payout: {
+        account_number: string,
+        bank_code: string,
+        recipient_code: string,
+      },
     createdAt: Date;
     updatedAt: Date;
 }

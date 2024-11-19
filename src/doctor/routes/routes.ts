@@ -74,6 +74,7 @@ import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "..
 import { addPracticeMember, followSuperDoctor, getDoctorsUnderPractice, getPatientsMedications, getPrescribersFollowingList, SetPracticeMemberPassword } from '../controllers/doctor.general.controller';
 import { doctorVerifyProfileDetails } from "../controllers/doctorAccountSteps.controller";
 import { uploadAnyFileToFirebase } from "../../admin/controllers/file.upload.controller";
+import { confirmFundPayoutDetails, getAllBanks, getDoctorWallet, initiatePayoutReference, setFundsWithdrawalDetails, withdrawFunds } from "../controllers/wallet.controller";
 
 
 router.post("/test", router.get("/", (req:any, res:any) => {
@@ -172,6 +173,10 @@ router.post("/patient/HMO_image/upload", checkDoctorRole, uploadHMOImagesToFireb
 router.get("/clinic_doctors/:clinic_code/all", checkDoctorRole, getDoctorsUnderPractice);
 
 
+// upload files to firebase and return location url
+router.post("/files/upload", checkDoctorRole, uploadAnyFileToFirebase);
+
+
 /* 
     new routes... get patients medications
 */
@@ -181,10 +186,30 @@ router.get("/medications/all_medications", checkDoctorRole, doctorGethMedication
 
 // add a practice member and send verification email...
 router.post("/members/add_new", checkDoctorRole, addPracticeMember);
+
 // update practice member password...
 router.patch("/members/set_password", SetPracticeMemberPassword);
 
 
-// upload files to firebase and return location url
-router.post("/files/upload", checkDoctorRole, uploadAnyFileToFirebase);
+/* 
+    FUNDSSSS
+*/
+// setup funds wthdrawal details///
+router.patch("/wallet/update", checkDoctorRole, setFundsWithdrawalDetails);
+
+// get doctor wallet dtails...
+router.get("/wallet/details", checkDoctorRole, getDoctorWallet);
+
+// get all banks list...
+router.get("/wallet/all_banks", checkDoctorRole, getAllBanks);
+
+// confirm payout details...
+router.get("/wallet/confirm_details", checkDoctorRole, confirmFundPayoutDetails);
+
+// initiate payment...
+// router.post("/wallet/initiate_payout", checkDoctorRole, initiatePayoutReference);
+
+// withdraw funds to set bank account...
+router.post("/wallet/withdraw_funds", checkDoctorRole, withdrawFunds);
+
 export default router;

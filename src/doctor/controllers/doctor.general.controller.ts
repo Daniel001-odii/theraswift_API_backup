@@ -137,19 +137,6 @@ export const getPatientsMedications = async(req:any, res: Response) => {
   }
 }
 
-/*
-
-DOCTOR PAYLOAD REQ PAYLOAD >>
-
-{
-  "super_doctor":
-  {"_id":"66dc35914dc6642113ffaada",
-    "email":"xenithheight+1@gmail.com",
-    "clinicCode":"15935","
-    iat":1726730621
-  }
-} */
-
 
 // adding a practice member (fellow smaller doctors who share similar practice code)
 export const addPracticeMember = async (req: any, res: Response) => {
@@ -202,18 +189,6 @@ export const addPracticeMember = async (req: any, res: Response) => {
   
     await practice_doctor.save();
 
-    /* 
-   
-    */
-
-
-    /* 
-      emailOtp: {
-      otp: String,
-      createdTime: Date,
-      }
-    */
-
     // send email link to new practice doctor for verification/email..
     const email_payload = {
       emailTo: email,
@@ -238,20 +213,9 @@ export const SetPracticeMemberPassword = async(req: any, res: Response) => {
     // const practice_doc_id = req.params.doctor_id;
     const { practice_doc_id, password } = req.body;
 
-   /*  if(!practice_doc_id){
-      return res.status(400).json({ message: "practice_doc_id missing in url params"})
-    }; 
-  */
-
     if(!practice_doc_id || !password){
       return res.status(400).json({ message: "body missing required field, please check!"})
     }
-
-
-/*     const employer = await Employer.findOne({ 
-      'email_verification.code':  verification_code,
-      'email_verification.expiry_date': { $gt: new Date() }  
-  }); */
 
     const practice_doctor = await DoctotModel.findOne({ _id: practice_doc_id, 'emailOtp.createdTime': { $gt: new Date() }  });
 
@@ -275,3 +239,5 @@ export const SetPracticeMemberPassword = async(req: any, res: Response) => {
     console.log("error setting up password for p-member: ", error)
   }
 }
+
+
