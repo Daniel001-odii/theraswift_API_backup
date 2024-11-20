@@ -14,5 +14,5 @@ export function generateOTP() {
 }
 
 export const OTP_EXPIRY_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
-export const SINGUP_LINK = 'https://app.theraswift.io/medication/signup'
-export const SINGIN_LINK = 'https://app.theraswift.io/medication/signin'
+export const SINGUP_LINK = 'https://app.theraswift.co/medication/signup'
+export const SINGIN_LINK = 'https://app.theraswift.co/medication/signin'

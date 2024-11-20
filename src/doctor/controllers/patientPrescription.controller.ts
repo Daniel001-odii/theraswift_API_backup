@@ -59,15 +59,22 @@ export const patientPrescriptionController = async (
             patientId
         });
 
-        patientPrescription.medications.push(medicationId);
+        patientPrescription.medications.push(...medicationId);
 
         const patientPrescriptionSaved = await patientPrescription.save();
 
 
-        let medication_total;
-        let medication_ = await MedicationModel.findById(patientPrescription.medications[0]);
+        let medication_total = 0;
 
-        medication_total = medication_?.price;
+        for (const element of patientPrescription.medications) {
+            const medication_: any = await MedicationModel.findById(element);
+            if (medication_) {
+                medication_total += medication_.price; // Add the price of each medication to the total
+                console.log("Medication details: ", medication_);
+            }
+        }
+    
+        // medication_total = medication_?.price;
 
 
         /* 
@@ -80,7 +87,7 @@ export const patientPrescriptionController = async (
             html: email_html,
           };
         // send prescription as email to user...
-        await sendEmail(emailData);
+        // await sendEmail(emailData);
 
 
 
@@ -107,7 +114,7 @@ export const patientPrescriptionController = async (
                 medications: patientPrescriptionSaved.medications      
             },
 
-            prescript_total: medication_total,
+            total_amount: `total_amnt: ${medication_total}`,
 
         });
 

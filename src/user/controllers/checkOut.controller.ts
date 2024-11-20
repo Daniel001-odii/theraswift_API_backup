@@ -606,7 +606,7 @@ try {
       email: userExist.email,
       reference: milliseconds,
       metadata,
-      callback_url: "https://app.theraswift.io/checkout/verify"
+      callback_url: "https://app.theraswift.co/checkout/verify"
     }),
   });
 
