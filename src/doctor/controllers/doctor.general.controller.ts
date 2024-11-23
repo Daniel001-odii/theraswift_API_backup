@@ -9,6 +9,7 @@ import { htmlMailTemplate } from "../../templates/sendEmailTemplate";
 import { practiceDoctorVerificationEmail } from "../../templates/doctor/onboardPracticeDoctorTemplate";
 
 import bcrypt from "bcrypt";
+import { sendTwilioSMS } from "../../utils/tiwlioSmsSender";
 
 export const followSuperDoctor = async (req: any, res: Response) => {
   try {
@@ -237,6 +238,26 @@ export const SetPracticeMemberPassword = async(req: any, res: Response) => {
   }catch(error){
     res.status(500).json({ message: "error setting up password for p-member"});
     console.log("error setting up password for p-member: ", error)
+  }
+}
+
+// temporary endpoint for sending test SMS
+export const testSMS = async(req: any, res: Response) => {
+  try{
+    // const { sms } = req.body;
+
+    const sms_payload = {
+      to: "+2348106613834",
+      sms: "Hell world"
+    };
+
+    const result = await sendTwilioSMS(sms_payload);
+
+    res.status(200).json({ message: "test sms sent!", result });
+
+  }catch(error){
+    console.log("error sending test sms: ", error);
+    res.status(500).json({ message: "error, cant send SMS internal server error"})
   }
 }
 

@@ -5,6 +5,7 @@ import PatientModel from "../modal/patient_reg.model";
 import MedicationModel from "../../admin/models/medication.model";
 import DoctorModel from "..//modal/doctor_reg.modal";
 import { sendEmail } from "../../utils/sendEmailGeneral";
+import { sendSms } from "../../utils/sendSms.utility";
 
 
 // doctor prescribe medication for patient
@@ -70,7 +71,7 @@ export const patientPrescriptionController = async (
             const medication_: any = await MedicationModel.findById(element);
             if (medication_) {
                 medication_total += medication_.price; // Add the price of each medication to the total
-                console.log("Medication details: ", medication_);
+                // console.log("Medication details: ", medication_);
             }
         }
     
@@ -88,6 +89,15 @@ export const patientPrescriptionController = async (
           };
         // send prescription as email to user...
         // await sendEmail(emailData);
+
+        const patient_phone = patientExists.phoneNumber;
+
+        const sms_payload = {
+            to: `+${patient_phone.toString()}`,
+            sms: `Hi ${patientExists.firstName}, heres a link to check out your prescription: theraswift.co/prescriptions/${patientPrescription._id}/checkout`
+          };
+      
+        await sendSms(sms_payload);
 
 
 
