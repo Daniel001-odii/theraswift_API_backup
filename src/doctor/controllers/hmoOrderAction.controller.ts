@@ -52,7 +52,7 @@ export const hmoGetPatientOrderSentToHimController = async (
 
         let orderMedication = []
 
-        for (let i = 0; i < ordersAtHmos.length; i++) {
+        /* for (let i = 0; i < ordersAtHmos.length; i++) {
             const ordersAtHmo = ordersAtHmos[i];
 
             const patientPriscription = await PatientPrescriptionModel.findOne({_id: ordersAtHmo.patientPrescriptionId})
@@ -74,7 +74,7 @@ export const hmoGetPatientOrderSentToHimController = async (
      
         return res.status(200).json({
             orderMedication
-        })
+        }) */
 
     } catch (err: any) {
         // signup error
@@ -141,7 +141,7 @@ export const hmoTakeActionOnOrderSentToHimController = async (
             .status(401)
             .json({ message: "no preiscription for this order" });
         }
-
+/* 
         const medication = await MedicationModel.findOne({_id: patientPriscription.medicationId})
         if (!medication){
             return res
@@ -164,7 +164,7 @@ export const hmoTakeActionOnOrderSentToHimController = async (
         order.hmoPayment = amount;
         order.hmoState = "final";
         await order.save()
-
+ */
         return res.status(200).json({
             message: "order successfully mark" 
         })
@@ -222,7 +222,7 @@ export const hmoGetPatientOrdeHeTakeActionController = async (
 
         let orderMedication = []
 
-        for (let i = 0; i < ordersAtFinals.length; i++) {
+        /* for (let i = 0; i < ordersAtFinals.length; i++) {
             const ordersAtFinal = ordersAtFinals[i];
 
             const patientPriscription = await PatientPrescriptionModel.findOne({_id: ordersAtFinal.patientPrescriptionId})
@@ -244,7 +244,7 @@ export const hmoGetPatientOrdeHeTakeActionController = async (
      
         return res.status(200).json({
             orderMedication
-        })
+        }) */
 
     } catch (err: any) {
         // signup error

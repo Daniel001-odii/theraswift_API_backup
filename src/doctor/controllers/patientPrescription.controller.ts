@@ -6,137 +6,89 @@ import MedicationModel from "../../admin/models/medication.model";
 import DoctorModel from "..//modal/doctor_reg.modal";
 import { sendEmail } from "../../utils/sendEmailGeneral";
 import { sendSms } from "../../utils/sendSms.utility";
-
+import { IMedicationDetails } from "../interface/prescription.interface";
 
 // doctor prescribe medication for patient
-export const patientPrescriptionController = async (
-    req: any,
-    res: Response
-) => {
+export const patientPrescriptionController = async (req: any, res: Response) => {
     try {
-        const doctor = req.doctor;
-
-        const {
-            patientId,
-            dosage,
-            frequency,
-            route,
-            duration,
-            medicationId
-        } = req.body;
-
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        
-        // check if patient exist
-        const patientExists = await PatientModel.findOne({ _id: patientId });
-        if (!patientExists) {
-            return res
-            .status(401)
-            .json({ message: "patient does not exist" });
-        }
-
-        //check if the medication is available
-        const medication = await MedicationModel.findOne({_id: medicationId});
+      const doctor = req.doctor; // Assuming `req.doctor` is populated via middleware
+      const { medications, patientId } = req.body;
+  
+      // Validate request body
+      /* const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+   */
+      // Check if patient exists
+      const patientExists = await PatientModel.findById(patientId);
+      if (!patientExists) {
+        return res.status(404).json({ message: "Patient does not exist" });
+      }
+  
+      // Calculate the total cost of medications and validate their existence
+      let totalAmount = 0;
+      const validatedMedications: IMedicationDetails[] = [];
+  
+      for (const med of medications) {
+        const { dosage, frequency, route, duration, medicationId } = med;
+        const medication = await MedicationModel.findById(medicationId);
+  
         if (!medication) {
-            return res
-            .status(401)
-            .json({ message: "medication dose not exist" });
-        };
-
-        // Save patient prescription  to MongoDB
-        const patientPrescription = new PatientPrescriptionModel({
-            dosage,
-            frequency,
-            route,
-            duration,
-            status: "pending",
-            doctorId: doctor._id,
-            clinicCode: doctor.clinicCode,
-            // medicationId: medicationId,
-            patientId
-        });
-
-        patientPrescription.medications.push(...medicationId);
-
-        const patientPrescriptionSaved = await patientPrescription.save();
-
-
-        let medication_total = 0;
-
-        for (const element of patientPrescription.medications) {
-            const medication_: any = await MedicationModel.findById(element);
-            if (medication_) {
-                medication_total += medication_.price; // Add the price of each medication to the total
-                // console.log("Medication details: ", medication_);
-            }
+          return res.status(404).json({
+            message: `Medication with ID ${medicationId} does not exist`,
+          });
         }
-    
-        // medication_total = medication_?.price;
-
-
-        /* 
-            SEND USER AN EMAIL FOR NEW PRESCRIPTIONS
-        */
-        const email_html = "<p>new prescription from theraswift: click the link to view</p>"
-        let emailData = {
-            emailTo: patientExists.email,
-            subject: "Theraswift New Prescription",
-            html: email_html,
-          };
-        // send prescription as email to user...
-        // await sendEmail(emailData);
-
-        const patient_phone = patientExists.phoneNumber;
-
-        const sms_payload = {
-            to: `+${patient_phone.toString()}`,
-            sms: `Hi ${patientExists.firstName}, heres a link to check out your prescription: theraswift.co/prescriptions/${patientPrescription._id}/checkout`
-          };
-      
-        await sendSms(sms_payload);
-
-
-
-        return res.status(200).json({
-            message: `precription successfully added for ${patientExists.firstName}`,
-            patient:{
-                id: patientExists._id,
-                email: patientExists.email,
-                firstName: patientExists.firstName,
-                surname: patientExists.surname,
-                phoneNumber: patientExists.phoneNumber,
-                gender: patientExists.gender,
-                address: patientExists.address,
-                dateOFBirth: patientExists.dateOFBirth,
-                doctorId: patientExists.doctorId,
-            
-            },
-            prescription:{
-                dosage: patientPrescriptionSaved.dosage,
-                frequency: patientPrescriptionSaved.frequency,
-                route: patientPrescriptionSaved.route,
-                duration: patientPrescriptionSaved.duration,
-                status: patientPrescriptionSaved.status, 
-                medications: patientPrescriptionSaved.medications      
-            },
-
-            total_amount: `total_amnt: ${medication_total}`,
-
+  
+        totalAmount += medication.price;
+  
+        validatedMedications.push({
+          dosage,
+          frequency,
+          route,
+          duration,
         });
-
-
-    } catch (err: any) {
-        // signup error
-        res.status(500).json({ message: err.message });
-        
+      }
+  
+      // Create and save the patient prescription
+      const newPrescription = new PatientPrescriptionModel({
+        status: "pending",
+        doctorId: doctor._id,
+        patientId,
+        medications: validatedMedications,
+        clinicCode: doctor.clinicCode,
+      });
+  
+      const savedPrescription = await newPrescription.save();
+  
+      // Send SMS to the patient
+      const smsPayload = {
+        to: `+${patientExists.phoneNumber}`,
+        sms: `Hi ${patientExists.firstName}, you have a new prescription. Total cost: ${totalAmount}. Check your prescriptions at: theraswift.co/prescriptions/${savedPrescription._id}/checkout`,
+      };
+      await sendSms(smsPayload);
+  
+      // Respond with the prescription details
+      return res.status(201).json({
+        message: "Prescription successfully added",
+        patient: {
+          id: patientExists._id,
+          name: `${patientExists.firstName} ${patientExists.surname}`,
+          phone: patientExists.phoneNumber,
+        },
+        prescription: {
+          id: savedPrescription._id,
+          status: savedPrescription.status,
+          medications: savedPrescription.medications,
+          totalAmount,
+        },
+      });
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
-}
+};
 
-
+// ___ ___ \\
 export const patientPrescriptionDetailController = async (req: any, res: Response) => {
     try{}catch(error){}
 }
@@ -144,7 +96,7 @@ export const patientPrescriptionDetailController = async (req: any, res: Respons
 
 
 // add medication to patient prescription..
-export const addMedicationToPrescription = async (req: any, res: Response) => {
+export const addMedicationToPrescriptionOld = async (req: any, res: Response) => {
     try{
         const prescription_id = req.params.prescription_id;
 
@@ -184,6 +136,64 @@ export const addMedicationToPrescription = async (req: any, res: Response) => {
         res.status(500).json({ message: "internal server error" });
     }
 }
+
+export const addMedicationToPrescription = async (req: any, res: Response) => {
+    try {
+      const prescription_id = req.params.prescription_id;
+      const { medication } = req.body; // Expecting a single medication object
+  
+      if (!prescription_id) {
+        return res
+          .status(400)
+          .json({ message: "Missing prescription_id in URL params" });
+      }
+  
+      // Check if prescription exists
+      const prescription = await PatientPrescriptionModel.findById(prescription_id);
+      if (!prescription) {
+        return res.status(404).json({ message: "Prescription does not exist!" });
+      }
+  
+      // Validate medication (ensure required fields are present)
+      const { medicationId, dosage, frequency, route, duration } = medication;
+      if (!medicationId || !dosage || !frequency || !route || !duration) {
+        return res
+          .status(400)
+          .json({ message: "Incomplete medication details in request body" });
+      }
+  
+      // Verify the medication exists
+      const medicationRecord = await MedicationModel.findById(medicationId);
+      if (!medicationRecord) {
+        return res
+          .status(404)
+          .json({ message: `Medication with ID ${medicationId} does not exist` });
+      }
+  
+      // Add new medication details to the prescription
+      prescription.medications.push({ dosage, frequency, route, duration });
+      await prescription.save();
+  
+      // Calculate the total cost of all medications in the prescription
+      const total_price = prescription.medications.reduce((total, med) => {
+        // Find price for each medication using its ID
+        if (med) {
+          const price = medicationRecord?.price || 0;
+          return total + price;
+        }
+        return total;
+      }, 0);
+  
+      res.status(201).json({
+        message: "New medication added to prescription successfully!",
+        total_price,
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+  };
+  
+
 
 
 

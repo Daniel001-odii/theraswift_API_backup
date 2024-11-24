@@ -13,7 +13,7 @@ export const adminGetDoctorPendingPatientOrder = async (
     res: Response
 ) => {
     try {
-        let {
+      /*   let {
             clinicCode
         } = req.query
 
@@ -66,7 +66,7 @@ export const adminGetDoctorPendingPatientOrder = async (
 
         return res.status(200).json({
             patientPendingOrders
-        })
+        }) */
 
         
 
@@ -90,7 +90,7 @@ export const adminGetDoctorSinglePendingPatientOrder = async (
             patientId
         } = req.query
 
-        const errors = validationResult(req);
+       /*  const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -140,7 +140,7 @@ export const adminGetDoctorSinglePendingPatientOrder = async (
 
         return res.status(200).json({
             patientPendingOrders: objTwo
-        })
+        }) */
 
         
 
@@ -165,7 +165,7 @@ export const adminGetDoctorPatientProgressOrder = async (
         } = req.query
 
         const errors = validationResult(req);
-
+/* 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
@@ -213,7 +213,7 @@ export const adminGetDoctorPatientProgressOrder = async (
 
         return res.status(200).json({
             patientProgressOrders
-        })
+        }) */
 
         
 
@@ -237,7 +237,7 @@ export const adminGetDoctorSingleProgressPatientOrder = async (
             patientId
         } = req.query
 
-        const errors = validationResult(req);
+        /* const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -288,7 +288,7 @@ export const adminGetDoctorSingleProgressPatientOrder = async (
         return res.status(200).json({
             patientPendingOrders: objTwo
         })
-
+ */
         
 
     } catch (err: any) {
@@ -316,7 +316,7 @@ export const adminGetDoctorDeliveredPatientOrder = async (
             return res.status(400).json({ errors: errors.array() });
         }
         
-        const patients = await PatientModel.find({clinicCode})
+        /* const patients = await PatientModel.find({clinicCode})
 
         let patientDeliveredOrders = []
 
@@ -360,7 +360,7 @@ export const adminGetDoctorDeliveredPatientOrder = async (
         return res.status(200).json({
             patientDeliveredOrders
         })
-
+ */
         
 
     } catch (err: any) {
@@ -383,7 +383,7 @@ export const adminGetDoctorSingleDeliveredPatientOrder = async (
             patientId
         } = req.query
 
-        const errors = validationResult(req);
+        /* const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -434,7 +434,7 @@ export const adminGetDoctorSingleDeliveredPatientOrder = async (
         return res.status(200).json({
             patientPendingOrders: objTwo
         })
-
+ */
         
 
     } catch (err: any) {

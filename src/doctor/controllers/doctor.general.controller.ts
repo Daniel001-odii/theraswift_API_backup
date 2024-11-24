@@ -106,7 +106,7 @@ export const getPatientsMedications = async(req:any, res: Response) => {
     if(!userId){
       return res.status(400).json({ message: "missing patient_id in url params"});
     }
-    const patient = await PatientModel.findById(userId, {
+  /*   const patient = await PatientModel.findById(userId, {
       email: 1,
       firstName: 1,
       surname: 1,
@@ -114,7 +114,9 @@ export const getPatientsMedications = async(req:any, res: Response) => {
       hmo: 1,
       dateOFBirth: 1,
       _id: 0,
-    });
+    }); */
+
+    const patient = await PatientModel.findById(userId);
 
     /* 
       patient doesnt have a DOB property unlike the design..
