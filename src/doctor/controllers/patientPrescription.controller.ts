@@ -141,6 +141,8 @@ export const patientPrescriptionDetailController = async (req: any, res: Respons
     try{}catch(error){}
 }
 
+
+
 // add medication to patient prescription..
 export const addMedicationToPrescription = async (req: any, res: Response) => {
     try{
