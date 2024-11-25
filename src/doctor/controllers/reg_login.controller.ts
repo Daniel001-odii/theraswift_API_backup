@@ -413,7 +413,10 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
       return res.status(404).json({ message: "Doctor not found" })
     }
 
-    const updatedCompletedAccountSteps = await updateCompletedAccountSteps(String(doctor._id),doctor.clinicCode)
+    const updatedCompletedAccountSteps = await updateCompletedAccountSteps(String(doctor._id),doctor.clinicCode);
+
+    // get the super doctor...(doctor with thesame clinic code but with superDoctor as true)
+    const super_doctor = await DoctotModel.findOne({ clinicCode: updatedCompletedAccountSteps?.clinicCode, superDoctor: true });
 
     // Return only necessary details
     res.json({
@@ -430,7 +433,9 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
         regNumber: updatedCompletedAccountSteps?.regNumber,
         addresss: updatedCompletedAccountSteps?.addresss,
         completedAccountSteps: updatedCompletedAccountSteps?.completedAccountSteps
-      }
+      },
+
+      superDoctor: super_doctor,
     });
   } catch (err: any) {
     return res.status(500).json({ message: "Server error" })
