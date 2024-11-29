@@ -146,6 +146,9 @@ export const addPracticeMember = async (req: any, res: Response) => {
   try{
     const super_doctor = req.doctor;
 
+    const doctor: any = await DoctotModel.findById(super_doctor._id);
+
+
     const {
       email,
       phoneNumber,
@@ -191,6 +194,10 @@ export const addPracticeMember = async (req: any, res: Response) => {
     practice_doctor.emailOtp.createdTime = new Date(mail_expiry);
   
     await practice_doctor.save();
+
+    // set doctors completedAccountSteps...
+    doctor.completedAccountSteps.step1.addedProviders = true;
+    await doctor.save();
 
     // send email link to new practice doctor for verification/email..
     const email_payload = {
@@ -264,3 +271,16 @@ export const testSMS = async(req: any, res: Response) => {
 }
 
 
+export const checkDoctorAccountSteps = async (req: any, res: Response) => {
+  try{
+    const doctor_id = req.doctor._id;
+    const doctor = await DoctotModel.findById(doctor_id);
+
+    const account_steps = doctor?.completedAccountSteps;
+
+    res.status(200).json({ account_steps });
+  }catch(error){
+      console.log("error checking completed account steps: ", error);
+      res.status(500).json({ message: "error checking completed account steps..."});
+  }
+}

@@ -85,6 +85,8 @@ export const setWalletClinicCode = async (req:any, res:Response) => {
 export const setFundsWithdrawalDetails = async (req: any, res:Response) => {
     try{
         const doctor_id = req.doctor._id;
+        const doctor: any = await DoctotModel.findById(doctor_id);
+
         const { account_number, bank_code } = req.body;
 
         if(!account_number || !bank_code){
@@ -95,6 +97,10 @@ export const setFundsWithdrawalDetails = async (req: any, res:Response) => {
         wallet.funds_payout.account_number = account_number;
         wallet.funds_payout.bank_code = bank_code;
         await wallet.save();
+
+        // set doctor completedAccountSteps...
+        doctor.completedAccountSteps.step2.addedPaymentMethod = true;
+        await doctor.save();
 
         const saved_ref = await initiatePayoutReference(req, res);
 

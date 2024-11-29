@@ -71,7 +71,7 @@ import { replyPharmacyRequestById } from "../controllers/pharmacyRequests.contro
 import { editDoctorProfile } from "../controllers/doctorProfileEdit.controller";
 import { createChatRoom, getChatRooms, getChatsInRoom, sendChatToRoom } from "../controllers/chat.controller";
 
-import { addPracticeMember, followSuperDoctor, getDoctorsUnderPractice, getPatientsMedications, getPrescribersFollowingList, SetPracticeMemberPassword, testSMS } from '../controllers/doctor.general.controller';
+import { addPracticeMember, checkDoctorAccountSteps, followSuperDoctor, getDoctorsUnderPractice, getPatientsMedications, getPrescribersFollowingList, SetPracticeMemberPassword, testSMS } from '../controllers/doctor.general.controller';
 import { doctorVerifyProfileDetails } from "../controllers/doctorAccountSteps.controller";
 import { uploadAnyFileToFirebase } from "../../admin/controllers/file.upload.controller";
 import { confirmFundPayoutDetails, getAllBanks, getDoctorWallet, initiatePayoutReference, setFundsWithdrawalDetails, withdrawFunds } from "../controllers/wallet.controller";
@@ -214,7 +214,9 @@ router.post("/wallet/withdraw_funds", checkDoctorRole, withdrawFunds);
 
 
 
-router.post("/sms/test", testSMS);
+// router.post("/sms/test", testSMS);
+
+router.get("/account_steps/check", checkDoctorRole, checkDoctorAccountSteps);
 
 
 

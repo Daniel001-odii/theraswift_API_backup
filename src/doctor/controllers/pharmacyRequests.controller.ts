@@ -78,6 +78,7 @@ export const getPharmacyRequestsForDoctor = async (req: any, res: Response) => {
     }
 }
 
+
 export const replyPharmacyRequestById = async (req: any, res: Response) => {
     try{
         const request_id = req.params.request_id;

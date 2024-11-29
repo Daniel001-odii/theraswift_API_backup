@@ -337,6 +337,12 @@ export const doctorRegisterPatient = async (
 
     let patientSaved = await patient.save()
 
+
+    // save to doctors completedAccountsteps...
+    doctor.completedAccountsteps.step3.addedPatients = true;
+    await doctor.save();
+
+
     return res.status(200).json({
       patient: {
         id: patientSaved._id,
@@ -416,7 +422,7 @@ export const getDetailsThroughDecodedToken = async (req: any, res: Response, nex
     const updatedCompletedAccountSteps = await updateCompletedAccountSteps(String(doctor._id),doctor.clinicCode);
 
     // get the super doctor...(doctor with thesame clinic code but with superDoctor as true)
-    const super_doctor = await DoctotModel.findOne({ clinicCode: updatedCompletedAccountSteps?.clinicCode, superDoctor: true });
+    const super_doctor = await DoctotModel.findOne({ clinicCode: doctor.clinicCode, superDoctor: true });
 
     // Return only necessary details
     res.json({
