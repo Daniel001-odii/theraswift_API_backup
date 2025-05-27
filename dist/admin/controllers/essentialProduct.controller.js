@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEssentialProductController = exports.editEssentialProductController = exports.searchEssentialProductByNameController = exports.getPageEssentialProductController = exports.adminAddEssentialProductController = void 0;
+exports.deleteEssentialProductController = exports.editEssentialProductController = exports.getSingleEssentialProductByNameController = exports.searchEssentialProductByNameController = exports.getPageEssentialProductController = exports.adminAddEssentialProductController = void 0;
 const express_validator_1 = require("express-validator");
 const aws3_utility_1 = require("../../utils/aws3.utility");
 const uuid_1 = require("uuid");
@@ -48,14 +48,14 @@ const adminAddEssentialProductController = (req, res) => __awaiter(void 0, void 
         }
         const essentialProduct = new essentialProduct_model_1.default({
             categoryId,
-            name,
-            price: price,
-            uses,
-            quantity: quantity,
+            name: name.trim(),
+            price: price.trim(),
+            uses: uses.trim(),
+            quantity: quantity.trim(),
             medicationImage: medicationImg,
-            ingredient,
-            inventoryQauntity,
-            expiryDate,
+            ingredient: ingredient.trim(),
+            inventoryQauntity: inventoryQauntity.trim(),
+            expiryDate: expiryDate.trim(),
             category: categoryDb === null || categoryDb === void 0 ? void 0 : categoryDb.name
         });
         const savedEssentialProduct = yield essentialProduct.save();
@@ -118,6 +118,29 @@ const searchEssentialProductByNameController = (req, res) => __awaiter(void 0, v
     }
 });
 exports.searchEssentialProductByNameController = searchEssentialProductByNameController;
+//admin get single Product/////////////
+const getSingleEssentialProductByNameController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { productId } = req.query;
+        // Check for validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const product = yield essentialProduct_model_1.default.findOne({ _id: productId });
+        if (!product) {
+            return res.status(401).json({ message: "product do not exist" });
+        }
+        return res.status(200).json({
+            product,
+        });
+    }
+    catch (err) {
+        // signup error
+        res.status(500).json({ message: err.message });
+    }
+});
+exports.getSingleEssentialProductByNameController = getSingleEssentialProductByNameController;
 //admin edit product by Id /////////////
 const editEssentialProductController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -149,14 +172,14 @@ const editEssentialProductController = (req, res) => __awaiter(void 0, void 0, v
         }
         const updatedProduct = yield essentialProduct_model_1.default.findOneAndUpdate({ _id: productId }, {
             categoryId,
-            name,
-            price: price,
-            uses,
-            quantity: quantity,
+            name: name.trim(),
+            price: price.trim(),
+            uses: uses.trim(),
+            quantity: quantity.trim(),
             medicationImage: medicationImg,
-            ingredient,
-            inventoryQauntity,
-            expiryDate,
+            ingredient: ingredient.trim(),
+            inventoryQauntity: ingredient.trim(),
+            expiryDate: ingredient.trim(),
             category: categoryDb === null || categoryDb === void 0 ? void 0 : categoryDb.name
         }, { new: true });
         return res.status(200).json({

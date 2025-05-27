@@ -6,7 +6,7 @@ const MedicationSchema = new mongoose_1.Schema({
         type: String,
     },
     price: {
-        type: String,
+        type: Number,
     },
     quantity: {
         type: String,
@@ -31,7 +31,7 @@ const MedicationSchema = new mongoose_1.Schema({
         type: String,
     },
     expiredDate: {
-        type: String,
+        type: Date,
     },
     category: {
         type: String,

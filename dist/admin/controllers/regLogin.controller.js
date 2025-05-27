@@ -113,11 +113,12 @@ const adminSignInController = (req, res, next) => __awaiter(void 0, void 0, void
         const accessToken = jsonwebtoken_1.default.sign({
             id: admin === null || admin === void 0 ? void 0 : admin._id,
             email: admin.email,
-        }, process.env.JWT_ADMIN_SECRET_KEY, { expiresIn: "24h" });
+        }, process.env.JWT_ADMIN_SECRET_KEY);
         // return access token
         res.json({
             message: "Login successful",
-            Token: accessToken
+            Token: accessToken,
+            _id: admin === null || admin === void 0 ? void 0 : admin._id
         });
     }
     catch (err) {
@@ -158,7 +159,7 @@ const adminMobileNumberSignInController = (req, res) => __awaiter(void 0, void 0
             id: admin === null || admin === void 0 ? void 0 : admin._id,
             email: admin.email,
             mobileNumber: admin.phoneNumber,
-        }, process.env.JWT_User_SECRET_KEY, { expiresIn: "24h" });
+        }, process.env.JWT_User_SECRET_KEY);
         // return access token
         res.json({
             message: "Login successful",

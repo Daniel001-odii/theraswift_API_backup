@@ -18,6 +18,10 @@ const userReg_model_1 = __importDefault(require("../models/userReg.model"));
 const otpGenerator_1 = require("../../utils/otpGenerator");
 const sendSms_utility_1 = require("../../utils/sendSms.utility");
 const mobilNumberFormatter_1 = require("../../utils/mobilNumberFormatter");
+const patient_reg_model_1 = __importDefault(require("../../doctor/modal/patient_reg.model"));
+const awaitingMedication_model_1 = __importDefault(require("../../admin/models/awaitingMedication.model"));
+const medication_model_1 = __importDefault(require("../models/medication.model"));
+const medication_model_2 = __importDefault(require("../../admin/models/medication.model"));
 //user send email /////////////
 const userSendPhoneNumberController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -91,6 +95,31 @@ const userPhoneNumberVerificationController = (req, res) => __awaiter(void 0, vo
         }
         user.phoneNumberOtp.verified = true;
         yield user.save();
+        const checkAwaitingMeds = yield awaitingMedication_model_1.default.find({ phoneNumber: phonenumber });
+        if (checkAwaitingMeds.length > 0) {
+            for (let i = 0; i < checkAwaitingMeds.length; i++) {
+                const checkAwaitingMed = checkAwaitingMeds[i];
+                const medication = yield medication_model_2.default.findOne({ _id: checkAwaitingMed.medicationId });
+                if (!medication)
+                    continue;
+                const patient = yield patient_reg_model_1.default.findOne({ _id: checkAwaitingMed.patientId });
+                if (!patient)
+                    continue;
+                //if medication those not exist
+                const userMedication = new medication_model_1.default({
+                    userId: user._id,
+                    medicationId: medication._id,
+                    prescriptionStatus: false,
+                    doctor: patient.doctorId,
+                    clinicCode: patient.clinicCode
+                });
+                const saveUserMedication = yield userMedication.save();
+                // check if the medication is in database
+                const deleteAwaitMed = yield awaitingMedication_model_1.default.findOneAndDelete({ _id: checkAwaitingMed._id }, { new: true });
+                if (!deleteAwaitMed)
+                    continue;
+            }
+        }
         return res.json({ message: "mobile number verified successfully" });
     }
     catch (err) {

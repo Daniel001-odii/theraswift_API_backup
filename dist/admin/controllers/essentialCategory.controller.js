@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPageEssentialCategoryController = exports.getAllEssentialCategoryController = exports.createEssentialCategoryController = void 0;
+exports.deleteEssentialCategoryController = exports.getPageEssentialCategoryController = exports.getAllEssentialCategoryController = exports.createEssentialCategoryController = void 0;
 const express_validator_1 = require("express-validator");
 const essentialCategori_model_1 = __importDefault(require("../models/essentialCategori.model"));
+const essentialProduct_model_1 = __importDefault(require("../models/essentialProduct.model"));
 const aws3_utility_1 = require("../../utils/aws3.utility");
 const uuid_1 = require("uuid");
 //admin create essential category /////////////
@@ -23,8 +24,6 @@ const createEssentialCategoryController = (req, res) => __awaiter(void 0, void 0
         const { name, } = req.body;
         // Access the uploaded file details
         const file = req.file;
-        // const fileName = file?.filename;
-        // const filePath = file?.path;
         let medicationImg;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
@@ -40,12 +39,12 @@ const createEssentialCategoryController = (req, res) => __awaiter(void 0, void 0
             medicationImg = result === null || result === void 0 ? void 0 : result.Location;
         }
         const essentialCategory = new essentialCategori_model_1.default({
-            name,
+            name: name.trim(),
             img: medicationImg
         });
         const savedEssentialCategory = yield essentialCategory.save();
         return res.status(200).json({
-            message: "category created succefully ",
+            message: "category created successfully ",
             category: savedEssentialCategory
         });
     }
@@ -64,7 +63,7 @@ const getAllEssentialCategoryController = (req, res) => __awaiter(void 0, void 0
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        const categories = yield essentialCategori_model_1.default.find();
+        const categories = yield essentialCategori_model_1.default.find().sort({ name: 1 });
         return res.status(200).json({
             categories
         });
@@ -88,7 +87,7 @@ const getPageEssentialCategoryController = (req, res) => __awaiter(void 0, void 
         const limit = parseInt(req.body.limit) || 50; // Documents per page, default to 10
         const skip = (page - 1) * limit; // Calculate how many documents to skip
         const totalCategories = yield essentialCategori_model_1.default.countDocuments(); // Get the total number of documents
-        const categories = yield essentialCategori_model_1.default.find().sort({ createdAt: -1 })
+        const categories = yield essentialCategori_model_1.default.find().sort({ name: 1 })
             .skip(skip)
             .limit(limit);
         return res.status(200).json({
@@ -103,3 +102,31 @@ const getPageEssentialCategoryController = (req, res) => __awaiter(void 0, void 
     }
 });
 exports.getPageEssentialCategoryController = getPageEssentialCategoryController;
+//admin delete essential category /////////////
+const deleteEssentialCategoryController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { categoryId, } = req.body;
+        // Check for validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const checkCategory = yield essentialCategori_model_1.default.findOne({ _id: categoryId });
+        if (!checkCategory) {
+            return res.status(401).json({ message: "invalid category ID." });
+        }
+        const checkProducts = yield essentialProduct_model_1.default.find({ categoryId: checkCategory._id });
+        if (checkProducts.length > 0) {
+            return res.status(401).json({ message: "delete all product under this category first." });
+        }
+        const deleteProduct = yield essentialCategori_model_1.default.findOneAndDelete({ _id: categoryId }, { new: true });
+        return res.status(200).json({
+            message: "category deleted successfully ",
+        });
+    }
+    catch (err) {
+        // signup error
+        res.status(500).json({ message: err.message });
+    }
+});
+exports.deleteEssentialCategoryController = deleteEssentialCategoryController;

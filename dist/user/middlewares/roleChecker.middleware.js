@@ -27,10 +27,10 @@ const checkUserRole = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         // Verify JWT and extract payload
         const payload = jsonwebtoken_1.default.verify(token, secret);
         // Check if email and mobile are in the MongoDB and belong to an admin role
-        const doctor = yield userReg_model_1.default.findOne({
+        const user = yield userReg_model_1.default.findOne({
             email: payload.email
         });
-        if (!doctor) {
+        if (!user) {
             return res
                 .status(403)
                 .json({ message: "Access denied. user role required." });

@@ -26,10 +26,6 @@ const PatientHmoSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    medicalCode: {
-        type: String,
-        required: true,
-    },
     medicalRecord: {
         type: String,
         required: true,
@@ -39,21 +35,19 @@ const PatientHmoSchema = new mongoose_1.Schema({
         enum: ["pending", "approved", "denied"],
         required: true,
     },
-    doctorId: {
-        type: mongoose_1.Schema.Types.ObjectId, ref: 'DoctorReg'
-    },
     patientId: {
         type: mongoose_1.Schema.Types.ObjectId, ref: 'PatientReg'
     },
-    hmoID: {
-        type: mongoose_1.Schema.Types.ObjectId, ref: 'DoctorReg'
-    },
-    clinicCode: {
+    doctorClinicCode: {
         type: String,
         required: true,
     },
-    orderId: {
-        type: mongoose_1.Schema.Types.ObjectId, ref: 'OrderFromDoctor'
+    icdCode: {
+        type: String,
+        required: true,
+    },
+    hmoClinicCode: {
+        type: String,
     },
     createdAt: {
         type: Date,

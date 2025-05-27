@@ -7,10 +7,7 @@ const medicationSchema = new mongoose_1.Schema({
     refill: String
 });
 const EnsentailSchema = new mongoose_1.Schema({
-    productId: String,
-    name: String,
-    quantity: String,
-    price: String,
+    product: mongoose_1.Schema.Types.Mixed,
     orderQuantity: Number,
     refill: String,
 });
@@ -47,10 +44,10 @@ const OrderSchema = new mongoose_1.Schema({
         type: String,
     },
     totalAmount: {
-        type: String,
+        type: Number,
     },
     amountPaid: {
-        type: String,
+        type: Number,
     },
     paymentDate: {
         type: String,
@@ -59,6 +56,16 @@ const OrderSchema = new mongoose_1.Schema({
         type: String,
         enum: ["delivered", "pending", "not delivered"],
     },
+    orderId: {
+        type: String,
+        default: ''
+    },
+    others: [
+        {
+            key: String,
+            value: String,
+        },
+    ],
     createdAt: {
         type: Date,
         default: Date.now,
@@ -70,5 +77,5 @@ const OrderSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-const OrderModel = (0, mongoose_1.model)("Order", OrderSchema);
+const OrderModel = (0, mongoose_1.model)("OrderReg", OrderSchema);
 exports.default = OrderModel;

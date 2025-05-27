@@ -12,19 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userGetDeliveredOrderController = exports.userGetNotDeliveredOrderController = exports.userGetPendingOrderController = exports.userCheckOutPaymentVerificationController = exports.userCheckOutController = void 0;
+exports.userCheckOutFromAvailableMedController = exports.userGetDeliveredOrderController = exports.userGetNotDeliveredOrderController = exports.userGetPendingOrderController = exports.userCheckOutPaymentVerificationController = exports.userCheckOutController = void 0;
 const express_validator_1 = require("express-validator");
 const userReg_model_1 = __importDefault(require("../models/userReg.model"));
-const medication_model_1 = __importDefault(require("../models/medication.model"));
-const medication_model_2 = __importDefault(require("../../admin/models/medication.model"));
+const medication_model_1 = __importDefault(require("../../admin/models/medication.model"));
 const order_model_1 = __importDefault(require("../../admin/models/order.model"));
 const cart_model_1 = __importDefault(require("../models/cart.model"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
+const essentialProduct_model_1 = __importDefault(require("../../admin/models/essentialProduct.model"));
 //user checkout /////////////
 const userCheckOutController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { deliveryDate, firstName, lastName, dateOfBirth, gender, address, } = req.body;
-        const file = req.file;
+        const { deliveryDate, firstName, lastName, dateOfBirth, gender, address, others, } = req.body;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -48,39 +47,48 @@ const userCheckOutController = (req, res) => __awaiter(void 0, void 0, void 0, f
         const refererCredit = userExist.refererCredit;
         let totalCost = 0;
         let medArray = [];
+        let essentialProductarray = [];
         for (let i = 0; i < carts.length; i++) {
             const cart = carts[i];
-            const medication = yield medication_model_2.default.findOne({ _id: cart.medicationId });
-            const userMedication = yield medication_model_1.default.findOne({ _id: cart.userMedicationId, userId });
-            if (medication && userMedication) {
-                if (medication.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {
+            if (cart.type == "med") {
+                const medication = yield medication_model_1.default.findOne({ _id: cart.medicationId });
+                // const userMedication = await UserMedicationModel.findOne({_id: cart.userMedicationId, userId})
+                if (medication) {
+                    // if (medication.prescriptionRequired == "required" && userMedication.prescriptionStatus == false) {  
+                    //     continue;
+                    // }
+                    totalCost = totalCost + (cart.quantityrquired * medication.price);
+                    const medicationObt = {
+                        medication: medication,
+                        orderQuantity: cart.quantityrquired,
+                        refill: cart.refill,
+                    };
+                    medArray.push(medicationObt);
+                }
+            }
+            else {
+                const essentialProdut = yield essentialProduct_model_1.default.findOne({ _id: cart.productId });
+                if (!essentialProdut) {
                     continue;
                 }
-                totalCost = totalCost + (cart.quantityrquired * parseInt(medication.price));
-                const medicationObt = {
-                    medication: medication,
-                    orderQuantity: cart.quantityrquired.toString(),
+                totalCost = totalCost + (cart.quantityrquired * parseFloat(essentialProdut.price));
+                const productObt = {
+                    product: essentialProdut,
+                    orderQuantity: cart.quantityrquired,
                     refill: cart.refill,
                 };
-                medArray.push(medicationObt);
+                essentialProductarray.push(productObt);
             }
         }
-        if (medArray.length < 1) {
-            return res
-                .status(401)
-                .json({ message: "all your medication required prescripstion" });
-        }
+        // if (medArray.length < 1 && essentialProductarray.length < 1) {
+        //     return res
+        //     .status(401)
+        //     .json({ message: "all your medication required prescripstion" });
+        // }
         if (refererCredit >= totalCost) {
             const currentDate = new Date();
-            // Extract day, month, year, and time components
-            const day = currentDate.getDate(); // Day of the month (1-31)
-            const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
-            const year = currentDate.getFullYear(); // Full year (e.g., 2023)
-            const hours = currentDate.getHours(); // Hours (0-23)
-            const minutes = currentDate.getMinutes(); // Minutes (0-59)
-            const seconds = currentDate.getSeconds(); // Seconds (0-59)
-            // Format the components as a string
-            const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+            const milliseconds = currentDate.getMilliseconds();
+            let orderId = milliseconds.toString().substring(milliseconds.toString().length - 5);
             const order = new order_model_1.default({
                 userId,
                 firstName,
@@ -90,19 +98,26 @@ const userCheckOutController = (req, res) => __awaiter(void 0, void 0, void 0, f
                 address,
                 paymentId: "referer credit",
                 medications: medArray,
+                ensential: essentialProductarray,
                 deliveryDate: deliveryDate,
                 refererBunousUsed: totalCost.toString(),
-                totalAmount: totalCost.toString(),
-                amountPaid: '0',
-                paymentDate: formattedDate,
-                deliveredStatus: 'not delivered'
+                totalAmount: totalCost,
+                amountPaid: 0,
+                paymentDate: currentDate,
+                deliveredStatus: 'not delivered',
+                orderId,
+                others
             });
             const me = yield order.save();
-            console.log(1);
-            console.log(me);
             userExist.refererCredit = refererCredit - totalCost;
             userExist.reference = "referer credit";
             yield userExist.save();
+            for (let i = 0; i < carts.length; i++) {
+                const cart = carts[i];
+                const deletedCart = yield cart_model_1.default.findOneAndDelete({ _id: cart._id, userId: userId }, { new: true });
+                if (!deletedCart)
+                    continue;
+            }
             return res.status(200).json({
                 message: "payment successfully using referer credit",
                 url: "",
@@ -125,7 +140,7 @@ const userCheckOutController = (req, res) => __awaiter(void 0, void 0, void 0, f
             refererBunousUsed: refCre,
             totalAmount: totalCost,
         };
-        const paystackSecretKey = 'sk_test_b27336978f0f77d84915d7e883b0f756f6d150e7';
+        const paystackSecretKey = process.env.PAYSTACK_KEY;
         const currentDate = new Date();
         const milliseconds = currentDate.getMilliseconds();
         const response = yield (0, node_fetch_1.default)('https://api.paystack.co/transaction/initialize', {
@@ -138,24 +153,18 @@ const userCheckOutController = (req, res) => __awaiter(void 0, void 0, void 0, f
                 amount: amount * 100,
                 email: userExist.email,
                 reference: milliseconds,
-                metadata
+                metadata,
+                callback_url: "https://app.theraswift.co/checkout/verify"
             }),
         });
         const data = yield response.json();
         if (!data.status) {
+            console.log("pment :", data);
             return res
                 .status(401)
                 .json({ message: "unable to initailize payment" });
         }
-        // Extract day, month, year, and time components
-        const day = currentDate.getDate(); // Day of the month (1-31)
-        const month = currentDate.getMonth() + 1; // Month (0-11), add 1 to get the real month (1-12)
-        const year = currentDate.getFullYear(); // Full year (e.g., 2023)
-        const hours = currentDate.getHours(); // Hours (0-23)
-        const minutes = currentDate.getMinutes(); // Minutes (0-59)
-        const seconds = currentDate.getSeconds(); // Seconds (0-59)
-        // Format the components as a string
-        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        let orderId = milliseconds.toString().substring(milliseconds.toString().length - 5);
         const order = new order_model_1.default({
             userId,
             firstName,
@@ -165,17 +174,26 @@ const userCheckOutController = (req, res) => __awaiter(void 0, void 0, void 0, f
             address,
             paymentId: data.data.reference,
             medications: medArray,
+            ensential: essentialProductarray,
             deliveryDate: deliveryDate,
             refererBunousUsed: refCre,
-            totalAmount: totalCost.toString(),
+            totalAmount: totalCost,
             amountPaid: amount,
-            paymentDate: formattedDate,
-            deliveredStatus: 'pending'
+            paymentDate: currentDate,
+            deliveredStatus: 'pending',
+            orderId,
+            others
         });
         const savedOrdered = yield order.save();
         userExist.refererCredit = 0;
         userExist.reference = data.data.reference;
         yield userExist.save();
+        for (let i = 0; i < carts.length; i++) {
+            const cart = carts[i];
+            const deletedCart = yield cart_model_1.default.findOneAndDelete({ _id: cart._id, userId: userId }, { new: true });
+            if (!deletedCart)
+                continue;
+        }
         return res.status(200).json({
             message: "payment successfully initialize",
             url: data.data.authorization_url,
@@ -193,8 +211,10 @@ exports.userCheckOutController = userCheckOutController;
 //user payment verification /////////////
 const userCheckOutPaymentVerificationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { reference, orderId, } = req.body;
-        const paystackSecretKey = 'sk_test_b27336978f0f77d84915d7e883b0f756f6d150e7';
+        const { reference,
+        // orderId,
+         } = req.body;
+        const paystackSecretKey = process.env.PAYSTACK_KEY;
         const response = yield (0, node_fetch_1.default)(`https://api.paystack.co/transaction/verify/${reference}`, {
             method: 'GET',
             headers: {
@@ -202,7 +222,6 @@ const userCheckOutPaymentVerificationController = (req, res) => __awaiter(void 0
             },
         });
         const data = yield response.json();
-        console.log(data);
         if (!data.status) {
             return res
                 .status(401)
@@ -228,7 +247,7 @@ const userCheckOutPaymentVerificationController = (req, res) => __awaiter(void 0
                 .status(401)
                 .json({ message: "invalid user" });
         }
-        const order = yield order_model_1.default.findOneAndUpdate({ _id: orderId, paymentId: reference, userId: userId, deliveredStatus: "pending" }, { deliveredStatus: "not delivered" }, { new: true });
+        const order = yield order_model_1.default.findOneAndUpdate({ paymentId: reference, userId: userId, deliveredStatus: "pending" }, { deliveredStatus: "not delivered" }, { new: true });
         if (!order) {
             return res
                 .status(401)
@@ -317,3 +336,165 @@ const userGetDeliveredOrderController = (req, res) => __awaiter(void 0, void 0, 
     }
 });
 exports.userGetDeliveredOrderController = userGetDeliveredOrderController;
+//user checkout from list of medication /////////////
+const userCheckOutFromAvailableMedController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { deliveryDate, firstName, lastName, dateOfBirth, gender, address, others, medicationId, type, } = req.body;
+        // Check for validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const user = req.user;
+        const userId = user.id;
+        //get user info from databas
+        const userExist = yield userReg_model_1.default.findOne({ _id: userId });
+        if (!userExist) {
+            return res
+                .status(401)
+                .json({ message: "invalid credential" });
+        }
+        const refererCredit = userExist.refererCredit;
+        let totalCost = 0;
+        let medArray = [];
+        let essentialProductarray = [];
+        if (type == "med") {
+            const medication = yield medication_model_1.default.findOne({ _id: medicationId });
+            if (!medication) {
+                return res
+                    .status(401)
+                    .json({ message: "can not find this medication" });
+            }
+            totalCost = totalCost + medication.price;
+            const medicationObt = {
+                medication: medication,
+                orderQuantity: 1,
+                refill: 'non',
+            };
+            medArray.push(medicationObt);
+        }
+        else {
+            const essentialProdut = yield essentialProduct_model_1.default.findOne({ _id: medicationId });
+            if (!essentialProdut) {
+                return res
+                    .status(401)
+                    .json({ message: "can not find this product" });
+            }
+            totalCost = totalCost + parseFloat(essentialProdut.price);
+            const productObt = {
+                product: essentialProdut,
+                orderQuantity: 1,
+                refill: 'non',
+            };
+            essentialProductarray.push(productObt);
+        }
+        if (refererCredit >= totalCost) {
+            const currentDate = new Date();
+            const milliseconds = currentDate.getMilliseconds();
+            let orderId = milliseconds.toString().substring(milliseconds.toString().length - 5);
+            const order = new order_model_1.default({
+                userId,
+                firstName,
+                lastName,
+                dateOfBirth,
+                gender,
+                address,
+                paymentId: "referer credit",
+                medications: medArray,
+                ensential: essentialProductarray,
+                deliveryDate: deliveryDate,
+                refererBunousUsed: totalCost.toString(),
+                totalAmount: totalCost,
+                amountPaid: 0,
+                paymentDate: currentDate,
+                deliveredStatus: 'not delivered',
+                orderId,
+                others
+            });
+            const me = yield order.save();
+            userExist.refererCredit = refererCredit - totalCost;
+            userExist.reference = "referer credit";
+            yield userExist.save();
+            return res.status(200).json({
+                message: "payment successfully using referer credit",
+                url: "",
+                reference: "",
+                orderId: ""
+            });
+        }
+        let refCre = 0;
+        if (refererCredit > 0) {
+            refCre = refererCredit;
+        }
+        else {
+            refCre = 0;
+        }
+        const amount = totalCost - refCre;
+        const metadata = {
+            userId,
+            medications: medArray,
+            deliveryDate: deliveryDate,
+            refererBunousUsed: refCre,
+            totalAmount: totalCost,
+        };
+        const paystackSecretKey = process.env.PAYSTACK_KEY;
+        const currentDate = new Date();
+        const milliseconds = currentDate.getMilliseconds();
+        const response = yield (0, node_fetch_1.default)('https://api.paystack.co/transaction/initialize', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${paystackSecretKey}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount: amount * 100,
+                email: userExist.email,
+                reference: milliseconds,
+                metadata,
+                callback_url: "https://app.theraswift.co/checkout/verify"
+            }),
+        });
+        const data = yield response.json();
+        if (!data.status) {
+            return res
+                .status(401)
+                .json({ message: "unable to initailize payment" });
+        }
+        let orderId = milliseconds.toString().substring(milliseconds.toString().length - 5);
+        const order = new order_model_1.default({
+            userId,
+            firstName,
+            lastName,
+            dateOfBirth,
+            gender,
+            address,
+            paymentId: data.data.reference,
+            medications: medArray,
+            ensential: essentialProductarray,
+            deliveryDate: deliveryDate,
+            refererBunousUsed: refCre,
+            totalAmount: totalCost,
+            amountPaid: amount,
+            paymentDate: currentDate,
+            deliveredStatus: 'pending',
+            orderId,
+            others
+        });
+        const savedOrdered = yield order.save();
+        userExist.refererCredit = 0;
+        userExist.reference = data.data.reference;
+        yield userExist.save();
+        return res.status(200).json({
+            message: "payment successfully initialize",
+            url: data.data.authorization_url,
+            reference: data.data.reference,
+            //orderId: savedOrdered._id
+        });
+    }
+    catch (err) {
+        // signup error
+        console.log("error", err);
+        res.status(500).json({ message: err.message });
+    }
+});
+exports.userCheckOutFromAvailableMedController = userCheckOutFromAvailableMedController;

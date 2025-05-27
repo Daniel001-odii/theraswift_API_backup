@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getsingleUserController = exports.getPageUserDeatilController = exports.getAllUsersController = void 0;
 const express_validator_1 = require("express-validator");
 const userReg_model_1 = __importDefault(require("../../user/models/userReg.model"));
+const medication_model_1 = __importDefault(require("../../user/models/medication.model"));
 //get all users /////////////
 const getAllUsersController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -22,6 +23,7 @@ const getAllUsersController = (req, res) => __awaiter(void 0, void 0, void 0, fu
         let userArry = [];
         for (let i = 0; i < users.length; i++) {
             const user = users[i];
+            const usermedication = yield medication_model_1.default.find({ userId: user._id }).populate('medicationId');
             const userObj = {
                 id: user._id,
                 userId: user.userId,
@@ -34,7 +36,8 @@ const getAllUsersController = (req, res) => __awaiter(void 0, void 0, void 0, fu
                 refererCode: user.refererCode,
                 refererCredit: user.refererCredit,
                 reference: user.reference,
-                operatingLocation: user.operatingLocation
+                operatingLocation: user.operatingLocation,
+                usermedication
             };
             userArry.push(userObj);
         }
@@ -63,6 +66,7 @@ const getPageUserDeatilController = (req, res) => __awaiter(void 0, void 0, void
         let userArry = [];
         for (let i = 0; i < users.length; i++) {
             const user = users[i];
+            const usermedication = yield medication_model_1.default.find({ userId: user._id }).populate('medicationId');
             const userObj = {
                 id: user._id,
                 userId: user.userId,
@@ -75,7 +79,8 @@ const getPageUserDeatilController = (req, res) => __awaiter(void 0, void 0, void
                 refererCode: user.refererCode,
                 refererCredit: user.refererCredit,
                 reference: user.reference,
-                operatingLocation: user.operatingLocation
+                operatingLocation: user.operatingLocation,
+                usermedication
             };
             userArry.push(userObj);
         }
@@ -95,13 +100,17 @@ exports.getPageUserDeatilController = getPageUserDeatilController;
 //get single user detail /////////////
 const getsingleUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userId, } = req.body;
+        const { userId, } = req.query;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         const user = yield userReg_model_1.default.findOne({ _id: userId });
+        if (!user) {
+            return res.status(401).json({ message: "user not found" });
+        }
+        const usermedication = yield medication_model_1.default.find({ userId }).populate('medicationId');
         const userObj = {
             id: user === null || user === void 0 ? void 0 : user._id,
             userId: user === null || user === void 0 ? void 0 : user.userId,
@@ -118,7 +127,7 @@ const getsingleUserController = (req, res) => __awaiter(void 0, void 0, void 0, 
         };
         return res.status(200).json({
             message: "success",
-            user: userObj
+            user: { profile: userObj, usermedication }
         });
     }
     catch (err) {

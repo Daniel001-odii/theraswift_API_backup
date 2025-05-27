@@ -26,41 +26,31 @@ const adminAddMedicationController = (req, res) => __awaiter(void 0, void 0, voi
         // const filePath = file?.path;
         let medicationImg;
         const { name, price, quantity, prescriptionRequired, form, ingredient, quantityForUser, inventoryQuantity, expiredDate, category, medInfo } = req.body;
-        // Check for validation errors
-        const errors = (0, express_validator_1.validationResult)(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        console.log("meidinfo", medInfo);
         const jsonMedInfo = JSON.parse(medInfo);
-        console.log("json", jsonMedInfo);
         if (!file) {
-            medicationImg = '';
+            return res.status(401)
+                .json({ message: "provide medicationImg" });
         }
         else {
             const filename = (0, uuid_1.v4)();
             const result = yield (0, aws3_utility_1.uploadToS3)(req.file.buffer, `${filename}.jpg`);
             medicationImg = result === null || result === void 0 ? void 0 : result.Location;
-            console.log(result);
-            //medicationImg = uploadToS3(file);
         }
         const medication = new medication_model_1.default({
-            name,
-            price,
-            quantity,
-            prescriptionRequired,
-            form,
-            ingredient,
-            quantityForUser,
-            inventoryQuantity,
-            expiredDate,
-            category,
+            name: name.trim(),
+            price: price.trim(),
+            quantity: quantity.trim(),
+            prescriptionRequired: prescriptionRequired.trim(),
+            form: form.trim(),
+            ingredient: ingredient.trim(),
+            quantityForUser: quantityForUser.trim(),
+            inventoryQuantity: inventoryQuantity.trim(),
+            expiredDate: expiredDate.trim(),
+            category: category.trim(),
             medInfo: jsonMedInfo,
             medicationImage: medicationImg,
         });
         const savedMedication = yield medication.save();
-        // const domainName = req.hostname;
-        // medicationImg = `${domainName}/public/uploads/${fileName}`;
         return res.status(200).json({
             message: "medication added successfuuy",
             medication: savedMedication
@@ -75,32 +65,49 @@ exports.adminAddMedicationController = adminAddMedicationController;
 //admin edit medications /////////////
 const adminEditMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // let medicationImg;
         const { medicationId, name, price, quantity, prescriptionRequired, form, ingredient, quantityForUser, inventoryQuantity, expiredDate, category, medInfo, } = req.body;
-        // Check for validation errors
-        const errors = (0, express_validator_1.validationResult)(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+        const file = req.file;
+        let medicationImg;
+        const medication = yield medication_model_1.default.findOne({ _id: medicationId });
+        if (!medication) {
+            return res.status(401)
+                .json({ message: "invalid medication ID" });
         }
+        if (!file) {
+            if (!medication.medicationImage || medication.medicationImage == '') {
+                return res.status(401)
+                    .json({ message: "provide medicationImg" });
+            }
+            else {
+                medicationImg = medication.medicationImage;
+            }
+        }
+        else {
+            const filename = (0, uuid_1.v4)();
+            const result = yield (0, aws3_utility_1.uploadToS3)(req.file.buffer, `${filename}.jpg`);
+            medicationImg = result === null || result === void 0 ? void 0 : result.Location;
+            console.log(result);
+            //medicationImg = uploadToS3(file);
+        }
+        const jsonMedInfo = JSON.parse(medInfo);
         const updatedMedication = yield medication_model_1.default.findOneAndUpdate({ _id: medicationId }, {
-            name,
-            price,
-            quantity,
-            prescriptionRequired,
-            form,
-            ingredient,
-            quantityForUser,
-            inventoryQuantity,
-            expiredDate,
-            category,
-            medInfo
+            name: name.trim(),
+            price: price.trim(),
+            quantity: quantity.trim(),
+            prescriptionRequired: prescriptionRequired.trim(),
+            form: form.trim(),
+            ingredient: ingredient.trim(),
+            quantityForUser: quantityForUser.trim(),
+            inventoryQuantity: inventoryQuantity.trim(),
+            expiredDate: expiredDate.trim(),
+            category: category.trim(),
+            medInfo: jsonMedInfo,
+            medicationImage: medicationImg,
         }, { new: true });
         if (!updatedMedication) {
             return res.status(401)
                 .json({ message: "medication not available" });
         }
-        // const domainName = req.hostname;
-        // medicationImg = `${domainName}/public/uploads/${updatedMedication.medicationImage}`;
         return res.status(200).json({
             message: "medication updated successfuuy",
             medication: updatedMedication

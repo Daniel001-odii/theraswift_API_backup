@@ -19,6 +19,30 @@ const UserMedicationSchema = new mongoose_1.Schema({
         type: String,
         default: "",
     },
+    doctor: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        default: null,
+    },
+    clinicCode: {
+        type: String,
+        default: "",
+    },
+    /*
+      new fields for more details [dan_]...
+    */
+    last_filled_date: {
+        type: Date,
+        default: Date.now()
+    },
+    refills_left: {
+        type: Number,
+        default: 0
+    },
+    status: {
+        type: String,
+        enum: ["processing order", "working wit HMO/insurance", "delivered"],
+        default: "processing order"
+    },
     createdAt: {
         type: Date,
         default: Date.now,

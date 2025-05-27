@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userAddMedicationThroughImageController = exports.userMedicatonRequiredPrescriptionController = exports.userPrescriptionStatusController = exports.userAddPrescriptionImageController = exports.userGetMedicationController = exports.userSearchMedicationNameFormDosageController = exports.userSearchMedicationNameFormController = exports.userSearchMedicationNameController = exports.userSearchMedicationController = exports.userRemoveMedicationController = exports.userAddMedicationController = void 0;
+exports.userGetPopualarMedicationController = exports.userGethMedicationByIdController = exports.userGethMedicationController = exports.userAddMedicationThroughImageController = exports.userMedicatonRequiredPrescriptionController = exports.userPrescriptionStatusController = exports.userAddPrescriptionImageController = exports.userGetMedicationController = exports.userSearchMedicationNameFormDosageController = exports.userSearchMedicationNameFormController = exports.userSearchMedicationNameController = exports.userSearchMedicationController = exports.userRemoveMedicationController = exports.userAddMedicationController = void 0;
 const express_validator_1 = require("express-validator");
 const userReg_model_1 = __importDefault(require("../models/userReg.model"));
 const medication_model_1 = __importDefault(require("../models/medication.model"));
@@ -20,6 +20,7 @@ const medication_model_2 = __importDefault(require("../../admin/models/medicatio
 const aws3_utility_1 = require("../../utils/aws3.utility");
 const uuid_1 = require("uuid");
 const medicationByImage_model_1 = __importDefault(require("../models/medicationByImage.model"));
+const removeMedication_model_1 = __importDefault(require("../models/removeMedication.model"));
 //user add medication /////////////
 const userAddMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -81,7 +82,7 @@ exports.userAddMedicationController = userAddMedicationController;
 //user remove  medication /////////////
 const userRemoveMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userMedicationId } = req.body;
+        const { userMedicationId, reason } = req.body;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -89,14 +90,6 @@ const userRemoveMedicationController = (req, res) => __awaiter(void 0, void 0, v
         }
         const user = req.user;
         const userId = user.id;
-        console.log(userId);
-        // check if the medication is in database
-        const deletedmedication = yield medication_model_1.default.findOneAndDelete({ _id: userMedicationId }, { new: true });
-        if (!deletedmedication) {
-            return res
-                .status(401)
-                .json({ message: "invalid medication" });
-        }
         //get user info from databas
         const userExist = yield userReg_model_1.default.findOne({ _id: userId });
         if (!userExist) {
@@ -104,7 +97,20 @@ const userRemoveMedicationController = (req, res) => __awaiter(void 0, void 0, v
                 .status(401)
                 .json({ message: "invalid credential" });
         }
-        const medication = yield medication_model_2.default.findOne({ _id: deletedmedication.medicationId });
+        // check if the medication is in database
+        const deletedmedication = yield medication_model_1.default.findOneAndDelete({ _id: userMedicationId }, { new: true });
+        if (!deletedmedication) {
+            return res
+                .status(401)
+                .json({ message: "invalid medication" });
+        }
+        // add reason for deleting medication
+        const newDeletedMedication = new removeMedication_model_1.default({
+            userId,
+            medicationId: deletedmedication.medicationId,
+            reason
+        });
+        yield newDeletedMedication.save();
         return res.status(200).json({
             message: "medication removed successfiily",
             removedMedication: deletedmedication
@@ -135,8 +141,6 @@ const userSearchMedicationController = (req, res) => __awaiter(void 0, void 0, v
                 // Add more fields as needed for your search
             ],
         };
-        console.log(medicationName);
-        console.log("era", searchQuery);
         const aggregationPipeline = [
             { $match: searchQuery },
             {
@@ -155,6 +159,7 @@ const userSearchMedicationController = (req, res) => __awaiter(void 0, void 0, v
             const obj = {
                 name: element._id,
                 ingridient: bd === null || bd === void 0 ? void 0 : bd.ingredient,
+                id: bd === null || bd === void 0 ? void 0 : bd._id
             };
             output.push(obj);
         }
@@ -177,9 +182,21 @@ const userSearchMedicationNameController = (req, res) => __awaiter(void 0, void 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        const medications = yield medication_model_2.default.find({ name: { $regex: name, $options: 'i' } });
+        console.log('name', name);
+        // const medications =  await MedicationModel.find({name: { $regex: name, $options: 'i' }});
+        const medications = yield medication_model_2.default.find({ name: name });
+        console.log('medication', medications);
+        const uniqueProducts = [];
+        const seenCombination = new Set();
+        medications.forEach(medication => {
+            const combination = `${medication.form}`;
+            if (!seenCombination.has(combination)) {
+                uniqueProducts.push(medication);
+                seenCombination.add(combination);
+            }
+        });
         return res.status(200).json({
-            medications
+            medications: uniqueProducts
         });
     }
     catch (err) {
@@ -198,8 +215,17 @@ const userSearchMedicationNameFormController = (req, res) => __awaiter(void 0, v
             return res.status(400).json({ errors: errors.array() });
         }
         const medications = yield medication_model_2.default.find({ name, form });
+        const uniqueProducts = [];
+        const seenCombination = new Set();
+        medications.forEach(medication => {
+            const combination = `${medication.quantity}`;
+            if (!seenCombination.has(combination)) {
+                uniqueProducts.push(medication);
+                seenCombination.add(combination);
+            }
+        });
         return res.status(200).json({
-            medications
+            medications: uniqueProducts
         });
     }
     catch (err) {
@@ -464,3 +490,81 @@ const userAddMedicationThroughImageController = (req, res) => __awaiter(void 0, 
     }
 });
 exports.userAddMedicationThroughImageController = userAddMedicationThroughImageController;
+//user get medication   /////////////
+const userGethMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const {} = req.query;
+        // Check for validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const page = parseInt(req.body.page) || 1; // Page number, default to 1
+        const limit = parseInt(req.body.limit) || 50; // Documents per page, default to 10
+        const skip = (page - 1) * limit; // Calculate how many documents to skip
+        const totalmedication = yield medication_model_2.default.countDocuments(); // Get the total number of documents
+        const medications = yield medication_model_2.default.find().skip(skip).limit(limit);
+        return res.status(200).json({
+            medications,
+            totalmedication,
+            currentPage: page,
+            totalPages: Math.ceil(totalmedication / limit),
+        });
+    }
+    catch (err) {
+        // signup error
+        res.status(500).json({ message: err.message });
+    }
+});
+exports.userGethMedicationController = userGethMedicationController;
+//user medication by Id  /////////////
+const userGethMedicationByIdController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { meidcationId } = req.query;
+        // Check for validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        const medication = yield medication_model_2.default.findOne({ _id: meidcationId });
+        if (!medication) {
+            return res
+                .status(401)
+                .json({ message: "invalid medication Id" });
+        }
+        return res.status(200).json({
+            medication
+        });
+    }
+    catch (err) {
+        // signup error
+        res.status(500).json({ message: err.message });
+    }
+});
+exports.userGethMedicationByIdController = userGethMedicationByIdController;
+//bet popular medication /////////////
+const userGetPopualarMedicationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const {} = req.query;
+        // Check for validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        //const popularMedication =  await MedicationModel.find().limit(8);
+        //const popularMedication =  await MedicationModel.distinct('name');
+        const popularMedication = yield medication_model_2.default.aggregate([
+            { $group: { _id: '$name', doc: { $first: '$$ROOT' } } },
+            { $replaceRoot: { newRoot: '$doc' } },
+            { $limit: 8 }
+        ]);
+        return res.status(200).json({
+            popularMedication
+        });
+    }
+    catch (err) {
+        // signup error
+        res.status(500).json({ message: err.message });
+    }
+});
+exports.userGetPopualarMedicationController = userGetPopualarMedicationController;

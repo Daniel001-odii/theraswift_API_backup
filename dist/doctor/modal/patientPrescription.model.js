@@ -2,22 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const PatientPrescriptionSchema = new mongoose_1.Schema({
-    dosage: {
-        type: String,
-        required: true,
-    },
-    frequency: {
-        type: String,
-        required: true,
-    },
-    route: {
-        type: String,
-        required: true,
-    },
-    duration: {
-        type: String,
-        required: true,
-    },
     status: {
         type: String,
         enum: ["delivered", "pending"],
@@ -29,9 +13,29 @@ const PatientPrescriptionSchema = new mongoose_1.Schema({
     patientId: {
         type: mongoose_1.Schema.Types.ObjectId, ref: 'PatientReg'
     },
-    medicationId: {
-        type: mongoose_1.Schema.Types.ObjectId, ref: 'Medication'
-    },
+    /*  medications: [
+       {
+         type: Schema.Types.ObjectId, ref: 'Medication'
+       }
+     ], */
+    medications: [{
+            dosage: {
+                type: String,
+                required: true,
+            },
+            frequency: {
+                type: String,
+                required: true,
+            },
+            route: {
+                type: String,
+                required: true,
+            },
+            duration: {
+                type: String,
+                required: true,
+            },
+        }],
     clinicCode: {
         type: String,
         required: true,

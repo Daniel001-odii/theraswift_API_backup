@@ -19,7 +19,7 @@ const patient_reg_model_1 = __importDefault(require("../modal/patient_reg.model"
 const doctorGetAllRegisteredPatient = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const doctor = req.doctor;
-        const doctorPatients = yield patient_reg_model_1.default.find({ doctorId: doctor._id });
+        const doctorPatients = yield patient_reg_model_1.default.find({ clinicCode: doctor.clinicCode });
         return res.status(200).json({
             message: "success",
             patients: doctorPatients
@@ -40,7 +40,7 @@ const doctorGetSingleRegisteredPatient = (req, res, next) => __awaiter(void 0, v
             return res.status(400).json({ errors: errors.array() });
         }
         const doctor = req.doctor;
-        const doctorPatient = yield patient_reg_model_1.default.findOne({ _id: id, doctorId: doctor._id });
+        const doctorPatient = yield patient_reg_model_1.default.findOne({ _id: id, clinicCode: doctor.clinicCode });
         return res.status(200).json({
             message: "success",
             patient: doctorPatient

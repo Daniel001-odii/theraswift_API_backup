@@ -47,7 +47,7 @@ exports.getPageEssentialCategoryController = getPageEssentialCategoryController;
 // get page essential products /////////////
 const getEssentialProductBycategoryController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { categoryId, page, limit } = req.query;
+        let { categoryId, page, limit, name, } = req.query;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -57,9 +57,17 @@ const getEssentialProductBycategoryController = (req, res) => __awaiter(void 0, 
         limit = limit || 50; // Documents per page, default to 10
         const skip = (page - 1) * limit; // Calculate how many documents to skip
         const totalProduct = yield essentialProduct_model_1.default.countDocuments({ categoryId }); // Get the total number of documents
-        const products = yield essentialProduct_model_1.default.find({ categoryId }).sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
+        let products;
+        if (!categoryId) {
+            products = yield essentialProduct_model_1.default.find({ name: { $regex: new RegExp(name, 'i') } }).sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit);
+        }
+        else {
+            products = yield essentialProduct_model_1.default.find({ categoryId, name: { $regex: new RegExp(name, 'i') } }).sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit);
+        }
         return res.status(200).json({
             products,
             currentPage: page,

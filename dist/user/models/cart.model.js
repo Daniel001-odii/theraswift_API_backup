@@ -8,11 +8,12 @@ const CartSchema = new mongoose_1.Schema({
     },
     medicationId: {
         type: mongoose_1.Schema.Types.ObjectId, ref: 'Medication',
-        required: true,
     },
     userMedicationId: {
-        type: mongoose_1.Schema.Types.ObjectId, ref: 'UserMedication',
-        required: true,
+        type: String,
+    },
+    productId: {
+        type: mongoose_1.Schema.Types.ObjectId, ref: 'EssentialProduct',
     },
     quantityrquired: {
         type: Number,
@@ -21,6 +22,11 @@ const CartSchema = new mongoose_1.Schema({
     refill: {
         type: String,
         default: "no",
+    },
+    type: {
+        type: String,
+        enum: ["med", "ess"],
+        required: true,
     },
     createdAt: {
         type: Date,

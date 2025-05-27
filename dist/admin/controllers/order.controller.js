@@ -100,7 +100,7 @@ exports.getPageOrderNotDeliveredController = getPageOrderNotDeliveredController;
 //get single order not deliver /////////////
 const getSingleOrderNotDeliveredController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { orderId } = req.body;
+        const { orderId } = req.query;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -211,7 +211,7 @@ exports.getPageOrderDeliveredController = getPageOrderDeliveredController;
 //get single order delivered /////////////
 const getSingleOrderDeliveredController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { orderId } = req.body;
+        const { orderId } = req.query;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {

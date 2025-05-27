@@ -16,6 +16,7 @@ exports.getEssentialProductInCartController = exports.decreaseEssentialProductTo
 const express_validator_1 = require("express-validator");
 const userReg_model_1 = __importDefault(require("../models/userReg.model"));
 const ensentialCart_model_1 = __importDefault(require("../models/ensentialCart.model"));
+const cart_model_1 = __importDefault(require("../models/cart.model"));
 // add esential product to cart /////////////
 const addEssentialProductToCartController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -34,7 +35,7 @@ const addEssentialProductToCartController = (req, res) => __awaiter(void 0, void
                 .status(401)
                 .json({ message: "invalid credential" });
         }
-        const checkCart = yield ensentialCart_model_1.default.findOne({ userId, productId });
+        const checkCart = yield cart_model_1.default.findOne({ userId, productId });
         if (checkCart) {
             checkCart.quantityrquired = checkCart.quantityrquired + 1;
             yield checkCart.save();
@@ -43,10 +44,11 @@ const addEssentialProductToCartController = (req, res) => __awaiter(void 0, void
             });
         }
         else {
-            const newCart = new ensentialCart_model_1.default({
+            const newCart = new cart_model_1.default({
                 userId,
                 productId,
-                quantityrquired: 1
+                quantityrquired: 1,
+                type: "ess"
             });
             yield newCart.save();
             return res.status(200).json({

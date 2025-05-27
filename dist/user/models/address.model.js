@@ -26,6 +26,14 @@ const AddressSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false
     },
+    handDeliver: {
+        type: Boolean,
+        default: false
+    },
+    state: {
+        type: String,
+        required: true,
+    },
     createdAt: {
         type: Date,
         default: Date.now,

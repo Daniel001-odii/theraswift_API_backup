@@ -24,6 +24,8 @@ const address_model_1 = __importDefault(require("../models/address.model"));
 const hmo_model_1 = __importDefault(require("../models/hmo.model"));
 const aws3_utility_1 = require("../../utils/aws3.utility");
 const uuid_1 = require("uuid");
+const otpGenerator_1 = require("../../utils/otpGenerator");
+const send_email_utility_1 = require("../../utils/send_email_utility");
 //user check email/////////////
 const userCheckEmailController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -70,6 +72,7 @@ const userCheckStateController = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.userCheckStateController = userCheckStateController;
+// "email"
 //user signup /////////////
 const userSignUpController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -125,9 +128,25 @@ const userSignUpController = (req, res) => __awaiter(void 0, void 0, void 0, fun
             operatingLocation: operatingLocation,
             address
         });
+        // SEND VERIFICATION EMAIL AT ONCE >>>
+        const otp = (0, otpGenerator_1.generateOTP)();
+        const createdTime = new Date();
+        user.emailOtp = {
+            otp,
+            createdTime,
+            verified: false
+        };
+        let emailData = {
+            emailTo: email,
+            subject: "Theraswift email verification",
+            otp,
+            firstName: user.firstName,
+        };
+        (0, send_email_utility_1.sendUserAccountVerificationEmail)(emailData);
+        // //////////
         let userSaved = yield user.save();
         res.json({
-            message: "Signup successful",
+            message: "Signup successful, check for verifcation code in email",
             user: {
                 id: userSaved._id,
                 userId: userSaved.userId,
@@ -174,12 +193,15 @@ const userEmailSignInController = (req, res) => __awaiter(void 0, void 0, void 0
         if (!user.emailOtp.verified) {
             return res.status(401).json({ message: "email not verified." });
         }
+        if (user.isDeleted) {
+            return res.status(401).json({ message: "user account is deleted" });
+        }
         // generate access token
         const accessToken = jsonwebtoken_1.default.sign({
             id: user === null || user === void 0 ? void 0 : user._id,
             email: user.email,
             mobileNumber: user.mobileNumber,
-        }, process.env.JWT_User_SECRET_KEY, { expiresIn: "24h" });
+        }, process.env.JWT_User_SECRET_KEY);
         // return access token
         res.json({
             message: "Login successful",
@@ -211,6 +233,10 @@ const userMobileNumberSignInController = (req, res) => __awaiter(void 0, void 0,
                 .status(401)
                 .json({ message: "invalid credential" });
         }
+        ;
+        if (user.isDeleted) {
+            return res.status(401).json({ message: "user account is deleted" });
+        }
         // compare password with hashed password in database
         const isPasswordMatch = yield bcrypt_1.default.compare(password, user.password);
         if (!isPasswordMatch) {
@@ -224,7 +250,7 @@ const userMobileNumberSignInController = (req, res) => __awaiter(void 0, void 0,
             id: user === null || user === void 0 ? void 0 : user._id,
             email: user.email,
             mobileNumber: user.mobileNumber,
-        }, process.env.JWT_User_SECRET_KEY, { expiresIn: "24h" });
+        }, process.env.JWT_User_SECRET_KEY);
         // return access token
         res.json({
             message: "Login successful",
@@ -346,7 +372,7 @@ exports.userGetMemberController = userGetMemberController;
 //user Add new addresss /////////////
 const userAddAddressController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { streetAddress, streetNO, LGA, DeliveryInstruction, doorMan } = req.body;
+        const { streetAddress, streetNO, LGA, DeliveryInstruction, doorMan, handDeliver, state } = req.body;
         // Check for validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
@@ -367,7 +393,9 @@ const userAddAddressController = (req, res) => __awaiter(void 0, void 0, void 0,
             streetNO: streetNO,
             LGA: LGA,
             DeliveryInstruction: DeliveryInstruction,
-            doorMan
+            doorMan,
+            handDeliver,
+            state
         });
         const savedAddress = yield newAddress.save();
         res.json({

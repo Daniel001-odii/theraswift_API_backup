@@ -80,9 +80,12 @@ const UserSchema = new mongoose_1.Schema({
         createdTime: Date,
         verified: Boolean,
     },
+    // added for user account soft delete feature..
+    isDeleted: {
+        type: Boolean,
+    },
 }, {
     timestamps: true,
 });
 const UserModel = (0, mongoose_1.model)("UserReg", UserSchema);
 exports.default = UserModel;
-

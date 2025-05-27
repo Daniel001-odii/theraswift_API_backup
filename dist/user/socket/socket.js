@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const chat_model_1 = __importDefault(require("../models/chat.model"));
+const chat_modelOld_1 = __importDefault(require("../models/chat.modelOld"));
 // export default (io: Server) => {
 exports.default = (io) => {
     io.on('connection', (socket) => {
         socket.on('join', (join) => __awaiter(void 0, void 0, void 0, function* () {
             //socket.join(userId);
             // Get chats involving the user
-            const chats = yield chat_model_1.default.find({
+            const chats = yield chat_modelOld_1.default.find({
                 $or: [{ sender: join.userId }, { reciever: join.userId }],
             })
                 .sort({ createdAt: 1 });
@@ -28,7 +28,7 @@ exports.default = (io) => {
         }));
         socket.on('getUsersChattedAdmin', (join) => __awaiter(void 0, void 0, void 0, function* () {
             //const userChat = await User.find({ 'chats.adminId': adminId }).select('_id email');
-            const userChat = yield chat_model_1.default.find({
+            const userChat = yield chat_modelOld_1.default.find({
                 $or: [{ sender: join.userId }, { reciever: join.userId }],
             })
                 .sort({ createdAt: 1 });
@@ -37,7 +37,7 @@ exports.default = (io) => {
         socket.on('new_message', ({ sender, receiver = '7053578760', message }) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 // Create new chat
-                const chat = new chat_model_1.default({
+                const chat = new chat_modelOld_1.default({
                     sender,
                     reciever: receiver,
                     message,

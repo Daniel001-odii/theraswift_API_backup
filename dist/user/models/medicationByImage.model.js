@@ -10,6 +10,11 @@ const PatientMedicationImageSchema = new mongoose_1.Schema({
         type: String,
         default: "",
     },
+    enter: {
+        type: String,
+        enum: ["yes", "no"],
+        default: "no",
+    },
     createdAt: {
         type: Date,
         default: Date.now,
